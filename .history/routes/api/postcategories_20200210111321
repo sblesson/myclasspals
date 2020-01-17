@@ -1,0 +1,54 @@
+const express = require('express');
+const request = require('request');
+const config = require('config');
+const router = express.Router();
+const auth = require('../../middleware/auth');
+
+router.get('/', auth, async (req, res) => {
+  try {
+    console.log(req.query.screen);
+    //default
+    let categories = [
+      {
+        name: 'general',
+        label: '#General',
+        url: '/dashboard?filter=general'
+      },
+      {
+        name: 'recommendations',
+        label: '#Recommendations',
+        url: '/dashboard?filter=recommend'
+      }
+    ];
+
+    let categories = [
+      {
+        category_id: 1,
+        title: "General", 
+        url: "/general/"
+      },
+      {
+        category_id: 2, 
+        title: "Recommendations", 
+        url: "/recommendations/"
+      },
+      {
+        category_id: 3, 
+        title: "Recommendations", 
+        url: "/recommendations/"
+      },
+      {
+        category_id: 2, 
+        title: "Recommendations", 
+        url: "/recommendations/"
+      },
+
+
+    ];
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+module.exports = router;

@@ -1,0 +1,99 @@
+.profile-component-container {
+  background-color: white;
+  border-bottom-color: rgba(0, 0, 0, 0.18);
+  border-radius: 3px;
+  margin-bottom: 8px;
+  position: relative;
+  .profile-component-header {
+    border-bottom: 1px #dfe1e4 solid;
+    padding: 16px 16px;
+    .profile-component-title {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'HelveticaNeue',
+        'Helvetica Neue', Helvetica, 'Roboto', 'Segoe UI', Arial, sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      padding: 0;
+      margin: 0;
+    }
+    .profile-action-button {
+      border: none;
+      background: none;
+      margin: 0;
+      padding: 0;
+      margin-top: 2px;
+      //color: #93bb77;
+      color: #0075a1;
+      float: right;
+      outline: none;
+      font-size: 10px;
+      .add-more {
+        display: inline-block;
+        padding: 0 4px;
+      }
+    }
+  }
+  .profile-component-content {
+    padding: 16px 16px;
+    .profile-content-details {
+      display: inline-block;
+      margin-right: 12px;
+      margin-bottom: 8px;
+      background-color: rgba(0, 153, 186, 0.06);
+      border-radius: 4px;
+      border: 1px #f9f9fa solid;
+      color: #0075a1;
+      cursor: default;
+      padding: 8px 12px;
+      width: 100%;
+      .school-info-item {
+        border-top: 1px #eff1f3 solid;
+        width: 100%;
+        justify-content: space-between;
+        font-size: 13px;
+        color: #757584;
+
+        .school-info-content {
+          margin-left: 12px;
+
+          display: inline-block;
+          padding: 12px 12px 12px 0;
+          font-weight: normal;
+          line-height: 12px;
+          word-wrap: break-word;
+          align-self: center;
+          word-break: break-word;
+        }
+      }
+      .delete-school {
+        float: right;
+        cursor: pointer;
+      }
+      .school {
+        margin: 0 0 2px 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .grade {
+        display: inline-block;
+        font-size: 12px;
+        color: #676e7a;
+        margin: 0 0 2px 0;
+      }
+      .class-room {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        color: #676e7a;
+        padding: 0 0 6px 6px;
+      }
+      .child-name {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: normal;
+        color: #676e7a;
+        padding: 0 0 6px 6px;
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+export const POST_MODAL = 'POST_MODAL';
+export const PROFILE_MODAL = 'HIDE_MODAL';
+
+LOGIN_MODAL, SIGNUP_MODAL

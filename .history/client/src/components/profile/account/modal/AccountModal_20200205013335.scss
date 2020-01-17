@@ -1,0 +1,51 @@
+.account-form {
+  position: relative;
+  border-bottom: 1px solid #dfe1e4;
+  width: 90%;
+  padding: 12px 12px;
+  margin: 0 12px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  &-radio-options-container {
+    margin: 0 30px 20px 0px;
+    -webkit-animation: fadein 400ms;
+    -moz-animation: fadein 400ms;
+    -ms-animation: fadein 400ms;
+    -o-animation: fadein 400ms;
+    animation: fadein 400ms;
+    label {
+      position: relative;
+      display: block;
+      cursor: pointer;
+      font-weight: normal;
+      line-height: 23px;
+      margin: 0 0 8px 0;
+      transition: color 100ms ease;
+      color: rgb(118, 118, 118);
+    }
+  }
+  &-text-input {
+    outline: none;
+    border: 0;
+    padding: 16px 8px;
+    width: 80%;
+  }
+  &-textarea {
+    resize: none;
+    height: 120px;
+    width: 80%;
+    padding: 16px 8px;
+  }
+}
+
+.account-info-edit-button-right {
+  float: right;
+  margin-right: 20px;
+  color: #0075a1;
+  font-size: 1px;
+  line-height: 20px;
+}

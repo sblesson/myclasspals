@@ -1,0 +1,53 @@
+.sidebar {
+  width: 200px;
+  float: left;
+  height: 100vh;
+  /*  background-color: #f7f7f7; */
+  &-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-content {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    &-expand-arrow {
+      font-size: 1.2rem !important;
+      &-expanded {
+        color: #09bb12;
+        font-weight: bold;
+      }
+    }
+    &-icon {
+      margin-right: 6px;
+      margin-top: 0.5rem;
+      float: left;
+    }
+    &-text {
+      width: 100%;
+      font-size: 14px;
+      padding: 3px 0;
+
+      a {
+        margin-left: 0.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        text-decoration: none;
+        color: #757575;
+        display: block;
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        line-height: normal;
+        &:hover {
+          color: #757575;
+        }
+      }
+    }
+  }
+}

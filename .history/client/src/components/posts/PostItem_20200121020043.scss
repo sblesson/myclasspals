@@ -1,0 +1,69 @@
+.post {
+  /*  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-gap: 2rem; */
+  align-items: center;
+
+  .avatar-container {
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 10px;
+
+    margin-bottom: 15px;
+
+    .avatar-img {
+      width: 30px;
+      height: 30px;
+      object-fit: cover;
+      display: inline-block;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.18);
+    }
+    .author-name {
+      color: #676e7a !important;
+      margin-left: 10px;
+      line-height: 24px;
+    }
+  }
+  .post-message-container {
+    margin-left: 10px;
+
+    .post-date {
+      color: #aaa;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .action-status-container {
+      float: right;
+      color: #aaa;
+      font-size: 0.8rem;
+      margin-right: 0.6em;
+      .action-status-item-container {
+        display: inline-block;
+        margin-left: 5px;
+      }
+    }
+    .action-item-container {
+      display: inline-block;
+      margin-left: 5px;
+      padding: 0.1rem 0.6rem;
+
+      .action-label {
+        font-size: 0.8rem;
+        margin-left: 5px;
+        color: var(--primary-color);
+      }
+      &:hover {
+        background: var(--light-color);
+        border-radius: 5px;
+      }
+    }
+    .m-left {
+      margin-left: -5px;
+    }
+  }
+
+  > div:first-child {
+    text-align: center;
+  }
+}
