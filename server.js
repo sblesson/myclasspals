@@ -18,6 +18,9 @@ app.use('/api/posts', require('./routes/api/posts'));
 app.use('/api/leftnav', require('./routes/api/leftnav'));
 app.use('/api/categories', require('./routes/api/categories'));
 
+app.use('/api/leftnav', require('./routes/api/leftnav'));
+app.use('/api/categories', require('./routes/api/categories'));
+
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder

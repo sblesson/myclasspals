@@ -27,7 +27,6 @@ export const GET_SCHOOL_DETAILS = 'GET_SCHOOL_DETAILS';
 export const GET_SCHOOL_DATA = 'GET_SCHOOL_DATA';
 export const GET_SCHOOL_DATA_ERROR = 'GET_SCHOOL_DATA_ERROR';
 
-export const ADD_SCHOOL = 'ADD_SCHOOL';
 export const DELETE_SCHOOL = 'DELETE_SCHOOL';
 export const GET_LEFT_NAV = 'GET_LEFT_NAV';
 export const SHOW_MODAL = 'SHOW_MODAL';
@@ -36,3 +35,4 @@ export const GET_POST_CATEGORIES = 'GET_POST_CATEGORIES';
 //ERROR
 export const LEFT_NAV_ERROR = 'LEFT_NAV_ERROR';
 export const CREATE_PROFILE = 'CREATE_PROFILE';
+export const ADD_SCHOOL = 'ADD_SCHOOL';
