@@ -17,6 +17,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
         <Spinner />
       ) : (
         <Fragment>
+<<<<<<< HEAD
           <div>
             <h3 className='heading-3'>My Connections</h3>
             <div className='profiles'>
@@ -28,6 +29,17 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
                 <h4>No profiles found...</h4>
               )}
             </div>
+=======
+          <h3 className='heading-3'>My Connections</h3>
+          <div className='profiles'>
+            {profiles.length > 0 ? (
+              profiles.map(profile => (
+                <ProfileItem key={profile._id} profile={profile} />
+              ))
+            ) : (
+              <h4>No profiles found...</h4>
+            )}
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
           </div>
         </Fragment>
       )}

@@ -15,7 +15,10 @@ import {
 // Get current users profile
 export const getCurrentProfile = () => async dispatch => {
   try {
+<<<<<<< HEAD
     console.log('getCurrentProfile');
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     const res = await axios.get('/api/profile/me');
 
     dispatch({
@@ -82,3 +85,10 @@ export const getGithubRepos = username => async dispatch => {
     });
   }
 };
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00

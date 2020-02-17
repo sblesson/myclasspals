@@ -37,12 +37,21 @@ router.post(
   [
     auth,
     [
+<<<<<<< HEAD
       check('phone', 'Phone is required')
         .not()
         .isEmpty()
       /*   check('skills', 'Skills is required')
         .not()
         .isEmpty() */
+=======
+      check('status', 'Status is required')
+        .not()
+        .isEmpty(),
+      check('skills', 'Skills is required')
+        .not()
+        .isEmpty()
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     ]
   ],
   async (req, res) => {
@@ -57,8 +66,13 @@ router.post(
       location,
       bio,
       status,
+<<<<<<< HEAD
       username,
       interests,
+=======
+      githubusername,
+      skills,
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
       youtube,
       facebook,
       twitter,
@@ -74,11 +88,17 @@ router.post(
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (status) profileFields.status = status;
+<<<<<<< HEAD
     if (username) profileFields.username = username;
     if (interests) {
       profileFields.interests = interests
         .split(',')
         .map(interest => interest.trim());
+=======
+    if (githubusername) profileFields.githubusername = githubusername;
+    if (skills) {
+      profileFields.skills = skills.split(',').map(skill => skill.trim());
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     }
 
     // Build social object
@@ -161,7 +181,11 @@ router.delete('/', auth, async (req, res) => {
 // @desc     Add profile school
 // @access   Private
 router.put(
+<<<<<<< HEAD
   '/community',
+=======
+  '/school',
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
   [
     auth,
     [

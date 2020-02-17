@@ -2,7 +2,10 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import {
   GET_POSTS,
+<<<<<<< HEAD
   GET_POST_CATEGORIES,
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
   POST_ERROR,
   UPDATE_LIKES,
   DELETE_POST,
@@ -29,6 +32,7 @@ export const getPosts = () => async dispatch => {
   }
 };
 
+<<<<<<< HEAD
 // Get posts
 export const getPostCategories = () => async dispatch => {
   try {
@@ -46,6 +50,8 @@ export const getPostCategories = () => async dispatch => {
   }
 };
 
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 // Add like
 export const addLike = id => async dispatch => {
   try {

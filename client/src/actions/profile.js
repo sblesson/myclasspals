@@ -9,8 +9,12 @@ import {
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
   GET_REPOS,
+<<<<<<< HEAD
   GET_SCHOOL_DETAILS,
   CREATE_PROFILE
+=======
+  GET_SCHOOL_DETAILS
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 } from './types';
 
 // Get current users profile
@@ -25,10 +29,14 @@ export const getCurrentProfile = () => async dispatch => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
+<<<<<<< HEAD
       payload: {
         msg: err.response ? err.response.statusText : 'profile error',
         status: err.response ? err.response.status : 'profile error'
       }
+=======
+      payload: { msg: err.response.statusText, status: err.response.status }
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     });
   }
 };
@@ -121,7 +129,11 @@ export const createProfile = (
     const res = await axios.post('/api/profile', formData, config);
 
     dispatch({
+<<<<<<< HEAD
       type: CREATE_PROFILE,
+=======
+      type: GET_PROFILE,
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
       payload: res.data
     });
 
@@ -153,7 +165,11 @@ export const addSchool = (formData, history) => async dispatch => {
       }
     };
 
+<<<<<<< HEAD
     const res = await axios.put('/api/profile/community', formData, config);
+=======
+    const res = await axios.put('/api/profile/school', formData, config);
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 
     dispatch({
       type: UPDATE_PROFILE,
@@ -238,8 +254,12 @@ export const addReminder = (formData, history) => async dispatch => {
 // Delete school
 export const deleteSchool = id => async dispatch => {
   try {
+<<<<<<< HEAD
     console.log('deleteSchool');
     const res = await axios.delete(`/api/profile/community/${id}`);
+=======
+    const res = await axios.delete(`/api/profile/school/${id}`);
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 
     dispatch({
       type: UPDATE_PROFILE,
@@ -276,6 +296,7 @@ export const deleteReminder = id => async dispatch => {
 
 // Delete account & profile
 export const deleteAccount = () => async dispatch => {
+<<<<<<< HEAD
   try {
     await axios.delete('/api/profile');
 
@@ -288,5 +309,21 @@ export const deleteAccount = () => async dispatch => {
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
+=======
+  if (window.confirm('Are you sure? This can NOT be undone!')) {
+    try {
+      await axios.delete('/api/profile');
+
+      dispatch({ type: CLEAR_PROFILE });
+      dispatch({ type: ACCOUNT_DELETED });
+
+      dispatch(setAlert('Your account has been permanantly deleted'));
+    } catch (err) {
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
   }
 };

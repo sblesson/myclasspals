@@ -6,8 +6,12 @@ import {
   GET_PROFILES,
   GET_REPOS,
   ADD_SCHOOL,
+<<<<<<< HEAD
   DELETE_SCHOOL,
   CREATE_PROFILE
+=======
+  DELETE_SCHOOL
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 } from '../actions/types';
 
 const initialState = {
@@ -23,7 +27,10 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case GET_PROFILE:
+<<<<<<< HEAD
     case CREATE_PROFILE:
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     case UPDATE_PROFILE:
       return {
         ...state,

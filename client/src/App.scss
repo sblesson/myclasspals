@@ -1,10 +1,28 @@
 /* Global Styles */
 //@import 'styles/main';
+<<<<<<< HEAD
 @import 'styles/modal';
 @import 'styles/abstracts/variables';
 @import url('https://fonts.googleapis.com/css?family=Comfortaa|Nanum+Pen+Script&display=swap');
 
 //font-family: 'Comfortaa', cursive;
+=======
+
+$mainColor: #fff;
+
+:root {
+  /*--primary-color: #fc6459;*/
+  --primary-color: #e00083;
+  --secondary-color: #0892ab;
+  /*--tertiary-color: #ff5a5f;*/
+  --tertiary-color: #e00083;
+
+  --dark-color: #0892ab;
+  --light-color: #f4f4f4;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+}
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 
 * {
   box-sizing: border-box;
@@ -13,6 +31,7 @@
 }
 
 body {
+<<<<<<< HEAD
   //font-family: 'Raleway', sans-serif, 'Haas Grot Text R Web', 'Helvetica Neue',Helvetica, Arial;
   //font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -30,6 +49,13 @@ body {
   float: left;
   margin-left: 20px;
   min-width: 60%;
+=======
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  background-color: #f7f7f7;
+  color: #333;
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 }
 
 a {
@@ -44,6 +70,10 @@ ul {
 img {
   width: 100%;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 /* Utilities */
 .container {
   max-width: 1100px;
@@ -51,7 +81,11 @@ img {
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
+<<<<<<< HEAD
   margin-top: 1rem;
+=======
+  margin-top: 6rem;
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
   margin-bottom: 3rem;
 }
 
@@ -137,10 +171,13 @@ img {
   margin: 3rem 0;
 }
 
+<<<<<<< HEAD
 .m-left-5 {
   margin-left: 5px;
 }
 
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 .btn {
   display: inline-block;
   background: var(--light-color);
@@ -215,9 +252,15 @@ img {
 .bg-white,
 .badge-white,
 .alert-white {
+<<<<<<< HEAD
   background: var(--white-color);
   color: #333;
   //border: #ccc solid 1px;
+=======
+  background: #fff;
+  color: #333;
+  border: #ccc solid 1px;
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 }
 
 .btn:hover {
@@ -313,6 +356,43 @@ button {
   background: var(--light-color);
 }
 
+<<<<<<< HEAD
+=======
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 2rem;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  top: 0;
+  border-bottom: solid 1px #cdcdcd;
+  opacity: 0.9;
+}
+
+.navbar ul {
+  display: flex;
+}
+
+.navbar a {
+  color: var(--secondary-color);
+  top: 0;
+  padding: 0.45rem;
+  margin: 0 0.25rem;
+}
+
+.navbar a:hover {
+  color: var(--tertiary-color);
+  text-decoration: none;
+}
+
+.navbar .welcome span {
+  margin-right: 0.6rem;
+}
+
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 /* Landing Page */
 .landing {
   position: relative;
@@ -364,7 +444,11 @@ button {
 }
 
 .profile-top img {
+<<<<<<< HEAD
   width: 50px;
+=======
+  width: 250px;
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 }
 
 .profile-top .icons a {
@@ -381,7 +465,11 @@ button {
   text-align: center;
 }
 
+<<<<<<< HEAD
 .profile-about .interests {
+=======
+.profile-about .skills {
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
   display: flex;
   align-items: center;
   justify-content: center;
@@ -436,6 +524,44 @@ button {
   flex-basis: 20%;
 }
 
+<<<<<<< HEAD
+=======
+/* Posts Page */
+.post-form .post-form-header {
+  background: var(--primary-color);
+  padding: 0.5rem;
+}
+
+.post {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-gap: 2rem;
+  align-items: center;
+}
+
+.post > div:first-child {
+  text-align: center;
+}
+
+.post img {
+  width: 100px;
+}
+
+.post .comment-count {
+  background: var(--light-color);
+  color: var(--primary-color);
+  padding: 0.1rem 0.2rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+.post .post-date {
+  color: #aaa;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 /* Mobile Styles */
 @media (max-width: 700px) {
   .container {
@@ -505,7 +631,11 @@ button {
       'github';
   }
 
+<<<<<<< HEAD
   .profile-about .interests {
+=======
+  .profile-about .skills {
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     flex-direction: column;
   }
 
@@ -606,10 +736,22 @@ button {
   background-color: #ddd;
 }
 
+<<<<<<< HEAD
+=======
+@import 'http://weloveiconfonts.com/api/?family=fontawesome';
+
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 [class*='fontawesome-']:before {
   font-family: 'fontawesome', sans-serif;
 }
 
+<<<<<<< HEAD
+=======
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 .select-search-box {
   width: 300px;
   position: relative;

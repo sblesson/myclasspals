@@ -23,6 +23,7 @@ export const ADD_POST = 'ADD_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const GET_SCHOOL_DETAILS = 'GET_SCHOOL_DETAILS';
+<<<<<<< HEAD
 
 export const GET_SCHOOL_DATA = 'GET_SCHOOL_DATA';
 export const GET_SCHOOL_DATA_ERROR = 'GET_SCHOOL_DATA_ERROR';
@@ -36,3 +37,7 @@ export const GET_POST_CATEGORIES = 'GET_POST_CATEGORIES';
 //ERROR
 export const LEFT_NAV_ERROR = 'LEFT_NAV_ERROR';
 export const CREATE_PROFILE = 'CREATE_PROFILE';
+=======
+export const ADD_SCHOOL = 'ADD_SCHOOL';
+export const DELETE_SCHOOL = 'DELETE_SCHOOL';
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00

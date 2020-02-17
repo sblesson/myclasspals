@@ -15,8 +15,11 @@ app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/posts'));
+<<<<<<< HEAD
 app.use('/api/leftnav', require('./routes/api/leftnav'));
 app.use('/api/categories', require('./routes/api/categories'));
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

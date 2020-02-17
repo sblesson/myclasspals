@@ -6,13 +6,20 @@ import {
   ADD_POST,
   GET_POST,
   ADD_COMMENT,
+<<<<<<< HEAD
   REMOVE_COMMENT,
   GET_POST_CATEGORIES
+=======
+  REMOVE_COMMENT
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
 } from '../actions/types';
 
 const initialState = {
   posts: [],
+<<<<<<< HEAD
   categories: [],
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
   post: null,
   loading: true,
   error: {}
@@ -28,12 +35,15 @@ export default function(state = initialState, action) {
         posts: payload,
         loading: false
       };
+<<<<<<< HEAD
     case GET_POST_CATEGORIES:
       return {
         ...state,
         categories: payload,
         loading: false
       };
+=======
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     case GET_POST:
       return {
         ...state,

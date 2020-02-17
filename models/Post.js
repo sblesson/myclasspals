@@ -6,6 +6,7 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users'
   },
+<<<<<<< HEAD
   subject: {
     type: String,
     required: true
@@ -19,6 +20,9 @@ const PostSchema = new Schema({
     required: true
   },
   communityId: {
+=======
+  text: {
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
     type: String,
     required: true
   },

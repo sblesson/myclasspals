@@ -15,7 +15,11 @@ router.post(
   [
     auth,
     [
+<<<<<<< HEAD
       check('subject', 'subject is required')
+=======
+      check('text', 'Text is required')
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
         .not()
         .isEmpty()
     ]
@@ -30,11 +34,15 @@ router.post(
       const user = await User.findById(req.user.id).select('-password');
 
       const newPost = new Post({
+<<<<<<< HEAD
         //author: req.body.userId
         subject: req.body.subject,
         message: req.body.message,
         categoryId: req.body.categoryId,
         communityId: req.body.communityId,
+=======
+        text: req.body.text,
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
         name: user.name,
         avatar: user.avatar,
         user: req.user.id

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Navbar */
 .navbar {
   display: flex;
@@ -91,6 +92,27 @@
 
           text-decoration: none;
         }
+=======
+.ui.menu.top-menu {
+  border: none; /*Remove Semantic UI's bottom border*/
+  .logo {
+    width: 17rem;
+  }
+  .header-icon {
+    //color: #a0a0a0;
+    color: #484848;
+  }
+  .nav-container {
+    justify-content: space-between; /*maximize whitespace between elements*/
+    flex-grow: 1; /* take available space in the flex container */
+    padding: 0;
+    .search-input {
+      padding-left: 0;
+      width: 33%;
+
+      form {
+        width: 100%;
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
       }
     }
   }

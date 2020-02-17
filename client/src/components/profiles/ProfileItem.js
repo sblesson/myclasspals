@@ -7,7 +7,11 @@ const ProfileItem = ({
     user: { _id, name, avatar },
     status,
     company,
+<<<<<<< HEAD
     interests
+=======
+    skills
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
   }
 }) => {
   return (
@@ -19,6 +23,7 @@ const ProfileItem = ({
           {status} {company && <span> at {company}</span>}
         </p>
         <Link to={`/profile/${_id}`} className='btn btn-primary'>
+<<<<<<< HEAD
           My Profile
         </Link>
       </div>
@@ -26,6 +31,15 @@ const ProfileItem = ({
         {interests.slice(0, 4).map((interest, index) => (
           <li key={index} className='text-primary'>
             <i className='fas fa-check' /> {interest}
+=======
+          View Profile
+        </Link>
+      </div>
+      <ul>
+        {skills.slice(0, 4).map((skill, index) => (
+          <li key={index} className='text-primary'>
+            <i className='fas fa-check' /> {skill}
+>>>>>>> 54881ad2f7c207c5f89b336585b0b07518654a00
           </li>
         ))}
       </ul>
