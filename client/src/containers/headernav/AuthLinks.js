@@ -6,7 +6,7 @@ import DropDownMenu from '../dropdownmenu/DropDownMenu';
 import './HeaderNav.scss';
 import logo from '../../assets/images/logo.jpg';
 
-const HeaderNav = (isLoggedIn = false) => {
+const AuthLinks = (isLoggedIn = false) => {
   console.log(isLoggedIn);
   if (isLoggedIn) {
     return (
@@ -14,7 +14,7 @@ const HeaderNav = (isLoggedIn = false) => {
         <Menu.Item header className='logo'>
           <div class='column docs-icon-set-column'>
             <i aria-hidden='true' class='braille big icon'></i>
-            <p class='name'>classlee</p>
+            <p class='name'>clazzbuddy</p>
           </div>
         </Menu.Item>
         <Menu.Menu className='nav-container'>
@@ -67,7 +67,7 @@ const HeaderNav = (isLoggedIn = false) => {
         <Menu.Item header className='logo'>
           <div class='column docs-icon-set-column'>
             <i aria-hidden='true' class='braille big icon'></i>
-            <p class='name'>classlee</p>
+            <p class='name'>clazzbuddy</p>
           </div>
         </Menu.Item>
         <Menu.Menu className='nav-container'>
@@ -82,4 +82,4 @@ const HeaderNav = (isLoggedIn = false) => {
   }
 };
 
-export default HeaderNav;
+export default AuthLinks;
