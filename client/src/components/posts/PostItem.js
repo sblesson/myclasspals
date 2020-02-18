@@ -5,6 +5,7 @@ import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
+import { Menu, Icon } from 'semantic-ui-react';
 
 import { addLike, removeLike, deletePost } from '../../actions/post';
 import './PostItem.scss';
@@ -47,43 +48,33 @@ const PostItem = ({
         <div className='post-date'>
           Posted on <Moment format='LLLL'>{date}</Moment>
         </div>
-
-        <div className='action-status-container'>
-          {/*  <div className='action-status-item-container'>
-          {likes.length > 0 && <span>{likes.length} Agreed</span>}
-        </div> */}
-          <div className='action-status-item-container'>
-            {likes.length > 0 && <span>{likes.length} Thanked</span>}
-          </div>
-          <div className='action-status-item-container'>
-            {comments.length > 0 && (
-              <span className='comment-count'>{comments.length} commented</span>
-            )}
-          </div>
-        </div>
       </div>
 
       {showActions && (
         <Fragment>
-          {/*         <div
-            className='action-item-container m-left-minus-5'
-            onClick={() => addLike(_id)}
-          >
-            <i className='fas fa-thumbs-up' />
-            <span className='action-label'>Agree</span>
-          </div> */}
-          <div
-            className='action-item-container'
-            onClick={() => removeLike(_id)}
-          >
-            <i className='far fa-smile'></i>
-            <span className=' action-label'>Thank</span>
-          </div>
-          <div className='action-item-container' onClick={() => addLike(_id)}>
-            <i className='fas fa-comments m-left'></i>
+          <Menu>
+            <Menu.Item name='thank' onClick={() => addLike(_id)}>
+              <i className='far fa-smile'></i>&nbsp;&nbsp; Thank
+            </Menu.Item>
+            <Menu.Item name='Comment' onClick={() => removeLike(_id)}>
+              <i className='far fa-comment-alt'></i>&nbsp;&nbsp;Comment
+            </Menu.Item>
 
-            <span className='action-label'>Comment</span>
-          </div>
+            <Menu.Menu position='right'>
+              {likes.length > 0 && (
+                <Menu.Item name='thanked'>
+                  <i className='far fa-smile'></i> &nbsp;&nbsp;{likes.length}
+                </Menu.Item>
+              )}
+              {comments.length > 0 && (
+                <Menu.Item name='commented'>
+                  <i className='far fa-comment-alt'></i>&nbsp;&nbsp;
+                  {comments.length}
+                </Menu.Item>
+              )}
+            </Menu.Menu>
+          </Menu>
+
           <div className='comments'>
             {comments.map(comment => (
               <CommentItem key={comment._id} comment={comment} postId={_id} />
