@@ -12,9 +12,9 @@ const AuthLinks = (isLoggedIn = false) => {
     return (
       <Menu borderless className='top-menu' fixed='top'>
         <Menu.Item header className='logo'>
-          <div class='column docs-icon-set-column'>
-            <i aria-hidden='true' class='braille big icon'></i>
-            <p class='name'>clazzbuddy</p>
+          <div className='column docs-icon-set-column'>
+            <i aria-hidden='true' className='braille big icon'></i>
+            <p className='name'>clazzbuddy</p>
           </div>
         </Menu.Item>
         <Menu.Menu className='nav-container'>

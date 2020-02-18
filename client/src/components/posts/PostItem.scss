@@ -30,6 +30,9 @@
   }
   .post-message-container {
     margin-left: 10px;
+    .post-content-wrapper {
+      border: 1px solid grey;
+    }
     .post-heading {
       //font-family: 'Comfortaa', cursive;
       font-size: 1rem;

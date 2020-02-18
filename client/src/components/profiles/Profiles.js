@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import ProfileItem from './ProfileItem';
 import { getProfiles } from '../../actions/profile';
+import { List, Segment } from 'semantic-ui-react';
 
 import './Profiles.scss';
 const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
@@ -17,9 +18,9 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
         <Spinner />
       ) : (
         <Fragment>
-          <div>
-            <h3 className='heading-3'>My Connections</h3>
-            <div className='profiles'>
+          <h3 className='heading-3'>Parents &amp; Guardians </h3>
+          <Segment>
+            <List divided relaxed>
               {profiles.length > 0 ? (
                 profiles.map(profile => (
                   <ProfileItem key={profile._id} profile={profile} />
@@ -27,8 +28,8 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
               ) : (
                 <h4>No profiles found...</h4>
               )}
-            </div>
-          </div>
+            </List>
+          </Segment>
         </Fragment>
       )}
     </Fragment>

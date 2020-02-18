@@ -16,8 +16,8 @@ const Landing = ({ isAuthenticated, location }) => {
   return (
     <Fragment>
       <section className='container'>
-        <div class='row'>
-          <div class='col'>
+        <div className='row'>
+          <div className='col'>
             {' '}
             <section>
               <div className='dark-overlay'>
@@ -34,7 +34,7 @@ const Landing = ({ isAuthenticated, location }) => {
               </div>
             </section>
           </div>
-          <div class='col col-4'>
+          <div className='col col-4'>
             {location.pathname === '/login' ? <Login /> : <Register />}
           </div>
         </div>
