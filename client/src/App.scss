@@ -78,7 +78,7 @@ img {
 }
 
 .text-primary {
-  color: var(--primary-color);
+  color: var(--large-text-color);
 }
 
 .text-dark {
@@ -241,8 +241,8 @@ img {
 
 /* Overlay */
 .dark-overlay {
-  /*background-color: rgba(0, 0, 0, 0.7);*/
-  position: absolute;
+  /*background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;*/
   top: 0;
   left: 0;
   width: 100%;

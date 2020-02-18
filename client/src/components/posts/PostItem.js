@@ -38,26 +38,28 @@ const PostItem = ({
       </Link>
     </div>
     <div className='post-message-container'>
-      <Link to={`/posts/${_id}`} className='post-message-title-container'>
-        <h5 className='post-heading'>{subject}</h5>
-      </Link>
+      <div className='post-content-wrapper'>
+        <Link to={`/posts/${_id}`} className='post-message-title-container'>
+          <h5 className='post-heading'>{subject}</h5>
+        </Link>
 
-      <p className='my-1 post-message'>{message}</p>
-      <div className='post-date'>
-        Posted on <Moment format='LLLL'>{date}</Moment>
-      </div>
+        <p className='my-1 post-message'>{message}</p>
+        <div className='post-date'>
+          Posted on <Moment format='LLLL'>{date}</Moment>
+        </div>
 
-      <div className='action-status-container'>
-        {/*  <div className='action-status-item-container'>
+        <div className='action-status-container'>
+          {/*  <div className='action-status-item-container'>
           {likes.length > 0 && <span>{likes.length} Agreed</span>}
         </div> */}
-        <div className='action-status-item-container'>
-          {likes.length > 0 && <span>{likes.length} Thanked</span>}
-        </div>
-        <div className='action-status-item-container'>
-          {comments.length > 0 && (
-            <span className='comment-count'>{comments.length} commented</span>
-          )}
+          <div className='action-status-item-container'>
+            {likes.length > 0 && <span>{likes.length} Thanked</span>}
+          </div>
+          <div className='action-status-item-container'>
+            {comments.length > 0 && (
+              <span className='comment-count'>{comments.length} commented</span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -74,7 +76,7 @@ const PostItem = ({
             className='action-item-container'
             onClick={() => removeLike(_id)}
           >
-            <i class='far fa-smile'></i>
+            <i className='far fa-smile'></i>
             <span className=' action-label'>Thank</span>
           </div>
           <div className='action-item-container' onClick={() => addLike(_id)}>
@@ -87,6 +89,7 @@ const PostItem = ({
               <CommentItem key={comment._id} comment={comment} postId={_id} />
             ))}
           </div>
+
           <CommentForm postId={_id} />
 
           {!auth.loading && user === auth.user._id && (
