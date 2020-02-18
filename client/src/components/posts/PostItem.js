@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
+import CommentForm from './CommentForm';
+import CommentItem from './CommentItem';
+
 import { addLike, removeLike, deletePost } from '../../actions/post';
 import './PostItem.scss';
 
@@ -45,9 +48,9 @@ const PostItem = ({
       </div>
 
       <div className='action-status-container'>
-        <div className='action-status-item-container'>
+        {/*  <div className='action-status-item-container'>
           {likes.length > 0 && <span>{likes.length} Agreed</span>}
-        </div>
+        </div> */}
         <div className='action-status-item-container'>
           {likes.length > 0 && <span>{likes.length} Thanked</span>}
         </div>
@@ -60,13 +63,13 @@ const PostItem = ({
 
       {showActions && (
         <Fragment>
-          <div
+          {/*         <div
             className='action-item-container m-left-minus-5'
             onClick={() => addLike(_id)}
           >
             <i className='fas fa-thumbs-up' />
             <span className='action-label'>Agree</span>
-          </div>
+          </div> */}
           <div
             className='action-item-container'
             onClick={() => removeLike(_id)}
@@ -79,6 +82,13 @@ const PostItem = ({
 
             <span className='action-label'>Comment</span>
           </div>
+          <div className='comments'>
+            {comments.map(comment => (
+              <CommentItem key={comment._id} comment={comment} postId={_id} />
+            ))}
+          </div>
+          <CommentForm postId={_id} />
+
           {!auth.loading && user === auth.user._id && (
             <button
               onClick={() => deletePost(_id)}

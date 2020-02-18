@@ -3,26 +3,18 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
-import HeaderNav from '../../containers/headernav/HeaderNav';
+import AuthLinks from '../../containers/headernav/AuthLinks';
+import GuestLinks from '../../containers/headernav/GuestLinks';
 
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
-  const authLinks = <HeaderNav />;
+  const authLinks = <AuthLinks />;
 
-  const guestLinks = (
-    <ul>
-      <li>
-        <Link to='/register'>Register</Link>
-      </li>
-      <li>
-        <Link to='/login'>Login</Link>
-      </li>
-    </ul>
-  );
+  const guestLinks = <GuestLinks />;
 
   return (
     <nav className='navbar'>
       <h1>
-        <Link to='/'>classlee</Link>
+        <Link to='/'>clazzbuddy</Link>
       </h1>
       {!loading && (
         <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>

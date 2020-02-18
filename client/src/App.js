@@ -30,6 +30,9 @@ const App = () => {
           <HeaderNav />
           <Switch>
             <Route exact path='/' component={Landing} />
+            <Route exact path='/register' component={Landing} />
+            <Route exact path='/login' component={Landing} />
+
             <Route component={Routes} />
           </Switch>
         </Fragment>
