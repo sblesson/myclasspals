@@ -6,6 +6,8 @@ import PostItem from './PostItem';
 import PostModal from '../modal/post/PostModal';
 import { getPosts, getPostCategories } from '../../actions/post';
 import LeftNav from '../leftnav/LeftNav';
+import { Menu, Segment, List, Button, Image } from 'semantic-ui-react';
+
 import './Posts.scss';
 const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
   useEffect(() => {
@@ -23,11 +25,11 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
         <div id='main'>
           <article>
             <PostModal />
-            <div className='posts'>
+            <List>
               {posts.map(post => (
                 <PostItem key={post._id} post={post} />
               ))}
-            </div>
+            </List>
           </article>
         </div>
       </div>

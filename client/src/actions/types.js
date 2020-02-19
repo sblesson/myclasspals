@@ -16,7 +16,6 @@ export const PROFILE_ERROR = 'PROFILE_ERROR';
 export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
 export const GET_POSTS = 'GET_POSTS';
 export const GET_POST = 'GET_POST';
-export const POST_ERROR = 'POST_ERROR';
 export const UPDATE_LIKES = 'UPDATE_LIKES';
 export const DELETE_POST = 'DELETE_POST';
 export const ADD_POST = 'ADD_POST';
@@ -32,7 +31,10 @@ export const GET_LEFT_NAV = 'GET_LEFT_NAV';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const HIDE_MODAL = 'HIDE_MODAL';
 export const GET_POST_CATEGORIES = 'GET_POST_CATEGORIES';
-//ERROR
-export const LEFT_NAV_ERROR = 'LEFT_NAV_ERROR';
 export const CREATE_PROFILE = 'CREATE_PROFILE';
 export const ADD_SCHOOL = 'ADD_SCHOOL';
+
+//ERROR
+export const LEFT_NAV_ERROR = 'LEFT_NAV_ERROR';
+export const REMOVE_COMMENT_ERROR = 'REMOVE_COMMENT_ERROR';
+export const POST_ERROR = 'POST_ERROR';

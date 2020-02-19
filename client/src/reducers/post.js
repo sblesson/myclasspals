@@ -7,7 +7,8 @@ import {
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
-  GET_POST_CATEGORIES
+  GET_POST_CATEGORIES,
+  REMOVE_COMMENT_ERROR
 } from '../actions/types';
 
 const initialState = {
@@ -81,6 +82,12 @@ export default function(state = initialState, action) {
             comment => comment._id !== payload
           )
         },
+        loading: false
+      };
+    case REMOVE_COMMENT_ERROR:
+      return {
+        ...state,
+        error: payload,
         loading: false
       };
     default:
