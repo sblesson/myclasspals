@@ -1,6 +1,6 @@
 /node_modules
-client/node_modules
-.history
-client/.history
+/client/node_modules
+/.history
+/client/.history
 node_modules/
 target/

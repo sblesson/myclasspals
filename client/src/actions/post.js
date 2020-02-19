@@ -9,7 +9,8 @@ import {
   ADD_POST,
   GET_POST,
   ADD_COMMENT,
-  REMOVE_COMMENT
+  REMOVE_COMMENT,
+  REMOVE_COMMENT_ERROR
 } from './types';
 
 // Get posts
@@ -181,9 +182,11 @@ export const deleteComment = (postId, commentId) => async dispatch => {
     });
 
     dispatch(setAlert('Comment Removed', 'success'));
+    console.log(commentId);
   } catch (err) {
+    console.log(err);
     dispatch({
-      type: POST_ERROR,
+      type: REMOVE_COMMENT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }

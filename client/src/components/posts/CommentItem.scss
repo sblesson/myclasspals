@@ -1,0 +1,21 @@
+.ui {
+  .comment-form {
+    height: 70px;
+    .comment-item {
+      border: 1px solid grey;
+      background-origin: padding-box;
+    }
+    .comment-text {
+      border-radius: 25px;
+      padding: 20px;
+      padding-top: 10px;
+      height: 5px;
+      overflow: hidden;
+    }
+    .reply-btn {
+      margin-top: 5px;
+      padding: 8px;
+      float: right;
+    }
+  }
+}
