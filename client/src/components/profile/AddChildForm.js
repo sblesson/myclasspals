@@ -2,7 +2,8 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import downshift from 'downshift';
+import DownshiftTwo from './DownshiftTwo';
 import _ from 'lodash';
 
 import { createProfile, getCurrentProfile } from '../../actions/profile';
@@ -18,9 +19,17 @@ import {
   Search
 } from 'semantic-ui-react';
 import './AddChildForm.scss';
+import Downshift from 'downshift';
 
 const AddChildForm = ({ community }) => {
   const [formData, setFormData] = useState({});
+  const items = [
+    { value: 'apple' },
+    { value: 'pear' },
+    { value: 'orange' },
+    { value: 'grape' },
+    { value: 'banana' }
+  ];
 
   const yourInfo =
     community !== null &&
@@ -37,18 +46,18 @@ const AddChildForm = ({ community }) => {
             required
           />
           <Form.Field>
-            {' '}
-            <Search
+            <DownshiftTwo></DownshiftTwo>
+            {/*      <Search
               fluid
-              /*      //loading={isLoading}
+                  //loading={isLoading}
           //onResultSelect={this.handleResultSelect}
           onSearchChange={_.debounce(this.handleSearchChange, 500, {
             leading: true
           })}
           results={results}
           value={value}
-          {...this.props} */
-            />
+          {...this.props} 
+            /> */}
           </Form.Field>
 
           {/*       <Form.Field widths='equal'>
@@ -99,7 +108,7 @@ AddChildForm.propTypes = {
 };
 const mapStateToProps = state => ({
   profile: state.profile,
-  isLoading: state.school.isLoading
+  isLoading: state.schools.isLoading
 });
 export default connect(mapStateToProps, {
   createProfile,

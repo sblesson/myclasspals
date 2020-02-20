@@ -19,7 +19,7 @@ import {
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addSchool } from '../../../actions/profile';
-import { getSchoolData } from '../../../actions/school';
+import { getSchoolData } from '../../../actions/schools';
 import './SchoolModal.scss';
 
 const AddSchoolModal = ({

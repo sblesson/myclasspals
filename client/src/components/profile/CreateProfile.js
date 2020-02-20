@@ -135,11 +135,13 @@ const CreateProfile = ({
     <Redirect to='/dashboard' />
   ) : (
     <Fragment>
-      <div class='create-profile-component-container'>
-        <div class='create-profile-component-header'>
-          <h4 class='create-profile-component-title'>Create Your Profile</h4>
+      <div className='create-profile-component-container'>
+        <div className='create-profile-component-header'>
+          <h4 className='create-profile-component-title'>
+            Create Your Profile
+          </h4>
         </div>
-        <div class='create-profile-component-content'>
+        <div className='create-profile-component-content'>
           <small>Don\'t worry you change change this info later </small>
           <br />
           <small>* = required field</small>
@@ -164,7 +166,7 @@ CreateProfile.propTypes = {
 };
 const mapStateToProps = state => ({
   profile: state.profile,
-  isLoading: state.school.isLoading
+  isLoading: state.schools.isLoading
 });
 export default connect(mapStateToProps, {
   createProfile,

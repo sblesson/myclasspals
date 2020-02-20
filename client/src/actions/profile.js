@@ -86,25 +86,6 @@ export const getGithubRepos = username => async dispatch => {
   }
 };
 
-// Get Github repos
-export const getSchoolDetails = searchTerm => async dispatch => {
-  try {
-    const res = await axios.get(
-      `https://api.schooldigger.com/v1.2/autocomplete/schools?q=${searchTerm}&appID=02e5e1fb&appKey=516f6dd0da01a186ffedea905bec1041`
-    );
-
-    dispatch({
-      type: GET_SCHOOL_DETAILS,
-      payload: res.data
-    });
-  } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-
 // Create or update profile
 export const createProfile = (
   formData,
