@@ -12,7 +12,7 @@ import './DropDownMenu.scss';
 // The "Publish To Web" item should contain a sub-menu.
 
 const DropDownMenu = ({ logout }) => (
-  <Dropdown icon='user circle big' className='header-icon big '>
+  <Dropdown icon='user' className='header-icon'>
     <Dropdown.Menu>
       <Dropdown.Item text='My Profile' as={Link} to='/view-profile' />
 

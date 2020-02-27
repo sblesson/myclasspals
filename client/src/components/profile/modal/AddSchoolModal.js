@@ -15,6 +15,7 @@ import {
   ModalBody,
   ModalFooter
 } from 'reactstrap';
+import AddChildForm from '../AddChildForm';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -40,6 +41,22 @@ const AddSchoolModal = ({
     childName: ''
   });
 
+  const community = [
+    {
+      id: null,
+      childName: '',
+      grade: '',
+      classroom: '',
+      school: {
+        name: '',
+        street: '',
+        suite: '',
+        city: '',
+        state: '',
+        zipcode: ''
+      }
+    }
+  ];
   const [modal, setModal] = useState(false);
   /* 
   useEffect(() => {
@@ -95,7 +112,9 @@ const AddSchoolModal = ({
           {"Connect to your child's class community"}
         </ModalHeader>
         <ModalBody>
-          <Form>
+          <AddChildForm community={community} />
+
+          {/*           <Form>
             <FormGroup className='post-form'>
               <Input
                 placeholder='Name of Child'
@@ -143,7 +162,7 @@ const AddSchoolModal = ({
                 onChange={e => onChange(e)}
               />
             </FormGroup>
-          </Form>
+          </Form> */}
         </ModalBody>
         <ModalFooter>
           <Button
@@ -169,9 +188,9 @@ AddSchoolModal.propTypes = {
 const mapStateToProps = state => {
   console.log(state);
   return {
-    results: state.school.results,
-    isLoading: state.school.isLoading,
-    value: state.school.value
+    //results: state.school.results,
+    //isLoading: state.school.isLoading,
+    //value: state.school.value
   };
 };
 

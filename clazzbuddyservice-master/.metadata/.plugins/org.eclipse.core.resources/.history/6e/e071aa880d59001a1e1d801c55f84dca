@@ -1,0 +1,10 @@
+package com.clazzbuddy.restmodel;
+
+public class PostSearchQuery {
+
+	private String keyWord;
+	
+	private String schoolid;
+	
+	
+}

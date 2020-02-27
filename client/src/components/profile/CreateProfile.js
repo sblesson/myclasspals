@@ -28,7 +28,11 @@ const CreateProfile = ({
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
-  const handleRangeChange = e => setActiveIndex(e.target.value);
+
+  const handlePageChange = e => {
+    setActiveIndex(e.target.value);
+    console.log(profileData);
+  };
 
   const [profileData, setProfileData] = useState({
     user: {
@@ -45,17 +49,17 @@ const CreateProfile = ({
     },
     community: [
       {
-        id: 2,
-        childName: 'Leanne Graham',
-        grade: 'Apt. 556',
-        classroom: 'Gwenborough',
+        id: null,
+        childName: '',
+        grade: '',
+        classroom: '',
         school: {
-          name: 'Kulas Light',
-          street: 'Apt. 556',
-          suite: 'Apt. 556',
-          city: 'Apt. 556',
-          state: 'California',
-          zipcode: '92998-3874'
+          name: '',
+          street: '',
+          suite: '',
+          city: '',
+          state: '',
+          zipcode: ''
         }
       }
     ],
@@ -73,7 +77,7 @@ const CreateProfile = ({
             content='Proceed'
             color='pink'
             className='actionBtnWrapper'
-            onClick={handleRangeChange}
+            onClick={handlePageChange}
             value={1}
           />
         </Tab.Pane>
@@ -88,7 +92,7 @@ const CreateProfile = ({
             content='Proceed'
             className='actionBtnWrapper'
             color='pink'
-            onClick={handleRangeChange}
+            onClick={handlePageChange}
             value={2}
           />
         </Tab.Pane>
@@ -109,7 +113,7 @@ const CreateProfile = ({
             content='Submit'
             className='actionBtnWrapper'
             color='pink'
-            disabled={profileData.isAcceptedTandC}
+            disabled={profileData.isTandCAccepted}
             onClick={handleSubmitProfile}
           />
         </Tab.Pane>
@@ -118,13 +122,13 @@ const CreateProfile = ({
   ];
 
   const onChangeCheckBoxHandler = (event, data) => {
-    profileData.isAcceptedTandC = data.checked;
+    profileData.isTandCAccepted = data.checked;
   };
 
   const handleSubmitProfile = e => {
     e.preventDefault();
     console.log(profileData);
-    //createProfile(profileData, history);
+    createProfile(profileData, history);
     history.push('/dashboard');
   };
   useEffect(() => {
@@ -135,11 +139,13 @@ const CreateProfile = ({
     <Redirect to='/dashboard' />
   ) : (
     <Fragment>
-      <div class='create-profile-component-container'>
-        <div class='create-profile-component-header'>
-          <h4 class='create-profile-component-title'>Create Your Profile</h4>
+      <div className='create-profile-component-container'>
+        <div className='create-profile-component-header'>
+          <h4 className='create-profile-component-title'>
+            Create Your Profile
+          </h4>
         </div>
-        <div class='create-profile-component-content'>
+        <div className='create-profile-component-content'>
           <small>Don\'t worry you change change this info later </small>
           <br />
           <small>* = required field</small>

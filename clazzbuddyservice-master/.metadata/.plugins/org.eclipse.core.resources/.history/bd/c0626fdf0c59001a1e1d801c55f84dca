@@ -1,0 +1,5 @@
+package com.clazzbuddy.restservice;
+
+public class PostController {
+
+}

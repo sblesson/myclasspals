@@ -3,20 +3,29 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import { deleteComment } from '../../actions/post';
+import { deleteComment, deleteSinglePostComment } from '../../actions/post';
 import { Image, List, Button } from 'semantic-ui-react';
 
 const CommentItem = ({
   postId,
   comment: { _id, text, name, avatar, user, date },
   auth,
-  deleteComment
+  deleteComment,
+  isSinglePost,
+  deleteSinglePostComment
 }) => (
   <List.Item>
     <List.Content floated='right'>
       {!auth.loading && user === auth.user._id && (
         <Button
-          onClick={() => deleteComment(postId, _id)}
+          onClick={() => {
+            if (isSinglePost) {
+              deleteSinglePostComment(postId, _id);
+            } else {
+              //deleting from dashboard
+              deleteComment(postId, _id);
+            }
+          }}
           type='button'
           content='Delete'
           color='pink'
@@ -45,11 +54,15 @@ CommentItem.propTypes = {
   postId: PropTypes.string.isRequired,
   comment: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  deleteComment: PropTypes.func.isRequired
+  deleteComment: PropTypes.func.isRequired,
+  deleteSinglePostComment: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { deleteComment })(CommentItem);
+export default connect(mapStateToProps, {
+  deleteComment,
+  deleteSinglePostComment
+})(CommentItem);

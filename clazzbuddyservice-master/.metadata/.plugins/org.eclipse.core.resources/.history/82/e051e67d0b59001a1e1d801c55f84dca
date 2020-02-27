@@ -1,0 +1,15 @@
+package com.clazzbuddy.mongocollections;
+
+import java.util.Date;
+
+public class Post {
+
+	private String message;
+	
+	private Date date;
+	
+	private String catagory;
+	
+	private String subject;
+	
+}

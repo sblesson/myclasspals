@@ -1,0 +1,8 @@
+1582771374805	Delete element
+1582772429344	Encapsulate field 'post'
+1582773146664	Rename type 'PostController'
+1582773173279	Rename type 'PostService'
+1582773586037	Encapsulate field 'keyword'
+1582774598722	Encapsulate field 'lastSeen'
+1582774665121	Encapsulate field '_id'
+1582775101032	Encapsulate field 'lastseen'

@@ -7,13 +7,17 @@ import { GET_SCHOOL_DATA, GET_SCHOOL_DATA_ERROR } from './types';
 export const getSchoolData = (searchTerm = '') => async dispatch => {
   try {
     console.log('school data');
-    const res = await axios.get(
+    /*     const res = await axios.get(
       `https://api.schooldigger.com/v1.2/autocomplete/schools?q=${searchTerm}&appID=02e5e1fb&appKey=516f6dd0da01a186ffedea905bec1041`
+    ); */
+    const res = await axios.get(
+      `http://localhost:8080/school/schoollist?searchkey=${searchTerm}`
     );
     dispatch({
       type: GET_SCHOOL_DATA,
       payload: res.data
     });
+    console.log(res);
   } catch (err) {
     dispatch({
       type: GET_SCHOOL_DATA_ERROR,
