@@ -23,7 +23,12 @@ import {
 import './AddChildForm.scss';
 import './styles.css';
 
-const AddChildForm = ({ community, getSchoolData, schools }) => {
+const AddChildForm = ({
+  community,
+  showwAddChildButton,
+  getSchoolData,
+  schools
+}) => {
   const inputOnChange = event => {
     console.log(event.target.value);
     if (!event.target.value) {
@@ -163,7 +168,7 @@ const AddChildForm = ({ community, getSchoolData, schools }) => {
   const schoolNameSelectHandler = (selectedItem, index) => {
     console.log(selectedItem);
     console.log(index);
-    community[index].school = selectedItem;
+    community[index].schoolid = selectedItem.schoolid;
   };
 
   const gradeSelectHandler = (selectedGrade, index) => {
@@ -180,18 +185,10 @@ const AddChildForm = ({ community, getSchoolData, schools }) => {
 
   const handleAddMoreChild = () => {
     community.push({
-      id: null,
-      childName: '',
+      displayname: '',
       grade: '',
       classroom: '',
-      school: {
-        name: '',
-        street: '',
-        suite: '',
-        city: '',
-        state: '',
-        zipcode: ''
-      }
+      schoolid: ''
     });
     this.forceUpdate(() => {
       console.log(community);
@@ -208,9 +205,9 @@ const AddChildForm = ({ community, getSchoolData, schools }) => {
         <Form>
           <Form.Field
             control={Input}
-            placeholder='Child Name'
-            name='childName'
-            defaultValue={childData.childName}
+            placeholder='Display Name'
+            name='displayname'
+            defaultValue={childData.displayname}
             onChange={e => onChange(e, childData)}
             required
           />
@@ -395,13 +392,17 @@ const AddChildForm = ({ community, getSchoolData, schools }) => {
               )}
             </Downshift>
           </Form.Field>
-          <Button
-            content='Add Child'
-            className='actionBtnWrapper'
-            color='pink'
-            onClick={() => handleAddMoreChild}
-            value={2}
-          />
+          {showwAddChildButton ? (
+            <Button
+              content='Add Child'
+              className='actionBtnWrapper'
+              color='pink'
+              onClick={() => handleAddMoreChild}
+              value={2}
+            />
+          ) : (
+            ''
+          )}
         </Form>
       </div>
     ));
@@ -416,7 +417,8 @@ AddChildForm.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  community: PropTypes.array.isRequired
+  community: PropTypes.array.isRequired,
+  showwAddChildButton: PropTypes.bool
 };
 const mapStateToProps = state => ({
   profile: state.profile,

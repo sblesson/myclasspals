@@ -28,8 +28,9 @@ const PostModal = ({ addPost, history, categories }) => {
   const [formData, setFormData] = useState({
     subject: '',
     message: '',
-    categoryId: '1',
-    communityId: '1'
+    category: '1',
+    schoolId: '1',
+    userid: '3' //get userid from db
   });
 
   const [modal, setModal] = useState(false);

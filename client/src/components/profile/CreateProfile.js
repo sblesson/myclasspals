@@ -35,32 +35,21 @@ const CreateProfile = ({
   };
 
   const [profileData, setProfileData] = useState({
-    user: {
-      name: '',
-      email: '',
-      phone: '',
-      address: {
-        street: '',
-        suite: '',
-        city: '',
-        state: '',
-        zipcode: ''
-      }
-    },
+    name: '',
+    email: '',
+    phone: '',
+    street: '',
+    suite: '',
+    city: '',
+    state: '',
+    zipcode: '',
+
     community: [
       {
-        id: null,
-        childName: '',
+        displayname: '',
         grade: '',
         classroom: '',
-        school: {
-          name: '',
-          street: '',
-          suite: '',
-          city: '',
-          state: '',
-          zipcode: ''
-        }
+        schoolid: ''
       }
     ],
     isTandCAccepted: false
@@ -71,7 +60,7 @@ const CreateProfile = ({
       menuItem: 'Your Info',
       render: () => (
         <Tab.Pane attached={false}>
-          <UserAccountForm user={profileData.user} />
+          <UserAccountForm profileData={profileData} />
 
           <Button
             content='Proceed'
@@ -87,7 +76,10 @@ const CreateProfile = ({
       menuItem: "Child's Class Info",
       render: () => (
         <Tab.Pane attached={false}>
-          <AddChildForm community={profileData.community} />
+          <AddChildForm
+            community={profileData.community}
+            showwAddChildButton={true}
+          />
           <Button
             content='Proceed'
             className='actionBtnWrapper'

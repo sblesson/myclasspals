@@ -17,7 +17,7 @@ const Landing = ({ isAuthenticated, location }) => {
     <Fragment>
       <section className='container'>
         <div className='row'>
-          <div className='col'>
+          <div className='col col-8'>
             {' '}
             <section>
               <div className='dark-overlay'>

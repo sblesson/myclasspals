@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Search, Input, Grid, Header, Segment, Label } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
-import {
-  Col,
-  Row,
-  Button,
-  Form,
-  FormGroup,
-  FormText,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import AddChildForm from '../AddChildForm';
 
 import PropTypes from 'prop-types';
@@ -32,36 +20,21 @@ const AddSchoolModal = ({
   value
 }) => {
   const [formData, setFormData] = useState({
-    schoolName: '',
-    schoolCity: '',
-    schoolState: '',
-    schoolZip: '',
-    grade: '',
-    classRoom: '',
-    childName: ''
+    displayname: 'sdfadf',
+    grade: 'sdfasdf',
+    classroom: 'fasdf',
+    schoolid: 'sdaff'
   });
 
   const community = [
     {
-      id: null,
-      childName: '',
+      displayname: '',
       grade: '',
       classroom: '',
-      school: {
-        name: '',
-        street: '',
-        suite: '',
-        city: '',
-        state: '',
-        zipcode: ''
-      }
+      schoolid: ''
     }
   ];
   const [modal, setModal] = useState(false);
-  /* 
-  useEffect(() => {
-    getSchoolData();
-  }, [getSchoolData]); */
 
   const resultRenderer = ({ schoolid, schoolName, city, state, zip }) => (
     <div class='content' key={{ schoolid }}>
@@ -73,7 +46,6 @@ const AddSchoolModal = ({
   );
   resultRenderer.propTypes = {
     schoolid: PropTypes.string,
-    schoolName: PropTypes.string,
     city: PropTypes.string,
     state: PropTypes.string,
     zip: PropTypes.string
@@ -113,56 +85,6 @@ const AddSchoolModal = ({
         </ModalHeader>
         <ModalBody>
           <AddChildForm community={community} />
-
-          {/*           <Form>
-            <FormGroup className='post-form'>
-              <Input
-                placeholder='Name of Child'
-                name='childName'
-                onChange={e => onChange(e)}
-                required
-              />
-            </FormGroup>
-            <FormGroup className='post-form'>
-              <Grid>
-                <Grid.Column width={6}>
-                  <Search
-                    placeholder='Type school name'
-                    loading={isLoading}
-                    onResultSelect={handleResultSelect}
-                    onBlur={_.debounce(handleSearchOnBlur, 500, {
-                      leading: true
-                    })}
-                    results={results}
-                    value={value}
-                    resultRenderer={resultRenderer}
-                    name='schoolName'
-                    //onChange={e => onChange(e)}
-                  />
-                </Grid.Column>
-              </Grid>
-            </FormGroup>
-            <FormGroup className='post-form'>
-              <Input
-                className='post-form-text-input'
-                type='text'
-                name='grade'
-                //value={grade}
-                placeholder='* Grade'
-                onChange={e => onChange(e)}
-              />
-            </FormGroup>
-            <FormGroup className='post-form'>
-              <Input
-                className='post-form-text-input'
-                type='text'
-                name='classRoom'
-                //value={classRoom}
-                placeholder='Class Room'
-                onChange={e => onChange(e)}
-              />
-            </FormGroup>
-          </Form> */}
         </ModalBody>
         <ModalFooter>
           <Button
