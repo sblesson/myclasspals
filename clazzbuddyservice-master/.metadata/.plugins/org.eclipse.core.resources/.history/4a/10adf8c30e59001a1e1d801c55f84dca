@@ -1,0 +1,54 @@
+package com.clazzbuddy.restservice;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.clazzbuddy.mongocollections.Post;
+import com.clazzbuddy.restmodel.CommonResult;
+import com.clazzbuddy.restmodel.PostSearchQuery;
+import com.clazzbuddy.service.PostService;
+
+@RestController
+@RequestMapping("/post")
+@CrossOrigin(origins = "*")
+public class PostController {
+
+	@Autowired
+	PostService postService;
+
+	@PostMapping(value="/createpost", produces={"application/json"})
+	public CommonResult createPost(@RequestBody Post post) {
+		CommonResult result = new CommonResult();
+		
+		try {
+			postService.createPost(post);
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.getMessage());
+		}
+		
+		return result;
+		
+	}
+	
+	@PostMapping(value="/searchpost", produces={"application/json"})
+	public CommonResult getPosts(@RequestBody PostSearchQuery postSearchQuery) {
+		CommonResult result = new CommonResult();
+		
+		try {
+			postService.createPost(post);
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.getMessage());
+		}
+		
+		return result;
+		
+	}
+}

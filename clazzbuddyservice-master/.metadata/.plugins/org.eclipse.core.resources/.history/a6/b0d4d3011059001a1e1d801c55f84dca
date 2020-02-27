@@ -1,0 +1,26 @@
+package com.clazzbuddy.restmodel;
+
+public class PostSearchQuery {
+
+	private String keyWord;
+	
+	private String schoolid;
+
+	public String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
+	}
+
+	public String getSchoolid() {
+		return schoolid;
+	}
+
+	public void setSchoolid(String schoolid) {
+		this.schoolid = schoolid;
+	}
+	
+	
+}

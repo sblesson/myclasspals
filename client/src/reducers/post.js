@@ -6,7 +6,9 @@ import {
   ADD_POST,
   GET_POST,
   ADD_COMMENT,
+  ADD_COMMENT_SINGLE_POST,
   REMOVE_COMMENT,
+  REMOVE_COMMENT_SINGLE_POST,
   GET_POST_CATEGORIES,
   REMOVE_COMMENT_ERROR
 } from '../actions/types';
@@ -70,20 +72,47 @@ export default function(state = initialState, action) {
     case ADD_COMMENT:
       return {
         ...state,
-        post: { ...state.post, comments: payload },
+        posts: state.posts.map(post =>
+          post._id === payload.postId
+            ? { ...post, comments: payload.comments }
+            : post
+        ),
+        loading: false
+      };
+    case ADD_COMMENT_SINGLE_POST:
+      return {
+        ...state,
+        post: { ...state.post, comments: payload.comments },
         loading: false
       };
     case REMOVE_COMMENT:
       return {
         ...state,
+        posts: state.posts.map(post =>
+          post._id === payload.postId
+            ? {
+                ...post,
+                comments: post.comments.filter(
+                  comment => comment._id !== payload.commentId
+                )
+              }
+            : post
+        ),
+        loading: false
+      };
+
+    case REMOVE_COMMENT_SINGLE_POST:
+      return {
+        ...state,
         post: {
           ...state.post,
           comments: state.post.comments.filter(
-            comment => comment._id !== payload
+            comment => comment._id !== payload.commentId
           )
         },
         loading: false
       };
+
     case REMOVE_COMMENT_ERROR:
       return {
         ...state,

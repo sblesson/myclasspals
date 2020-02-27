@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addComment } from '../../actions/post';
+import { addComment, addCommentToSinglePost } from '../../actions/post';
 import { Button } from 'semantic-ui-react';
 
 import './CommentItem.scss';
 
-const CommentForm = ({ postId, addComment }) => {
+const CommentForm = ({
+  postId,
+  isSinglePost,
+  addComment,
+  addCommentToSinglePost
+}) => {
   const [text, setText] = useState('');
 
   return (
@@ -15,7 +20,11 @@ const CommentForm = ({ postId, addComment }) => {
         className='form my-1'
         onSubmit={e => {
           e.preventDefault();
-          addComment(postId, { text });
+          if (isSinglePost) {
+            addCommentToSinglePost(postId, { text });
+          } else {
+            addComment(postId, { text });
+          }
           setText('');
         }}
       >
@@ -40,7 +49,11 @@ const CommentForm = ({ postId, addComment }) => {
 };
 
 CommentForm.propTypes = {
-  addComment: PropTypes.func.isRequired
+  isSinglePost: PropTypes.bool.isRequired,
+  addComment: PropTypes.func.isRequired,
+  addCommentToSinglePost: PropTypes.func.isRequired
 };
 
-export default connect(null, { addComment })(CommentForm);
+export default connect(null, { addComment, addCommentToSinglePost })(
+  CommentForm
+);

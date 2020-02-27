@@ -16,7 +16,7 @@ router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.user.id
-    }).populate('user', ['name', 'avatar']);
+    }).populate('user', ['name', 'email', 'avatar', 'phone', 'address']);
 
     if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
@@ -37,7 +37,7 @@ router.post(
   [
     auth,
     [
-      check('phone', 'Phone is required')
+      check('community', 'community is required')
         .not()
         .isEmpty()
       /*   check('skills', 'Skills is required')
@@ -51,43 +51,20 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      company,
-      website,
-      location,
-      bio,
-      status,
-      username,
-      interests,
-      youtube,
-      facebook,
-      twitter,
-      instagram,
-      linkedin
-    } = req.body;
+    const { user, address, community, isTandCAccepted } = req.body;
 
     // Build profile object
     const profileFields = {};
     profileFields.user = req.user.id;
-    if (company) profileFields.company = company;
-    if (website) profileFields.website = website;
-    if (location) profileFields.location = location;
-    if (bio) profileFields.bio = bio;
-    if (status) profileFields.status = status;
-    if (username) profileFields.username = username;
-    if (interests) {
-      profileFields.interests = interests
-        .split(',')
-        .map(interest => interest.trim());
-    }
+    if (community && community.length > 0) profileFields.community = community;
+    if (address) profileFields.address = address;
 
-    // Build social object
-    profileFields.social = {};
-    if (youtube) profileFields.social.youtube = youtube;
-    if (twitter) profileFields.social.twitter = twitter;
-    if (facebook) profileFields.social.facebook = facebook;
-    if (linkedin) profileFields.social.linkedin = linkedin;
-    if (instagram) profileFields.social.instagram = instagram;
+    if (isTandCAccepted) profileFields.isTandCAccepted = isTandCAccepted;
+    // if (interests) {
+    //   profileFields.interests = interests
+    //     .split(',')
+    //     .map(interest => interest.trim());
+    // }
 
     try {
       // Using upsert option (creates new doc if no match is found):
@@ -96,6 +73,7 @@ router.post(
         { $set: profileFields },
         { new: true, upsert: true }
       );
+      console.log(profileFields);
       res.json(profile);
     } catch (err) {
       console.error(err.message);

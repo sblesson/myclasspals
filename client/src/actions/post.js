@@ -10,6 +10,8 @@ import {
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
+  ADD_COMMENT_SINGLE_POST,
+  REMOVE_COMMENT_SINGLE_POST,
   REMOVE_COMMENT_ERROR
 } from './types';
 
@@ -159,7 +161,36 @@ export const addComment = (postId, formData) => async dispatch => {
 
     dispatch({
       type: ADD_COMMENT,
-      payload: res.data
+      payload: { postId, comments: res.data }
+    });
+
+    dispatch(setAlert('Comment Added', 'success'));
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Add comment
+export const addCommentToSinglePost = (postId, formData) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post(
+      `/api/posts/comment/${postId}`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: ADD_COMMENT_SINGLE_POST,
+      payload: { postId, comments: res.data }
     });
 
     dispatch(setAlert('Comment Added', 'success'));
@@ -174,11 +205,34 @@ export const addComment = (postId, formData) => async dispatch => {
 // Delete comment
 export const deleteComment = (postId, commentId) => async dispatch => {
   try {
-    await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
 
     dispatch({
       type: REMOVE_COMMENT,
-      payload: commentId
+      payload: { postId, commentId, comments: res.data }
+    });
+
+    dispatch(setAlert('Comment Removed', 'success'));
+    console.log(commentId);
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: REMOVE_COMMENT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+export const deleteSinglePostComment = (
+  postId,
+  commentId
+) => async dispatch => {
+  try {
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
+
+    dispatch({
+      type: REMOVE_COMMENT_SINGLE_POST,
+      payload: { postId, commentId, comments: res.data }
     });
 
     dispatch(setAlert('Comment Removed', 'success'));

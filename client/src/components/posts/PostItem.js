@@ -27,7 +27,9 @@ const PostItem = ({
     comments,
     date
   },
-  showActions
+  showActions,
+  showAllComments,
+  isSinglePost
 }) => (
   <Segment className='post bg-white p-1'>
     <List.Item>
@@ -48,7 +50,7 @@ const PostItem = ({
           <Link to={`/profile/${_id}`}>{name}</Link>
         </List.Header>
         <List.Header>
-          <Link to={`/profile/${_id}`}>{subject}</Link>
+          <Link to={`/posts/${_id}`}>{subject}</Link>
         </List.Header>
 
         <List.Description>
@@ -84,23 +86,48 @@ const PostItem = ({
             )}
           </Menu.Menu>
         </Menu>
-        <List divided relaxed>
-          {comments.length > 0 ? (
-            comments.map(comment => (
-              <CommentItem key={comment._id} comment={comment} postId={_id} />
-            ))
-          ) : (
-            <h4>...</h4>
-          )}
-        </List>
-        <CommentForm postId={_id} />{' '}
+        {showAllComments === true ? (
+          <List divided relaxed>
+            {comments.length > 0 ? (
+              comments.map(comment => (
+                <CommentItem
+                  key={comment._id}
+                  comment={comment}
+                  postId={_id}
+                  isSinglePost={isSinglePost}
+                />
+              ))
+            ) : (
+              <hr />
+            )}
+          </List>
+        ) : (
+          <List divided relaxed>
+            {comments.length > 0 ? (
+              comments
+                .slice(0, 3)
+                .map(comment => (
+                  <CommentItem
+                    key={comment._id}
+                    comment={comment}
+                    postId={_id}
+                  />
+                ))
+            ) : (
+              <hr />
+            )}
+          </List>
+        )}
+        <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
       </Fragment>
     )}
   </Segment>
 );
 
 PostItem.defaultProps = {
-  showActions: true
+  showActions: true,
+  showAllComments: false,
+  isSinglePost: false
 };
 
 PostItem.propTypes = {
@@ -109,7 +136,8 @@ PostItem.propTypes = {
   addLike: PropTypes.func.isRequired,
   removeLike: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
-  showActions: PropTypes.bool
+  showActions: PropTypes.bool,
+  showAllComments: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
