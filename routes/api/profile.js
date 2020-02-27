@@ -51,13 +51,14 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { user, address, community, isTandCAccepted } = req.body;
+    const { user, community, isTandCAccepted } = req.body;
 
     // Build profile object
     const profileFields = {};
     profileFields.user = req.user.id;
-    if (community && community.length > 0) profileFields.community = community;
-    if (address) profileFields.address = address;
+    console.log(req.body);
+    //if (community && community.length > 0) profileFields.community = community;
+    if (user) profileFields.user = user;
 
     if (isTandCAccepted) profileFields.isTandCAccepted = isTandCAccepted;
     // if (interests) {

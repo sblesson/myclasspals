@@ -15,7 +15,7 @@ import {
   Checkbox
 } from 'semantic-ui-react';
 
-const UserAccountForm = ({ user }) => {
+const UserAccountForm = ({ profileData }) => {
   //const [formData, setFormData] = useState({ user });
 
   const yourInfo = (
@@ -24,7 +24,7 @@ const UserAccountForm = ({ user }) => {
         control={Input}
         placeholder='Your Name'
         name='name'
-        defaultValue={user.name}
+        defaultValue={profileData.name}
         onChange={e => onChange(e)}
         required
       />
@@ -32,7 +32,7 @@ const UserAccountForm = ({ user }) => {
         control={Input}
         placeholder='Phone Number'
         name='phone'
-        defaultValue={user.phone}
+        defaultValue={profileData.phone}
         onChange={e => onChange(e)}
         required
       />
@@ -40,21 +40,21 @@ const UserAccountForm = ({ user }) => {
         control={Input}
         placeholder='Street'
         name='street'
-        defaultValue={user.address.street}
+        defaultValue={profileData.street}
         onChange={e => onChange(e)}
       />
       <Form.Field
         control={Input}
         placeholder='Apt/Suite'
         name='suite'
-        defaultValue={user.address.suite}
+        defaultValue={profileData.suite}
         onChange={e => onChange(e)}
       />
       <Form.Field
         control={Input}
         placeholder='City'
         name='city'
-        defaultValue={user.address.city}
+        defaultValue={profileData.city}
         onChange={e => onChange(e)}
       />
 
@@ -68,22 +68,22 @@ const UserAccountForm = ({ user }) => {
       <Form.Field
         control={Input}
         placeholder='Zip'
-        name='zip'
-        defaultValue={user.address.zip}
+        name='zipcode'
+        defaultValue={profileData.zip}
         onChange={e => onChange(e)}
       />
     </Form>
   );
 
   const onChange = e => {
-    user[e.target.name] = e.target.value;
+    profileData[e.target.name] = e.target.value;
   };
 
   return <Fragment>{yourInfo}</Fragment>;
 };
 
 UserAccountForm.propTypes = {
-  user: PropTypes.object.isRequired
+  profileData: PropTypes.object.isRequired
 };
 
 export default connect(null, {})(withRouter(UserAccountForm));
