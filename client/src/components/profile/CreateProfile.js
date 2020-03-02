@@ -5,11 +5,7 @@ import { connect } from 'react-redux';
 
 import _ from 'lodash';
 
-import {
-  addSchool,
-  createProfile,
-  getCurrentProfile
-} from '../../actions/profile';
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 
 import { Tab, Button, Checkbox } from 'semantic-ui-react';
 
@@ -157,8 +153,7 @@ const CreateProfile = ({
 CreateProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-  addSchool: PropTypes.func.isRequired
+  profile: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
   profile: state.profile,
@@ -166,6 +161,5 @@ const mapStateToProps = state => ({
 });
 export default connect(mapStateToProps, {
   createProfile,
-  getCurrentProfile,
-  addSchool
+  getCurrentProfile
 })(withRouter(CreateProfile));

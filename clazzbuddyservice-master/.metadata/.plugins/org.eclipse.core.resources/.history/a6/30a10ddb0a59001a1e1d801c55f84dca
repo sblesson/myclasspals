@@ -1,8 +1,0 @@
-package com.clazzbuddy.mongocollections;
-
-public class Snippet {
-	public static void main(String[] args) {
-		/Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home/bin/
-	}
-}
-

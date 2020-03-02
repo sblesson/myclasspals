@@ -149,7 +149,7 @@ export const createProfile = (
 };
 
 // Add School
-export const addSchool = (formData, history) => async dispatch => {
+export const updateCommunity = (formData, history) => async dispatch => {
   try {
     const config = {
       headers: {
@@ -157,7 +157,11 @@ export const addSchool = (formData, history) => async dispatch => {
       }
     };
 
-    const res = await axios.put('/api/profile/community', formData, config);
+    const res = await axios.put(
+      'http://localhost:8080/user/updateprofile',
+      formData,
+      config
+    );
 
     dispatch({
       type: UPDATE_PROFILE,
