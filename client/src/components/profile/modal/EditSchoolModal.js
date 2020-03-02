@@ -18,12 +18,12 @@ import {
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addSchool } from '../../../actions/profile';
+import { updateCommunity } from '../../../actions/profile';
 import { getSchoolData } from '../../../actions/school';
 import './SchoolModal.scss';
 
 const EditSchoolModal = ({
-  addSchool,
+  updateCommunity,
   history,
   getSchoolData,
   results,
@@ -151,7 +151,7 @@ const EditSchoolModal = ({
             color='primary'
             onClick={e => {
               e.preventDefault();
-              addSchool(formData, history);
+              updateCommunity(formData, history);
             }}
           >
             Save
@@ -163,7 +163,7 @@ const EditSchoolModal = ({
 };
 
 EditSchoolModal.propTypes = {
-  addSchool: PropTypes.func.isRequired,
+  updateCommunity: PropTypes.func.isRequired,
   getSchoolData: PropTypes.func.isRequired
 };
 
@@ -176,6 +176,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { addSchool, getSchoolData })(
+export default connect(mapStateToProps, { updateCommunity, getSchoolData })(
   withRouter(EditSchoolModal)
 );
