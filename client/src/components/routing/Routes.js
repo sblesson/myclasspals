@@ -9,7 +9,7 @@ import CreateProfile from '../profile/CreateProfile';
 import AccountSettings from '../profile/AccountSettings';
 import Profiles from '../profiles/Profiles';
 import Posts from '../posts/Posts';
-import Post from '../post/Post';
+import SinglePost from '../posts/SinglePost';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 const Routes = () => {
@@ -26,7 +26,7 @@ const Routes = () => {
         <PrivateRoute exact path='/create-profile' component={CreateProfile} />
         <PrivateRoute exact path='/account' component={AccountSettings} />
         <PrivateRoute exact path='/posts' component={Posts} />
-        <PrivateRoute exact path='/posts/:id' component={Post} />
+        <PrivateRoute exact path='/posts/:id' component={SinglePost} />
         <Route component={NotFound} />
       </Switch>
     </section>
