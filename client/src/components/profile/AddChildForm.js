@@ -24,11 +24,34 @@ import './AddChildForm.scss';
 import './styles.css';
 
 const AddChildForm = ({
-  community,
+  profileData,
   showwAddChildButton,
   getSchoolData,
   schools
 }) => {
+  const [community, setCommunityArray] = useState([
+    {
+      displayname: '',
+      grade: '',
+      classroom: '',
+      schoolid: ''
+    }
+  ]);
+
+  profileData.community = community;
+
+  const handleAddMoreChild = event => {
+    console.log('cool');
+    event.preventDefault();
+    const updateArray = [...community];
+    updateArray.push({
+      displayname: '',
+      grade: '',
+      classroom: '',
+      schoolid: ''
+    });
+    setCommunityArray(updateArray);
+  };
   const inputOnChange = event => {
     console.log(event.target.value);
     if (!event.target.value) {
@@ -181,20 +204,6 @@ const AddChildForm = ({
     console.log(selectedClassRoom);
     console.log(index);
     community[index].grade = selectedClassRoom;
-  };
-
-  const handleAddMoreChild = () => {
-    community.push({
-      displayname: '',
-      grade: '',
-      classroom: '',
-      schoolid: ''
-    });
-    this.forceUpdate(() => {
-      console.log(community);
-      console.log('component updated');
-    });
-    this.forceUpdate();
   };
 
   const yourInfo =
@@ -392,17 +401,6 @@ const AddChildForm = ({
               )}
             </Downshift>
           </Form.Field>
-          {showwAddChildButton ? (
-            <Button
-              content='Add Child'
-              className='actionBtnWrapper'
-              color='pink'
-              onClick={() => handleAddMoreChild}
-              value={2}
-            />
-          ) : (
-            ''
-          )}
         </Form>
       </div>
     ));
@@ -410,14 +408,29 @@ const AddChildForm = ({
     childData[e.target.name] = e.target.value;
   };
 
-  return <Fragment>{yourInfo}</Fragment>;
+  return (
+    <Fragment>
+      {' '}
+      {showwAddChildButton ? (
+        <div className='profile-action-button'>
+          <i className='fas fa-plus-circle'></i>
+          <span className='add-more' onClick={event => handleAddMoreChild}>
+            Add your child's class?
+          </span>
+        </div>
+      ) : (
+        ''
+      )}
+      {yourInfo}
+    </Fragment>
+  );
 };
 
 AddChildForm.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  community: PropTypes.array.isRequired,
+  profileData: PropTypes.object.isRequired,
   showwAddChildButton: PropTypes.bool
 };
 const mapStateToProps = state => ({

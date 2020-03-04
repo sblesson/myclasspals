@@ -32,22 +32,12 @@ const CreateProfile = ({
 
   const [profileData, setProfileData] = useState({
     name: '',
-    email: '',
     phone: '',
     street: '',
     suite: '',
     city: '',
     state: '',
     zipcode: '',
-
-    community: [
-      {
-        displayname: '',
-        grade: '',
-        classroom: '',
-        schoolid: ''
-      }
-    ],
     isTandCAccepted: false
   });
 
@@ -72,10 +62,8 @@ const CreateProfile = ({
       menuItem: "Child's Class Info",
       render: () => (
         <Tab.Pane attached={false}>
-          <AddChildForm
-            community={profileData.community}
-            showwAddChildButton={true}
-          />
+          <AddChildForm profileData={profileData} showwAddChildButton={true} />
+
           <Button
             content='Proceed'
             className='actionBtnWrapper'
