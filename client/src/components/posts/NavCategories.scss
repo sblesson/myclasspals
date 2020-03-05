@@ -1,6 +1,7 @@
-.side-bar-list {
+.sidebar {
   width: 200px;
   height: 100vh;
+  display: block;
   /*  background-color: #f7f7f7; */
   &-item {
     display: flex;

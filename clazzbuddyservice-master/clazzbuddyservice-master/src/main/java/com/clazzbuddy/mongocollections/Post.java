@@ -19,7 +19,9 @@ public class Post {
 	
 	private String userId;
 	
-	private String schoolid;
+	private String groupId;
+	
+	
 
 	public String getMessage() {
 		return message;
@@ -61,13 +63,6 @@ public class Post {
 		this.userId = userId;
 	}
 
-	public String getSchoolid() {
-		return schoolid;
-	}
-
-	public void setSchoolid(String schoolid) {
-		this.schoolid = schoolid;
-	}
 
 	public String get_id() {
 		return _id;
@@ -75,6 +70,14 @@ public class Post {
 
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 

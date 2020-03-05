@@ -20,6 +20,7 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'semantic-ui-css/semantic.min.css';
+import 'antd/dist/antd.css';
 
 import './App.scss';
 

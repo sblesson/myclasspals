@@ -11,35 +11,12 @@ const CreateProfile = ({
   history
 }) => {
   const [formData, setFormData] = useState({
-    company: '',
-    website: '',
     location: '',
     status: '',
-    skills: '',
-    githubusername: '',
-    bio: '',
-    twitter: '',
-    facebook: '',
-    linkedin: '',
-    youtube: '',
-    instagram: '',
     child: ''
   });
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
-  const {
-    company,
-    website,
-    location,
-    status,
-    skills,
-    githubusername,
-    bio,
-    twitter,
-    facebook,
-    linkedin,
-    youtube,
-    instagram
-  } = formData;
+  const { company, website, location } = formData;
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = e => {

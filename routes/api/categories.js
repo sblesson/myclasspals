@@ -21,8 +21,8 @@ router.get('/', auth, async (req, res) => {
       },
       {
         category_id: 3,
-        title: 'Question on Homework',
-        url: '/homework/'
+        title: 'Urgent',
+        url: '/urgent/'
       },
       {
         category_id: 4,
@@ -36,18 +36,18 @@ router.get('/', auth, async (req, res) => {
       },
       {
         category_id: 6,
-        title: 'About the Event',
-        url: '/aboutevent/'
+        title: 'Reminder',
+        url: '/reminder/'
       },
 
       {
         category_id: 7,
-        title: 'Birthday Invite',
+        title: 'Birthday',
         url: '/birthday/'
       },
       {
         category_id: 8,
-        title: 'Fieldtrips or camps',
+        title: 'Fieldtrips or Camps',
         url: '/fieldtrips/'
       },
       {
@@ -62,13 +62,13 @@ router.get('/', auth, async (req, res) => {
       },
       {
         category_id: 11,
-        title: 'Urgent',
-        url: '/urgent/'
+        title: 'About Homework',
+        url: '/homework/'
       },
       {
         category_id: 12,
-        title: 'Classes & Clubs',
-        url: '/clubs/'
+        title: 'Needed Help',
+        url: '/needhelp/'
       }
     ];
     res.json(categories);

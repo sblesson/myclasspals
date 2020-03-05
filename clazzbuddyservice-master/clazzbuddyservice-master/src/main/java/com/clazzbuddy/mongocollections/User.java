@@ -3,6 +3,8 @@ package com.clazzbuddy.mongocollections;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public class User {
 
@@ -10,6 +12,16 @@ public class User {
 	private String _id;
 	
 	private String name;
+	
+	private String password;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	private String email;
 
@@ -26,6 +38,9 @@ public class User {
 	private String zipcode;
 	
 	private List<Community> community;
+	
+	@DBRef
+	private List<UserGroup> userGroup;
 
 	public String getName() {
 		return name;
@@ -105,6 +120,14 @@ public class User {
 
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+
+	public List<UserGroup> getUserGroup() {
+		return userGroup;
+	}
+
+	public void setUserGroup(List<UserGroup> userGroup) {
+		this.userGroup = userGroup;
 	}
 
 }
