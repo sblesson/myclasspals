@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Select } from 'antd';
+
 import { Link, withRouter } from 'react-router-dom';
 import { Accordion, Form, Menu } from 'semantic-ui-react';
 
@@ -24,6 +26,7 @@ import './PostModal.scss';
 const PostModal = ({ addPost, history, categories }) => {
   const [text, setText] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedGroup, setSelectedGroup] = useState(undefined);
 
   const [formData, setFormData] = useState({
     subject: '',
@@ -35,16 +38,24 @@ const PostModal = ({ addPost, history, categories }) => {
 
   const [modal, setModal] = useState(false);
 
+  const [category, setSelectedCategory] = useState('');
+
   const toggle = () => setModal(!modal);
+
+  const { Option } = Select;
 
   const topics = [
     { category_id: '1', title: 'General', url: '/general' },
     { category_id: '2', title: 'Recommendations', url: '/recommendations' },
     { category_id: '3', title: 'Carpool', url: '/carpool' },
     { category_id: '4', title: 'Lost & Found', url: '/lost_and_found' },
-    { category_id: '5', title: 'Volunteer', url: '/volunteer' },
-    { category_id: '6', title: 'Help Needed', url: '/help' },
-    { category_id: '7', title: 'Homework', url: '/homework' }
+    { category_id: '5', title: 'Help Wanted', url: '/help' },
+    { category_id: '6', title: 'Homework', url: '/homework' },
+    { category_id: '7', title: 'Aftercare', url: '/aftercare' },
+    { category_id: '8', title: 'Reminder', url: '/reminder' },
+    { category_id: '9', title: 'Urgent', url: '/urgent' },
+    { category_id: '10', title: 'Volunteering', url: '/volunteering' },
+    { category_id: '11', title: 'Birthday', url: '/birthday' }
   ];
   const all_groups = [
     {
@@ -104,6 +115,13 @@ const PostModal = ({ addPost, history, categories }) => {
     </Form.Group>
   );
 
+  const onGroupChange = value => {
+    setSelectedGroup(value);
+  };
+
+  const onCategoryChange = value => {
+    setSelectedCategory(value);
+  };
   return (
     <div>
       <div className='new-post-form' onClick={toggle}>
@@ -122,78 +140,30 @@ const PostModal = ({ addPost, history, categories }) => {
         <ModalHeader toggle={toggle}> Create Post</ModalHeader>
         <ModalBody>
           <Form>
-            <Accordion as={Menu} vertical>
-              <Menu.Item>
-                <Accordion.Title
-                  active={activeIndex === 0}
-                  content='Size'
-                  index={0}
-                  onClick={handleClick}
-                />
-                <Accordion.Content
-                  active={activeIndex === 0}
-                  content={CategoryForm}
-                />
-              </Menu.Item>
-
-              <Menu.Item>
-                <Accordion.Title
-                  active={activeIndex === 1}
-                  content='Colors'
-                  index={1}
-                  onClick={handleClick}
-                />
-                <Accordion.Content
-                  active={activeIndex === 1}
-                  content={GroupForm}
-                />
-              </Menu.Item>
-            </Accordion>
-
-            {/*         <Form>
-            <FormGroup
-              tag='fieldset'
-              className='post-form post-form-radio-options-container'
-            >
-              <legend className='col-form-label'>Choose Category</legend>
-              {topics.map(function(topic, index) {
-                return (
-                  <FormGroup check key={index}>
-                    <Label check>
-                      <Input
-                        type='radio'
-                        name='topics'
-                        value={topic}
-                        category={topic.category_id}
-                        onChange={e => onChange(e)}
-                      />{' '}
-                      {topic.title}
-                    </Label>
-                  </FormGroup>
-                );
-              })}
-            </FormGroup>
-            <FormGroup
-              tag='fieldset'
-              className='post-form post-form-radio-options-container'
-            >
-              <legend className='col-form-label'>Choose Group</legend>
-              {all_groups.map(function(group, index) {
-                return (
-                  <FormGroup check key={index}>
-                    <Label check>
-                      <Input
-                        type='radio'
-                        name='group_id'
-                        value={group.group_id}
-                        onChange={e => onChange(e)}
-                      />{' '}
-                      {group.name}
-                    </Label>
-                  </FormGroup>
-                );
-              })}
-            </FormGroup> */}
+            <Form.Group className='post-form'>
+              <Select
+                allowClear
+                style={{ width: '100%' }}
+                placeholder='Choose category'
+                onChange={onCategoryChange}
+              >
+                {topics.map(function(topic, index) {
+                  return <Option key={index}>{topic.title}</Option>;
+                })}
+              </Select>
+            </Form.Group>
+            <Form.Group className='post-form'>
+              <Select
+                allowClear
+                style={{ width: '100%' }}
+                placeholder='Choose group'
+                onChange={onGroupChange}
+              >
+                {all_groups.map(function(group, index) {
+                  return <Option key={index}>{group.name}</Option>;
+                })}
+              </Select>
+            </Form.Group>
             <Form.Group className='post-form'>
               <Input
                 className='post-form-text-input'

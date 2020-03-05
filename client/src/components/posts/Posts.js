@@ -21,6 +21,8 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
   }, [getPosts]);
 
   const [items, setItems] = useState({});
+  const [activeItem, setActiveItem] = useState('catherine');
+
   const [requestCache, setRequestCache] = useState({});
 
   const getPostUrl = (rows, start) => `/api/posts?&rows=${rows}&start=${start}`;
@@ -34,6 +36,8 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
   };
 
   const isItemLoaded = ({ index }) => !!items[index];
+
+  const handleItemClick = (e, { name }) => setActiveItem(name);
 
   const loadMoreItems = (visibleStartIndex, visibleStopIndex) => {
     const key = [visibleStartIndex, visibleStopIndex].join(':'); // 0:10
@@ -67,43 +71,65 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <div className='row'>
-        <LeftNav />
+      <div>
+        <Menu pointing secondary>
+          <Menu.Item
+            name='catherine'
+            active={activeItem === 'catherine'}
+            onClick={handleItemClick}
+          />
+          <Menu.Item
+            name='ethan'
+            active={activeItem === 'ethan'}
+            onClick={handleItemClick}
+          />
+          <Menu.Item
+            name='kikku'
+            active={activeItem === 'kikku'}
+            onClick={handleItemClick}
+          />
+        </Menu>
 
-        <div id='main'>
-          <article>
-            <PostModal />
-            <AutoSizer>
-              {({ height, width }) => (
-                <InfiniteLoader
-                  isItemLoaded={isItemLoaded}
-                  loadMoreItems={loadMoreItems}
-                  itemCount={1000}
-                >
-                  {({ onItemsRendered, ref }) => (
-                    <List
-                      className='List'
-                      height={height}
+        <Segment>
+          <div className='row'>
+            <LeftNav />
+
+            <div id='main'>
+              <article>
+                <PostModal />
+                <AutoSizer>
+                  {({ height, width }) => (
+                    <InfiniteLoader
+                      isItemLoaded={isItemLoaded}
+                      loadMoreItems={loadMoreItems}
                       itemCount={1000}
-                      itemSize={35}
-                      width={width}
-                      ref={ref}
-                      onItemsRendered={onItemsRendered}
                     >
-                      {Row}
-                    </List>
+                      {({ onItemsRendered, ref }) => (
+                        <List
+                          className='List'
+                          height={height}
+                          itemCount={1000}
+                          itemSize={35}
+                          width={width}
+                          ref={ref}
+                          onItemsRendered={onItemsRendered}
+                        >
+                          {Row}
+                        </List>
+                      )}
+                    </InfiniteLoader>
                   )}
-                </InfiniteLoader>
-              )}
-            </AutoSizer>
+                </AutoSizer>
 
-            {/*   <List>
+                {/*   <List>
               {posts.map(post => (
                 <PostItem key={post._id} post={post} />
               ))}
             </List> */}
-          </article>
-        </div>
+              </article>
+            </div>
+          </div>
+        </Segment>
       </div>
     </Fragment>
   );
