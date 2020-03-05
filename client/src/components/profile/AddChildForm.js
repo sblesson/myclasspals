@@ -41,6 +41,7 @@ const AddChildForm = ({
   profileData.community = community;
 
   const handleAddMoreChild = event => {
+    console.log('cool');
     event.preventDefault();
     const updateArray = [...community];
     updateArray.push({
@@ -410,10 +411,16 @@ const AddChildForm = ({
   return (
     <Fragment>
       {' '}
-      <div class='profile-action-button'>
-        <i class='fas fa-plus-circle'></i>
-        <span class='add-more'>Add your child's class?</span>
-      </div>
+      {showwAddChildButton ? (
+        <div className='profile-action-button'>
+          <i className='fas fa-plus-circle'></i>
+          <span className='add-more' onClick={event => handleAddMoreChild}>
+            Add your child's class?
+          </span>
+        </div>
+      ) : (
+        ''
+      )}
       {yourInfo}
     </Fragment>
   );

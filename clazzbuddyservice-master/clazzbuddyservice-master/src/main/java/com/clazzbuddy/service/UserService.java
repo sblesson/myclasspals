@@ -1,8 +1,8 @@
 package com.clazzbuddy.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,11 +17,11 @@ public class UserService {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
-	
+
 	public void createUser(User user) {
 		mongoTemplate.insert(user);
 	}
-	
+
 	public void updateUser(User user) {
 		User userFromDB = getUser(user.getName());
 		if (user.getCommunity() != null) {
@@ -32,9 +32,17 @@ public class UserService {
 		}
 		mongoTemplate.save(userFromDB);
 	}
-	public User getUser(String username) {
+
+	public User getUser(String userKey) {
 		Query userByName = new Query();
-		userByName.addCriteria(Criteria.where("name").is(username));
-		return mongoTemplate.findOne(userByName, User.class);
+		userByName.addCriteria(Criteria.where("name").is(userKey));
+		User user = mongoTemplate.findOne(userByName, User.class);
+		if (user == null) {
+			ObjectId objID = new ObjectId(userKey);
+			Query userById = new Query();
+			userById.addCriteria(Criteria.where("_id").is(objID));
+			user = mongoTemplate.findOne(userById, User.class);
+		}
+		return user;
 	}
 }
