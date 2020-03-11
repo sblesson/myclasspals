@@ -8,10 +8,14 @@ import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
 import { getPosts, getPostCategories } from '../../actions/post';
 import LeftNav from '../leftnav/LeftNav';
+import NavCategories from './NavCategories';
+
 import { Menu, Segment, Button, Image } from 'semantic-ui-react';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
+import { Tabs } from 'antd';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 import './Posts.scss';
 const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
@@ -19,6 +23,7 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
     getPosts();
     getPostCategories();
   }, [getPosts]);
+  const { TabPane } = Tabs;
 
   const [items, setItems] = useState({});
   const [activeItem, setActiveItem] = useState('catherine');
@@ -67,69 +72,85 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
       .catch(error => console.error('Error:', error));
   };
 
+  const renderTabBar = (props, DefaultTabBar) => (
+    <Sticky bottomOffset={80}>
+      {({ style }) => (
+        <DefaultTabBar
+          {...props}
+          className='site-custom-tab-bar'
+          style={{ ...style }}
+        />
+      )}
+    </Sticky>
+  );
+
   return loading ? (
     <Spinner />
   ) : (
     <Fragment>
-      <div>
-        <Menu pointing secondary>
-          <Menu.Item
-            name='catherine'
-            active={activeItem === 'catherine'}
-            onClick={handleItemClick}
-          />
-          <Menu.Item
-            name='ethan'
-            active={activeItem === 'ethan'}
-            onClick={handleItemClick}
-          />
-          <Menu.Item
-            name='kikku'
-            active={activeItem === 'kikku'}
-            onClick={handleItemClick}
-          />
-        </Menu>
+      <div className='row'>
+        <LeftNav />
 
-        <Segment>
-          <div className='row'>
-            <LeftNav />
+        <NavCategories />
 
-            <div id='main'>
-              <article>
-                <PostModal />
-                <AutoSizer>
-                  {({ height, width }) => (
-                    <InfiniteLoader
-                      isItemLoaded={isItemLoaded}
-                      loadMoreItems={loadMoreItems}
-                      itemCount={1000}
-                    >
-                      {({ onItemsRendered, ref }) => (
-                        <List
-                          className='List'
-                          height={height}
-                          itemCount={1000}
-                          itemSize={35}
-                          width={width}
-                          ref={ref}
-                          onItemsRendered={onItemsRendered}
-                        >
-                          {Row}
-                        </List>
-                      )}
-                    </InfiniteLoader>
-                  )}
-                </AutoSizer>
+        <div className='post-container'>
+          <Menu pointing secondary>
+            <Menu.Item
+              name='catherine'
+              active={activeItem === 'catherine'}
+              onClick={handleItemClick}
+            />
+            <Menu.Item
+              name='ethan'
+              active={activeItem === 'ethan'}
+              onClick={handleItemClick}
+            />
+            <Menu.Item
+              name='kikku'
+              active={activeItem === 'kikku'}
+              onClick={handleItemClick}
+            />
+          </Menu>
 
-                {/*   <List>
+          <Segment>
+            <div className='row'>
+              <div id='main'>
+                <article>
+                  <PostModal />
+                  <AutoSizer>
+                    {({ height, width }) => (
+                      <InfiniteLoader
+                        isItemLoaded={isItemLoaded}
+                        loadMoreItems={loadMoreItems}
+                        itemCount={1000}
+                      >
+                        {({ onItemsRendered, ref }) => (
+                          <List
+                            className='List'
+                            height={height}
+                            itemCount={1000}
+                            itemSize={35}
+                            width={width}
+                            ref={ref}
+                            onItemsRendered={onItemsRendered}
+                          >
+                            {Row}
+                          </List>
+                        )}
+                      </InfiniteLoader>
+                    )}
+                  </AutoSizer>
+
+                  {/*   <List>
               {posts.map(post => (
                 <PostItem key={post._id} post={post} />
               ))}
             </List> */}
-              </article>
+                </article>
+              </div>
             </div>
-          </div>
-        </Segment>
+          </Segment>
+        </div>
       </div>
     </Fragment>
   );

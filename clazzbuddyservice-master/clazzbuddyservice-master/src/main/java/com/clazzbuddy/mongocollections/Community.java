@@ -8,6 +8,8 @@ public class Community {
 	
 	private String classroom;
 	
+	private String schoolName;
+	
 	private String schoolid;
 
 	
@@ -41,6 +43,14 @@ public class Community {
 
 	public void setDisplayname(String displayname) {
 		this.displayname = displayname;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
 	}
 	
 	

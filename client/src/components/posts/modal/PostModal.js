@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import { Select } from 'antd';
+import { Upload, Button } from 'antd';
+import { UploadOutlined, StarOutlined } from '@ant-design/icons';
 
-import { Link, withRouter } from 'react-router-dom';
-import { Accordion, Form, Menu } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { Form } from 'semantic-ui-react';
 
-import {
-  Col,
-  Row,
-  Button,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from 'reactstrap';
+import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -50,7 +40,7 @@ const PostModal = ({ addPost, history, categories }) => {
     { category_id: '3', title: 'Carpool', url: '/carpool' },
     { category_id: '4', title: 'Lost & Found', url: '/lost_and_found' },
     { category_id: '5', title: 'Help Wanted', url: '/help' },
-    { category_id: '6', title: 'Homework', url: '/homework' },
+    { category_id: '6', title: 'About Homework', url: '/homework' },
     { category_id: '7', title: 'Aftercare', url: '/aftercare' },
     { category_id: '8', title: 'Reminder', url: '/reminder' },
     { category_id: '9', title: 'Urgent', url: '/urgent' },
@@ -97,24 +87,6 @@ const PostModal = ({ addPost, history, categories }) => {
     setActiveIndex(newIndex);
   };
 
-  const CategoryForm = (
-    <Form.Group grouped>
-      <Form.Radio label='Small' name='size' type='radio' value='small' />
-      <Form.Radio label='Medium' name='size' type='radio' value='medium' />
-      <Form.Radio label='Large' name='size' type='radio' value='large' />
-      <Form.Radio label='X-Large' name='size' type='radio' value='x-large' />
-    </Form.Group>
-  );
-
-  const GroupForm = (
-    <Form.Group grouped>
-      <Form.Radio label='Small' name='size' type='radio' value='small' />
-      <Form.Radio label='Medium' name='size' type='radio' value='medium' />
-      <Form.Radio label='Large' name='size' type='radio' value='large' />
-      <Form.Radio label='X-Large' name='size' type='radio' value='x-large' />
-    </Form.Group>
-  );
-
   const onGroupChange = value => {
     setSelectedGroup(value);
   };
@@ -122,6 +94,48 @@ const PostModal = ({ addPost, history, categories }) => {
   const onCategoryChange = value => {
     setSelectedCategory(value);
   };
+
+  const uploadProps = {
+    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    onChange({ file, fileList }) {
+      if (file.status !== 'uploading') {
+        console.log(file, fileList);
+      }
+    },
+    defaultFileList: [
+      {
+        uid: '1',
+        name: 'xxx.png',
+        status: 'done',
+        response: 'Server Error 500', // custom error message to show
+        url: 'http://www.baidu.com/xxx.png'
+      },
+      {
+        uid: '2',
+        name: 'yyy.png',
+        status: 'done',
+        url: 'http://www.baidu.com/yyy.png'
+      },
+      {
+        uid: '3',
+        name: 'zzz.png',
+        status: 'error',
+        response: 'Server Error 500', // custom error message to show
+        url: 'http://www.baidu.com/zzz.png'
+      }
+    ],
+    showUploadList: {
+      showDownloadIcon: true,
+      downloadIcon: 'download ',
+      showRemoveIcon: true,
+      removeIcon: (
+        <StarOutlined
+          onClick={e => console.log(e, 'custom removeIcon event')}
+        />
+      )
+    }
+  };
+
   return (
     <div>
       <div className='new-post-form' onClick={toggle}>
@@ -183,6 +197,13 @@ const PostModal = ({ addPost, history, categories }) => {
                 onChange={e => onChange(e)}
                 required
               />
+            </Form.Group>
+            <Form.Group>
+              <Upload {...uploadProps}>
+                <Button>
+                  <UploadOutlined /> Upload
+                </Button>
+              </Upload>
             </Form.Group>
           </Form>
         </ModalBody>

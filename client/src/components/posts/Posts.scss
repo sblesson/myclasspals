@@ -1,8 +1,14 @@
 .post-container {
   background-color: white;
-  border: 1px #dfe1e4 solid;
+  border: 0.5px #dfe1e4 solid;
   border-radius: 3px;
   margin-bottom: 8px;
+
+  .ui.segment {
+    min-height: 400px;
+    box-shadow: none;
+    border: none;
+  }
 }
 .new-post {
   margin-left: 10px;
@@ -12,3 +18,15 @@
   background: var(--primary-color);
   padding: 0.5rem;
 }
+/* .ant-tabs {
+  &-nav {
+    display: flex;
+
+    .ant-tabs-tab {
+      flex-grow: 1;
+      margin-right: 0px;
+      width: 100%;
+      text-align: center;
+    }
+  }
+} */

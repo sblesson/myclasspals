@@ -62,14 +62,32 @@ public class UserController {
 		
 	}
 	
-	@GetMapping(value="/getuser", produces={"application/json"})
-	public CommonResult getUser(@RequestParam(value = "user") String username) {
+	@GetMapping(value="/getprofile", produces={"application/json"})
+	public CommonResult getUser(@RequestParam(value = "user") String userkey) {
 		UserResult result = new UserResult();
 		
 		try {
 			List<User> userList = new ArrayList<>();
-			userList.add(userService.getUser(username));
+			userList.add(userService.getUser(userkey));
  			result.setUser(userList);
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.getMessage());
+		}
+		
+		return result;
+		
+	}
+	
+	@PostMapping(value="/validateuser", produces={"application/json"})
+	public CommonResult validateProfile(@RequestBody User user) {
+		UserResult result = new UserResult();
+		
+		try {
+			List<User> userList = new ArrayList<>();
+			userList.add(userService.validateUser(user));
+			result.setUser(userList);
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
