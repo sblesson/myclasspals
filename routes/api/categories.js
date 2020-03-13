@@ -9,6 +9,8 @@ router.get('/', auth, async (req, res) => {
     console.log(req.query.screen);
     //default
     let categories = [
+      'divider',
+
       {
         category_id: 1,
         title: 'General',
@@ -20,40 +22,14 @@ router.get('/', auth, async (req, res) => {
         url: '/recommendations/'
       },
       {
-        category_id: 3,
-        title: 'Urgent',
-        url: '/urgent/'
-      },
-      {
         category_id: 4,
         title: 'Lost & Found',
         url: '/lostfound/'
       },
       {
-        category_id: 5,
-        title: 'Volunteering',
-        url: '/volunteering/'
-      },
-      {
         category_id: 6,
         title: 'Reminder',
         url: '/reminder/'
-      },
-
-      {
-        category_id: 7,
-        title: 'Birthday',
-        url: '/birthday/'
-      },
-      {
-        category_id: 8,
-        title: 'Fieldtrips or Camps',
-        url: '/fieldtrips/'
-      },
-      {
-        category_id: 9,
-        title: 'Aftercare',
-        url: '/aftercare/'
       },
       {
         category_id: 10,
@@ -69,6 +45,39 @@ router.get('/', auth, async (req, res) => {
         category_id: 12,
         title: 'Needed Help',
         url: '/needhelp/'
+      },
+      {
+        category_id: 9,
+        title: 'Aftercare',
+        url: '/aftercare/'
+      },
+      'divider',
+
+      {
+        category_id: 7,
+        title: 'Birthday',
+        url: '/birthday/'
+      },
+      {
+        category_id: 11,
+        title: 'Playdate',
+        url: '/playdate/'
+      },
+      {
+        category_id: 8,
+        title: 'Fieldtrips or Camps',
+        url: '/fieldtrips/'
+      },
+      {
+        category_id: 5,
+        title: 'Volunteering',
+        url: '/volunteering/'
+      },
+      'divider',
+      {
+        category_id: 3,
+        title: 'Urgent',
+        url: '/urgent/'
       }
     ];
     res.json(categories);

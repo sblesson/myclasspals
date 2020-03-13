@@ -5,12 +5,16 @@ import { UploadOutlined, StarOutlined } from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom';
 import { Form } from 'semantic-ui-react';
+import moment from 'moment';
 
 import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Tabs } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addPost } from '../../../actions/post';
+import { DatePicker, TimePicker } from 'antd';
+
 import './PostModal.scss';
 
 const PostModal = ({ addPost, history, categories }) => {
@@ -18,6 +22,7 @@ const PostModal = ({ addPost, history, categories }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState(undefined);
 
+  const { TabPane } = Tabs;
   const [formData, setFormData] = useState({
     subject: '',
     message: '',
@@ -25,7 +30,10 @@ const PostModal = ({ addPost, history, categories }) => {
     schoolId: '1',
     userid: '3' //get userid from db
   });
-
+  function callback(key) {
+    console.log(key);
+  }
+  console.log('inside post modal' + categories);
   const [modal, setModal] = useState(false);
 
   const [category, setSelectedCategory] = useState('');
@@ -33,20 +41,6 @@ const PostModal = ({ addPost, history, categories }) => {
   const toggle = () => setModal(!modal);
 
   const { Option } = Select;
-
-  const topics = [
-    { category_id: '1', title: 'General', url: '/general' },
-    { category_id: '2', title: 'Recommendations', url: '/recommendations' },
-    { category_id: '3', title: 'Carpool', url: '/carpool' },
-    { category_id: '4', title: 'Lost & Found', url: '/lost_and_found' },
-    { category_id: '5', title: 'Help Wanted', url: '/help' },
-    { category_id: '6', title: 'About Homework', url: '/homework' },
-    { category_id: '7', title: 'Aftercare', url: '/aftercare' },
-    { category_id: '8', title: 'Reminder', url: '/reminder' },
-    { category_id: '9', title: 'Urgent', url: '/urgent' },
-    { category_id: '10', title: 'Volunteering', url: '/volunteering' },
-    { category_id: '11', title: 'Birthday', url: '/birthday' }
-  ];
   const all_groups = [
     {
       id: 'userId',
@@ -136,6 +130,148 @@ const PostModal = ({ addPost, history, categories }) => {
     }
   };
 
+  const MessagePostForm = (
+    <Form>
+      <Form.Group className='post-form'>
+        <Select
+          allowClear
+          style={{ width: '100%' }}
+          placeholder='Choose category'
+          onChange={onCategoryChange}
+        >
+          {categories.map(function(topic, index) {
+            return <Option key={index}>{topic.title}</Option>;
+          })}
+        </Select>
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <Select
+          allowClear
+          style={{ width: '100%' }}
+          placeholder='Choose group'
+          onChange={onGroupChange}
+        >
+          {all_groups.map(function(group, index) {
+            return <Option key={index}>{group.name}</Option>;
+          })}
+        </Select>
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <Input
+          className='post-form-text-input'
+          type='text'
+          name='subject'
+          placeholder='Subject'
+          onChange={e => onChange(e)}
+        />
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <textarea
+          className='post-form-text-input post-form-textarea'
+          name='message'
+          cols='30'
+          rows='5'
+          placeholder='Enter your message ...'
+          onChange={e => onChange(e)}
+          required
+        />
+      </Form.Group>
+      <Form.Group>
+        <Upload {...uploadProps}>
+          <Button>
+            <UploadOutlined /> Upload
+          </Button>
+        </Upload>
+      </Form.Group>
+    </Form>
+  );
+
+  const EventPostForm = (
+    <Form>
+      <Form.Group className='post-form'>
+        <Select
+          allowClear
+          style={{ width: '100%' }}
+          placeholder='Choose event category'
+          onChange={onCategoryChange}
+        >
+          {categories.map(function(topic, index) {
+            return <Option key={index}>{topic.title}</Option>;
+          })}
+        </Select>
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <Select
+          allowClear
+          style={{ width: '100%' }}
+          placeholder='Choose group'
+          onChange={onGroupChange}
+        >
+          {all_groups.map(function(group, index) {
+            return <Option key={index}>{group.name}</Option>;
+          })}
+        </Select>
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <DatePicker.RangePicker
+          format='YYYY-MM-DD HH:mm'
+          showTime={{ defaultValue: moment('00:00', 'HH:mm') }}
+        />
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <Input
+          className='post-form-text-input'
+          type='text'
+          name='location'
+          placeholder='Address'
+          onChange={e => onChange(e)}
+        />
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <Input
+          className='post-form-text-input'
+          type='text'
+          name='subject'
+          placeholder='Subject'
+          onChange={e => onChange(e)}
+        />
+      </Form.Group>
+      <Form.Group className='post-form'>
+        <textarea
+          className='post-form-text-input post-form-textarea'
+          name='message'
+          cols='30'
+          rows='5'
+          placeholder='Enter your message ...'
+          onChange={e => onChange(e)}
+          required
+        />
+      </Form.Group>
+      <Form.Group>
+        <Upload {...uploadProps}>
+          <Button>
+            <UploadOutlined /> Upload
+          </Button>
+        </Upload>
+      </Form.Group>
+    </Form>
+  );
+
+  const ReminderPostForm = (
+    <Form>
+      <Form.Group className='post-form'>
+        <textarea
+          className='post-form-text-input post-form-textarea'
+          name='message'
+          cols='30'
+          rows='5'
+          placeholder='Enter your message ...'
+          onChange={e => onChange(e)}
+          required
+        />
+      </Form.Group>
+    </Form>
+  );
   return (
     <div>
       <div className='new-post-form' onClick={toggle}>
@@ -151,61 +287,19 @@ const PostModal = ({ addPost, history, categories }) => {
         </div>
       </div>
       <Modal isOpen={modal} fade={false} toggle={toggle}>
-        <ModalHeader toggle={toggle}> Create Post</ModalHeader>
+        {/*  <ModalHeader toggle={toggle}> </ModalHeader> */}
         <ModalBody>
-          <Form>
-            <Form.Group className='post-form'>
-              <Select
-                allowClear
-                style={{ width: '100%' }}
-                placeholder='Choose category'
-                onChange={onCategoryChange}
-              >
-                {topics.map(function(topic, index) {
-                  return <Option key={index}>{topic.title}</Option>;
-                })}
-              </Select>
-            </Form.Group>
-            <Form.Group className='post-form'>
-              <Select
-                allowClear
-                style={{ width: '100%' }}
-                placeholder='Choose group'
-                onChange={onGroupChange}
-              >
-                {all_groups.map(function(group, index) {
-                  return <Option key={index}>{group.name}</Option>;
-                })}
-              </Select>
-            </Form.Group>
-            <Form.Group className='post-form'>
-              <Input
-                className='post-form-text-input'
-                type='text'
-                name='subject'
-                placeholder='Subject'
-                onChange={e => onChange(e)}
-              />
-            </Form.Group>
-            <Form.Group className='post-form'>
-              <textarea
-                className='post-form-text-input post-form-textarea'
-                name='message'
-                cols='30'
-                rows='5'
-                placeholder='Enter your message ...'
-                onChange={e => onChange(e)}
-                required
-              />
-            </Form.Group>
-            <Form.Group>
-              <Upload {...uploadProps}>
-                <Button>
-                  <UploadOutlined /> Upload
-                </Button>
-              </Upload>
-            </Form.Group>
-          </Form>
+          <Tabs defaultActiveKey='1' onChange={callback}>
+            <TabPane tab='Speak Up' key='1'>
+              {MessagePostForm}
+            </TabPane>
+            <TabPane tab="Let's Meet" key='2'>
+              {EventPostForm}
+            </TabPane>
+            <TabPane tab='Important' key='3'>
+              {ReminderPostForm}
+            </TabPane>
+          </Tabs>
         </ModalBody>
         <ModalFooter>
           <Button

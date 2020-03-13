@@ -8,7 +8,6 @@ import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
 import { getPosts, getPostCategories } from '../../actions/post';
 import LeftNav from '../leftnav/LeftNav';
-import NavCategories from './NavCategories';
 
 import { Menu, Segment, Button, Image } from 'semantic-ui-react';
 import { FixedSizeList as List } from 'react-window';
@@ -91,30 +90,18 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
       <div className='row'>
         <LeftNav />
 
-        <NavCategories />
-
-        <div className='post-container'>
+        <div className='post-container has-sidbar'>
           <Menu pointing secondary>
             <Menu.Item
               name='catherine'
               active={activeItem === 'catherine'}
               onClick={handleItemClick}
             />
-            <Menu.Item
-              name='ethan'
-              active={activeItem === 'ethan'}
-              onClick={handleItemClick}
-            />
-            <Menu.Item
-              name='kikku'
-              active={activeItem === 'kikku'}
-              onClick={handleItemClick}
-            />
           </Menu>
 
           <Segment>
             <div className='row'>
-              <div id='main'>
+              <div id='main' className='col-md-12'>
                 <article>
                   <PostModal />
                   <AutoSizer>

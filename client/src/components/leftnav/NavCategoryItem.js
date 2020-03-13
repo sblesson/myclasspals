@@ -7,8 +7,6 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Collapse from '@material-ui/core/Collapse';
 import { Link } from 'react-router-dom';
 
-import './NavCategories.scss';
-
 const SideNavItem = ({
   depthStep = 10,
   depth = 0,
@@ -39,18 +37,19 @@ const SideNavItem = ({
     expandIcon = !collapsed ? (
       <ExpandLessIcon
         className={
-          'sidebar-item-expand-arrow' + ' sidebar-item-expand-arrow-expanded'
+          'leftnav-sidebar-item-expand-arrow' +
+          ' leftnav-sidebar-item-expand-arrow-expanded'
         }
       />
     ) : (
-      <ExpandMoreIcon className='sidebar-item-expand-arrow' />
+      <ExpandMoreIcon className='leftnav-sidebar-item-expand-arrow' />
     );
   }
 
   return (
     <>
       <ListItem
-        className='sidebar-item'
+        className='leftnav-sidebar-item'
         onClick={onClick}
         button
         dense
@@ -58,12 +57,12 @@ const SideNavItem = ({
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
-          className='sidebar-item-content'
+          className='leftnav-sidebar-item-content'
         >
           {/*           {Icon && <Icon className='sidebar-item-icon' fontSize='small' />}
            */}{' '}
-          <div className='sidebar-item-text'>
-            <i className={`${icon} sidebar-item-icon`}></i>
+          <div className='leftnav-sidebar-item-text'>
+            <i className={`${icon} leftnav-sidebar-item-icon`}></i>
             <Link to={`${url}`}>{title}</Link>
           </div>
         </div>

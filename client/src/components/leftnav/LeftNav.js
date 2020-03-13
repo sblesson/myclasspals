@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import LeftNavItem from './LeftNavItem';
+import NavCategoryItem from './NavCategoryItem';
 import Spinner from '../layout/Spinner';
 
 import { getLeftNav } from '../../actions/leftnav';
@@ -14,9 +15,11 @@ import './LeftNav.scss';
 const LeftNav = ({
   screen = 'dashboard',
   getLeftNav,
-  leftnav: { leftnav, loading }
+  leftnav: { leftnav, loading },
+  categories
 }) => {
-  console.log(getLeftNav);
+  console.log(categories);
+
   let depthStep = 10,
     depth = 0,
     expanded;
@@ -28,22 +31,41 @@ const LeftNav = ({
   return loading ? (
     <Spinner />
   ) : (
-    <div className='side-bar-list'>
-      <List disablePadding dense className='side-bar-list'>
-        {leftnav.map((leftNavItem, index) => (
-          <React.Fragment key={`${leftNavItem.name}${index}`}>
-            {leftNavItem === 'divider' ? (
-              <Divider style={{ margin: '6px 0' }} />
-            ) : (
-              <LeftNavItem
-                depthStep={depthStep}
-                depth={depth}
-                expanded={expanded}
-                item={leftNavItem}
-              />
-            )}
-          </React.Fragment>
-        ))}
+    <div className='leftnav-sidebar'>
+      <List disablePadding dense>
+        {leftnav &&
+          leftnav.length > 0 &&
+          leftnav.map((leftNavItem, index) => (
+            <React.Fragment key={`${leftNavItem.name}${index}`}>
+              {leftNavItem === 'divider' ? (
+                <Divider style={{ margin: '6px 0' }} />
+              ) : (
+                <LeftNavItem
+                  depthStep={depthStep}
+                  depth={depth}
+                  expanded={expanded}
+                  item={leftNavItem}
+                />
+              )}
+            </React.Fragment>
+          ))}
+        {screen == 'dashboard' &&
+          categories &&
+          categories.length > 0 &&
+          categories.map((leftNavItem, index) => (
+            <React.Fragment key={`${leftNavItem.title}${index}`}>
+              {leftNavItem === 'divider' ? (
+                <Divider style={{ margin: '6px 0' }} />
+              ) : (
+                <NavCategoryItem
+                  depthStep={depthStep}
+                  depth={depth}
+                  expanded={expanded}
+                  item={leftNavItem}
+                />
+              )}
+            </React.Fragment>
+          ))}
       </List>
     </div>
   );
@@ -56,7 +78,8 @@ LeftNav.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    leftnav: state.leftnav
+    leftnav: state.leftnav,
+    categories: state.post.categories
   };
 };
 

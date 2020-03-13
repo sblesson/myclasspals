@@ -45,7 +45,7 @@ const AuthLinks = (isLoggedIn = false) => {
             <Icon className='header-icon' name='alarm' size='large' />
           </Menu.Item> */}
             <Menu.Item>
-              <Link to='/profiles'>
+              <Link to='/messages'>
                 {'Messages'}
                 {/*         <Icon
               className='header-icon'
