@@ -18,7 +18,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
         <Spinner />
       ) : (
         <Fragment>
-          <h3 className='heading-3'>Parents &amp; Guardians </h3>
+          <h3 className='heading-3'>My Connections </h3>
           <Segment>
             <List divided relaxed>
               {profiles.length > 0 ? (

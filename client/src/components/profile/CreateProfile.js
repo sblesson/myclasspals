@@ -58,7 +58,7 @@ const CreateProfile = ({
         </Tab.Pane>
       )
     },
-    {
+    /*     {
       menuItem: "Child's Class Info",
       render: () => (
         <Tab.Pane attached={false}>
@@ -73,7 +73,7 @@ const CreateProfile = ({
           />
         </Tab.Pane>
       )
-    },
+    }, */
     {
       menuItem: 'Summary',
       render: () => (

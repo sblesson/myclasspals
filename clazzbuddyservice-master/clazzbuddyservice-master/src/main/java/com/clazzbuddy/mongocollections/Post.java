@@ -22,6 +22,26 @@ public class Post {
 	private String groupId;
 	
 	
+	private Boolean isPrivate;
+	
+	private String endUserId;
+	
+
+	public Boolean getIsPrivate() {
+		return isPrivate;
+	}
+
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+
+	public String getEndUserId() {
+		return endUserId;
+	}
+
+	public void setEndUserId(String endUserId) {
+		this.endUserId = endUserId;
+	}
 
 	public String getMessage() {
 		return message;

@@ -19,11 +19,6 @@ router.get('/', auth, async (req, res) => {
         name: 'general',
         label: '#General',
         url: '/dashboard?filter=general'
-      },
-      {
-        name: 'recommendations',
-        label: '#Recommendations',
-        url: '/dashboard?filter=recommend'
       }
     ];
     if (req.query.screen === 'profile') {

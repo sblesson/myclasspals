@@ -3,9 +3,27 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
-import PropTypes from 'prop-types';
+import { getSchoolData } from '../../actions/school';
+import {
+  Menu,
+  ControllerButton,
+  Input,
+  Item,
+  ArrowIcon,
+  XIcon
+} from './DownshiftComponents';
+import { Div } from 'glamorous';
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+import PropTypes from 'prop-types';
+import Downshift from 'downshift';
+
+const Register = ({
+  setAlert,
+  register,
+  isAuthenticated,
+  getSchoolData,
+  schools
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,6 +45,32 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     }
   };
 
+  const inputOnChange = event => {
+    console.log(event.target.value);
+    if (!event.target.value) {
+      return;
+    }
+    fetchSchools(event.target.value);
+  };
+
+  const fetchSchools = searchTerm => {
+    setTimeout(() => {
+      getSchoolData(searchTerm);
+    }, Math.random() * 1000);
+  };
+
+  const schoolNameSelectHandler = selectedItem => {
+    console.log(selectedItem);
+    //community[index].schoolid = selectedItem.schoolid;
+  };
+
+  const schoolNameToString = (item, index) => {
+    console.log(item);
+    //community[index].school = item;
+    //if (item) setGradeOptions(item.lowGrade, item.highGrade);
+    return item ? item.schoolName : '';
+  };
+
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
@@ -39,6 +83,67 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       </p>
       <form className='form' onSubmit={e => onSubmit(e)}>
         <div className='form-group'>
+          <Downshift
+            onChange={selectedItem => schoolNameSelectHandler(selectedItem)}
+            itemToString={schoolNameToString}
+          >
+            {({
+              getInputProps,
+              getToggleButtonProps,
+              getItemProps,
+              isOpen,
+              toggleMenu,
+              clearSelection,
+              selectedItem,
+              inputValue,
+              getLabelProps,
+              highlightedIndex
+            }) => (
+              <div className='auto-container'>
+                <Div position='relative' css={{ paddingRight: '1.75em' }}>
+                  <Input
+                    {...getInputProps({
+                      placeholder:
+                        'Type school or district or an address, city, zip...',
+                      onKeyUp: inputOnChange
+                    })}
+                  />
+                  {selectedItem ? (
+                    <ControllerButton
+                      css={{ paddingTop: 4, top: 5 }}
+                      onClick={clearSelection}
+                      aria-label='clear selection'
+                    >
+                      <XIcon />
+                    </ControllerButton>
+                  ) : (
+                    <ControllerButton {...getToggleButtonProps()}>
+                      <ArrowIcon isOpen={isOpen} />
+                    </ControllerButton>
+                  )}
+                </Div>
+                {isOpen ? (
+                  <Menu>
+                    {schools.map((item, index) => (
+                      <Item
+                        key={item.schoolid}
+                        {...getItemProps({
+                          item,
+                          index,
+                          isActive: highlightedIndex === index,
+                          isSelected: selectedItem === item
+                        })}
+                      >
+                        {item.schoolName}
+                      </Item>
+                    ))}
+                  </Menu>
+                ) : null}
+              </div>
+            )}
+          </Downshift>
+        </div>
+        <div className='form-group'>
           <input
             type='text'
             placeholder='Name'
@@ -47,6 +152,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             onChange={e => onChange(e)}
           />
         </div>
+
         <div className='form-group'>
           <input
             type='email'
@@ -90,7 +196,12 @@ Register.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  isLoading: state.school.isLoading,
+  schools: state.school.results,
+  isSchoolLoading: state.school.isLoading
 });
 
-export default connect(mapStateToProps, { setAlert, register })(Register);
+export default connect(mapStateToProps, { setAlert, register, getSchoolData })(
+  Register
+);
