@@ -47,7 +47,7 @@ const SideNavItem = ({
   }
 
   return (
-    <>
+    <div>
       <ListItem
         className='leftnav-sidebar-item'
         onClick={onClick}
@@ -87,7 +87,7 @@ const SideNavItem = ({
           </List>
         ) : null}
       </Collapse>
-    </>
+    </div>
   );
 };
 export default SideNavItem;
