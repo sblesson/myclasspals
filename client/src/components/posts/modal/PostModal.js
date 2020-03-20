@@ -296,7 +296,7 @@ const PostModal = ({ addPost, history, categories }) => {
             <TabPane tab="Let's Meet" key='2'>
               {EventPostForm}
             </TabPane>
-            <TabPane tab='Important' key='3'>
+            <TabPane tab='Alert' key='3'>
               {ReminderPostForm}
             </TabPane>
           </Tabs>

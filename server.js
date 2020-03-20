@@ -7,13 +7,8 @@ const app = express();
 // Connect Database
 connectDB();
 
-const adminRouter = require('./config/admin');
-
 // Init Middleware
 app.use(express.json({ extended: false }));
-
-// Define Routes
-app.use('/admin', adminRouter);
 
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));

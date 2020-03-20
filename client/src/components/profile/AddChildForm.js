@@ -24,21 +24,19 @@ import './AddChildForm.scss';
 import './styles.css';
 
 const AddChildForm = ({
-  profileData,
+  //profileData,
   showwAddChildButton,
   getSchoolData,
   schools
 }) => {
   const [community, setCommunityArray] = useState([
     {
-      displayname: '',
-      grade: '',
-      classroom: '',
-      schoolid: ''
+      displayname: 'sfdfsdf',
+      grade: 'Grade 6',
+      classroom: 'room 34',
+      schoolid: '123'
     }
   ]);
-
-  profileData.community = community;
 
   const handleAddMoreChild = event => {
     console.log('cool');
@@ -415,7 +413,7 @@ const AddChildForm = ({
         <div className='profile-action-button'>
           <i className='fas fa-plus-circle'></i>
           <span className='add-more' onClick={event => handleAddMoreChild}>
-            Add your child's class?
+            Create your child's class community?
           </span>
         </div>
       ) : (

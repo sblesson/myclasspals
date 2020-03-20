@@ -20,14 +20,6 @@
     box-shadow: none;
     border: none;
   }
-
-  /*   @include respond(tab-land) {
-    // width < 1200?
-    font-size: 56.25%; //1 rem = 9px, 9/16 = 50%
-  }
-  @media (min-width: 768px) {
-    width: 600px;
-  } */
 }
 .new-post {
   margin-left: 10px;
@@ -38,15 +30,9 @@
   padding: 0.5rem;
 }
 
-/* .ant-tabs {
-  &-nav {
-    display: flex;
-
-    .ant-tabs-tab {
-      flex-grow: 1;
-      margin-right: 0px;
-      width: 100%;
-      text-align: center;
-    }
+.feed-container {
+  .feed-wrapper {
+    width: 100%;
   }
-} */
+}
+

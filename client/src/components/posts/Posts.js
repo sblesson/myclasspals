@@ -8,13 +8,15 @@ import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
 import { getPosts, getPostCategories } from '../../actions/post';
 import LeftNav from '../leftnav/LeftNav';
-
-import { Menu, Segment, Button, Image } from 'semantic-ui-react';
+import { Card } from 'antd';
+import { Radio } from 'antd';
+import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { Tabs } from 'antd';
 import { StickyContainer, Sticky } from 'react-sticky';
+import PrivateMessageModal from '../groups/modal/CreateGroupModal';
 
 import './Posts.scss';
 const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
@@ -40,8 +42,6 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
   };
 
   const isItemLoaded = ({ index }) => !!items[index];
-
-  const handleItemClick = (e, { name }) => setActiveItem(name);
 
   const loadMoreItems = (visibleStartIndex, visibleStopIndex) => {
     const key = [visibleStartIndex, visibleStopIndex].join(':'); // 0:10
@@ -83,26 +83,37 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
     </Sticky>
   );
 
+  const operations = <PrivateMessageModal />;
+
+  const radioStyle = {
+    display: 'block',
+    height: '30px',
+    lineHeight: '16px'
+  };
+
+  const state = {
+    value: 1
+  };
+
+  const onGroupChange = e => {
+    console.log('radio checked', e.target.value);
+
+    state.value = e.target.value;
+  };
+
   return loading ? (
     <Spinner />
   ) : (
     <Fragment>
       <div className='row'>
-        <LeftNav />
-
-        <div className='post-container has-sidbar'>
-          <Menu pointing secondary>
-            <Menu.Item
-              name='catherine'
-              active={activeItem === 'catherine'}
-              onClick={handleItemClick}
-            />
-          </Menu>
-
-          <Segment>
-            <div className='row'>
-              <div id='main' className='col-md-12'>
-                <article>
+        <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+          <LeftNav />
+        </div>
+        <div className='col-xs-6 col-sm-6 col-md-8 col-lg-6'>
+          <div className='feed-container'>
+            <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+              <TabPane tab='My Groups' key='1'>
+                <div id='main' className='feed-wrapper'>
                   <PostModal />
                   <AutoSizer>
                     {({ height, width }) => (
@@ -127,16 +138,29 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
                       </InfiniteLoader>
                     )}
                   </AutoSizer>
-
-                  {/*   <List>
-              {posts.map(post => (
-                <PostItem key={post._id} post={post} />
-              ))}
-            </List> */}
-                </article>
-              </div>
-            </div>
-          </Segment>
+                </div>
+              </TabPane>
+            </Tabs>
+          </div>
+        </div>
+        <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+          <Card style={{ marginTop: 6 }} type='inner' title='My Groups'>
+            <Radio.Group onChange={onGroupChange} value={state.value}>
+              <Radio style={radioStyle} value={1}>
+                <Ellipsis length={10}>warmsprings grade 6</Ellipsis>
+              </Radio>
+              <Radio style={radioStyle} value={2}>
+                <Ellipsis length={10}>sunshine</Ellipsis>
+              </Radio>
+              <Radio style={radioStyle} value={3}>
+                <Ellipsis length={10}>
+                  upcoming 7th gradersupcoming 7th gradersupcoming 7th
+                  gradersupcoming 7th gradersupcoming 7th gradersupcoming 7th
+                  gradersupcoming 7th gradersupcoming 7th graders
+                </Ellipsis>
+              </Radio>
+            </Radio.Group>{' '}
+          </Card>
         </div>
       </div>
     </Fragment>
