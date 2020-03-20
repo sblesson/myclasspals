@@ -1,5 +1,5 @@
 {
-  "mongoURI": "mongodb+srv://bpl:bpl@cluster0-xffue.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "mongodb://clazz:buddy@localhost/clazzbuddy?retryWrites=true&w=majority",
   "jwtSecret": "mysecrettoken",
   "githubClientId": "",
   "githubSecret": ""

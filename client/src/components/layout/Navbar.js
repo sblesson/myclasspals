@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
-import AuthLinks from '../../containers/headernav/AuthLinks';
-import GuestLinks from '../../containers/headernav/GuestLinks';
+import AuthLinks from './headernav/AuthLinks';
+import GuestLinks from './headernav/GuestLinks';
 
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = <AuthLinks />;

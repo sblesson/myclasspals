@@ -9,6 +9,8 @@ import CreateProfile from '../profile/CreateProfile';
 import AccountSettings from '../profile/AccountSettings';
 import Profiles from '../profiles/Profiles';
 import Messages from '../messages/Messages.js';
+import Groups from '../groups/Groups.js';
+import SingleGroup from '../groups/SingleGroup.js';
 
 import Posts from '../posts/Posts';
 import SinglePost from '../posts/SinglePost';
@@ -22,6 +24,8 @@ const Routes = () => {
         <Route exact path='/login' component={Login} />
         <PrivateRoute exact path='/profiles' component={Profiles} />
         <PrivateRoute exact path='/messages' component={Messages} />
+        <PrivateRoute exact path='/groups' component={Groups} />
+        <PrivateRoute exact path='/group/id' component={SingleGroup} />
         {/*         <PrivateRoute exact path='/profile/:id' component={Profile} />
          */}{' '}
         <PrivateRoute exact path='/dashboard' component={Posts} />
