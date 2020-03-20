@@ -25,9 +25,9 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
 
   const menu = (
     <Menu onClick={onClick}>
-      <Menu.Item key='1'>Edit</Menu.Item>
-      <Menu.Item key='2'>Delete</Menu.Item>
-      <Menu.Item key='3'>Change Role</Menu.Item>
+      <Menu.Item key='2'>Leave Group</Menu.Item>
+      <Menu.Item key='3'>Set as Moderator</Menu.Item>
+      <Menu.Item key='3'>Set as Member</Menu.Item>
     </Menu>
   );
 
@@ -35,7 +35,7 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
     <Menu onClick={onClick}>
       <Menu.Item key='1'>Join</Menu.Item>
       <Menu.Item key='2'>Decline</Menu.Item>
-      <Menu.Item key='3'>Change Role</Menu.Item>
+      <Menu.Item key='3'>Set as Moderator</Menu.Item>
     </Menu>
   );
 
@@ -43,7 +43,7 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
     <Menu onClick={onClick}>
       <Menu.Item key='1'>Withdraw</Menu.Item>
       <Menu.Item key='2'>Re-send</Menu.Item>
-      <Menu.Item key='3'>Change Role</Menu.Item>
+      <Menu.Item key='3'>Set as Member</Menu.Item>
     </Menu>
   );
 
@@ -118,6 +118,7 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
       )
     }
   ];
+  //roles -- moderator, admin, member
   const data = [
     {
       key: '1',
@@ -130,7 +131,7 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
     {
       key: '2',
       name: 'Sunshine Kids',
-      role: 'owner',
+      role: 'moderator',
       description: 'London No. 1 Lake Park',
       memberCount: '20',
       tags: ['loser']
@@ -317,7 +318,7 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
         <Fragment>
           <div className='row'>
             <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
-              <LeftNav />
+              <LeftNav screen='groups' />
             </div>
 
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>

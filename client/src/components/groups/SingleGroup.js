@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List, Button } from 'semantic-ui-react';
+import Spinner from '../layout/Spinner';
+import LeftNav from '../leftnav/LeftNav';
+import { Menu, Dropdown, message } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import { Table, Tag } from 'antd';
 
-const SingleGroup = ({}) => {
+const SingleGroup = ({ loading }) => {
+  const onClick = ({ key }) => {
+    console.log(`Click on item ${key}`);
+  };
+  const requestedGroupsMenu = (
+    <Menu onClick={onClick}>
+      <Menu.Item key='1'>Set as Admin</Menu.Item>
+      <Menu.Item key='2'>Set as Moderator</Menu.Item>
+      <Menu.Item key='3'>Remove from Group</Menu.Item>
+      <Menu.Item key='4'>Mute Member</Menu.Item>
+    </Menu>
+  );
+
   const columns = [
     {
       title: 'Name',
@@ -14,18 +30,8 @@ const SingleGroup = ({}) => {
     },
     {
       title: 'Role',
+      key: 'role',
       dataIndex: 'role',
-      key: 'role'
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description'
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
       render: tags => (
         <span>
           {tags.map(tag => {
@@ -43,13 +49,31 @@ const SingleGroup = ({}) => {
       )
     },
     {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description'
+    },
+    {
+      title: 'Message',
+      dataIndex: 'message',
+      key: 'message',
+      render: (text, record) => (
+        <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
+          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+            <DownOutlined />
+          </a>
+        </Dropdown>
+      )
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <span>
-          <a style={{ marginRight: 16 }}>Invite {record.name}</a>
-          <a>Delete</a>
-        </span>
+        <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
+          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+            <DownOutlined />
+          </a>
+        </Dropdown>
       )
     }
   ];
@@ -58,26 +82,41 @@ const SingleGroup = ({}) => {
     {
       key: '1',
       name: 'John Brown',
-      role: 32,
-      description: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer']
+      role: ['nice', 'developer'],
+      description: 'New York No. 1 Lake Park'
     },
     {
       key: '2',
       name: 'Jim Green',
-      role: 42,
-      description: 'London No. 1 Lake Park',
-      tags: ['loser']
+      role: ['loser'],
+      description: 'London No. 1 Lake Park'
     },
     {
       key: '3',
       name: 'Joe Black',
-      role: 32,
-      description: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher']
+      role: ['cool', 'teacher'],
+      description: 'Sidney No. 1 Lake Park'
     }
   ];
-  return <Table columns={columns} dataSource={data} />;
+  return (
+    <Fragment>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Fragment>
+          <div className='row'>
+            <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+              <LeftNav screen='group' id='123' />
+            </div>
+
+            <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
+              <Table columns={columns} dataSource={data} />
+            </div>
+          </div>
+        </Fragment>
+      )}
+    </Fragment>
+  );
 };
 
 SingleGroup.propTypes = {

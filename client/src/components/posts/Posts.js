@@ -146,7 +146,7 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
         <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
           <Card style={{ marginTop: 6 }} type='inner' title='My Groups'>
             <Radio.Group onChange={onGroupChange} value={state.value}>
-              <Radio style={radioStyle} value={1}>
+              <Radio value={1}>
                 <Ellipsis length={10}>warmsprings grade 6</Ellipsis>
               </Radio>
               <Radio style={radioStyle} value={2}>
