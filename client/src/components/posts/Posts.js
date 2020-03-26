@@ -19,7 +19,12 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import PrivateMessageModal from '../groups/modal/CreateGroupModal';
 
 import './Posts.scss';
-const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
+const Posts = ({
+  auth,
+  getPosts,
+  getPostCategories,
+  post: { posts, loading }
+}) => {
   useEffect(() => {
     getPosts();
     getPostCategories();
@@ -30,6 +35,16 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
   const [activeItem, setActiveItem] = useState('catherine');
 
   const [requestCache, setRequestCache] = useState({});
+  const getUserGroup = () => {
+    let userGroupRadioOptions = [];
+    //console.log(auth.user.userGroup);
+    /* if (auth.user.userGroup !== null && auth.user.userGroup.length > 0) {
+      return (userGroupRadioOptions = auth.user.userGroup.map(group => ({
+        label: group.groupName,
+        value: group.id
+      })));
+    } */
+  };
 
   const getPostUrl = (rows, start) => `/api/posts?&rows=${rows}&start=${start}`;
 
@@ -145,6 +160,7 @@ const Posts = ({ getPosts, getPostCategories, post: { posts, loading } }) => {
         </div>
         <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
           <Card style={{ marginTop: 6 }} type='inner' title='My Groups'>
+            <Radio.Group name='selectedUserGroup' options={getUserGroup()} />
             <Radio.Group onChange={onGroupChange} value={state.value}>
               <Radio value={1}>
                 <Ellipsis length={10}>warmsprings grade 6</Ellipsis>
@@ -173,7 +189,8 @@ Posts.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  post: state.post
+  post: state.post,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { getPosts, getPostCategories })(Posts);

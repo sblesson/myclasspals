@@ -5,6 +5,7 @@ import profile from './profile';
 import post from './post';
 import leftnav from './leftnav';
 import school from './school';
+import group from './group';
 
 export default combineReducers({
   alert,
@@ -12,5 +13,6 @@ export default combineReducers({
   profile,
   post,
   leftnav,
-  school
+  school,
+  group
 });

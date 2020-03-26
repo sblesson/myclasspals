@@ -8,7 +8,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
+  SEND_USER_EMAIL,
+  EMAIL_SEND_ERROR
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -32,6 +34,28 @@ export const loadUser = () => async dispatch => {
   }
 };
 
+// Load User
+const sendEmailConfirmation = (body, config) => async dispatch => {
+  console.log(body);
+  //SET admin password
+  try {
+    const res = await axios.get(
+      'http://localhost:5000/api/sendMail',
+      body,
+      config
+    );
+
+    dispatch({
+      type: SEND_USER_EMAIL,
+      payload: res
+    });
+  } catch (err) {
+    dispatch({
+      type: EMAIL_SEND_ERROR
+    });
+  }
+};
+
 // Register User
 export const register = ({ name, email, password }) => async dispatch => {
   const config = {
@@ -49,6 +73,10 @@ export const register = ({ name, email, password }) => async dispatch => {
       type: REGISTER_SUCCESS,
       payload: res.data
     });
+
+    const emailRes = await axios.post('/api/sendMail', body, config);
+
+    console.log(emailRes);
 
     dispatch(loadUser());
   } catch (err) {

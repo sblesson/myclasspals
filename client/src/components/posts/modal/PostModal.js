@@ -130,6 +130,13 @@ const PostModal = ({ addPost, history, categories }) => {
     }
   };
 
+  const postTab1Categories = categories.map(function(topic, index) {
+    if(topic === 'divider'){
+      
+    }
+    return <Option key={index}>{topic.title}</Option>;
+  })
+
   const MessagePostForm = (
     <Form>
       <Form.Group className='post-form'>
@@ -140,6 +147,7 @@ const PostModal = ({ addPost, history, categories }) => {
           onChange={onCategoryChange}
         >
           {categories.map(function(topic, index) {
+            if(topic === 'divider'){}
             return <Option key={index}>{topic.title}</Option>;
           })}
         </Select>
@@ -196,6 +204,7 @@ const PostModal = ({ addPost, history, categories }) => {
           onChange={onCategoryChange}
         >
           {categories.map(function(topic, index) {
+            console.log(topic, index);
             return <Option key={index}>{topic.title}</Option>;
           })}
         </Select>

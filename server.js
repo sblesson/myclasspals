@@ -1,8 +1,11 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
-
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const app = express();
+var cors = require('cors');
+const config = require('config');
 
 // Connect Database
 connectDB();
@@ -19,6 +22,25 @@ app.use('/api/categories', require('./routes/api/categories'));
 
 app.use('/api/leftnav', require('./routes/api/leftnav'));
 app.use('/api/categories', require('./routes/api/categories'));
+//send email
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors());
+
+const { sendEmail } = require('./routes/api/mail');
+
+app.post('/api/sendMail', (req, res) => {
+  console.log(req.body);
+
+  const adminEmail = config.get('adminEmail');
+  const adminEmailPass = config.get('adminEmailPass');
+
+  console.log(adminEmail);
+  console.log(adminEmailPass);
+
+  sendEmail(req.body.email, req.body.name, adminEmail, adminEmailPass, 'hello');
+});
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

@@ -1,24 +1,35 @@
 import React, { useState } from 'react';
-import { Button, Select } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
-import { Tab, Form, Radio } from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { useForm } from 'react-hook-form';
-import { DevTool } from 'react-hook-form-devtools';
-
+//import { useForm, Controller } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
 import { getSchoolData } from '../../../actions/school';
+import { addGroup } from '../../../actions/group';
 import {
   Menu,
   ControllerButton,
-  Input,
+  //Input,
   Item,
   ArrowIcon,
   XIcon
 } from '../../common/DownshiftComponents';
+import { Formik } from 'formik';
+
+import {
+  SubmitButton,
+  Input,
+  Checkbox,
+  Radio,
+  ResetButton,
+  FormikDebug,
+  Form,
+  FormItem
+} from 'formik-antd';
+import { message, Button, Row, Col } from 'antd';
 
 import { Div } from 'glamorous';
 
@@ -30,29 +41,27 @@ const CreateGroupModal = ({
   sendPrivateMessage,
   getSchoolData,
   schools,
-  history
+  history,
+  addGroup,
+  auth
 }) => {
-  const { Option } = Select;
-  const { register, handleSubmit, errors, setValue } = useForm();
-
-  const FORM_DATA = {
-    groupName: '',
-    privacy: 'private',
-    visibility: 'hidden',
-    schoolGroup: false,
-    members: []
-  };
-  const [formData, setFormData] = useState(FORM_DATA);
-  const children = [];
-  for (let i = 10; i < 36; i++) {
-    children.push(
-      <Option key={i.toString(36) + i} value='yc' label='YC'>
-        <div className='demo-option-label-item'>Founder</div>
-      </Option>
-    );
-  }
   const [activeIndex, setActiveIndex] = useState(0);
-  const [userList, setUserList] = useState(children);
+  //const [userList, setUserList] = useState(children);
+
+  const [componentSize, setComponentSize] = useState('small');
+  const onFormLayoutChange = ({ size }) => {
+    setComponentSize(size);
+  };
+
+  const defaultValues = {
+    groupName: '',
+    TextField: '',
+    Select: '',
+    ReactSelect: '',
+    Checkbox: false,
+    switch: false,
+    RadioGroup: ''
+  };
 
   const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
 
@@ -65,7 +74,7 @@ const CreateGroupModal = ({
   const toggle = () => setModal(!modal);
   const onChange = e => {
     console.log(e.target.name, e.target.value);
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    //setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleChange = value => {
@@ -102,41 +111,16 @@ const CreateGroupModal = ({
     console.log(data);
   };
 
+  const validateRequired = value => {
+    return value ? undefined : 'required';
+  };
+
   const panes = [
     {
       menuItem: 'Create New Group',
       render: () => (
         <Tab.Pane attached={false}>
-          <Form onSubmit={handleSubmit(onCreateGroupSubmit)}>
-            <ModalBody>
-              <div className='private-group-modal-field'>
-                <input
-                  className='post-form-text-input'
-                  type='text'
-                  id='group_name'
-                  name='group_name'
-                  placeholder='Group Name'
-                  ref={register({
-                    required: true,
-                    maxLength: 30,
-                    minLength: 3
-                  })}
-                />
-                <p>
-                  {errors.group_name &&
-                    errors.group_name.type === 'required' && (
-                      <span>This is required</span>
-                    )}
-                  {errors.group_name &&
-                    errors.group_name.type === 'maxLength' && (
-                      <span>Max length exceeded</span>
-                    )}
-                  {errors.group_name &&
-                    errors.group_name.type === 'minLength' && (
-                      <span>Group name should be minimun 3 characters</span>
-                    )}
-                </p>
-              </div>
+          {/*    
               <Form.Group className='private-message-modal-field'>
                 <Select
                   mode='multiple'
@@ -148,21 +132,6 @@ const CreateGroupModal = ({
                 >
                   {userList}
                 </Select>
-              </Form.Group>
-              <Form.Group inline>
-                <label>Are you creating this group for your school?</label>
-                <input
-                  name='school-group-radio'
-                  type='radio'
-                  value='Yes'
-                  ref={register({ required: true })}
-                />
-                <input
-                  name='school-group-radio'
-                  type='radio'
-                  value='No'
-                  ref={register({ required: true })}
-                />
               </Form.Group>
               <Form.Group>
                 <Downshift
@@ -226,49 +195,123 @@ const CreateGroupModal = ({
                     </div>
                   )}
                 </Downshift>
-              </Form.Group>
-              <Form.Group inline>
-                <label>Privacy</label>
-                <Form.Field
-                  control={Radio}
-                  label='Private'
-                  value='private'
-                  //defaultChecked={true}
-                  checked={formData.privacy === 'private'}
-                  onChange={e => onChange(e)}
-                />
-                <Form.Field
-                  control={Radio}
-                  label='Public'
-                  value='public'
-                  checked={formData.privacy === 'public'}
-                  //checked={value === 'public'}
-                  onChange={e => onChange(e)}
-                />
-              </Form.Group>
-              <Form.Group inline>
-                <label>Hidden</label>
-                <Form.Radio
-                  label='Hidden'
-                  value='hidden'
-                  //checked={value === 'private'}
-                  onChange={e => onChange(e)}
-                />
-                <Form.Radio
-                  label='Visible'
-                  value='visible'
-                  defaultChecked={true}
-                  //checked={value === 'public'}
-                  onChange={e => onChange(e)}
-                />
-              </Form.Group>
-            </ModalBody>
+              </Form.Group> */}
 
-            <ModalFooter>
-              {' '}
-              <input type='submit' value='Create' />
-            </ModalFooter>
-          </Form>
+          <div>
+            <Formik
+              initialValues={{
+                groupName: '',
+                privacy: 'private',
+                hidden: 'visible'
+                //isSchoolGroup: 'no'
+              }}
+              onSubmit={(values, actions) => {
+                message.info(JSON.stringify(values, null, 4));
+                console.log(values);
+
+                values.createrUserId = auth.user._id;
+                console.log(JSON.stringify(values));
+
+                addGroup(JSON.stringify(values));
+                actions.setSubmitting(false);
+                actions.resetForm();
+              }}
+              validate={values => {
+                if (!values.groupName) {
+                  return { groupName: 'required' };
+                }
+                return {};
+              }}
+              render={() => (
+                <Form
+                  labelCol={{
+                    span: 8
+                  }}
+                  wrapperCol={{
+                    span: 16
+                  }}
+                  layout='horizontal'
+                  initialValues={{
+                    size: componentSize
+                  }}
+                >
+                  <div style={{ flex: 1, padding: 40 }}>
+                    <FormItem
+                      name='groupName'
+                      label='Group Name'
+                      required={true}
+                      validate={validateRequired}
+                    >
+                      <Input name='groupName' placeholder='Group Name' />
+                    </FormItem>
+                    <FormItem
+                      name='privacyLabel'
+                      label='Privacy'
+                      //required={true}
+                      //validate={validateRequired}
+                    >
+                      <Radio.Group
+                        name='privacy'
+                        options={[
+                          { label: 'Private', value: 'private' },
+                          { label: 'Public', value: 'public' }
+                        ]}
+                      />
+                    </FormItem>
+
+                    <FormItem
+                      name='visibilityLabel'
+                      label='Visibility'
+                      //required={true}
+                      //validate={validateRequired}
+                    >
+                      <Radio.Group
+                        name='hidden'
+                        options={[
+                          { label: 'Hidden', value: 'hidden' },
+                          { label: 'Visible', value: 'visible' }
+                        ]}
+                      />
+                    </FormItem>
+                    {/*       <FormItem
+                      name='schoolGroupLabel'
+                      label='Are you creating this group for your school?'
+                      //required={true}
+                      //validate={validateRequired}
+                    >
+                      <Radio.Group
+                        name='isSchoolGroup'
+                        options={[
+                          { label: 'Yes', value: 'yes' },
+                          { label: 'No', value: 'no' }
+                        ]}
+                      />
+                    </FormItem> */}
+                    {/* 
+                    <FormItem
+                      name='newsletter'
+                      labelCol={{ xs: 4 }}
+                      wrapperCol={{ offset: 4, xs: 20 }}
+                    >
+                      <Checkbox name='groupTandA'>
+                        I accept the terms &amp; conditions
+                      </Checkbox>
+                    </FormItem> */}
+
+                    <Row style={{ marginTop: 60 }}>
+                      <Col offset={8}>
+                        <Button.Group>
+                          <ResetButton>Reset</ResetButton>
+                          <SubmitButton>Submit</SubmitButton>
+                        </Button.Group>
+                      </Col>
+                    </Row>
+                  </div>
+                  <FormikDebug style={{ maxWidth: 400 }} />
+                </Form>
+              )}
+            />
+          </div>
         </Tab.Pane>
       )
     },
@@ -352,11 +395,13 @@ CreateGroupModal.propTypes = {
 const mapDispatchToProps = state => ({
   hideModal: state.hideModal,
   schools: state.school.results,
-  isSchoolLoading: state.school.isLoading
+  isSchoolLoading: state.school.isLoading,
+  auth: state.auth
 });
 
 export default connect(mapDispatchToProps, {
   sendPrivateMessage,
   getSchoolData,
+  addGroup,
   mapDispatchToProps
 })(withRouter(CreateGroupModal));
