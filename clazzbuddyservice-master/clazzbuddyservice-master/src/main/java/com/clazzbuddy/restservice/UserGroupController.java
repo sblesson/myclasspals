@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.mongocollections.UserGroup;
 import com.clazzbuddy.restmodel.CommonResult;
 import com.clazzbuddy.restmodel.UserGroupResult;
 import com.clazzbuddy.service.UserGroupService;
+import com.clazzbuddy.service.UserService;
 
 @ComponentScan(basePackages = "com.clazzbuddy")
 
@@ -29,12 +31,14 @@ public class UserGroupController {
 	@Autowired
 	UserGroupService userGroupService;
 
+
 	@PostMapping(value = "/creategroup", produces = { "application/json" })
 	public CommonResult createGroup(@RequestBody UserGroup userGroup) {
 		CommonResult result = new CommonResult();
 
 		try {
 			userGroupService.createUserGroup(userGroup);
+			
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
@@ -62,12 +66,12 @@ public class UserGroupController {
 	}
 
 	@GetMapping(value = "/getgroup", produces = { "application/json" })
-	public CommonResult getUser(@RequestParam(value = "usergroupid") String id) {
+	public CommonResult getGroupById(@RequestParam(value = "usergroupid") String id) {
 		UserGroupResult result = new UserGroupResult();
 
 		try {
 			List<UserGroup> userGroupList = new ArrayList<>();
-			userGroupList.add(userGroupService.getUserGroupByName(id));
+			userGroupList.add(userGroupService.getUserGroupById(id));
 			result.setUserGroup(userGroupList);
 			result.setErrorCode(0);
 		} catch (Exception e) {
@@ -78,4 +82,5 @@ public class UserGroupController {
 		return result;
 
 	}
+	
 }

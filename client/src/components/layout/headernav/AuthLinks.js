@@ -6,6 +6,7 @@ import DropDownMenu from '../dropdownmenu/DropDownMenu';
 import './HeaderNav.scss';
 import logo from '../../../assets/images/logo.jpg';
 
+
 const AuthLinks = (isLoggedIn = false) => {
   console.log(isLoggedIn);
   if (isLoggedIn) {

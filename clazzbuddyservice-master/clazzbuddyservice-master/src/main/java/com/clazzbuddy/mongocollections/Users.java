@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
-public class User {
+public class Users {
 
 	@Id
 	private String _id;
@@ -41,6 +41,12 @@ public class User {
 	
 	@DBRef
 	private List<UserGroup> userGroup;
+	
+	@DBRef
+	private List<UserGroup> pendingInvitedUserGroups;
+	
+	@DBRef
+	private List<UserGroup> requestedUserGroup;
 
 	public String getName() {
 		return name;
@@ -130,4 +136,21 @@ public class User {
 		this.userGroup = userGroup;
 	}
 
+	public List<UserGroup> getPendingInvitedUserGroups() {
+		return pendingInvitedUserGroups;
+	}
+
+	public void setPendingInvitedUserGroups(List<UserGroup> pendingInvitedUserGroups) {
+		this.pendingInvitedUserGroups = pendingInvitedUserGroups;
+	}
+
+	public List<UserGroup> getRequestedUserGroup() {
+		return requestedUserGroup;
+	}
+
+	public void setRequestedUserGroup(List<UserGroup> requestedUserGroup) {
+		this.requestedUserGroup = requestedUserGroup;
+	}
+
+	
 }
