@@ -29,7 +29,7 @@ public class PostMessageService {
 			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase(), "i"));
 		}
 
-		postListQuery.addCriteria(Criteria.where("schoolid").is(postSearchQuery.getSchoolid()));
+		postListQuery.addCriteria(Criteria.where("groupId").is(postSearchQuery.getGroupid()));
 
 		if (postSearchQuery.getLastseen() != null) {
 			ObjectId objID = new ObjectId(postSearchQuery.getLastseen());

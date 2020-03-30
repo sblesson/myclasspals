@@ -56,14 +56,8 @@ router.get('/', auth, async (req, res) => {
     if (req.query.screen === 'group') {
       leftnav = [
         {
-          name: 'about_group',
-          label: 'About',
-          //icon: 'fas fa-user-edit',
-          url: '/group/about/' + req.query.id
-        },
-        {
           name: 'members',
-          label: 'Members',
+          label: 'Membership',
           icon: 'fas fa-user-edit',
           url: '/group/members/' + req.query.id
         },
@@ -72,6 +66,12 @@ router.get('/', auth, async (req, res) => {
           label: 'Group Rules',
           icon: 'fas fa-user-cog',
           url: '/group/group_rules/' + req.query.id
+        },
+        {
+          name: 'about_group',
+          label: 'About',
+          //icon: 'fas fa-user-edit',
+          url: '/group/about/' + req.query.id
         }
       ];
     }

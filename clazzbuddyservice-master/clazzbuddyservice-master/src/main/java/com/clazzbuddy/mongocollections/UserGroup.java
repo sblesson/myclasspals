@@ -12,21 +12,33 @@ public class UserGroup {
 
 	private String groupName;
 	
+	private String description;
+
+	
 	private String privacy;
 	
 	private String hidden;
 	
-	private String createrUserId;
+	private UserGroupMembers createrUserId;
 	
-	private List<String> adminUserIds;
+	private List<UserGroupMembers> adminUserIds;
 	
-	@DBRef
 	private List<UserGroupMembers> userGroupMembers;
 	
 	private List<GroupInvitations> pendingInvitations;
 	
 	private List<GroupInvitations> requestedInvitations;
+	
+	private String isSchoolGroup;
 
+	private String schoolName;
+	
+	private String schoolAddress;
+	
+	private String schoolCity;
+	
+	private String schoolZipCode;
+	
 	public List<UserGroupMembers> getUserGroupMembers() {
 		return userGroupMembers;
 	}
@@ -67,21 +79,7 @@ public class UserGroup {
 		this.hidden = hidden;
 	}
 
-	public String getCreaterUserId() {
-		return createrUserId;
-	}
-
-	public void setCreaterUserId(String createrUserId) {
-		this.createrUserId = createrUserId;
-	}
-
-	public List<String> getAdminUserIds() {
-		return adminUserIds;
-	}
-
-	public void setAdminUserIds(List<String> adminUserIds) {
-		this.adminUserIds = adminUserIds;
-	}
+	
 
 	public List<GroupInvitations> getPendingInvitations() {
 		return pendingInvitations;
@@ -97,6 +95,70 @@ public class UserGroup {
 
 	public void setRequestedInvitations(List<GroupInvitations> requestedInvitations) {
 		this.requestedInvitations = requestedInvitations;
+	}
+
+	public List<UserGroupMembers> getAdminUserIds() {
+		return adminUserIds;
+	}
+
+	public void setAdminUserIds(List<UserGroupMembers> adminUserIds) {
+		this.adminUserIds = adminUserIds;
+	}
+
+	public UserGroupMembers getCreaterUserId() {
+		return createrUserId;
+	}
+
+	public void setCreaterUserId(UserGroupMembers createrUserId) {
+		this.createrUserId = createrUserId;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
+	public String getSchoolAddress() {
+		return schoolAddress;
+	}
+
+	public void setSchoolAddress(String schoolAddress) {
+		this.schoolAddress = schoolAddress;
+	}
+
+	public String getIsSchoolGroup() {
+		return isSchoolGroup;
+	}
+
+	public void setIsSchoolGroup(String isSchoolGroup) {
+		this.isSchoolGroup = isSchoolGroup;
+	}
+
+	public String getSchoolZipCode() {
+		return schoolZipCode;
+	}
+
+	public void setSchoolZipCode(String schoolZipCode) {
+		this.schoolZipCode = schoolZipCode;
+	}
+
+	public String getSchoolCity() {
+		return schoolCity;
+	}
+
+	public void setSchoolCity(String schoolCity) {
+		this.schoolCity = schoolCity;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	

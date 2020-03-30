@@ -12,12 +12,20 @@ import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import './Groups.scss';
-const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
+const Messages = ({ getProfiles, auth, profile: { profiles, loading } }) => {
   useEffect(() => {
     getProfiles();
   }, [getProfiles]);
   console.log(profiles);
   const { TabPane } = Tabs;
+
+  const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
+  console.log(userGroup);
+
+  const pendingInvitationsData2 = JSON.parse(localStorage.getItem('user'))
+    .pendingInvitedUserGroups;
+  const requestedUserGroup2 = JSON.parse(localStorage.getItem('user'))
+    .requestedUserGroup;
 
   const onClick = ({ key }) => {
     message.info(`Click on item ${key}`);
@@ -31,13 +39,19 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
     </Menu>
   );
 
-  const pendingInvitationsMenu = (
-    <Menu onClick={onClick}>
-      <Menu.Item key='1'>Join</Menu.Item>
-      <Menu.Item key='2'>Decline</Menu.Item>
-      <Menu.Item key='3'>Set as Moderator</Menu.Item>
-    </Menu>
-  );
+  const onClickPendingInvitationsMenu = ({ key, record, index }) => {
+    //console.log(text, record, index);
+  };
+  const pendingInvitationsMenu = (text, record, index) => {
+    console.log(text, record, index);
+    return (
+      <Menu onClick={onClickPendingInvitationsMenu(record, index)}>
+        <Menu.Item key='1'>Join</Menu.Item>
+        <Menu.Item key='2'>Decline</Menu.Item>
+        <Menu.Item key='3'>Set as Moderator</Menu.Item>
+      </Menu>
+    );
+  };
 
   const requestedGroupsMenu = (
     <Menu onClick={onClick}>
@@ -67,8 +81,8 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
   const myGroupsColumns = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'groupName',
+      key: 'groupName',
       render: text => <a>{text}</a>
     },
     {
@@ -87,6 +101,16 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
       key: 'memberCount'
     },
     {
+      title: 'Privacy',
+      dataIndex: 'privacy',
+      key: 'privacy'
+    },
+    {
+      title: 'Hidden',
+      dataIndex: 'hidden',
+      key: 'hidden'
+    },
+    /*     {
       title: 'Tags',
       key: 'tags',
       dataIndex: 'tags',
@@ -105,7 +129,7 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
           })}
         </span>
       )
-    },
+    }, */
     {
       title: 'Action',
       key: 'action',
@@ -116,33 +140,6 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
           </a>
         </Dropdown>
       )
-    }
-  ];
-  //roles -- moderator, admin, member
-  const data = [
-    {
-      key: '1',
-      name: 'warm springs 6th grade',
-      role: 'admin',
-      description: 'New York No. 1 Lake Park',
-      memberCount: '20',
-      tags: ['nice', 'developer']
-    },
-    {
-      key: '2',
-      name: 'Sunshine Kids',
-      role: 'moderator',
-      description: 'London No. 1 Lake Park',
-      memberCount: '20',
-      tags: ['loser']
-    },
-    {
-      key: '3',
-      name: 'Volunteers 2020',
-      role: 'member',
-      description: 'Sidney No. 1 Lake Park',
-      memberCount: '20',
-      tags: ['cool', 'teacher']
     }
   ];
 
@@ -191,8 +188,11 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
     {
       title: 'Action',
       key: 'action',
-      render: (text, record) => (
-        <Dropdown overlay={pendingInvitationsMenu} placement='bottomCenter'>
+      render: (text, record, index) => (
+        <Dropdown
+          overlay={pendingInvitationsMenu(text, record, index)}
+          placement='bottomCenter'
+        >
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             <DownOutlined />
           </a>
@@ -324,7 +324,15 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
               <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
                 <TabPane tab='My Groups' key='1'>
-                  <Table columns={myGroupsColumns} dataSource={data} />{' '}
+                  {userGroup && userGroup.length > 0 ? (
+                    <Table
+                      columns={myGroupsColumns}
+                      dataSource={userGroup}
+                      rowKey='id'
+                    />
+                  ) : (
+                    'Current user is not part of any groups.'
+                  )}
                 </TabPane>
                 <TabPane tab='Pending Invitations' key='2'>
                   <Table
@@ -353,7 +361,8 @@ Messages.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile
+  profile: state.profile,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { getProfiles })(Messages);

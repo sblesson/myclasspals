@@ -60,7 +60,8 @@ const CreateGroupModal = ({
     ReactSelect: '',
     Checkbox: false,
     switch: false,
-    RadioGroup: ''
+    RadioGroup: '',
+    newGroupMembers: ''
   };
 
   const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
@@ -273,7 +274,7 @@ const CreateGroupModal = ({
                         ]}
                       />
                     </FormItem>
-                    {/*       <FormItem
+                    <FormItem
                       name='schoolGroupLabel'
                       label='Are you creating this group for your school?'
                       //required={true}
@@ -286,7 +287,12 @@ const CreateGroupModal = ({
                           { label: 'No', value: 'no' }
                         ]}
                       />
-                    </FormItem> */}
+                    </FormItem>
+                    <Input.TextArea
+                      name='newGroupMembers'
+                      placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
+                    />
+
                     {/* 
                     <FormItem
                       name='newsletter'

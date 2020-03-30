@@ -1,10 +1,7 @@
 package com.clazzbuddy.mongocollections;
 
-import org.springframework.data.annotation.Id;
-
 public class UserGroupMembers {
 
-	@Id
 	private String _id;
 	
 	private String name;

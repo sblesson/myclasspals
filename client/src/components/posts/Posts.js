@@ -8,13 +8,11 @@ import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
 import { getPosts, getPostCategories } from '../../actions/post';
 import LeftNav from '../leftnav/LeftNav';
-import { Card } from 'antd';
-import { Radio } from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
-import { Tabs } from 'antd';
+import { Tabs, Radio, Card } from 'antd';
 import { StickyContainer, Sticky } from 'react-sticky';
 import PrivateMessageModal from '../groups/modal/CreateGroupModal';
 
@@ -29,22 +27,23 @@ const Posts = ({
     getPosts();
     getPostCategories();
   }, [getPosts]);
+  const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
+
+  let userGroupRadioOptions = [];
+  if (userGroup && userGroup.length > 0) {
+    userGroupRadioOptions = userGroup.map(group => ({
+      label: group.groupName,
+      value: group.id
+    }));
+  }
+  console.log(userGroup);
+
   const { TabPane } = Tabs;
 
   const [items, setItems] = useState({});
   const [activeItem, setActiveItem] = useState('catherine');
 
   const [requestCache, setRequestCache] = useState({});
-  const getUserGroup = () => {
-    let userGroupRadioOptions = [];
-    //console.log(auth.user.userGroup);
-    /* if (auth.user.userGroup !== null && auth.user.userGroup.length > 0) {
-      return (userGroupRadioOptions = auth.user.userGroup.map(group => ({
-        label: group.groupName,
-        value: group.id
-      })));
-    } */
-  };
 
   const getPostUrl = (rows, start) => `/api/posts?&rows=${rows}&start=${start}`;
 
@@ -160,22 +159,17 @@ const Posts = ({
         </div>
         <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
           <Card style={{ marginTop: 6 }} type='inner' title='My Groups'>
-            <Radio.Group name='selectedUserGroup' options={getUserGroup()} />
-            <Radio.Group onChange={onGroupChange} value={state.value}>
-              <Radio value={1}>
-                <Ellipsis length={10}>warmsprings grade 6</Ellipsis>
-              </Radio>
-              <Radio style={radioStyle} value={2}>
-                <Ellipsis length={10}>sunshine</Ellipsis>
-              </Radio>
-              <Radio style={radioStyle} value={3}>
-                <Ellipsis length={10}>
-                  upcoming 7th gradersupcoming 7th gradersupcoming 7th
-                  gradersupcoming 7th gradersupcoming 7th gradersupcoming 7th
-                  gradersupcoming 7th gradersupcoming 7th graders
-                </Ellipsis>
-              </Radio>
-            </Radio.Group>{' '}
+            {userGroup && userGroup.length > 0 ? (
+              <Radio.Group name='selectedUserGroup' onChange={onGroupChange}>
+                {userGroup.map(group => (
+                  <Radio key={group.id} style={radioStyle} value={group.id}>
+                    {group.groupName}
+                  </Radio>
+                ))}
+              </Radio.Group>
+            ) : (
+              'No Groups Found'
+            )}
           </Card>
         </div>
       </div>
@@ -193,4 +187,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getPosts, getPostCategories })(Posts);
+export default connect(mapStateToProps, {
+  getPosts,
+  getPostCategories
+})(Posts);
