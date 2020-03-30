@@ -1,14 +1,17 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { List, Button } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { Table, Tag } from 'antd';
+import { Tabs, Button, Table, Tag } from 'antd';
+import PrivateMessageModal from './modal/CreateGroupModal';
 
 const SingleGroup = ({ loading }) => {
+  const { TabPane } = Tabs;
+
   const onClick = ({ key }) => {
     console.log(`Click on item ${key}`);
   };
@@ -20,6 +23,8 @@ const SingleGroup = ({ loading }) => {
       <Menu.Item key='4'>Mute Member</Menu.Item>
     </Menu>
   );
+
+  const operations = <PrivateMessageModal />;
 
   const columns = [
     {
@@ -110,7 +115,14 @@ const SingleGroup = ({ loading }) => {
             </div>
 
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
-              <Table columns={columns} dataSource={data} />
+              <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+                <TabPane tab='Members' key='1'>
+                  <Table columns={columns} dataSource={data} />{' '}
+                </TabPane>
+                <TabPane tab='Pending Invitations' key='2'>
+                  <Table columns={columns} dataSource={data} />{' '}
+                </TabPane>
+              </Tabs>
             </div>
           </div>
         </Fragment>

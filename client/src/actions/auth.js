@@ -10,10 +10,56 @@ import {
   LOGOUT,
   CLEAR_PROFILE,
   SEND_USER_EMAIL,
-  EMAIL_SEND_ERROR
+  EMAIL_SEND_ERROR,
+  GET_USER_GROUP,
+  GET_USER_GROUP_ERROR
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
+// Get all profiles
+export const getUserGroup = userId => async dispatch => {
+  try {
+    const userId = JSON.parse(localStorage.getItem('user'))._id;
+    console.log(userId);
+
+    const userGroupRes = await axios.get(
+      'http://localhost:8080/user/getprofile?user=' + userId
+    );
+    console.log();
+    dispatch({
+      type: GET_USER_GROUP,
+      payload: userGroupRes.data.user[0]
+    });
+  } catch (err) {
+    dispatch({
+      type: GET_USER_GROUP_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+/* export const getUserGroups = () => async dispatch => {
+
+  try {
+    const res = await axios.get('/api/auth');
+    console.log(res);
+
+    const userGroupRes = await axios.get(
+      'http://localhost:8080/user/getprofile?user=' + res.data._id
+    );
+
+    console.log(userGroupRes);
+
+    dispatch({
+      type: USER_LOADED,
+      payload: userGroupRes.data
+    });
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR
+    });
+}
+ */
 // Load User
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
@@ -22,10 +68,17 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
+    console.log(res);
+
+    const userGroupRes = await axios.get(
+      'http://localhost:8080/user/getprofile?user=' + res.data._id
+    );
+
+    console.log(userGroupRes);
 
     dispatch({
       type: USER_LOADED,
-      payload: res.data
+      payload: userGroupRes.data
     });
   } catch (err) {
     dispatch({

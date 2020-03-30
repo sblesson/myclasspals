@@ -14,6 +14,7 @@ import com.clazzbuddy.mongocollections.Community;
 import com.clazzbuddy.mongocollections.GroupInvitations;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.mongocollections.UserGroup;
+import com.clazzbuddy.mongocollections.UserGroupMembers;
 import com.clazzbuddy.restmodel.GroupInvitationAction;
 
 @Component
@@ -52,7 +53,7 @@ public class UserService {
 
 	public Users getUser(String userKey) {
 		Query userByName = new Query();
-		userByName.addCriteria(Criteria.where("name").is(userKey));
+		userByName.addCriteria(Criteria.where("email").is(userKey));
 		Users user = mongoTemplate.findOne(userByName, Users.class);
 		if (user == null) {
 			ObjectId objID = new ObjectId(userKey);
@@ -147,6 +148,14 @@ public class UserService {
 			}
 			invitedUser.getUserGroup().add(userGroup);
 			
+			if (userGroup.getUserGroupMembers() == null) {
+				userGroup.setUserGroupMembers(new ArrayList<UserGroupMembers>());
+			}
+			UserGroupMembers userGroupMember = new UserGroupMembers();
+			userGroupMember.set_id(invitedUser.get_id());
+			userGroupMember.setName(invitedUser.getEmail());
+			userGroup.getUserGroupMembers().add(userGroupMember);
+			
 			mongoTemplate.save(invitedUser);
 			mongoTemplate.save(userGroup);
 		}
@@ -182,6 +191,14 @@ public class UserService {
 			}
 			invitedUser.getUserGroup().add(userGroup);
 		
+			if (userGroup.getUserGroupMembers() == null) {
+				userGroup.setUserGroupMembers(new ArrayList<UserGroupMembers>());
+			}
+			UserGroupMembers userGroupMember = new UserGroupMembers();
+			userGroupMember.set_id(invitedUser.get_id());
+			userGroupMember.setName(invitedUser.getEmail());
+			userGroup.getUserGroupMembers().add(userGroupMember);
+			
 			mongoTemplate.save(invitedUser);
 			mongoTemplate.save(userGroup);
 		}

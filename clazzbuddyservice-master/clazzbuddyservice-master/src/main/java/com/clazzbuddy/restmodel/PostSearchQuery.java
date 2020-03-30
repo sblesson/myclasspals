@@ -4,18 +4,11 @@ public class PostSearchQuery {
 
 	private String keyword;
 	
-	private String schoolid;
+	private String groupid;
 	
 	private String lastseen;
 
-	
-	public String getSchoolid() {
-		return schoolid;
-	}
 
-	public void setSchoolid(String schoolid) {
-		this.schoolid = schoolid;
-	}
 
 	public String getKeyword() {
 		return keyword;
@@ -31,6 +24,14 @@ public class PostSearchQuery {
 
 	public void setLastseen(String lastseen) {
 		this.lastseen = lastseen;
+	}
+
+	public String getGroupid() {
+		return groupid;
+	}
+
+	public void setGroupid(String groupid) {
+		this.groupid = groupid;
 	}
 
 

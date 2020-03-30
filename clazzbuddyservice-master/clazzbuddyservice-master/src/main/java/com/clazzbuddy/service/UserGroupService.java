@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.mongocollections.UserGroup;
+import com.clazzbuddy.mongocollections.UserGroupMembers;
 
 @Component
 public class UserGroupService {
@@ -28,7 +29,7 @@ public class UserGroupService {
 		if (userGroupFromDB != null) {
 			return userGroupFromDB;
 		}
-		Users creatorUser = userService.getUser(userGroup.getCreaterUserId());
+		Users creatorUser = userService.getUser(userGroup.getCreaterUserId().get_id());
 		if (creatorUser == null) {
 			throw new Exception("Not a valid creator user:" + userGroup.getCreaterUserId());
 		}
@@ -40,8 +41,8 @@ public class UserGroupService {
 		userService.updateUser(creatorUser);
 		
 		if (userGroup.getAdminUserIds() != null) {
-			for (String userId : userGroup.getAdminUserIds()) {
-				Users adminUser = userService.getUser(userId);
+			for (UserGroupMembers userId : userGroup.getAdminUserIds()) {
+				Users adminUser = userService.getUser(userId.get_id());
 				if (adminUser == null) {
 					throw new Exception("Not a valid creator user: " + userId);
 				}

@@ -7,30 +7,48 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
-  SEND_USER_EMAIL
+  SEND_USER_EMAIL,
+  GET_USER_GROUP,
+  GET_USER_GROUP_ERROR
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
-  isAuthenticated: null,
+  isAuthenticated: false,
   loading: true,
-  user: null
+  user: localStorage.getItem('user')
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case USER_LOADED:
+    case GET_USER_GROUP:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
         user: payload
       };
+    case USER_LOADED:
+      localStorage.setItem('user', JSON.stringify(payload.user[0]));
+      console.log('USER_LOADED');
+
+      console.log(payload);
+
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: payload.user[0]
+      };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
+      localStorage.setItem('isAuthenticated', payload.isAuthenticated);
+      console.log('LOGIN_SUCCESS');
+      console.log(payload);
+
       return {
         ...state,
         ...payload,
