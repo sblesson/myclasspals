@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
 import { getSchoolData } from '../../../actions/school';
-import { addGroup } from '../../../actions/group';
+import { addGroup, inviteToJoinUserGroup } from '../../../actions/group';
 import {
   Menu,
   ControllerButton,
@@ -43,7 +43,9 @@ const CreateGroupModal = ({
   schools,
   history,
   addGroup,
-  auth
+  inviteToJoinUserGroup,
+  auth,
+  group
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   //const [userList, setUserList] = useState(children);
@@ -210,7 +212,10 @@ const CreateGroupModal = ({
                 message.info(JSON.stringify(values, null, 4));
                 console.log(values);
 
-                values.createrUserId = auth.user._id;
+                values.createrUserId = {
+                  _id: auth.user._id,
+                  name: auth.user.name
+                };
                 console.log(JSON.stringify(values));
 
                 addGroup(JSON.stringify(values));
@@ -288,10 +293,6 @@ const CreateGroupModal = ({
                         ]}
                       />
                     </FormItem>
-                    <Input.TextArea
-                      name='newGroupMembers'
-                      placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
-                    />
 
                     {/* 
                     <FormItem
@@ -325,23 +326,46 @@ const CreateGroupModal = ({
       menuItem: 'Send Invitation',
       render: () => (
         <Tab.Pane attached={false}>
-          <Form>
-            <Form.Group className='private-message-modal-field'>
-              <textarea
-                className='post-form-text-input post-form-textarea'
-                name='new_group_members'
-                cols='30'
-                rows='5'
-                placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
-                onChange={e => onChange(e)}
-                required
-              />
-            </Form.Group>
-            <ModalFooter>
-              {' '}
-              <input type='submit' value='Send Invite' />
-            </ModalFooter>{' '}
-          </Form>
+          <Formik
+            initialValues={{
+              invitedUsers: '',
+              action: 'INVITE'
+            }}
+            onSubmit={(values, actions) => {
+              console.log(JSON.stringify(values));
+              values.groupId = group.newGroup.id;
+              inviteToJoinUserGroup(JSON.stringify(values));
+              actions.setSubmitting(false);
+              actions.resetForm();
+            }}
+            validate={values => {
+              if (!values.invitedUsers) {
+                return { invitedUsers: 'required' };
+              }
+              return {};
+            }}
+            render={() => (
+              <Form>
+                <Input.TextArea
+                  className='post-form-text-input post-form-textarea'
+                  name='invitedUsers'
+                  cols='30'
+                  rows='5'
+                  placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
+                  onChange={e => onChange(e)}
+                  required
+                />
+                <Row style={{ marginTop: 60 }}>
+                  <Col offset={8}>
+                    <Button.Group>
+                      <ResetButton>Reset</ResetButton>
+                      <SubmitButton> Send Invite</SubmitButton>
+                    </Button.Group>
+                  </Col>
+                </Row>
+              </Form>
+            )}
+          />
         </Tab.Pane>
       )
     },
@@ -402,12 +426,14 @@ const mapDispatchToProps = state => ({
   hideModal: state.hideModal,
   schools: state.school.results,
   isSchoolLoading: state.school.isLoading,
-  auth: state.auth
+  auth: state.auth,
+  group: state.group
 });
 
 export default connect(mapDispatchToProps, {
   sendPrivateMessage,
   getSchoolData,
   addGroup,
+  inviteToJoinUserGroup,
   mapDispatchToProps
 })(withRouter(CreateGroupModal));

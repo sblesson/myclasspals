@@ -9,6 +9,8 @@ public class GroupInvitationAction {
 	private String invitedUserId;
 	
 	private String action;
+	
+	private String invitedUsers;
 
 	public String getGroupId() {
 		return groupId;
@@ -40,6 +42,14 @@ public class GroupInvitationAction {
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public String getInvitedUsers() {
+		return invitedUsers;
+	}
+
+	public void setInvitedUsers(String invitedUsers) {
+		this.invitedUsers = invitedUsers;
 	}
 
 

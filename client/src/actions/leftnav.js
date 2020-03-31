@@ -9,9 +9,14 @@ import {
 } from './types';
 
 // Get Github repos
-export const getLeftNav = (screen = 'dashboard') => async dispatch => {
+export const getLeftNav = (screen = 'dashboard', id) => async dispatch => {
   try {
-    const res = await axios.get(`/api/leftnav?screen=${screen}`);
+    let res;
+    if (id !== undefined || id !== null) {
+      res = await axios.get(`/api/leftnav?screen=${screen}&id=${id}`);
+    } else {
+      res = await axios.get(`/api/leftnav?screen=${screen}`);
+    }
 
     dispatch({
       type: GET_LEFT_NAV,

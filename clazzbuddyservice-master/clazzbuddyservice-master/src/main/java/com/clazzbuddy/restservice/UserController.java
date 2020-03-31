@@ -115,10 +115,20 @@ public class UserController {
 	public CommonResult inviteToUserGroup(@RequestBody GroupInvitationAction groupInvitationAction) {
 		CommonResult result  = new CommonResult();
 		try {
-			userService.inviteToJoinUserGroup(groupInvitationAction);
+			if (groupInvitationAction.getInvitedUsers() != null) {
+				String[] emailAddresses = groupInvitationAction.getInvitedUsers().split(",");
+				for (int count=0; count<emailAddresses.length ;count++) {
+					GroupInvitationAction newGroupInvitationAction = new GroupInvitationAction();
+					newGroupInvitationAction.setGroupId(groupInvitationAction.getGroupId());
+					newGroupInvitationAction.setInvitedUserId(emailAddresses[count]);
+					userService.inviteToJoinUserGroup(newGroupInvitationAction);
+				}
+			} else {
+				userService.inviteToJoinUserGroup(groupInvitationAction);
+			}
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
 		}
 		return result;
 	}

@@ -25,7 +25,7 @@ const Routes = () => {
         <PrivateRoute exact path='/profiles' component={Profiles} />
         <PrivateRoute exact path='/messages' component={Messages} />
         <PrivateRoute exact path='/groups' component={Groups} />
-        <PrivateRoute exact path='/group/id' component={SingleGroup} />
+        <PrivateRoute exact path='/group/:id' component={SingleGroup} />
         {/*         <PrivateRoute exact path='/profile/:id' component={Profile} />
          */}{' '}
         <PrivateRoute exact path='/dashboard' component={Posts} />
