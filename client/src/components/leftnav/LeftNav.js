@@ -14,6 +14,7 @@ import './LeftNav.scss';
 
 const LeftNav = ({
   screen = 'dashboard',
+  id,
   getLeftNav,
   leftnav: { leftnav, loading },
   categories
@@ -25,7 +26,7 @@ const LeftNav = ({
     expanded;
 
   useEffect(() => {
-    getLeftNav(screen);
+    getLeftNav(screen, id);
   }, [getLeftNav]);
 
   return loading ? (

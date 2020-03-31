@@ -23,7 +23,7 @@ public class UserGroup {
 	
 	private List<UserGroupMembers> adminUserIds;
 	
-	private List<UserGroupMembers> userGroupMembers;
+	//private List<UserGroupMembers> userGroupMembers;
 	
 	private List<GroupInvitations> pendingInvitations;
 	
@@ -38,6 +38,8 @@ public class UserGroup {
 	private String schoolCity;
 	
 	private String schoolZipCode;
+	 
+	private List<UserGroupMembers> userGroupMembers;
 	
 	public List<UserGroupMembers> getUserGroupMembers() {
 		return userGroupMembers;

@@ -1,4 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import { connect } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
@@ -8,10 +10,14 @@ import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Tabs, Button, Table, Tag } from 'antd';
 import PrivateMessageModal from './modal/CreateGroupModal';
+import { getGroupDetails } from '../../actions/group';
 
-const SingleGroup = ({ loading }) => {
+const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
+  useEffect(() => {
+    getGroupDetails(match.params.id);
+  }, [getGroupDetails, match.params.id]);
   const { TabPane } = Tabs;
-
+  console.log(group);
   const onClick = ({ key }) => {
     console.log(`Click on item ${key}`);
   };
@@ -29,8 +35,8 @@ const SingleGroup = ({ loading }) => {
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'groupName',
+      key: 'groupName',
       render: text => <a>{text}</a>
     },
     {
@@ -111,18 +117,30 @@ const SingleGroup = ({ loading }) => {
         <Fragment>
           <div className='row'>
             <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
-              <LeftNav screen='group' id='123' />
+              <LeftNav screen='group' id={match.params.id} />
             </div>
 
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
-              <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
-                <TabPane tab='Members' key='1'>
-                  <Table columns={columns} dataSource={data} />{' '}
-                </TabPane>
-                <TabPane tab='Pending Invitations' key='2'>
-                  <Table columns={columns} dataSource={data} />{' '}
-                </TabPane>
-              </Tabs>
+              {group !== null ? (
+                <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+                  <TabPane tab='Members' key='1'>
+                    {group.currentGroup && group.currentGroup.length > 0 ? (
+                      <Table
+                        columns={columns}
+                        dataSource={group.currentGroup}
+                        rowKey='id'
+                      />
+                    ) : (
+                      'Current group member list is empty'
+                    )}
+                  </TabPane>
+                  <TabPane tab='Pending Invitations' key='2'>
+                    <Table columns={columns} dataSource={data} />{' '}
+                  </TabPane>
+                </Tabs>
+              ) : (
+                'Group is empty'
+              )}
             </div>
           </div>
         </Fragment>
@@ -132,7 +150,11 @@ const SingleGroup = ({ loading }) => {
 };
 
 SingleGroup.propTypes = {
-  //profile: PropTypes.object.isRequired
+  getGroupDetails: PropTypes.func.isRequired
 };
 
-export default SingleGroup;
+const mapStateToProps = state => ({
+  group: state.group
+});
+
+export default connect(mapStateToProps, { getGroupDetails })(SingleGroup);

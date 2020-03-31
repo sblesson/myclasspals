@@ -34,10 +34,10 @@ public class UserGroupController {
 
 	@PostMapping(value = "/creategroup", produces = { "application/json" })
 	public CommonResult createGroup(@RequestBody UserGroup userGroup) {
-		CommonResult result = new CommonResult();
+		UserGroupResult result = new UserGroupResult();
 
 		try {
-			userGroupService.createUserGroup(userGroup);
+			result.setUserGroup(userGroupService.createUserGroup(userGroup));
 			
 			result.setErrorCode(0);
 		} catch (Exception e) {
@@ -72,7 +72,7 @@ public class UserGroupController {
 		try {
 			List<UserGroup> userGroupList = new ArrayList<>();
 			userGroupList.add(userGroupService.getUserGroupById(id));
-			result.setUserGroup(userGroupList);
+			result.setUserGroupList(userGroupList);
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
