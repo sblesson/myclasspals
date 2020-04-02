@@ -3,6 +3,7 @@ package com.clazzbuddy.mongocollections;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public class UserGroup {
@@ -19,11 +20,6 @@ public class UserGroup {
 	
 	private String hidden;
 	
-	private UserGroupMembers createrUserId;
-	
-	private List<UserGroupMembers> adminUserIds;
-	
-	//private List<UserGroupMembers> userGroupMembers;
 	
 	private List<GroupInvitations> pendingInvitations;
 	
@@ -33,11 +29,49 @@ public class UserGroup {
 
 	private String schoolName;
 	
-	private String schoolAddress;
+	private String schoolId;
+
+	
+	private String schoolState;
 	
 	private String schoolCity;
 	
 	private String schoolZipCode;
+	
+	@Transient
+	private String role;
+	
+	public String getRole() {
+		return role;
+	}
+	
+	public void initializeRole(String currentUserId, String emailId) {
+		if (userGroupMembers != null) {
+			for (UserGroupMembers group : userGroupMembers) {
+				if (group.get_id() != null && (group.get_id().equals(currentUserId))) {
+					role = group.getRole();
+					return;
+				}
+			}
+		}
+		if (pendingInvitations != null) {
+			for (GroupInvitations group : pendingInvitations) {
+				if (group.getRequestorUserId() != null && group.getRequestorUserId().equals(currentUserId)) {
+					role = group.getRole();
+					return;
+				}
+			}
+		}
+		if (requestedInvitations != null) {
+			for (GroupInvitations group : requestedInvitations) {
+				if (group.getInvitedUserId() != null && (group.getInvitedUserId().equals(currentUserId)
+						|| group.getInvitedUserId().equals(emailId))) {
+					role = group.getRole();
+					return;
+				}
+			}
+		}
+	}
 	 
 	private List<UserGroupMembers> userGroupMembers;
 	
@@ -99,21 +133,6 @@ public class UserGroup {
 		this.requestedInvitations = requestedInvitations;
 	}
 
-	public List<UserGroupMembers> getAdminUserIds() {
-		return adminUserIds;
-	}
-
-	public void setAdminUserIds(List<UserGroupMembers> adminUserIds) {
-		this.adminUserIds = adminUserIds;
-	}
-
-	public UserGroupMembers getCreaterUserId() {
-		return createrUserId;
-	}
-
-	public void setCreaterUserId(UserGroupMembers createrUserId) {
-		this.createrUserId = createrUserId;
-	}
 
 	public String getSchoolName() {
 		return schoolName;
@@ -121,14 +140,6 @@ public class UserGroup {
 
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
-	}
-
-	public String getSchoolAddress() {
-		return schoolAddress;
-	}
-
-	public void setSchoolAddress(String schoolAddress) {
-		this.schoolAddress = schoolAddress;
 	}
 
 	public String getIsSchoolGroup() {
@@ -161,6 +172,22 @@ public class UserGroup {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getSchoolState() {
+		return schoolState;
+	}
+
+	public void setSchoolState(String schoolState) {
+		this.schoolState = schoolState;
+	}
+
+	public String getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(String schoolId) {
+		this.schoolId = schoolId;
 	}
 
 	

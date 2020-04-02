@@ -9,8 +9,8 @@ import LeftNav from '../leftnav/LeftNav';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Tabs, Button, Table, Tag } from 'antd';
-import PrivateMessageModal from './modal/CreateGroupModal';
-import { getGroupDetails } from '../../actions/group';
+import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
+import { getGroupDetails, approveUserGroupRequest } from '../../actions/group';
 
 const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
   useEffect(() => {
@@ -21,7 +21,39 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
   const onClick = ({ key }) => {
     console.log(`Click on item ${key}`);
   };
-  const requestedGroupsMenu = (
+
+  //TODO check if you are admin, creator or member and decide menu actions
+  const requestToJoinMenu = (
+    <Menu onClick={onClick}>
+      <Menu.Item key='1'>Approve</Menu.Item>
+      <Menu.Item key='2'>Decline</Menu.Item>
+    </Menu>
+  );
+
+  const requestToJoinColumn = [
+    {
+      title: 'Member Request',
+      dataIndex: 'invitedUserId',
+      key: 'invitedUserId',
+      render: text => <a>{text}</a>
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => (
+        <Dropdown overlay={requestToJoinMenu} placement='bottomCenter'>
+          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+            <DownOutlined />
+          </a>
+        </Dropdown>
+      )
+    }
+  ];
+
+  const operations = <InviteUsersToGroupModal />;
+
+  //TODO check if you are admin, creator or member and decide menu actions
+  const membersMenu = (
     <Menu onClick={onClick}>
       <Menu.Item key='1'>Set as Admin</Menu.Item>
       <Menu.Item key='2'>Set as Moderator</Menu.Item>
@@ -29,8 +61,6 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
       <Menu.Item key='4'>Mute Member</Menu.Item>
     </Menu>
   );
-
-  const operations = <PrivateMessageModal />;
 
   const columns = [
     {
@@ -69,7 +99,7 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
       dataIndex: 'message',
       key: 'message',
       render: (text, record) => (
-        <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
+        <Dropdown overlay={membersMenu} placement='bottomCenter'>
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             <DownOutlined />
           </a>
@@ -80,7 +110,7 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
+        <Dropdown overlay={membersMenu} placement='bottomCenter'>
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             <DownOutlined />
           </a>
@@ -89,26 +119,49 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
     }
   ];
 
-  const data = [
+  const onClickPendingInvitation = () => {};
+
+  //TODO check if you are admin, creator or member and decide menu actions
+  const pendingInvitationsMenu = (
+    <Menu onClick={onClickPendingInvitation}>
+      <Menu.Item key='1'>Approve</Menu.Item>
+      <Menu.Item key='2'>Decline</Menu.Item>
+    </Menu>
+  );
+
+  const approveUserGroupRequestClick = record => {
+    console.log(record);
+  };
+
+  const pendingInvitationsColumns = [
     {
-      key: '1',
-      name: 'John Brown',
-      role: ['nice', 'developer'],
-      description: 'New York No. 1 Lake Park'
+      title: 'Invited Users',
+      dataIndex: 'invitedUserId',
+      key: 'invitedUserId',
+      render: text => <a>{text}</a>
     },
     {
-      key: '2',
-      name: 'Jim Green',
-      role: ['loser'],
-      description: 'London No. 1 Lake Park'
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      role: ['cool', 'teacher'],
-      description: 'Sidney No. 1 Lake Park'
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => (
+        <span>
+          <a
+            style={{ marginRight: 16 }}
+            onClick={approveUserGroupRequestClick(record)}
+          >
+            Approve
+          </a>
+          <a>Delete</a>
+        </span>
+        /*         <Dropdown overlay={pendingInvitationsMenu} placement='bottomCenter'>
+          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+            <DownOutlined />
+          </a>
+        </Dropdown> */
+      )
     }
   ];
+
   return (
     <Fragment>
       {loading ? (
@@ -121,9 +174,9 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
             </div>
 
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
-              {group !== null ? (
+              {group !== null && group.currentGroup ? (
                 <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
-                  <TabPane tab='Members' key='1'>
+                  <TabPane tab='Members' key='members'>
                     {group.currentGroup && group.currentGroup.length > 0 ? (
                       <Table
                         columns={columns}
@@ -134,8 +187,29 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
                       'Current group member list is empty'
                     )}
                   </TabPane>
-                  <TabPane tab='Pending Invitations' key='2'>
-                    <Table columns={columns} dataSource={data} />{' '}
+                  <TabPane tab='Pending Invitations' key='invitations'>
+                    {group.currentGroup.requestedInvitations &&
+                    group.currentGroup.requestedInvitations.length > 0 ? (
+                      <Table
+                        columns={pendingInvitationsColumns}
+                        dataSource={group.currentGroup.requestedInvitations}
+                        rowKey='id'
+                      />
+                    ) : (
+                      'Current group member list is empty'
+                    )}
+                  </TabPane>
+                  <TabPane tab='Request To Join' key='request'>
+                    {group.currentGroup.requestedInvitations &&
+                    group.currentGroup.requestedInvitations.length > 0 ? (
+                      <Table
+                        columns={requestToJoinColumn}
+                        dataSource={group.currentGroup.requestedInvitations}
+                        rowKey='id'
+                      />
+                    ) : (
+                      'Current group member list is empty'
+                    )}
                   </TabPane>
                 </Tabs>
               ) : (

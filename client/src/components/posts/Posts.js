@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -163,7 +164,7 @@ const Posts = ({
               <Radio.Group name='selectedUserGroup' onChange={onGroupChange}>
                 {userGroup.map(group => (
                   <Radio key={group.id} style={radioStyle} value={group.id}>
-                    {group.groupName}
+                    <Link to={`/group/${group.id}`}>{group.groupName}</Link>
                   </Radio>
                 ))}
               </Radio.Group>

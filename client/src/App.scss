@@ -135,6 +135,13 @@ img {
 .m-left-5 {
   margin-left: 5px;
 }
+.m-top-20 {
+  margin-top: 20px !important;
+}
+
+.m-bottom-15 {
+  margin-bottom: 15px !important;
+}
 
 .btn {
   display: inline-block;
@@ -170,12 +177,12 @@ img {
 .bg-primary,
 .badge-primary,
 .alert-primary {
-  background: var(--primary-color);
+  background: var(--primary-btn-color);
   color: #fff;
   &:hover,
   &:active,
   &:focus {
-    background: #a10053;
+    background: var(--secondary-btn-color);
   }
 }
 

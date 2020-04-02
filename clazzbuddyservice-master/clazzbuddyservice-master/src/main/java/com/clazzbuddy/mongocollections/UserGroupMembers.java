@@ -5,6 +5,8 @@ public class UserGroupMembers {
 	private String _id;
 	
 	private String name;
+	
+	private String role;
 
 	public String get_id() {
 		return _id;
@@ -20,6 +22,14 @@ public class UserGroupMembers {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 	

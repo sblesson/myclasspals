@@ -59,7 +59,7 @@ router.get('/', auth, async (req, res) => {
           name: 'members',
           label: 'Membership',
           icon: 'fas fa-user-edit',
-          url: '/group/' + req.query.id
+          url: '/group/members/' + req.query.id
         },
         {
           name: 'group_rules',

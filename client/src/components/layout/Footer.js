@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div className='ui inverted vertical footer segment'>
       <div className='ui center aligned container'>
-        <div className='ui stackable inverted divided grid'>
+        <div className='ui stackable inverted divided grid m-top-20'>
           <div className='three wide column'>
             <h4 className='ui inverted header'>Company</h4>
             <div className='ui inverted link list'>
@@ -68,7 +68,7 @@ const Footer = () => {
             Privacy Policy
           </Link>
         </div>
-        <div className='ui inverted small divided link list'>
+        <div className='ui inverted small divided link list m-bottom-15'>
           <p className='item'>
             Copyright © 2020 clazzbuddy, Inc. All rights reserved.
           </p>
