@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import PrivateMessageModal from './modal/CreateGroupModal';
 import LeftNav from '../leftnav/LeftNav';
-import { getAllGroups } from '../../actions/group';
-import { Tabs, Table, Tag } from 'antd';
+import { getAllGroups, acceptUserGroupInvitation } from '../../actions/group';
+import { Tabs, Table, Tag, Button, Popconfirm } from 'antd';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import './Groups.scss';
-const Groups = ({ getAllGroups, group }) => {
+const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
   useEffect(() => {
     getAllGroups();
   }, [getAllGroups]);
@@ -30,7 +30,7 @@ const Groups = ({ getAllGroups, group }) => {
   );
 
   const onClickPendingInvitationsMenu = ({ key, record, index }) => {
-    //console.log(text, record, index);
+    console.log(key, record, index);
   };
   const pendingInvitationsMenu = (text, record, index) => {
     console.log(text, record, index);
@@ -86,26 +86,6 @@ const Groups = ({ getAllGroups, group }) => {
       dataIndex: 'hidden',
       key: 'hidden'
     },
-    /*     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      )
-    }, */
     {
       title: 'Action',
       key: 'action',
@@ -119,12 +99,25 @@ const Groups = ({ getAllGroups, group }) => {
     }
   ];
 
+  const acceptPendingInviteActionClick = record => {
+    console.log('acceptPendingInviteActionClick', record, auth.user.email);
+    acceptUserGroupInvitation({
+      groupId: record.id,
+      role: 'member',
+      invitedUserId: auth.user.email
+    });
+  };
+
+  const declinePendingInviteActionClick = record => {
+    console.log('declinePendingInviteActionClick', record);
+  };
+
   const pendingInvitations = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: text => <a>{text}</a>
+      title: 'Group Name',
+      dataIndex: 'groupName',
+      key: 'groupName',
+      render: (text, record) => <Link to={`/group/${record.id}`}>{text}</Link>
     },
     {
       title: 'Role',
@@ -137,51 +130,65 @@ const Groups = ({ getAllGroups, group }) => {
       key: 'description'
     },
     {
-      title: 'Member Count',
-      dataIndex: 'memberCount',
-      key: 'memberCount'
+      title: 'Privacy',
+      dataIndex: 'privacy',
+      key: 'privacy'
     },
     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      )
+      title: 'Hidden',
+      dataIndex: 'hidden',
+      key: 'hidden'
+    },
+    {
+      title: 'Created Date',
+      dataIndex: 'createdDate',
+      key: 'createdDate'
     },
     {
       title: 'Action',
       key: 'action',
       render: (text, record, index) => (
-        <Dropdown
-          overlay={pendingInvitationsMenu(text, record, index)}
-          placement='bottomCenter'
+        <Button
+          type='link'
+          style={{ marginRight: 16 }}
+          onClick={() => acceptPendingInviteActionClick(record)}
         >
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown>
+          Join
+        </Button>
+
+        /*         <div>
+          <Button
+            type='link'
+            style={{ marginRight: 16 }}
+            onClick={acceptPendingInviteActionClick(record)}
+          >
+            Join
+          </Button>
+
+          <Button
+            type='link'
+            style={{ marginRight: 16 }}
+            onClick={record => {
+              console.log(record);
+              declinePendingInviteActionClick(record);
+            }}
+          >
+            Decline
+          </Button>
+        </div> */
       )
     }
   ];
 
+  const myFunction = record => {
+    console.log(record);
+  };
+
   const requestedGroupsColumns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'GroupName',
+      dataIndex: 'groupName',
+      key: 'groupName',
       render: text => <a>{text}</a>
     },
     {
@@ -223,38 +230,20 @@ const Groups = ({ getAllGroups, group }) => {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
+        <Button
+          onClick={record => {
+            console.log(record);
+          }}
+        >
+          Click me
+        </Button>
+
+        /*     <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             <DownOutlined />
           </a>
-        </Dropdown>
+        </Dropdown> */
       )
-    }
-  ];
-  const RequestedGroupsData = [
-    {
-      key: '1',
-      name: 'warm springs 6th grade',
-      role: 'admin',
-      description: 'New York No. 1 Lake Park',
-      memberCount: '20',
-      tags: ['nice', 'developer']
-    },
-    {
-      key: '2',
-      name: 'Sunshine Kids',
-      role: 'member',
-      description: 'London No. 1 Lake Park',
-      memberCount: '20',
-      tags: ['loser']
-    },
-    {
-      key: '3',
-      name: 'Volunteers 2020',
-      role: 'member',
-      description: 'Sidney No. 1 Lake Park',
-      memberCount: '20',
-      tags: ['cool', 'teacher']
     }
   ];
 
@@ -286,18 +275,18 @@ const Groups = ({ getAllGroups, group }) => {
                     )}
                   </TabPane>
                   <TabPane tab='Pending Invitations' key='2'>
-                    {group.pendingInvitationsData &&
-                    group.pendingInvitationsData.length > 0 ? (
+                    {group.pendingInvitedUserGroups &&
+                    group.pendingInvitedUserGroups.length > 0 ? (
                       <Table
                         columns={pendingInvitations}
-                        dataSource={group.pendingInvitationsData}
+                        dataSource={group.pendingInvitedUserGroups}
                         rowKey='id'
                       />
                     ) : (
                       'There are no pending group invitation for current user.'
                     )}
                   </TabPane>
-                  <TabPane tab='Requested' key='3'>
+                  <TabPane tab='Requested To Join' key='3'>
                     {group.requestedGroupsData &&
                     group.requestedGroupsData.length > 0 ? (
                       <Table
@@ -326,7 +315,11 @@ Groups.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  group: state.group
+  group: state.group,
+  auth: state.auth
 });
 
-export default connect(mapStateToProps, { getAllGroups })(Groups);
+export default connect(mapStateToProps, {
+  getAllGroups,
+  acceptUserGroupInvitation
+})(Groups);

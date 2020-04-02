@@ -11,6 +11,8 @@ public class GroupInvitationAction {
 	private String action;
 	
 	private String invitedUsers;
+	
+	private String role;
 
 	public String getGroupId() {
 		return groupId;
@@ -50,6 +52,14 @@ public class GroupInvitationAction {
 
 	public void setInvitedUsers(String invitedUsers) {
 		this.invitedUsers = invitedUsers;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 

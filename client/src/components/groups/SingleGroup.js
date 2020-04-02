@@ -9,10 +9,20 @@ import LeftNav from '../leftnav/LeftNav';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Tabs, Button, Table, Tag } from 'antd';
-import PrivateMessageModal from './modal/CreateGroupModal';
-import { getGroupDetails } from '../../actions/group';
+import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
+import {
+  getGroupDetails,
+  approveUserGroupRequest,
+  declineUserGroupRequest
+} from '../../actions/group';
 
-const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
+const SingleGroup = ({
+  loading,
+  group,
+  getGroupDetails,
+  approveUserGroupRequest,
+  match
+}) => {
   useEffect(() => {
     getGroupDetails(match.params.id);
   }, [getGroupDetails, match.params.id]);
@@ -21,7 +31,39 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
   const onClick = ({ key }) => {
     console.log(`Click on item ${key}`);
   };
-  const requestedGroupsMenu = (
+
+  //TODO check if you are admin, creator or member and decide menu actions
+  const requestToJoinMenu = (
+    <Menu onClick={onClick}>
+      <Menu.Item key='1'>Approve</Menu.Item>
+      <Menu.Item key='2'>Decline</Menu.Item>
+    </Menu>
+  );
+
+  const requestToJoinColumn = [
+    {
+      title: 'Member Request',
+      dataIndex: 'invitedUserId',
+      key: 'invitedUserId',
+      render: text => <a>{text}</a>
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => (
+        <Dropdown overlay={requestToJoinMenu} placement='bottomCenter'>
+          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+            <DownOutlined />
+          </a>
+        </Dropdown>
+      )
+    }
+  ];
+
+  const operations = <InviteUsersToGroupModal />;
+
+  //TODO check if you are admin, creator or member and decide menu actions
+  const membersMenu = (
     <Menu onClick={onClick}>
       <Menu.Item key='1'>Set as Admin</Menu.Item>
       <Menu.Item key='2'>Set as Moderator</Menu.Item>
@@ -30,34 +72,17 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
     </Menu>
   );
 
-  const operations = <PrivateMessageModal />;
-
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'groupName',
-      key: 'groupName',
+      dataIndex: 'name',
+      key: 'name',
       render: text => <a>{text}</a>
     },
     {
       title: 'Role',
       key: 'role',
-      dataIndex: 'role',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      )
+      dataIndex: 'role'
     },
     {
       title: 'Description',
@@ -69,7 +94,7 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
       dataIndex: 'message',
       key: 'message',
       render: (text, record) => (
-        <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
+        <Dropdown overlay={membersMenu} placement='bottomCenter'>
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             <DownOutlined />
           </a>
@@ -80,7 +105,7 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
+        <Dropdown overlay={membersMenu} placement='bottomCenter'>
           <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
             <DownOutlined />
           </a>
@@ -89,26 +114,66 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
     }
   ];
 
-  const data = [
+  const onClickPendingInvitation = () => {};
+
+  //TODO check if you are admin, creator or member and decide menu actions
+  const pendingInvitationsMenu = (
+    <Menu onClick={onClickPendingInvitation}>
+      <Menu.Item key='1'>Approve</Menu.Item>
+      <Menu.Item key='2'>Decline</Menu.Item>
+    </Menu>
+  );
+
+  const approveUserGroupRequestClick = record => {
+    console.log(record);
+
+    approveUserGroupRequest({
+      groupId: record.groupId,
+      role: record.role,
+      requestorUserId: record.requestorUserId
+    });
+  };
+
+  const declineUserGroupRequestClick = record => {
+    console.log(record);
+  };
+
+  const pendingInvitationsColumns = [
     {
-      key: '1',
-      name: 'John Brown',
-      role: ['nice', 'developer'],
-      description: 'New York No. 1 Lake Park'
+      title: 'Requested Users',
+      dataIndex: 'requestorUserId',
+      key: 'requestorUserId',
+      render: text => <a>{text}</a>
     },
     {
-      key: '2',
-      name: 'Jim Green',
-      role: ['loser'],
-      description: 'London No. 1 Lake Park'
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role'
     },
     {
-      key: '3',
-      name: 'Joe Black',
-      role: ['cool', 'teacher'],
-      description: 'Sidney No. 1 Lake Park'
+      title: 'Action',
+      key: 'action',
+      render: (text, record, index) => (
+        <div>
+          <Button
+            type='link'
+            style={{ marginRight: 16 }}
+            onClick={() => approveUserGroupRequestClick(record)}
+          >
+            Approve
+          </Button>
+          <Button
+            type='link'
+            style={{ marginRight: 16 }}
+            onClick={() => declineUserGroupRequestClick(record)}
+          >
+            Decline
+          </Button>
+        </div>
+      )
     }
   ];
+
   return (
     <Fragment>
       {loading ? (
@@ -121,21 +186,43 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
             </div>
 
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
-              {group !== null ? (
+              {group !== null && group.currentGroup ? (
                 <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
-                  <TabPane tab='Members' key='1'>
-                    {group.currentGroup && group.currentGroup.length > 0 ? (
+                  <TabPane tab='Members' key='members'>
+                    {group.currentGroup.userGroupMembers &&
+                    group.currentGroup.userGroupMembers.length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={group.currentGroup}
-                        rowKey='id'
+                        dataSource={group.currentGroup.userGroupMembers}
+                        rowKey='_id'
                       />
                     ) : (
                       'Current group member list is empty'
                     )}
                   </TabPane>
-                  <TabPane tab='Pending Invitations' key='2'>
-                    <Table columns={columns} dataSource={data} />{' '}
+                  <TabPane tab='Pending Approvals' key='approvals'>
+                    {group.currentGroup.pendingInvitations &&
+                    group.currentGroup.pendingInvitations.length > 0 ? (
+                      <Table
+                        columns={pendingInvitationsColumns}
+                        dataSource={group.currentGroup.pendingInvitations}
+                        rowKey='requestorUserId'
+                      />
+                    ) : (
+                      'Current group member list is empty'
+                    )}
+                  </TabPane>
+                  <TabPane tab='Request To Join' key='request'>
+                    {group.currentGroup.requestedInvitations &&
+                    group.currentGroup.requestedInvitations.length > 0 ? (
+                      <Table
+                        columns={requestToJoinColumn}
+                        dataSource={group.currentGroup.requestedInvitations}
+                        rowKey='id'
+                      />
+                    ) : (
+                      'Current group member list is empty'
+                    )}
                   </TabPane>
                 </Tabs>
               ) : (
@@ -157,4 +244,8 @@ const mapStateToProps = state => ({
   group: state.group
 });
 
-export default connect(mapStateToProps, { getGroupDetails })(SingleGroup);
+export default connect(mapStateToProps, {
+  getGroupDetails,
+  declineUserGroupRequest,
+  approveUserGroupRequest
+})(SingleGroup);

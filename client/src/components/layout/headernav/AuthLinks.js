@@ -6,7 +6,6 @@ import DropDownMenu from '../dropdownmenu/DropDownMenu';
 import './HeaderNav.scss';
 import logo from '../../../assets/images/logo.jpg';
 
-
 const AuthLinks = (isLoggedIn = false) => {
   console.log(isLoggedIn);
   if (isLoggedIn) {
@@ -31,35 +30,10 @@ const AuthLinks = (isLoggedIn = false) => {
               <Link to='/dashboard'>{'Home'}</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to='/view-profile'>
-                {'Community'}
-                {/*       <Icon className='header-icon fal fa-address-book' size='small' /> */}
-              </Link>
+              <Link to='/groups'>{'Groups'}</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to='/groups'>
-                {'Groups'}
-                {/*       <Icon className='header-icon fal fa-address-book' size='small' /> */}
-              </Link>
-            </Menu.Item>
-            <Menu.Item>
-              <Link to='/profiles'>
-                {'Directory'}
-                {/*       <Icon className='header-icon fal fa-address-book' size='small' /> */}
-              </Link>
-            </Menu.Item>
-            {/*         <Menu.Item>
-            <Icon className='header-icon' name='alarm' size='large' />
-          </Menu.Item> */}
-            <Menu.Item>
-              <Link to='/messages'>
-                {'Messages'}
-                {/*         <Icon
-              className='header-icon'
-              name='facebook messenger'
-              size='large'
-            /> */}
-              </Link>
+              <Link to='/messages'>{'Messages'}</Link>
             </Menu.Item>
             <Menu.Item>
               <DropDownMenu />

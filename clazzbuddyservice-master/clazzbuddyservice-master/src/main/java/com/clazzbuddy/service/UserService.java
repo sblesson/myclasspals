@@ -61,6 +61,22 @@ public class UserService {
 			userById.addCriteria(Criteria.where("_id").is(objID));
 			user = mongoTemplate.findOne(userById, Users.class);
 		}
+		
+		if (user.getUserGroup() != null) {
+			for (UserGroup userGroup : user.getUserGroup()) {
+				userGroup.initializeRole(user.get_id(), user.getEmail());
+			}
+		}
+		if (user.getRequestedUserGroup() != null) {
+			for (UserGroup userGroup : user.getRequestedUserGroup()) {
+				userGroup.initializeRole(user.get_id(),user.getEmail());
+			}
+		}
+		if (user.getPendingInvitedUserGroups() != null) {
+			for (UserGroup userGroup : user.getPendingInvitedUserGroups()) {
+				userGroup.initializeRole(user.get_id(),user.getEmail());
+			}
+		}
 		return user;
 	}
 	
@@ -73,7 +89,7 @@ public class UserService {
 		GroupInvitations invitation = new GroupInvitations();
 		invitation.setGroupId(action.getGroupId());
 		invitation.setRequestorUserId(action.getRequestorUserId());
-		
+		invitation.setRole(action.getRole());
 		
 		if (userGroup.getPendingInvitations() == null) {
 			userGroup.setPendingInvitations(new ArrayList<GroupInvitations>());
@@ -102,7 +118,7 @@ public class UserService {
 		invitation.setGroupId(action.getGroupId());
 		
 		invitation.setInvitedUserId(action.getInvitedUserId());
-		
+		invitation.setRole(action.getRole());
 
 		if (userGroup.getRequestedInvitations() == null) {
 			userGroup.setRequestedInvitations(new ArrayList<GroupInvitations>());
@@ -154,6 +170,7 @@ public class UserService {
 			UserGroupMembers userGroupMember = new UserGroupMembers();
 			userGroupMember.set_id(invitedUser.get_id());
 			userGroupMember.setName(invitedUser.getEmail());
+			userGroupMember.setRole(action.getRole());
 			userGroup.getUserGroupMembers().add(userGroupMember);
 			
 			mongoTemplate.save(invitedUser);
@@ -197,6 +214,7 @@ public class UserService {
 			UserGroupMembers userGroupMember = new UserGroupMembers();
 			userGroupMember.set_id(invitedUser.get_id());
 			userGroupMember.setName(invitedUser.getEmail());
+			userGroupMember.setRole(action.getRole());
 			userGroup.getUserGroupMembers().add(userGroupMember);
 			
 			mongoTemplate.save(invitedUser);

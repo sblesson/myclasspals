@@ -121,6 +121,7 @@ public class UserController {
 					GroupInvitationAction newGroupInvitationAction = new GroupInvitationAction();
 					newGroupInvitationAction.setGroupId(groupInvitationAction.getGroupId());
 					newGroupInvitationAction.setInvitedUserId(emailAddresses[count]);
+					newGroupInvitationAction.setRole(groupInvitationAction.getRole());
 					userService.inviteToJoinUserGroup(newGroupInvitationAction);
 				}
 			} else {
