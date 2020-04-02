@@ -48,6 +48,8 @@ const CreateGroupModal = ({
   group
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedSchool, setSelectedSchool] = useState('');
+
   //const [userList, setUserList] = useState(children);
 
   const [componentSize, setComponentSize] = useState('small');
@@ -100,13 +102,11 @@ const CreateGroupModal = ({
 
   const schoolNameSelectHandler = selectedItem => {
     console.log(selectedItem);
-    //community[index].schoolid = selectedItem.schoolid;
+    setSelectedSchool(selectedItem);
   };
 
   const schoolNameToString = (item, index) => {
     console.log(item);
-    //community[index].school = item;
-    //if (item) setGradeOptions(item.lowGrade, item.highGrade);
     return item ? item.schoolName : '';
   };
 
@@ -123,83 +123,6 @@ const CreateGroupModal = ({
       menuItem: 'Create New Group',
       render: () => (
         <Tab.Pane attached={false}>
-          {/*    
-              <Form.Group className='private-message-modal-field'>
-                <Select
-                  mode='multiple'
-                  style={{ width: '100%' }}
-                  placeholder='select one country'
-                  defaultValue={['china']}
-                  onChange={handleChange}
-                  optionLabelProp='label'
-                >
-                  {userList}
-                </Select>
-              </Form.Group>
-              <Form.Group>
-                <Downshift
-                  onChange={selectedItem =>
-                    schoolNameSelectHandler(selectedItem)
-                  }
-                  itemToString={schoolNameToString}
-                >
-                  {({
-                    getInputProps,
-                    getToggleButtonProps,
-                    getItemProps,
-                    isOpen,
-                    toggleMenu,
-                    clearSelection,
-                    selectedItem,
-                    inputValue,
-                    getLabelProps,
-                    highlightedIndex
-                  }) => (
-                    <div className='auto-container'>
-                      <Div position='relative' css={{ paddingRight: '1.75em' }}>
-                        <Input
-                          {...getInputProps({
-                            placeholder:
-                              'Type school or district or an address, city, zip...',
-                            onKeyUp: inputOnChange
-                          })}
-                        />
-                        {selectedItem ? (
-                          <ControllerButton
-                            css={{ paddingTop: 4, top: 5 }}
-                            onClick={clearSelection}
-                            aria-label='clear selection'
-                          >
-                            <XIcon />
-                          </ControllerButton>
-                        ) : (
-                          <ControllerButton {...getToggleButtonProps()}>
-                            <ArrowIcon isOpen={isOpen} />
-                          </ControllerButton>
-                        )}
-                      </Div>
-                      {isOpen ? (
-                        <Menu>
-                          {schools.map((item, index) => (
-                            <Item
-                              key={item.schoolid}
-                              {...getItemProps({
-                                item,
-                                index,
-                                isActive: highlightedIndex === index,
-                                isSelected: selectedItem === item
-                              })}
-                            >
-                              {item.schoolName}
-                            </Item>
-                          ))}
-                        </Menu>
-                      ) : null}
-                    </div>
-                  )}
-                </Downshift>
-              </Form.Group> */}
-
           <div>
             <Formik
               initialValues={{
@@ -210,12 +133,22 @@ const CreateGroupModal = ({
               }}
               onSubmit={(values, actions) => {
                 message.info(JSON.stringify(values, null, 4));
-                console.log(values);
+                console.log(selectedSchool);
+                values.schoolName = selectedSchool.schoolName;
+                values.schoolId = selectedSchool.schoolid;
+                values.schoolCity = selectedSchool.city;
+                values.schoolState = selectedSchool.state;
+                values.schoolZipCode = selectedSchool.zip;
 
-                values.createrUserId = {
-                  _id: auth.user._id,
-                  name: auth.user.name
-                };
+                //deleting unwanted property
+                delete values['downshift-0-input'];
+                values.userGroupMembers = [
+                  {
+                    _id: auth.user._id,
+                    name: auth.user.name,
+                    role: 'admin'
+                  }
+                ];
                 console.log(JSON.stringify(values));
 
                 addGroup(JSON.stringify(values));
@@ -293,6 +226,70 @@ const CreateGroupModal = ({
                         ]}
                       />
                     </FormItem>
+                    <Downshift
+                      onChange={selectedItem =>
+                        schoolNameSelectHandler(selectedItem)
+                      }
+                      itemToString={schoolNameToString}
+                    >
+                      {({
+                        getInputProps,
+                        getToggleButtonProps,
+                        getItemProps,
+                        isOpen,
+                        toggleMenu,
+                        clearSelection,
+                        selectedItem,
+                        inputValue,
+                        getLabelProps,
+                        highlightedIndex
+                      }) => (
+                        <div className='auto-container'>
+                          <Div
+                            position='relative'
+                            css={{ paddingRight: '1.75em' }}
+                          >
+                            <Input
+                              {...getInputProps({
+                                placeholder:
+                                  'Type school or district or an address, city, zip...',
+                                onKeyUp: inputOnChange
+                              })}
+                            />
+                            {selectedItem ? (
+                              <ControllerButton
+                                css={{ paddingTop: 4, top: 5 }}
+                                onClick={clearSelection}
+                                aria-label='clear selection'
+                              >
+                                <XIcon />
+                              </ControllerButton>
+                            ) : (
+                              <ControllerButton {...getToggleButtonProps()}>
+                                <ArrowIcon isOpen={isOpen} />
+                              </ControllerButton>
+                            )}
+                          </Div>
+                          {isOpen ? (
+                            <Menu>
+                              {schools.map((item, index) => (
+                                <Item
+                                  key={item.schoolid}
+                                  {...getItemProps({
+                                    item,
+                                    index,
+                                    isActive: highlightedIndex === index,
+                                    isSelected: selectedItem === item
+                                  })}
+                                >
+                                  {item.schoolName}
+                                </Item>
+                              ))}
+                            </Menu>
+                          ) : null}
+                        </div>
+                      )}
+                    </Downshift>
 
                     {/* 
                     <FormItem
@@ -329,7 +326,8 @@ const CreateGroupModal = ({
           <Formik
             initialValues={{
               invitedUsers: '',
-              action: 'INVITE'
+              action: 'INVITE',
+              role: 'member'
             }}
             onSubmit={(values, actions) => {
               console.log(JSON.stringify(values));

@@ -8,6 +8,8 @@ public class GroupInvitations {
 	private String requestorUserId;
 	
 	private String invitedUserId;
+	
+	private String role;
 
 	public String getGroupId() {
 		return groupId;
@@ -31,6 +33,14 @@ public class GroupInvitations {
 
 	public void setInvitedUserId(String invitedUserId) {
 		this.invitedUserId = invitedUserId;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	

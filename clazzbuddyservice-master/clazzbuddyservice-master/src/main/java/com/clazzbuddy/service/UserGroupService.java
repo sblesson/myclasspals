@@ -29,28 +29,20 @@ public class UserGroupService {
 		if (userGroupFromDB != null) {
 			return userGroupFromDB;
 		}
-		Users creatorUser = userService.getUser(userGroup.getCreaterUserId().get_id());
-		if (creatorUser == null) {
-			throw new Exception("Not a valid creator user:" + userGroup.getCreaterUserId());
-		}
-		userGroupFromDB = mongoTemplate.insert(userGroup);
-		if (creatorUser.getUserGroup() == null) {
-			creatorUser.setUserGroup(new ArrayList<UserGroup>());
-		}
-		creatorUser.getUserGroup().add(userGroupFromDB);
-		userService.updateUser(creatorUser);
 		
-		if (userGroup.getAdminUserIds() != null) {
-			for (UserGroupMembers userId : userGroup.getAdminUserIds()) {
-				Users adminUser = userService.getUser(userId.get_id());
-				if (adminUser == null) {
+		userGroupFromDB = mongoTemplate.insert(userGroup);
+		
+		if (userGroup.getUserGroupMembers() != null) {
+			for (UserGroupMembers userId : userGroup.getUserGroupMembers()) {
+				Users user = userService.getUser(userId.get_id());
+				if (user == null) {
 					throw new Exception("Not a valid creator user: " + userId);
 				}
-				if (adminUser.getUserGroup() == null) {
-					adminUser.setUserGroup(new ArrayList<UserGroup>());
+				if (user.getUserGroup() == null) {
+					user.setUserGroup(new ArrayList<UserGroup>());
 				}
-				adminUser.getUserGroup().add(userGroup);
-				userService.updateUser(adminUser);
+				user.getUserGroup().add(userGroup);
+				userService.updateUser(user);
 			}
 	}
 		

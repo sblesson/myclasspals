@@ -4,12 +4,18 @@ import {
   ADD_GROUP,
   DELETE_GROUP,
   GROUP_ERROR,
-  INVITE_TO_GROUP,
-  INVITE_TO_GROUP_ERROR,
   GET_ALL_GROUPS,
   GET_ALL_GROUPS_ERROR,
   GET_GROUP,
-  GET_GROUP_ERROR
+  GET_GROUP_ERROR,
+  INVITE_TO_GROUP,
+  INVITE_TO_GROUP_ERROR,
+  ACCEPT_USER_GROUP,
+  ACCEPT_USER_GROUP_ERROR,
+  REQUEST_JOIN_USER_GROUP,
+  REQUEST_JOIN_USER_GROUP_ERROR,
+  APPROVE_GROUP_REQUEST,
+  APPROVE_GROUP_REQUEST_ERROR
 } from './types';
 
 // Add post
@@ -69,7 +75,7 @@ export const getAllGroups = userId => async dispatch => {
 export const getGroupDetails = groupId => async dispatch => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/usergroup/getgroup?usergroupid=${groupId}`
+      `http://localhost:8080/usergroup/getgroup?id=${groupId}`
     );
     console.log(response);
     dispatch({
@@ -83,7 +89,7 @@ export const getGroupDetails = groupId => async dispatch => {
     });
   }
 };
-
+//Admin sends users invitation to join userGroup
 export const inviteToJoinUserGroup = formData => async dispatch => {
   console.log(formData);
   const config = {
@@ -110,6 +116,102 @@ export const inviteToJoinUserGroup = formData => async dispatch => {
   } catch (err) {
     dispatch({
       type: INVITE_TO_GROUP_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+//Users accept invitation to join userGroup
+export const acceptUserGroupInvitation = requestData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  requestData.action = 'INVITE_ACCEPT';
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/user/acceptusergroupinvitaion',
+      requestData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: ACCEPT_USER_GROUP,
+      payload: requestData
+    });
+
+    dispatch(setAlert('User added to group', 'success'));
+  } catch (err) {
+    dispatch({
+      type: ACCEPT_USER_GROUP_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//User sends request to join user group
+export const requestToJoinUserGroup = requestData => async dispatch => {
+  console.log(requestData);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  //requestData.action =
+
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/user/requestusergroup',
+      requestData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: REQUEST_JOIN_USER_GROUP,
+      payload: requestData
+    });
+
+    dispatch(setAlert('User added to group', 'success'));
+  } catch (err) {
+    dispatch({
+      type: REQUEST_JOIN_USER_GROUP_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+//Admin approves group request initiated by user
+export const approveUserGroupRequest = requestData => async dispatch => {
+  console.log(requestData);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  requestData.action = 'REQUEST_ACCEPT';
+
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/user/acceptusergrouprequest',
+      requestData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: APPROVE_GROUP_REQUEST,
+      payload: requestData
+    });
+
+    dispatch(setAlert('User added to group', 'success'));
+  } catch (err) {
+    dispatch({
+      type: APPROVE_GROUP_REQUEST_ERROR
       //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }

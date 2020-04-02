@@ -66,7 +66,7 @@ public class UserGroupController {
 	}
 
 	@GetMapping(value = "/getgroup", produces = { "application/json" })
-	public CommonResult getGroupById(@RequestParam(value = "usergroupid") String id) {
+	public CommonResult getGroupById(@RequestParam(value = "id") String id) {
 		UserGroupResult result = new UserGroupResult();
 
 		try {
