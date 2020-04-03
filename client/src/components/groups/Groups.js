@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import PrivateMessageModal from './modal/CreateGroupModal';
 import LeftNav from '../leftnav/LeftNav';
-import { getAllGroups } from '../../actions/group';
+import { getAllGroups, acceptUserGroupInvitation } from '../../actions/group';
 import { Tabs, Table, Tag, Button, Popconfirm } from 'antd';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import './Groups.scss';
-const Groups = ({ getAllGroups, group }) => {
+const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
   useEffect(() => {
     getAllGroups();
   }, [getAllGroups]);
@@ -100,7 +100,12 @@ const Groups = ({ getAllGroups, group }) => {
   ];
 
   const acceptPendingInviteActionClick = record => {
-    console.log('acceptPendingInviteActionClick', record);
+    console.log('acceptPendingInviteActionClick', record, auth.user.email);
+    acceptUserGroupInvitation({
+      groupId: record.id,
+      role: 'member',
+      invitedUserId: auth.user.email
+    });
   };
 
   const declinePendingInviteActionClick = record => {
@@ -143,12 +148,14 @@ const Groups = ({ getAllGroups, group }) => {
       title: 'Action',
       key: 'action',
       render: (text, record, index) => (
-        <div
-          //title='Sure to delete?'
+        <Button
+          type='link'
+          style={{ marginRight: 16 }}
           onClick={() => acceptPendingInviteActionClick(record)}
         >
-          <a>Delete</a>
-        </div>
+          Join
+        </Button>
+
         /*         <div>
           <Button
             type='link'
@@ -179,7 +186,7 @@ const Groups = ({ getAllGroups, group }) => {
 
   const requestedGroupsColumns = [
     {
-      title: 'Group Name',
+      title: 'GroupName',
       dataIndex: 'groupName',
       key: 'groupName',
       render: text => <a>{text}</a>
@@ -308,7 +315,11 @@ Groups.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  group: state.group
+  group: state.group,
+  auth: state.auth
 });
 
-export default connect(mapStateToProps, { getAllGroups })(Groups);
+export default connect(mapStateToProps, {
+  getAllGroups,
+  acceptUserGroupInvitation
+})(Groups);

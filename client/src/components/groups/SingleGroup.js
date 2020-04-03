@@ -10,9 +10,19 @@ import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Tabs, Button, Table, Tag } from 'antd';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
-import { getGroupDetails, approveUserGroupRequest } from '../../actions/group';
+import {
+  getGroupDetails,
+  approveUserGroupRequest,
+  declineUserGroupRequest
+} from '../../actions/group';
 
-const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
+const SingleGroup = ({
+  loading,
+  group,
+  getGroupDetails,
+  approveUserGroupRequest,
+  match
+}) => {
   useEffect(() => {
     getGroupDetails(match.params.id);
   }, [getGroupDetails, match.params.id]);
@@ -65,29 +75,14 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'groupName',
-      key: 'groupName',
+      dataIndex: 'name',
+      key: 'name',
       render: text => <a>{text}</a>
     },
     {
       title: 'Role',
       key: 'role',
-      dataIndex: 'role',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      )
+      dataIndex: 'role'
     },
     {
       title: 'Description',
@@ -131,33 +126,50 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
 
   const approveUserGroupRequestClick = record => {
     console.log(record);
+
+    approveUserGroupRequest({
+      groupId: record.groupId,
+      role: record.role,
+      requestorUserId: record.requestorUserId
+    });
+  };
+
+  const declineUserGroupRequestClick = record => {
+    console.log(record);
   };
 
   const pendingInvitationsColumns = [
     {
-      title: 'Invited Users',
-      dataIndex: 'invitedUserId',
-      key: 'invitedUserId',
+      title: 'Requested Users',
+      dataIndex: 'requestorUserId',
+      key: 'requestorUserId',
       render: text => <a>{text}</a>
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role'
     },
     {
       title: 'Action',
       key: 'action',
-      render: (text, record) => (
-        <span>
-          <a
+      render: (text, record, index) => (
+        <div>
+          <Button
+            type='link'
             style={{ marginRight: 16 }}
-            onClick={approveUserGroupRequestClick(record)}
+            onClick={() => approveUserGroupRequestClick(record)}
           >
             Approve
-          </a>
-          <a>Delete</a>
-        </span>
-        /*         <Dropdown overlay={pendingInvitationsMenu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown> */
+          </Button>
+          <Button
+            type='link'
+            style={{ marginRight: 16 }}
+            onClick={() => declineUserGroupRequestClick(record)}
+          >
+            Decline
+          </Button>
+        </div>
       )
     }
   ];
@@ -177,23 +189,24 @@ const SingleGroup = ({ loading, group, getGroupDetails, match }) => {
               {group !== null && group.currentGroup ? (
                 <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
                   <TabPane tab='Members' key='members'>
-                    {group.currentGroup && group.currentGroup.length > 0 ? (
+                    {group.currentGroup.userGroupMembers &&
+                    group.currentGroup.userGroupMembers.length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={group.currentGroup}
-                        rowKey='id'
+                        dataSource={group.currentGroup.userGroupMembers}
+                        rowKey='_id'
                       />
                     ) : (
                       'Current group member list is empty'
                     )}
                   </TabPane>
-                  <TabPane tab='Pending Invitations' key='invitations'>
-                    {group.currentGroup.requestedInvitations &&
-                    group.currentGroup.requestedInvitations.length > 0 ? (
+                  <TabPane tab='Pending Approvals' key='approvals'>
+                    {group.currentGroup.pendingInvitations &&
+                    group.currentGroup.pendingInvitations.length > 0 ? (
                       <Table
                         columns={pendingInvitationsColumns}
-                        dataSource={group.currentGroup.requestedInvitations}
-                        rowKey='id'
+                        dataSource={group.currentGroup.pendingInvitations}
+                        rowKey='requestorUserId'
                       />
                     ) : (
                       'Current group member list is empty'
@@ -231,4 +244,8 @@ const mapStateToProps = state => ({
   group: state.group
 });
 
-export default connect(mapStateToProps, { getGroupDetails })(SingleGroup);
+export default connect(mapStateToProps, {
+  getGroupDetails,
+  declineUserGroupRequest,
+  approveUserGroupRequest
+})(SingleGroup);

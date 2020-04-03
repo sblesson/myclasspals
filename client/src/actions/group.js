@@ -127,6 +127,7 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
       'Content-Type': 'application/json'
     }
   };
+  console.log(requestData);
   requestData.action = 'INVITE_ACCEPT';
   try {
     const res = await axios.post(
@@ -197,6 +198,40 @@ export const approveUserGroupRequest = requestData => async dispatch => {
   try {
     const res = await axios.post(
       'http://localhost:8080/user/acceptusergrouprequest',
+      requestData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: APPROVE_GROUP_REQUEST,
+      payload: requestData
+    });
+
+    dispatch(setAlert('User added to group', 'success'));
+    getGroupDetails(requestData.groupId);
+  } catch (err) {
+    dispatch({
+      type: APPROVE_GROUP_REQUEST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//Admin approves group request initiated by user
+export const declineUserGroupRequest = requestData => async dispatch => {
+  console.log(requestData);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  requestData.action = 'REQUEST_ACCEPT';
+
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/user/declineusergrouprequest',
       requestData,
       config
     );
