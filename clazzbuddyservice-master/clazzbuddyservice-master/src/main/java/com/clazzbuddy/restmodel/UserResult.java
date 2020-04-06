@@ -1,18 +1,17 @@
 package com.clazzbuddy.restmodel;
 
-import java.util.List;
-
 import com.clazzbuddy.mongocollections.Users;
 
-public class UserResult extends CommonResult{
+public class UserResult extends CommonResult {
 
-	private List<Users> user;
+	private Users user;
 
-	public List<Users> getUser() {
+	public Users getUser() {
 		return user;
 	}
 
-	public void setUser(List<Users> user) {
+	public void setUser(Users user) {
 		this.user = user;
 	}
+
 }

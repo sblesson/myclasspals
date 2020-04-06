@@ -49,6 +49,9 @@ const CreateGroupModal = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedSchool, setSelectedSchool] = useState('');
+  const [isSchoolVisible, setIsSchoolVisible] = useState(false);
+  const [modal, setModal] = useState(false);
+  const toggle = () => setModal(!modal);
 
   //const [userList, setUserList] = useState(children);
 
@@ -74,9 +77,6 @@ const CreateGroupModal = ({
     setActiveIndex(e.target.value);
   };
 
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
   const onChange = e => {
     console.log(e.target.name, e.target.value);
     //setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -118,6 +118,36 @@ const CreateGroupModal = ({
     return value ? undefined : 'required';
   };
 
+  const showHideSchoolSelect = event => {
+    console.log('shool', event);
+    if (event.target.value === 'yes') {
+      setIsSchoolVisible(true);
+    } else {
+      setIsSchoolVisible(false);
+    }
+  };
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 }
+    }
+  };
+  const tailFormItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+        offset: 0
+      },
+      sm: {
+        span: 16,
+        offset: 8
+      }
+    }
+  };
   const panes = [
     {
       menuItem: 'Create New Group',
@@ -128,8 +158,8 @@ const CreateGroupModal = ({
               initialValues={{
                 groupName: '',
                 privacy: 'private',
-                hidden: 'visible'
-                //isSchoolGroup: 'no'
+                //hidden: 'visible',
+                isSchoolGroup: 'no'
               }}
               onSubmit={(values, actions) => {
                 message.info(JSON.stringify(values, null, 4));
@@ -163,18 +193,13 @@ const CreateGroupModal = ({
               }}
               render={() => (
                 <Form
-                  labelCol={{
-                    span: 8
-                  }}
-                  wrapperCol={{
-                    span: 16
-                  }}
-                  layout='horizontal'
+                  {...formItemLayout}
+                  layout='vertical'
                   initialValues={{
                     size: componentSize
                   }}
                 >
-                  <div style={{ flex: 1, padding: 40 }}>
+                  <div style={{ flex: 1, padding: 15 }}>
                     <FormItem
                       name='groupName'
                       label='Group Name'
@@ -197,8 +222,7 @@ const CreateGroupModal = ({
                         ]}
                       />
                     </FormItem>
-
-                    <FormItem
+                    {/*              <FormItem
                       name='visibilityLabel'
                       label='Visibility'
                       //required={true}
@@ -211,107 +235,104 @@ const CreateGroupModal = ({
                           { label: 'Visible', value: 'visible' }
                         ]}
                       />
-                    </FormItem>
+                    </FormItem> */}
                     <FormItem
                       name='schoolGroupLabel'
-                      label='Are you creating this group for your school?'
+                      label='School Group'
                       //required={true}
                       //validate={validateRequired}
                     >
                       <Radio.Group
                         name='isSchoolGroup'
+                        onChange={showHideSchoolSelect}
                         options={[
                           { label: 'Yes', value: 'yes' },
                           { label: 'No', value: 'no' }
                         ]}
                       />
                     </FormItem>
-                    <Downshift
-                      onChange={selectedItem =>
-                        schoolNameSelectHandler(selectedItem)
-                      }
-                      itemToString={schoolNameToString}
-                    >
-                      {({
-                        getInputProps,
-                        getToggleButtonProps,
-                        getItemProps,
-                        isOpen,
-                        toggleMenu,
-                        clearSelection,
-                        selectedItem,
-                        inputValue,
-                        getLabelProps,
-                        highlightedIndex
-                      }) => (
-                        <div className='auto-container'>
-                          <Div
-                            position='relative'
-                            css={{ paddingRight: '1.75em' }}
-                          >
-                            <Input
-                              {...getInputProps({
-                                placeholder:
-                                  'Type school or district or an address, city, zip...',
-                                onKeyUp: inputOnChange
-                              })}
-                            />
-                            {selectedItem ? (
-                              <ControllerButton
-                                css={{ paddingTop: 4, top: 5 }}
-                                onClick={clearSelection}
-                                aria-label='clear selection'
+                    {isSchoolVisible ? (
+                      <FormItem name='schoolName'>
+                        <Downshift
+                          onChange={selectedItem =>
+                            schoolNameSelectHandler(selectedItem)
+                          }
+                          itemToString={schoolNameToString}
+                        >
+                          {({
+                            getInputProps,
+                            getToggleButtonProps,
+                            getItemProps,
+                            isOpen,
+                            toggleMenu,
+                            clearSelection,
+                            selectedItem,
+                            inputValue,
+                            getLabelProps,
+                            highlightedIndex
+                          }) => (
+                            <div>
+                              <Div
+                                position='relative'
+                                css={{ paddingRight: '1.75em' }}
                               >
-                                <XIcon />
-                              </ControllerButton>
-                            ) : (
-                              <ControllerButton {...getToggleButtonProps()}>
-                                <ArrowIcon isOpen={isOpen} />
-                              </ControllerButton>
-                            )}
-                          </Div>
-                          {isOpen ? (
-                            <Menu>
-                              {schools.map((item, index) => (
-                                <Item
-                                  key={item.schoolid}
-                                  {...getItemProps({
-                                    item,
-                                    index,
-                                    isActive: highlightedIndex === index,
-                                    isSelected: selectedItem === item
+                                <Input
+                                  {...getInputProps({
+                                    placeholder:
+                                      'Type school or district or city, zip...',
+                                    onKeyUp: inputOnChange
                                   })}
-                                >
-                                  {item.schoolName}
-                                </Item>
-                              ))}
-                            </Menu>
-                          ) : null}
-                        </div>
-                      )}
-                    </Downshift>
-
-                    {/* 
-                    <FormItem
-                      name='newsletter'
-                      labelCol={{ xs: 4 }}
-                      wrapperCol={{ offset: 4, xs: 20 }}
-                    >
-                      <Checkbox name='groupTandA'>
-                        I accept the terms &amp; conditions
-                      </Checkbox>
-                    </FormItem> */}
-
-                    <Row style={{ marginTop: 60 }}>
-                      <Col offset={8}>
-                        <Button.Group>
-                          <ResetButton>Reset</ResetButton>
-                          <SubmitButton>Submit</SubmitButton>
-                        </Button.Group>
-                      </Col>
-                    </Row>
+                                />
+                                {selectedItem ? (
+                                  <ControllerButton
+                                    css={{ paddingTop: 4, top: 5 }}
+                                    onClick={clearSelection}
+                                    aria-label='clear selection'
+                                  >
+                                    <XIcon />
+                                  </ControllerButton>
+                                ) : (
+                                  <ControllerButton {...getToggleButtonProps()}>
+                                    <ArrowIcon
+                                      isOpen={isOpen}
+                                      className='icon-auto-open'
+                                    />
+                                  </ControllerButton>
+                                )}
+                              </Div>
+                              {isOpen ? (
+                                <Menu>
+                                  {schools.map((item, index) => (
+                                    <Item
+                                      key={item.schoolid}
+                                      {...getItemProps({
+                                        item,
+                                        index,
+                                        isActive: highlightedIndex === index,
+                                        isSelected: selectedItem === item
+                                      })}
+                                    >
+                                      {item.schoolName}
+                                    </Item>
+                                  ))}
+                                </Menu>
+                              ) : null}
+                            </div>
+                          )}
+                        </Downshift>
+                      </FormItem>
+                    ) : (
+                      ''
+                    )}
+                    <ModalFooter>
+                      {' '}
+                      <SubmitButton className='create-group-btn'>
+                        Create
+                      </SubmitButton>{' '}
+                    </ModalFooter>{' '}
                   </div>
-                  <FormikDebug style={{ maxWidth: 400 }} />
+                  {/*                   <FormikDebug style={{ maxWidth: 400 }} />
+                   */}{' '}
                 </Form>
               )}
             />
@@ -395,9 +416,7 @@ const CreateGroupModal = ({
   return (
     <div>
       <div onClick={toggle}>
-        <Button className='pinkBtn' icon={<UsergroupAddOutlined />}>
-          Create Group
-        </Button>
+        <Button icon={<UsergroupAddOutlined />}>Create Group</Button>
       </div>
       <Modal
         className='create-group-modal'

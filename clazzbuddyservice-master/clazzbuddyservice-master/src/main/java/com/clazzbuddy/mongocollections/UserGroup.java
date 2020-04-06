@@ -20,6 +20,10 @@ public class UserGroup {
 	
 	private String hidden;
 	
+	private String groupRules;
+	private String aboutGroup;
+
+	
 	
 	private List<GroupInvitations> pendingInvitations;
 	
@@ -37,6 +41,8 @@ public class UserGroup {
 	private String schoolCity;
 	
 	private String schoolZipCode;
+	
+	private String createdDate;
 	
 	@Transient
 	private String role;
@@ -188,6 +194,30 @@ public class UserGroup {
 
 	public void setSchoolId(String schoolId) {
 		this.schoolId = schoolId;
+	}
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getAboutGroup() {
+		return aboutGroup;
+	}
+
+	public void setAboutGroup(String aboutGroup) {
+		this.aboutGroup = aboutGroup;
+	}
+
+	public String getGroupRules() {
+		return groupRules;
+	}
+
+	public void setGroupRules(String groupRules) {
+		this.groupRules = groupRules;
 	}
 
 	

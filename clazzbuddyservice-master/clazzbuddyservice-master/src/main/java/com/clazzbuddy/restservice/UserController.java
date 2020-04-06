@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.clazzbuddy.mongocollections.Post;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.restmodel.CommonResult;
 import com.clazzbuddy.restmodel.GroupInvitationAction;
-import com.clazzbuddy.restmodel.PostSearchQuery;
-import com.clazzbuddy.restmodel.PostSearchResult;
 import com.clazzbuddy.restmodel.UserResult;
-import com.clazzbuddy.service.PostMessageService;
 import com.clazzbuddy.service.UserService;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "*")
 public class UserController {
+
+	Logger logger = LogManager.getLogger(UserController.class);
 
 	@Autowired
 	UserService userService;
@@ -40,7 +40,8 @@ public class UserController {
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("error", e);
 		}
 		
 		return result;
@@ -56,7 +57,8 @@ public class UserController {
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("error", e);
 		}
 		
 		return result;
@@ -68,36 +70,36 @@ public class UserController {
 		UserResult result = new UserResult();
 		
 		try {
-			List<Users> userList = new ArrayList<>();
-			userList.add(userService.getUser(userkey));
- 			result.setUser(userList);
+			result.setUser(userService.getUser(userkey));
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("error", e);
 		}
 		
 		return result;
 		
 	}
 	
-	@PostMapping(value="/validateuser", produces={"application/json"})
-	public CommonResult validateProfile(@RequestBody Users user) {
-		UserResult result = new UserResult();
-		
-		try {
-			List<Users> userList = new ArrayList<>();
-			userList.add(userService.validateUser(user));
-			result.setUser(userList);
-			result.setErrorCode(0);
-		} catch (Exception e) {
-			result.setErrorCode(1);
-			result.setException(e.getMessage());
-		}
-		
-		return result;
-		
-	}
+//	@PostMapping(value="/validateuser", produces={"application/json"})
+//	public CommonResult validateProfile(@RequestBody Users user) {
+//		UserResult result = new UserResult();
+//		
+//		try {
+//			List<Users> userList = new ArrayList<>();
+//			userList.add(userService.validateUser(user));
+//			result.setUser(userList);
+//			result.setErrorCode(0);
+//		} catch (Exception e) {
+//			result.setErrorCode(1);
+//			result.setException(e.toString());
+//			logger.error("error", e);
+//		}
+//		
+//		return result;
+//		
+//	}
 	
 	@PostMapping(value="/requestusergroup", produces={"application/json"})
 	public CommonResult requestUserGroup(@RequestBody GroupInvitationAction groupInvitationAction) {
@@ -106,7 +108,8 @@ public class UserController {
 			userService.requestToJoinUserGroup(groupInvitationAction);
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("error", e);
 		}
 		return result;
 	}
@@ -130,18 +133,20 @@ public class UserController {
 		} catch (Exception e) {
 			result.setErrorCode(1);
 			result.setException(e.toString());
+			logger.error("error", e);
 		}
 		return result;
 	}
 	
 	@PostMapping(value="/acceptusergroupinvitaion", produces={"application/json"})
 	public CommonResult acceptGroupInvitation(@RequestBody GroupInvitationAction groupInvitationAction) {
-		CommonResult result  = new CommonResult();
+		UserResult result  = new UserResult();
 		try {
-			userService.acceptGroupInvitation(groupInvitationAction);
+			result.setUser(userService.acceptGroupInvitation(groupInvitationAction));
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("error", e);
 		}
 		return result;
 	}
@@ -153,9 +158,12 @@ public class UserController {
 			userService.acceptGroupRequest(groupInvitationAction);
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("error", e);
 		}
 		return result;
 	}
+	
+	
 	
 }
