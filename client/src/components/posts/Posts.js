@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Tabs, Input, Radio, Card } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,9 +14,8 @@ import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
-import { Tabs, Radio, Card } from 'antd';
 import { StickyContainer, Sticky } from 'react-sticky';
-import PrivateMessageModal from '../groups/modal/CreateGroupModal';
+import CreateGroupModal from '../groups/modal/CreateGroupModal';
 
 import './Posts.scss';
 const Posts = ({
@@ -29,6 +29,7 @@ const Posts = ({
     getPostCategories();
   }, [getPosts]);
   const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
+  const { Search } = Input;
 
   let userGroupRadioOptions = [];
   if (userGroup && userGroup.length > 0) {
@@ -98,7 +99,14 @@ const Posts = ({
     </Sticky>
   );
 
-  const operations = <PrivateMessageModal />;
+  const operations = (
+    <Search
+      placeholder='Seach post'
+      onSearch={value => console.log(value)}
+      style={{ width: 300, marginBottom: 20 }}
+      enterButton
+    />
+  );
 
   const radioStyle = {
     display: 'block',
@@ -159,7 +167,13 @@ const Posts = ({
           </div>
         </div>
         <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
-          <Card style={{ marginTop: 6 }} type='inner' title='My Groups'>
+          <CreateGroupModal />
+          {/* 
+          <Card
+            style={{ marginTop: 6, background: 'rgb(243, 250, 253)' }}
+            type='inner'
+            title='Groups'
+          >
             {userGroup && userGroup.length > 0 ? (
               <Radio.Group name='selectedUserGroup' onChange={onGroupChange}>
                 {userGroup.map(group => (
@@ -171,7 +185,7 @@ const Posts = ({
             ) : (
               'No Groups Found'
             )}
-          </Card>
+          </Card> */}
         </div>
       </div>
     </Fragment>

@@ -1,5 +1,7 @@
 package com.clazzbuddy.restservice;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import com.clazzbuddy.service.PostMessageService;
 @CrossOrigin(origins = "*")
 public class PostMessagesController {
 
+	Logger logger = LogManager.getLogger(PostMessagesController.class);
 	@Autowired
 	PostMessageService postService;
 
@@ -30,7 +33,8 @@ public class PostMessagesController {
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("Error :", e);
 		}
 		
 		return result;
@@ -46,7 +50,8 @@ public class PostMessagesController {
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
-			result.setException(e.getMessage());
+			result.setException(e.toString());
+			logger.error("Error :", e);
 		}
 		
 		return result;

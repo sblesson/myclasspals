@@ -8,7 +8,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
 import { getSchoolData } from '../../../actions/school';
-import { addGroup, inviteToJoinUserGroup } from '../../../actions/group';
+import {
+  addGroup,
+  inviteToJoinUserGroup,
+  updateGroup
+} from '../../../actions/group';
 import {
   Menu,
   ControllerButton,
@@ -17,7 +21,7 @@ import {
   ArrowIcon,
   XIcon
 } from '../../common/DownshiftComponents';
-import { Formik } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 
 import {
   SubmitButton,
@@ -44,14 +48,15 @@ const CreateGroupModal = ({
   history,
   addGroup,
   inviteToJoinUserGroup,
+  updateGroup,
   auth,
   group
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedSchool, setSelectedSchool] = useState('');
-
-  //const [userList, setUserList] = useState(children);
-
+  const [isSchoolVisible, setIsSchoolVisible] = useState(false);
+  const [modal, setModal] = useState(false);
+  const toggle = () => setModal(!modal);
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -68,22 +73,14 @@ const CreateGroupModal = ({
     newGroupMembers: ''
   };
 
-  const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
-
-  const handlePageChange = e => {
-    setActiveIndex(e.target.value);
+  const handleTabChange = (e, { activeIndex }) => {
+    console.log(e);
+    console.log(activeIndex);
+    setActiveIndex(activeIndex);
   };
 
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
   const onChange = e => {
     console.log(e.target.name, e.target.value);
-    //setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleChange = value => {
-    console.log(`selected ${value}`);
   };
 
   const inputOnChange = event => {
@@ -118,6 +115,41 @@ const CreateGroupModal = ({
     return value ? undefined : 'required';
   };
 
+  const validateSchoolGroupRadio = value => {
+    console.log(value);
+  };
+
+  const showHideSchoolSelect = event => {
+    console.log('shool', event);
+    if (event.target.value === 'yes') {
+      setIsSchoolVisible(true);
+      console.log('selectedSchool', selectedSchool);
+    } else {
+      setIsSchoolVisible(false);
+    }
+  };
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 }
+    }
+  };
+  const tailFormItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+        offset: 0
+      },
+      sm: {
+        span: 16,
+        offset: 8
+      }
+    }
+  };
   const panes = [
     {
       menuItem: 'Create New Group',
@@ -128,12 +160,11 @@ const CreateGroupModal = ({
               initialValues={{
                 groupName: '',
                 privacy: 'private',
-                hidden: 'visible'
-                //isSchoolGroup: 'no'
+                //hidden: 'visible',
+                isSchoolGroup: 'no'
               }}
               onSubmit={(values, actions) => {
                 message.info(JSON.stringify(values, null, 4));
-                console.log(selectedSchool);
                 values.schoolName = selectedSchool.schoolName;
                 values.schoolId = selectedSchool.schoolid;
                 values.schoolCity = selectedSchool.city;
@@ -142,6 +173,7 @@ const CreateGroupModal = ({
 
                 //deleting unwanted property
                 delete values['downshift-0-input'];
+
                 values.userGroupMembers = [
                   {
                     _id: auth.user._id,
@@ -149,32 +181,20 @@ const CreateGroupModal = ({
                     role: 'admin'
                   }
                 ];
-                console.log(JSON.stringify(values));
-
                 addGroup(JSON.stringify(values));
                 actions.setSubmitting(false);
                 actions.resetForm();
-              }}
-              validate={values => {
-                if (!values.groupName) {
-                  return { groupName: 'required' };
-                }
-                return {};
+                setActiveIndex(1);
               }}
               render={() => (
                 <Form
-                  labelCol={{
-                    span: 8
-                  }}
-                  wrapperCol={{
-                    span: 16
-                  }}
-                  layout='horizontal'
+                  {...formItemLayout}
+                  layout='vertical'
                   initialValues={{
                     size: componentSize
                   }}
                 >
-                  <div style={{ flex: 1, padding: 40 }}>
+                  <div style={{ flex: 1, padding: 15 }}>
                     <FormItem
                       name='groupName'
                       label='Group Name'
@@ -197,8 +217,7 @@ const CreateGroupModal = ({
                         ]}
                       />
                     </FormItem>
-
-                    <FormItem
+                    {/*              <FormItem
                       name='visibilityLabel'
                       label='Visibility'
                       //required={true}
@@ -211,107 +230,108 @@ const CreateGroupModal = ({
                           { label: 'Visible', value: 'visible' }
                         ]}
                       />
-                    </FormItem>
+                    </FormItem> */}
                     <FormItem
                       name='schoolGroupLabel'
-                      label='Are you creating this group for your school?'
-                      //required={true}
-                      //validate={validateRequired}
+                      label='School Group'
+                      required={true}
+                      validate={validateSchoolGroupRadio}
                     >
                       <Radio.Group
                         name='isSchoolGroup'
+                        onChange={showHideSchoolSelect}
                         options={[
                           { label: 'Yes', value: 'yes' },
                           { label: 'No', value: 'no' }
                         ]}
                       />
                     </FormItem>
-                    <Downshift
-                      onChange={selectedItem =>
-                        schoolNameSelectHandler(selectedItem)
-                      }
-                      itemToString={schoolNameToString}
-                    >
-                      {({
-                        getInputProps,
-                        getToggleButtonProps,
-                        getItemProps,
-                        isOpen,
-                        toggleMenu,
-                        clearSelection,
-                        selectedItem,
-                        inputValue,
-                        getLabelProps,
-                        highlightedIndex
-                      }) => (
-                        <div className='auto-container'>
-                          <Div
-                            position='relative'
-                            css={{ paddingRight: '1.75em' }}
-                          >
-                            <Input
-                              {...getInputProps({
-                                placeholder:
-                                  'Type school or district or an address, city, zip...',
-                                onKeyUp: inputOnChange
-                              })}
-                            />
-                            {selectedItem ? (
-                              <ControllerButton
-                                css={{ paddingTop: 4, top: 5 }}
-                                onClick={clearSelection}
-                                aria-label='clear selection'
+                    {isSchoolVisible ? (
+                      <FormItem
+                        name='schoolName'
+                        required={true}
+                        validate={validateRequired}
+                      >
+                        <Downshift
+                          onChange={selectedItem =>
+                            schoolNameSelectHandler(selectedItem)
+                          }
+                          itemToString={schoolNameToString}
+                        >
+                          {({
+                            getInputProps,
+                            getToggleButtonProps,
+                            getItemProps,
+                            isOpen,
+                            toggleMenu,
+                            clearSelection,
+                            selectedItem,
+                            inputValue,
+                            getLabelProps,
+                            highlightedIndex
+                          }) => (
+                            <div>
+                              <Div
+                                position='relative'
+                                css={{ paddingRight: '1.75em' }}
                               >
-                                <XIcon />
-                              </ControllerButton>
-                            ) : (
-                              <ControllerButton {...getToggleButtonProps()}>
-                                <ArrowIcon isOpen={isOpen} />
-                              </ControllerButton>
-                            )}
-                          </Div>
-                          {isOpen ? (
-                            <Menu>
-                              {schools.map((item, index) => (
-                                <Item
-                                  key={item.schoolid}
-                                  {...getItemProps({
-                                    item,
-                                    index,
-                                    isActive: highlightedIndex === index,
-                                    isSelected: selectedItem === item
+                                <Input
+                                  {...getInputProps({
+                                    placeholder:
+                                      'Type school or district or city, zip...',
+                                    onKeyUp: inputOnChange
                                   })}
-                                >
-                                  {item.schoolName}
-                                </Item>
-                              ))}
-                            </Menu>
-                          ) : null}
-                        </div>
-                      )}
-                    </Downshift>
-
-                    {/* 
-                    <FormItem
-                      name='newsletter'
-                      labelCol={{ xs: 4 }}
-                      wrapperCol={{ offset: 4, xs: 20 }}
-                    >
-                      <Checkbox name='groupTandA'>
-                        I accept the terms &amp; conditions
-                      </Checkbox>
-                    </FormItem> */}
-
-                    <Row style={{ marginTop: 60 }}>
-                      <Col offset={8}>
-                        <Button.Group>
-                          <ResetButton>Reset</ResetButton>
-                          <SubmitButton>Submit</SubmitButton>
-                        </Button.Group>
-                      </Col>
-                    </Row>
+                                />
+                                {selectedItem ? (
+                                  <ControllerButton
+                                    css={{ paddingTop: 4, top: 5 }}
+                                    onClick={clearSelection}
+                                    aria-label='clear selection'
+                                  >
+                                    <XIcon />
+                                  </ControllerButton>
+                                ) : (
+                                  <ControllerButton {...getToggleButtonProps()}>
+                                    <ArrowIcon
+                                      isOpen={isOpen}
+                                      className='icon-auto-open'
+                                    />
+                                  </ControllerButton>
+                                )}
+                              </Div>
+                              {isOpen ? (
+                                <Menu>
+                                  {schools.map((item, index) => (
+                                    <Item
+                                      key={item.schoolid}
+                                      {...getItemProps({
+                                        item,
+                                        index,
+                                        isActive: highlightedIndex === index,
+                                        isSelected: selectedItem === item
+                                      })}
+                                    >
+                                      {item.schoolName}
+                                    </Item>
+                                  ))}
+                                </Menu>
+                              ) : null}
+                            </div>
+                          )}
+                        </Downshift>
+                      </FormItem>
+                    ) : (
+                      ''
+                    )}
+                    <ModalFooter>
+                      {' '}
+                      <SubmitButton className='create-group-btn'>
+                        Create
+                      </SubmitButton>{' '}
+                    </ModalFooter>{' '}
                   </div>
-                  <FormikDebug style={{ maxWidth: 400 }} />
+                  {/*                   <FormikDebug style={{ maxWidth: 400 }} />
+                   */}{' '}
                 </Form>
               )}
             />
@@ -335,33 +355,37 @@ const CreateGroupModal = ({
               inviteToJoinUserGroup(JSON.stringify(values));
               actions.setSubmitting(false);
               actions.resetForm();
-            }}
-            validate={values => {
-              if (!values.invitedUsers) {
-                return { invitedUsers: 'required' };
-              }
-              return {};
+              setActiveIndex(2);
             }}
             render={() => (
-              <Form>
-                <Input.TextArea
-                  className='post-form-text-input post-form-textarea'
-                  name='invitedUsers'
-                  cols='30'
-                  rows='5'
-                  placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
-                  onChange={e => onChange(e)}
-                  required
-                />
-                <Row style={{ marginTop: 60 }}>
-                  <Col offset={8}>
-                    <Button.Group>
-                      <ResetButton>Reset</ResetButton>
-                      <SubmitButton> Send Invite</SubmitButton>
-                    </Button.Group>
-                  </Col>
-                </Row>
-              </Form>
+              <div style={{ flex: 1, padding: 15 }}>
+                <Form
+                  className='form-wrapper'
+                  {...formItemLayout}
+                  layout='vertical'
+                  initialValues={{
+                    size: componentSize
+                  }}
+                >
+                  <FormItem name='invitedUsers' label='Invite Buddies'>
+                    <Input.TextArea
+                      className='post-form-text-input post-form-textarea'
+                      name='invitedUsers'
+                      cols='50'
+                      rows='10'
+                      placeholder='Invite buddies to new group by typing or pasting email addresses, separated by commas'
+                      onChange={e => onChange(e)}
+                      required
+                    />{' '}
+                  </FormItem>
+                  <ModalFooter>
+                    <SubmitButton className='send-invite-btn'>
+                      {' '}
+                      Send Invite
+                    </SubmitButton>
+                  </ModalFooter>
+                </Form>
+              </div>
             )}
           />
         </Tab.Pane>
@@ -371,23 +395,64 @@ const CreateGroupModal = ({
       menuItem: 'Group Policy',
       render: () => (
         <Tab.Pane attached={false}>
-          <Form>
-            <Form.Group className='private-message-modal-field'>
-              <textarea
-                className='post-form-text-input post-form-textarea'
-                name='group_rules'
-                cols='30'
-                rows='5'
-                placeholder='Start with the right tone by sharing your purpose and rules for your group?'
-                onChange={e => onChange(e)}
-                required
-              />
-            </Form.Group>
-            <ModalFooter>
-              {' '}
-              <input type='submit' value='Post' />
-            </ModalFooter>{' '}
-          </Form>
+          <Formik
+            initialValues={{
+              groupRules: '',
+              description: ''
+            }}
+            onSubmit={(values, actions) => {
+              console.log(JSON.stringify(values));
+              values.id = group.newGroup.id;
+              delete values['invitedUsers'];
+              delete values['action'];
+              delete values['role'];
+
+              updateGroup(JSON.stringify(values));
+              actions.setSubmitting(false);
+              actions.resetForm();
+              setModal(false);
+              setActiveIndex(0);
+            }}
+            validate={values => {}}
+            render={() => (
+              <div style={{ flex: 1, padding: 15 }}>
+                <Form
+                  className='form-wrapper'
+                  {...formItemLayout}
+                  layout='vertical'
+                  initialValues={{
+                    size: componentSize
+                  }}
+                >
+                  <FormItem
+                    name='description'
+                    label='About Group'
+                    style={{ marginBottom: 16 }}
+                  >
+                    <Input
+                      name='description'
+                      placeholder='What is this group about?'
+                    />
+                  </FormItem>
+                  <FormItem name='groupRules' label='Group Rules'>
+                    <Input.TextArea
+                      className='post-form-text-input post-form-textarea'
+                      name='groupRules'
+                      cols='50'
+                      rows='10'
+                      placeholder='Start with the right tone by sharing your purpose and rules for your group?'
+                      onChange={e => onChange(e)}
+                      required
+                    />{' '}
+                  </FormItem>
+
+                  <ModalFooter>
+                    <SubmitButton className='send-post-btn'> Post</SubmitButton>
+                  </ModalFooter>
+                </Form>
+              </div>
+            )}
+          />
         </Tab.Pane>
       )
     }
@@ -395,7 +460,7 @@ const CreateGroupModal = ({
   return (
     <div>
       <div onClick={toggle}>
-        <Button className='pinkBtn' icon={<UsergroupAddOutlined />}>
+        <Button className='btn-primary' icon={<UsergroupAddOutlined />}>
           Create Group
         </Button>
       </div>
@@ -433,5 +498,6 @@ export default connect(mapDispatchToProps, {
   getSchoolData,
   addGroup,
   inviteToJoinUserGroup,
+  updateGroup,
   mapDispatchToProps
 })(withRouter(CreateGroupModal));

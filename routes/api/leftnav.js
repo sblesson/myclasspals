@@ -14,11 +14,6 @@ router.get('/', auth, async (req, res) => {
         label: 'Home',
         icon: 'fa fa-home',
         url: '/dashboard'
-      },
-      {
-        name: 'general',
-        label: '#General',
-        url: '/dashboard?filter=general'
       }
     ];
     if (req.query.screen === 'profile') {
@@ -37,19 +32,19 @@ router.get('/', auth, async (req, res) => {
         }
       ];
     }
-    if (req.query.screen === 'groups') {
+    if (req.query.screen === 'groups' || req.query.screen === 'discovergroup') {
       leftnav = [
         {
-          name: 'search_group',
-          label: 'Search Groups',
-          icon: 'fas fa-search',
-          url: '/group/search/' + req.query.id
+          name: 'my_groups',
+          label: 'My Groups',
+          icon: 'fas fa-users',
+          url: '/groups'
         },
         {
-          name: 'profiles',
-          label: 'Directory',
-          icon: 'fas fa-user-edit',
-          url: '/profiles/' + req.query.id
+          name: 'search_group',
+          label: 'Discover Groups',
+          icon: 'fas fa-search',
+          url: '/discovergroup/'
         }
       ];
     }

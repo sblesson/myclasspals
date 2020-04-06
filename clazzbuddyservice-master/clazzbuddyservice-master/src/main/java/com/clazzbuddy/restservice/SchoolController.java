@@ -1,5 +1,7 @@
 package com.clazzbuddy.restservice;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,8 @@ import com.clazzbuddy.service.SchoolCache;
 @RequestMapping("/school")
 @CrossOrigin(origins = "*")
 public class SchoolController {
+	
+	Logger logger = LogManager.getLogger(SchoolController.class);
 
 	@Autowired
 	SchoolCache schoolCache;
@@ -32,7 +36,8 @@ public class SchoolController {
 		try {
 			schoolSerachResult.setSchoolMatches(schoolCache.getSchoolStartingWithLetters(searchKey));
 		} catch (Exception e) {
-			schoolSerachResult.setException(e.getMessage());
+			schoolSerachResult.setException(e.toString());
+			logger.error("error", e);
 		}
 		
 		return schoolSerachResult;

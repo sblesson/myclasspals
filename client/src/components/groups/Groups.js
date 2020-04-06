@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -6,7 +6,7 @@ import Spinner from '../layout/Spinner';
 import PrivateMessageModal from './modal/CreateGroupModal';
 import LeftNav from '../leftnav/LeftNav';
 import { getAllGroups, acceptUserGroupInvitation } from '../../actions/group';
-import { Tabs, Table, Tag, Button, Popconfirm } from 'antd';
+import { Tabs, Table, Tag, Button, Input } from 'antd';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
@@ -17,8 +17,18 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
   }, [getAllGroups]);
   const { TabPane } = Tabs;
 
+  const { Search } = Input;
+
   const onClick = ({ key }) => {
     message.info(`Click on item ${key}`);
+  };
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
+
+  const handlePageChange = e => {
+    setActiveIndex(e.target.value);
   };
 
   const menu = (
@@ -64,7 +74,18 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
     {
       title: 'Role',
       dataIndex: 'role',
-      key: 'role'
+      key: 'role',
+      render: role => (
+        <span>
+          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
+            {role}
+          </Tag>
+        </span>
+      )
+      /*      filters: [
+        { text: 'admin', value: 'admin' },
+        { text: 'member', value: 'member' }
+      ] */
     },
     {
       title: 'Description',
@@ -82,9 +103,9 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       key: 'privacy'
     },
     {
-      title: 'Hidden',
-      dataIndex: 'hidden',
-      key: 'hidden'
+      title: 'Created Date',
+      dataIndex: 'createdDate',
+      key: 'createdDate'
     },
     {
       title: 'Action',
@@ -100,16 +121,11 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
   ];
 
   const acceptPendingInviteActionClick = record => {
-    console.log('acceptPendingInviteActionClick', record, auth.user.email);
     acceptUserGroupInvitation({
       groupId: record.id,
       role: 'member',
       invitedUserId: auth.user.email
     });
-  };
-
-  const declinePendingInviteActionClick = record => {
-    console.log('declinePendingInviteActionClick', record);
   };
 
   const pendingInvitations = [
@@ -122,7 +138,14 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
     {
       title: 'Role',
       dataIndex: 'role',
-      key: 'role'
+      key: 'role',
+      render: role => (
+        <span>
+          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
+            {role.toUpperCase()}
+          </Tag>
+        </span>
+      )
     },
     {
       title: 'Description',
@@ -133,11 +156,6 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       title: 'Privacy',
       dataIndex: 'privacy',
       key: 'privacy'
-    },
-    {
-      title: 'Hidden',
-      dataIndex: 'hidden',
-      key: 'hidden'
     },
     {
       title: 'Created Date',
@@ -155,27 +173,6 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
         >
           Join
         </Button>
-
-        /*         <div>
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={acceptPendingInviteActionClick(record)}
-          >
-            Join
-          </Button>
-
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={record => {
-              console.log(record);
-              declinePendingInviteActionClick(record);
-            }}
-          >
-            Decline
-          </Button>
-        </div> */
       )
     }
   ];
@@ -194,7 +191,14 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
     {
       title: 'Role',
       dataIndex: 'role',
-      key: 'role'
+      key: 'role',
+      render: role => (
+        <span>
+          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
+            {role.toUpperCase()}
+          </Tag>
+        </span>
+      )
     },
     {
       title: 'Description',
@@ -207,6 +211,11 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       key: 'memberCount'
     },
     {
+      title: 'Created Date',
+      dataIndex: 'createdDate',
+      key: 'createdDate'
+    },
+    /*     {
       title: 'Tags',
       key: 'tags',
       dataIndex: 'tags',
@@ -225,7 +234,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
           })}
         </span>
       )
-    },
+    }, */
     {
       title: 'Action',
       key: 'action',
@@ -261,6 +270,12 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
             </div>
 
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
+              <Search
+                placeholder='Seach my group'
+                onSearch={value => console.log(value)}
+                style={{ width: 300, marginBottom: 30 }}
+                enterButton
+              />
               {group !== null ? (
                 <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
                   <TabPane tab='My Groups' key='1'>
@@ -269,6 +284,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
                         columns={myGroupsColumns}
                         dataSource={group.userGroup}
                         rowKey='id'
+                        loading={group.loading}
                       />
                     ) : (
                       'Current user is not part of any groups.'
@@ -286,7 +302,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
                       'There are no pending group invitation for current user.'
                     )}
                   </TabPane>
-                  <TabPane tab='Requested To Join' key='3'>
+                  <TabPane tab='Pending Requests' key='3'>
                     {group.requestedGroupsData &&
                     group.requestedGroupsData.length > 0 ? (
                       <Table

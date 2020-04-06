@@ -24,6 +24,13 @@
 .new-post {
   margin-left: 10px;
 }
+
+.ant-tabs-tab {
+  color: #444 !important;
+}
+.ant-tabs-ink-bar {
+  background: var(--primary-color) !important;
+}
 /* Posts Page */
 .post-form .post-form-header {
   background: var(--primary-color);
@@ -35,4 +42,3 @@
     width: 100%;
   }
 }
-

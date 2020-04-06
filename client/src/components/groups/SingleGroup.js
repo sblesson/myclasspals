@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-
+import { Tabs, Table, Tag, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
@@ -8,12 +8,13 @@ import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { Tabs, Button, Table, Tag } from 'antd';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import {
   getGroupDetails,
   approveUserGroupRequest,
-  declineUserGroupRequest
+  declineUserGroupRequest,
+  changeGroupUserRole,
+  removeUserFromGroup
 } from '../../actions/group';
 
 const SingleGroup = ({
@@ -26,8 +27,10 @@ const SingleGroup = ({
   useEffect(() => {
     getGroupDetails(match.params.id);
   }, [getGroupDetails, match.params.id]);
+
   const { TabPane } = Tabs;
   console.log(group);
+
   const onClick = ({ key }) => {
     console.log(`Click on item ${key}`);
   };
@@ -64,10 +67,48 @@ const SingleGroup = ({
 
   //TODO check if you are admin, creator or member and decide menu actions
   const membersMenu = (
-    <Menu onClick={onClick}>
-      <Menu.Item key='1'>Set as Admin</Menu.Item>
-      <Menu.Item key='2'>Set as Moderator</Menu.Item>
-      <Menu.Item key='3'>Remove from Group</Menu.Item>
+    <Menu>
+      <Menu.Item key='1'>
+        {/*         <Button
+          type='link'
+          onClick={() =>
+            changeGroupUserRole({
+              userId: record._id,
+              groupId: match.params.id,
+              newRole: 'admin'
+            })
+          }
+        >
+          Set as Admin
+        </Button> */}
+      </Menu.Item>
+      <Menu.Item key='2'>
+        {/*        <Button
+          type='link'
+          onClick={() =>
+            changeGroupUserRole({
+              userId: record._id,
+              groupId: match.params.id,
+              newRole: 'moderator'
+            })
+          }
+        >
+          Set as Moderator
+        </Button> */}
+      </Menu.Item>
+      <Menu.Item key='3'>
+        {/*         <Button
+          type='link'
+          onClick={() =>
+            removeUserFromGroup({
+              userId: record._id,
+              groupId: match.params.id
+            })
+          }
+        >
+          Remove from Group
+        </Button> */}
+      </Menu.Item>
       <Menu.Item key='4'>Mute Member</Menu.Item>
     </Menu>
   );
@@ -81,25 +122,20 @@ const SingleGroup = ({
     },
     {
       title: 'Role',
+      dataIndex: 'role',
       key: 'role',
-      dataIndex: 'role'
+      render: role => (
+        <span>
+          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
+            {role.toUpperCase()}
+          </Tag>
+        </span>
+      )
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description'
-    },
-    {
-      title: 'Message',
-      dataIndex: 'message',
-      key: 'message',
-      render: (text, record) => (
-        <Dropdown overlay={membersMenu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown>
-      )
     },
     {
       title: 'Action',
@@ -148,7 +184,14 @@ const SingleGroup = ({
     {
       title: 'Role',
       dataIndex: 'role',
-      key: 'role'
+      key: 'role',
+      render: role => (
+        <span>
+          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
+            {role.toUpperCase()}
+          </Tag>
+        </span>
+      )
     },
     {
       title: 'Action',
@@ -200,30 +243,38 @@ const SingleGroup = ({
                       'Current group member list is empty'
                     )}
                   </TabPane>
-                  <TabPane tab='Pending Approvals' key='approvals'>
-                    {group.currentGroup.pendingInvitations &&
-                    group.currentGroup.pendingInvitations.length > 0 ? (
-                      <Table
-                        columns={pendingInvitationsColumns}
-                        dataSource={group.currentGroup.pendingInvitations}
-                        rowKey='requestorUserId'
-                      />
-                    ) : (
-                      'Current group member list is empty'
-                    )}
-                  </TabPane>
-                  <TabPane tab='Request To Join' key='request'>
-                    {group.currentGroup.requestedInvitations &&
-                    group.currentGroup.requestedInvitations.length > 0 ? (
-                      <Table
-                        columns={requestToJoinColumn}
-                        dataSource={group.currentGroup.requestedInvitations}
-                        rowKey='id'
-                      />
-                    ) : (
-                      'Current group member list is empty'
-                    )}
-                  </TabPane>
+                  {group.isGroupAdmin ? (
+                    <TabPane tab='Pending Requests' key='request'>
+                      {group.currentGroup.requestedInvitations &&
+                      group.currentGroup.requestedInvitations.length > 0 ? (
+                        <Table
+                          columns={requestToJoinColumn}
+                          dataSource={group.currentGroup.requestedInvitations}
+                          rowKey='groupId'
+                        />
+                      ) : (
+                        'There are no pending request for this user group'
+                      )}
+                    </TabPane>
+                  ) : (
+                    ''
+                  )}
+                  {group.isGroupAdmin ? (
+                    <TabPane tab='Pending Approvals' key='approvals'>
+                      {group.currentGroup.pendingInvitations &&
+                      group.currentGroup.pendingInvitations.length > 0 ? (
+                        <Table
+                          columns={pendingInvitationsColumns}
+                          dataSource={group.currentGroup.pendingInvitations}
+                          rowKey='requestorUserId'
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </TabPane>
+                  ) : (
+                    ''
+                  )}
                 </Tabs>
               ) : (
                 'Group is empty'
