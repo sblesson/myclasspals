@@ -135,11 +135,23 @@ public class UserService {
 		mongoTemplate.save(userGroup);
 	}
 
-	public void acceptGroupInvitation(GroupInvitationAction action) {
+	public Users acceptGroupInvitation(GroupInvitationAction action) throws Exception {
 		
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 		
+		if (userGroup == null) {
+			throw new Exception("Not a valid user group");
+		}
 		Users invitedUser = getUser(action.getInvitedUserId());
+		
+		if (invitedUser == null) {
+			throw new Exception("Not a valid user");
+		}
+		
+		if (action.getAction() == null) {
+			throw new Exception("Action cannot be null");
+		}
+		
 		
 		if (action.getAction().equals(GroupInvitationActions.INVITE_ACCEPT.toString())) {
 			
@@ -175,6 +187,9 @@ public class UserService {
 			
 			mongoTemplate.save(invitedUser);
 			mongoTemplate.save(userGroup);
+			return invitedUser;
+		} else {
+			throw new Exception("action should be INVITE_ACCEPT. it is " + action.getAction());
 		}
 	}
 	

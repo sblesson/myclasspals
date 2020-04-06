@@ -31,7 +31,7 @@ export default function(state = initialState, action) {
         user: payload
       };
     case USER_LOADED:
-      localStorage.setItem('user', JSON.stringify(payload.user[0]));
+      localStorage.setItem('user', JSON.stringify(payload.user));
       console.log('USER_LOADED');
 
       console.log(payload);
@@ -40,12 +40,13 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload.user[0]
+        user: payload.user
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
       localStorage.setItem('isAuthenticated', payload.isAuthenticated);
+
       console.log('LOGIN_SUCCESS');
       console.log(payload);
 

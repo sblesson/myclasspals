@@ -28,7 +28,7 @@ export const getUserGroup = userId => async dispatch => {
     console.log();
     dispatch({
       type: GET_USER_GROUP,
-      payload: userGroupRes.data.user[0]
+      payload: userGroupRes.data.user
     });
   } catch (err) {
     dispatch({

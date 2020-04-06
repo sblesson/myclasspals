@@ -15,7 +15,9 @@ import {
   REQUEST_JOIN_USER_GROUP,
   REQUEST_JOIN_USER_GROUP_ERROR,
   APPROVE_GROUP_REQUEST,
-  APPROVE_GROUP_REQUEST_ERROR
+  APPROVE_GROUP_REQUEST_ERROR,
+  CHANGE_GROUP_USER_ROLE,
+  CHANGE_GROUP_USER_ROLE_ERROR
 } from './types';
 
 // Add post
@@ -61,7 +63,7 @@ export const getAllGroups = userId => async dispatch => {
     console.log(response);
     dispatch({
       type: GET_ALL_GROUPS,
-      payload: response.data.user[0]
+      payload: response.data.user
     });
   } catch (err) {
     dispatch({
@@ -77,7 +79,7 @@ export const getGroupDetails = groupId => async dispatch => {
     const response = await axios.get(
       `http://localhost:8080/usergroup/getgroup?id=${groupId}`
     );
-    console.log(response);
+
     dispatch({
       type: GET_GROUP,
       payload: response.data.userGroupList[0]
@@ -85,7 +87,7 @@ export const getGroupDetails = groupId => async dispatch => {
   } catch (err) {
     dispatch({
       type: GET_GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err, status: err }
     });
   }
 };
@@ -140,7 +142,7 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
 
     dispatch({
       type: ACCEPT_USER_GROUP,
-      payload: requestData
+      payload: res.data
     });
 
     dispatch(setAlert('User added to group', 'success'));
@@ -174,7 +176,7 @@ export const requestToJoinUserGroup = requestData => async dispatch => {
 
     dispatch({
       type: REQUEST_JOIN_USER_GROUP,
-      payload: requestData
+      payload: res
     });
 
     dispatch(setAlert('User added to group', 'success'));
@@ -206,7 +208,7 @@ export const approveUserGroupRequest = requestData => async dispatch => {
 
     dispatch({
       type: APPROVE_GROUP_REQUEST,
-      payload: requestData
+      payload: res
     });
 
     dispatch(setAlert('User added to group', 'success'));
@@ -240,13 +242,73 @@ export const declineUserGroupRequest = requestData => async dispatch => {
 
     dispatch({
       type: APPROVE_GROUP_REQUEST,
-      payload: requestData
+      payload: res
     });
 
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
     dispatch({
       type: APPROVE_GROUP_REQUEST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//Users change Group UserRole
+export const changeGroupUserRole = requestData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/usergroup/changeuserrole',
+      requestData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: CHANGE_GROUP_USER_ROLE,
+      payload: res
+    });
+
+    dispatch(setAlert('User added to group', 'success'));
+  } catch (err) {
+    dispatch({
+      type: CHANGE_GROUP_USER_ROLE_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//remove user from group
+export const removeUserFromGroup = requestData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/user/removeuserfromgroup',
+      requestData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: CHANGE_GROUP_USER_ROLE,
+      payload: res
+    });
+
+    dispatch(setAlert('User removed from the group', 'success'));
+  } catch (err) {
+    dispatch({
+      type: CHANGE_GROUP_USER_ROLE_ERROR
       //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }

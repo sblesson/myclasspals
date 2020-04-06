@@ -82,9 +82,9 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       key: 'privacy'
     },
     {
-      title: 'Hidden',
-      dataIndex: 'hidden',
-      key: 'hidden'
+      title: 'Created Date',
+      dataIndex: 'createdDate',
+      key: 'createdDate'
     },
     {
       title: 'Action',
@@ -133,11 +133,6 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       title: 'Privacy',
       dataIndex: 'privacy',
       key: 'privacy'
-    },
-    {
-      title: 'Hidden',
-      dataIndex: 'hidden',
-      key: 'hidden'
     },
     {
       title: 'Created Date',
@@ -207,6 +202,11 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       key: 'memberCount'
     },
     {
+      title: 'Created Date',
+      dataIndex: 'createdDate',
+      key: 'createdDate'
+    },
+    /*     {
       title: 'Tags',
       key: 'tags',
       dataIndex: 'tags',
@@ -225,7 +225,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
           })}
         </span>
       )
-    },
+    }, */
     {
       title: 'Action',
       key: 'action',
@@ -286,7 +286,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
                       'There are no pending group invitation for current user.'
                     )}
                   </TabPane>
-                  <TabPane tab='Requested To Join' key='3'>
+                  <TabPane tab='Pending Requests' key='3'>
                     {group.requestedGroupsData &&
                     group.requestedGroupsData.length > 0 ? (
                       <Table

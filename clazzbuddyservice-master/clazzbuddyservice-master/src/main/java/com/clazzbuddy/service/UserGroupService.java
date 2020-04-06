@@ -1,7 +1,11 @@
 package com.clazzbuddy.service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,11 +14,15 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.mongocollections.Users;
+import com.clazzbuddy.restmodel.GroupChangeRoleAction;
+import com.clazzbuddy.restmodel.UserGroupSearchFilter;
 import com.clazzbuddy.mongocollections.UserGroup;
 import com.clazzbuddy.mongocollections.UserGroupMembers;
 
 @Component
 public class UserGroupService {
+	
+	Logger logger = LogManager.getLogger(UserGroupService.class);
 
 	@Autowired
 	MongoTemplate mongoTemplate;
@@ -30,6 +38,7 @@ public class UserGroupService {
 			return userGroupFromDB;
 		}
 		
+		userGroup.setCreatedDate(new Date().toString());
 		userGroupFromDB = mongoTemplate.insert(userGroup);
 		
 		if (userGroup.getUserGroupMembers() != null) {
@@ -68,12 +77,62 @@ public class UserGroupService {
 
 	}
 	
+	public List<UserGroup> getUserGroupBySerachFilter(UserGroupSearchFilter filter) {
+
+		Query userGroupSearch = new Query();
+		if (filter.getGroupKeyword() != null) {
+			userGroupSearch.addCriteria(Criteria.where("groupName").regex(filter.getGroupKeyword()));
+		}
+		if (filter.getPrivacy() != null) {
+			userGroupSearch.addCriteria(Criteria.where("privacy").regex(filter.getPrivacy()));
+
+		}
+		if (filter.getSchoolName() != null) {
+			userGroupSearch.addCriteria(Criteria.where("schoolName").regex(filter.getSchoolName()));
+
+		}
+		if (filter.getSchoolCity() != null) {
+			userGroupSearch.addCriteria(Criteria.where("schoolCity").regex(filter.getSchoolCity()));
+
+		}
+		if (filter.getSchoolZipCode() != null) {
+			userGroupSearch.addCriteria(Criteria.where("schoolZipCode").regex(filter.getSchoolZipCode()));
+
+		}
+		logger.info(userGroupSearch.toString());
+		filter.getSchoolZipCode().toString();
+		return mongoTemplate.find(userGroupSearch, UserGroup.class);
+
+	}
+	
 	public UserGroup getUserGroupByName(String id) {
 
 		Query userByName = new Query();
 		userByName.addCriteria(Criteria.where("groupName").is(id));
 		return mongoTemplate.findOne(userByName, UserGroup.class);
 
+	}
+	
+	public UserGroup changeUserRole(GroupChangeRoleAction action) throws Exception {
+		UserGroup userGroup = getUserGroupById(action.getGroupId());
+		
+		if (userGroup == null) {
+			throw new Exception("user group is invalid");
+		}
+		
+		if (userGroup.getUserGroupMembers() == null) {
+			throw new Exception("No group members");
+		}
+		
+		for (UserGroupMembers member : userGroup.getUserGroupMembers()) {
+			if (member.get_id().equals(action.getUserId())) {
+				member.setRole(action.getNewRole());
+				mongoTemplate.save(userGroup);
+				return userGroup;
+			}
+		}
+		throw new Exception("User is not a member in the group :" + action.getUserId());
+		
 	}
 	
 }

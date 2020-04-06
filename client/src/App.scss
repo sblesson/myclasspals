@@ -748,9 +748,9 @@ input[type='search']::-webkit-search-decoration {
 .ui.secondary.pointing.menu {
   border-bottom: 1px solid #f0f0f0;
   .active.item {
-    border-color: #ea4c89;
+    border-color: var(--primary-color);
     &:hover {
-      border-color: #ea4c89;
+      border-color: var(--primary-color);
     }
   }
 }
