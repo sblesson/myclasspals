@@ -1,6 +1,8 @@
 import {
   ADD_GROUP,
+  UPDATE_GROUP,
   GET_ALL_GROUPS,
+  SEARCH_ALL_GROUP,
   GET_ALL_GROUPS_ERROR,
   GET_GROUP,
   GET_GROUP_ERROR,
@@ -20,6 +22,7 @@ const initialState = {
   userGroup: [],
   pendingInvitedUserGroups: [],
   requestedUserGroup: [],
+  searchResult: [],
   newGroup: null,
   currentGroup: null,
   isGroupAdmin: false,
@@ -55,6 +58,15 @@ export default function(state = initialState, action) {
         newGroup: payload.userGroup,
         loading: false
       };
+    case UPDATE_GROUP:
+      console.log(payload);
+      return {
+        ...state,
+        groups: [payload.userGroup, ...state.groups],
+        userGroup: payload.userGroup,
+        newGroup: payload.userGroup,
+        loading: false
+      };
 
     case GET_ALL_GROUPS:
       return {
@@ -65,7 +77,13 @@ export default function(state = initialState, action) {
         pendingInvitedUserGroups: payload.pendingInvitedUserGroups,
         requestedUserGroup: payload.requestedUserGroup
       };
-
+    case SEARCH_ALL_GROUP:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        searchResult: payload.userGroup
+      };
     case GET_GROUP:
       return {
         ...state,

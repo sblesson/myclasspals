@@ -20,16 +20,29 @@ const LeftNav = ({
   categories
 }) => {
   console.log(categories);
-
+  const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
+  let myGroups = [];
+  if (userGroup && userGroup.length > 0) {
+    myGroups = userGroup.map(group => ({
+      id: group.id,
+      title: group.groupName,
+      value: group.id,
+      icon: 'fas fa-users',
+      url: '/dashboard?group=' + group.id
+    }));
+  }
+  console.log(userGroup);
   let depthStep = 10,
     depth = 0,
     expanded;
 
   useEffect(() => {
-    getLeftNav(screen, id);
+    if (screen !== 'dashboard') {
+      getLeftNav(screen, id);
+    }
   }, [getLeftNav]);
 
-  return loading ? (
+  return loading & (screen !== 'dashboard') ? (
     <Spinner />
   ) : (
     <div className='leftnav-sidebar'>
@@ -51,9 +64,9 @@ const LeftNav = ({
             </React.Fragment>
           ))}
         {screen == 'dashboard' &&
-          categories &&
-          categories.length > 0 &&
-          categories.map((leftNavItem, index) => (
+          myGroups &&
+          myGroups.length > 0 &&
+          myGroups.map((leftNavItem, index) => (
             <React.Fragment key={`${leftNavItem.title}${index}`}>
               {leftNavItem === 'divider' ? (
                 <Divider style={{ margin: '6px 0' }} />

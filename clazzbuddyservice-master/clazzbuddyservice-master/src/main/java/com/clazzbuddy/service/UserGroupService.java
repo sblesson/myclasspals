@@ -59,13 +59,25 @@ public class UserGroupService {
 		return userGroupFromDB;
 	}
 
-	public void updateUserGroup(UserGroup userGroup) {
+	public UserGroup updateUserGroup(UserGroup userGroup) {
 		UserGroup userGroupFromDB = getUserGroupById(userGroup.getId());
-		userGroupFromDB.setGroupName(userGroup.getGroupName());
-		userGroupFromDB.setHidden(userGroup.getHidden());
-		userGroupFromDB.setPrivacy(userGroup.getPrivacy());
-		userGroupFromDB.setUserGroupMembers(userGroup.getUserGroupMembers());
+		if (userGroup.getGroupName() != null) {
+			userGroupFromDB.setGroupName(userGroup.getGroupName());
+		}
+		if (userGroup.getHidden() != null) {
+			userGroupFromDB.setHidden(userGroup.getHidden());
+		}
+		if (userGroup.getPrivacy() != null) {
+			userGroupFromDB.setPrivacy(userGroup.getPrivacy());
+		}
+		if (userGroup.getGroupRules() != null) {
+			userGroupFromDB.setGroupRules(userGroup.getGroupRules());
+		}
+		if (userGroup.getDescription() != null) {
+			userGroupFromDB.setDescription(userGroup.getDescription());
+		}
 		mongoTemplate.save(userGroupFromDB);
+		return userGroupFromDB;
 	}
 
 	public UserGroup getUserGroupById(String id) {

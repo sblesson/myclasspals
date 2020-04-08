@@ -182,10 +182,15 @@ img {
 .alert-primary {
   background: var(--primary-btn-color);
   color: #fff;
+  border: none;
+  text-decoration: none;
+  -webkit-transition: color 200ms ease;
+  transition: color 200ms ease;
+  box-sizing: border-box;
   &:hover,
   &:active,
   &:focus {
-    background: var(--secondary-btn-color);
+    background: var(--primary-btn-hover-color);
   }
 }
 
@@ -477,7 +482,7 @@ button {
   margin-bottom: 20px;
 }
 .bg-post-head {
-  background-color: #f5f6f7;
+  background-color: var(--color-rank-4);
 }
 
 .react-autosuggest__container {
@@ -760,4 +765,26 @@ input[type='search']::-webkit-search-decoration {
 .ui.inverted.link.list .item a:not(.ui),
 .ui.inverted.link.list a.item {
   color: '#333' !important;
+}
+
+.ant-btn-primary.ant-input-search-button {
+  color: var(--color-rank-1);
+  background-color: var(--light-blue);
+  border-color: var(--color-rank-2);
+  //border: 1px solid var(--light-grey-color);
+}
+
+thead {
+  .ant-table-cell {
+    background: var(--color-rank-3) !important;
+    //background: #fff !important;
+    font-weight: 400 !important;
+    border: none !important;
+  }
+}
+
+.ant-table-tbody {
+  .ant-table-cell {
+    border: none !important;
+  }
 }

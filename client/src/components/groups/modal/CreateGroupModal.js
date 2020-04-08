@@ -8,7 +8,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
 import { getSchoolData } from '../../../actions/school';
-import { addGroup, inviteToJoinUserGroup } from '../../../actions/group';
+import {
+  addGroup,
+  inviteToJoinUserGroup,
+  updateGroup
+} from '../../../actions/group';
 import {
   Menu,
   ControllerButton,
@@ -17,7 +21,7 @@ import {
   ArrowIcon,
   XIcon
 } from '../../common/DownshiftComponents';
-import { Formik } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 
 import {
   SubmitButton,
@@ -44,6 +48,7 @@ const CreateGroupModal = ({
   history,
   addGroup,
   inviteToJoinUserGroup,
+  updateGroup,
   auth,
   group
 }) => {
@@ -52,9 +57,6 @@ const CreateGroupModal = ({
   const [isSchoolVisible, setIsSchoolVisible] = useState(false);
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
-
-  //const [userList, setUserList] = useState(children);
-
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -71,19 +73,14 @@ const CreateGroupModal = ({
     newGroupMembers: ''
   };
 
-  const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
-
-  const handlePageChange = e => {
-    setActiveIndex(e.target.value);
+  const handleTabChange = (e, { activeIndex }) => {
+    console.log(e);
+    console.log(activeIndex);
+    setActiveIndex(activeIndex);
   };
 
   const onChange = e => {
     console.log(e.target.name, e.target.value);
-    //setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleChange = value => {
-    console.log(`selected ${value}`);
   };
 
   const inputOnChange = event => {
@@ -118,10 +115,15 @@ const CreateGroupModal = ({
     return value ? undefined : 'required';
   };
 
+  const validateSchoolGroupRadio = value => {
+    console.log(value);
+  };
+
   const showHideSchoolSelect = event => {
     console.log('shool', event);
     if (event.target.value === 'yes') {
       setIsSchoolVisible(true);
+      console.log('selectedSchool', selectedSchool);
     } else {
       setIsSchoolVisible(false);
     }
@@ -163,7 +165,6 @@ const CreateGroupModal = ({
               }}
               onSubmit={(values, actions) => {
                 message.info(JSON.stringify(values, null, 4));
-                console.log(selectedSchool);
                 values.schoolName = selectedSchool.schoolName;
                 values.schoolId = selectedSchool.schoolid;
                 values.schoolCity = selectedSchool.city;
@@ -172,6 +173,7 @@ const CreateGroupModal = ({
 
                 //deleting unwanted property
                 delete values['downshift-0-input'];
+
                 values.userGroupMembers = [
                   {
                     _id: auth.user._id,
@@ -179,17 +181,10 @@ const CreateGroupModal = ({
                     role: 'admin'
                   }
                 ];
-                console.log(JSON.stringify(values));
-
                 addGroup(JSON.stringify(values));
                 actions.setSubmitting(false);
                 actions.resetForm();
-              }}
-              validate={values => {
-                if (!values.groupName) {
-                  return { groupName: 'required' };
-                }
-                return {};
+                setActiveIndex(1);
               }}
               render={() => (
                 <Form
@@ -239,8 +234,8 @@ const CreateGroupModal = ({
                     <FormItem
                       name='schoolGroupLabel'
                       label='School Group'
-                      //required={true}
-                      //validate={validateRequired}
+                      required={true}
+                      validate={validateSchoolGroupRadio}
                     >
                       <Radio.Group
                         name='isSchoolGroup'
@@ -252,7 +247,11 @@ const CreateGroupModal = ({
                       />
                     </FormItem>
                     {isSchoolVisible ? (
-                      <FormItem name='schoolName'>
+                      <FormItem
+                        name='schoolName'
+                        required={true}
+                        validate={validateRequired}
+                      >
                         <Downshift
                           onChange={selectedItem =>
                             schoolNameSelectHandler(selectedItem)
@@ -356,33 +355,37 @@ const CreateGroupModal = ({
               inviteToJoinUserGroup(JSON.stringify(values));
               actions.setSubmitting(false);
               actions.resetForm();
-            }}
-            validate={values => {
-              if (!values.invitedUsers) {
-                return { invitedUsers: 'required' };
-              }
-              return {};
+              setActiveIndex(2);
             }}
             render={() => (
-              <Form>
-                <Input.TextArea
-                  className='post-form-text-input post-form-textarea'
-                  name='invitedUsers'
-                  cols='30'
-                  rows='5'
-                  placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
-                  onChange={e => onChange(e)}
-                  required
-                />
-                <Row style={{ marginTop: 60 }}>
-                  <Col offset={8}>
-                    <Button.Group>
-                      <ResetButton>Reset</ResetButton>
-                      <SubmitButton> Send Invite</SubmitButton>
-                    </Button.Group>
-                  </Col>
-                </Row>
-              </Form>
+              <div style={{ flex: 1, padding: 15 }}>
+                <Form
+                  className='form-wrapper'
+                  {...formItemLayout}
+                  layout='vertical'
+                  initialValues={{
+                    size: componentSize
+                  }}
+                >
+                  <FormItem name='invitedUsers' label='Invite Buddies'>
+                    <Input.TextArea
+                      className='post-form-text-input post-form-textarea'
+                      name='invitedUsers'
+                      cols='50'
+                      rows='10'
+                      placeholder='Invite buddies to new group by typing or pasting email addresses, separated by commas'
+                      onChange={e => onChange(e)}
+                      required
+                    />{' '}
+                  </FormItem>
+                  <ModalFooter>
+                    <SubmitButton className='send-invite-btn'>
+                      {' '}
+                      Send Invite
+                    </SubmitButton>
+                  </ModalFooter>
+                </Form>
+              </div>
             )}
           />
         </Tab.Pane>
@@ -392,23 +395,64 @@ const CreateGroupModal = ({
       menuItem: 'Group Policy',
       render: () => (
         <Tab.Pane attached={false}>
-          <Form>
-            <Form.Group className='private-message-modal-field'>
-              <textarea
-                className='post-form-text-input post-form-textarea'
-                name='group_rules'
-                cols='30'
-                rows='5'
-                placeholder='Start with the right tone by sharing your purpose and rules for your group?'
-                onChange={e => onChange(e)}
-                required
-              />
-            </Form.Group>
-            <ModalFooter>
-              {' '}
-              <input type='submit' value='Post' />
-            </ModalFooter>{' '}
-          </Form>
+          <Formik
+            initialValues={{
+              groupRules: '',
+              description: ''
+            }}
+            onSubmit={(values, actions) => {
+              console.log(JSON.stringify(values));
+              values.id = group.newGroup.id;
+              delete values['invitedUsers'];
+              delete values['action'];
+              delete values['role'];
+
+              updateGroup(JSON.stringify(values));
+              actions.setSubmitting(false);
+              actions.resetForm();
+              setModal(false);
+              setActiveIndex(0);
+            }}
+            validate={values => {}}
+            render={() => (
+              <div style={{ flex: 1, padding: 15 }}>
+                <Form
+                  className='form-wrapper'
+                  {...formItemLayout}
+                  layout='vertical'
+                  initialValues={{
+                    size: componentSize
+                  }}
+                >
+                  <FormItem
+                    name='description'
+                    label='About Group'
+                    style={{ marginBottom: 16 }}
+                  >
+                    <Input
+                      name='description'
+                      placeholder='What is this group about?'
+                    />
+                  </FormItem>
+                  <FormItem name='groupRules' label='Group Rules'>
+                    <Input.TextArea
+                      className='post-form-text-input post-form-textarea'
+                      name='groupRules'
+                      cols='50'
+                      rows='10'
+                      placeholder='Start with the right tone by sharing your purpose and rules for your group?'
+                      onChange={e => onChange(e)}
+                      required
+                    />{' '}
+                  </FormItem>
+
+                  <ModalFooter>
+                    <SubmitButton className='send-post-btn'> Post</SubmitButton>
+                  </ModalFooter>
+                </Form>
+              </div>
+            )}
+          />
         </Tab.Pane>
       )
     }
@@ -416,7 +460,9 @@ const CreateGroupModal = ({
   return (
     <div>
       <div onClick={toggle}>
-        <Button icon={<UsergroupAddOutlined />}>Create Group</Button>
+        <Button className='btn-primary' icon={<UsergroupAddOutlined />}>
+          Create Group
+        </Button>
       </div>
       <Modal
         className='create-group-modal'
@@ -452,5 +498,6 @@ export default connect(mapDispatchToProps, {
   getSchoolData,
   addGroup,
   inviteToJoinUserGroup,
+  updateGroup,
   mapDispatchToProps
 })(withRouter(CreateGroupModal));

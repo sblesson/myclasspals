@@ -2,7 +2,9 @@ import axios from 'axios';
 import { setAlert } from './alert';
 import {
   ADD_GROUP,
+  UPDATE_GROUP,
   DELETE_GROUP,
+  SEARCH_ALL_GROUP,
   GROUP_ERROR,
   GET_ALL_GROUPS,
   GET_ALL_GROUPS_ERROR,
@@ -17,7 +19,8 @@ import {
   APPROVE_GROUP_REQUEST,
   APPROVE_GROUP_REQUEST_ERROR,
   CHANGE_GROUP_USER_ROLE,
-  CHANGE_GROUP_USER_ROLE_ERROR
+  CHANGE_GROUP_USER_ROLE_ERROR,
+  SEARCH_ALL_GROUP_ERROR
 } from './types';
 
 // Add post
@@ -43,6 +46,37 @@ export const addGroup = formData => async dispatch => {
     });
 
     dispatch(setAlert('Group Created', 'success'));
+  } catch (err) {
+    dispatch({
+      type: GROUP_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Update group
+export const updateGroup = formData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.put(
+      'http://localhost:8080/usergroup/updategroup',
+      formData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: UPDATE_GROUP,
+      payload: res.data
+    });
+
+    dispatch(setAlert('Group Updated', 'success'));
   } catch (err) {
     dispatch({
       type: GROUP_ERROR
@@ -91,6 +125,36 @@ export const getGroupDetails = groupId => async dispatch => {
     });
   }
 };
+
+// Search Groups
+export const searchGroup = searchKey => async dispatch => {
+  const requestData = {
+    groupKeyword: searchKey
+  };
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/usergroup/getgroupbyfilter`,
+      requestData,
+      config
+    );
+
+    dispatch({
+      type: SEARCH_ALL_GROUP,
+      payload: response.data.userGroupList[0]
+    });
+  } catch (err) {
+    dispatch({
+      type: SEARCH_ALL_GROUP_ERROR,
+      payload: { msg: err, status: err }
+    });
+  }
+};
+
 //Admin sends users invitation to join userGroup
 export const inviteToJoinUserGroup = formData => async dispatch => {
   console.log(formData);

@@ -3,15 +3,18 @@ $mainColor: #fff;
 :root {
   /*--primary-color: #fc6459;*/
   --primary-color: #45b3e0;
+  --primary-color: #45b3e0;
   //--primary-btn-color: #0892ab;
   --primary-btn-color: #45b3e0;
-  --primary-btn-hover-color: #0892ab;
+  --primary-btn-hover-color: #8cc2e3;
   --secondary-btn-color: #87ceeb;
 
   // --primary-color: #e00083;
   --secondary-color: #87ceeb;
   /*--tertiary-color: #ff5a5f;*/
   --tertiary-color: #e00083;
+  --light-blue: rgb(243, 250, 253);
+  --light-border-grey: #d9d9d9;
 
   --dark-color: #0892ab;
   --light-color: #f4f4f4;
@@ -21,6 +24,36 @@ $mainColor: #fff;
   --light-grey-color: #bbb;
   --large-text-color: #444;
   --large-text-color: #444;
+
+  --font-color-1: floralwhite;
+  --font-color-2: #444;
+  --font-color-3: #757575;
+
+  //--color-rank-1: #62c1d3;
+
+  --color-rank-1: #45b3e0;
+  --color-rank-5: #87ceeb;
+
+  --color-rank-3: #fafafa;
+  --color-rank-4: #f5f6f7;
+  --color-rank-5: #f3fafd;
+
+  //additional
+  --bg: #1d1e2a !important;
+  /*  main   */
+  --bg2: #1a1b26 !important;
+  /*  alt   */
+  --bg3: #14151f !important;
+  /*  header   */
+  --first-color: #aaa !important;
+  /*  grey - main color  */
+  --second-color: #74857c !important;
+  /* green - alt text */
+  --third-color: #7587a6 !important;
+  /* blue - links  */
+  --font1: 'Open Sans', 'Segoe UI' !important;
+  /* main font */
+  --font2: 'Open Sans Semibold', 'Segoe UI' !important;
 }
 
 /* // COLORS

@@ -58,10 +58,10 @@ public class UserGroupController {
 
 	@PutMapping(value = "/updategroup", produces = { "application/json" })
 	public CommonResult updateGroup(@RequestBody UserGroup userGroup) {
-		CommonResult result = new CommonResult();
+		UserGroupResult result = new UserGroupResult();
 
 		try {
-			userGroupService.updateUserGroup(userGroup);
+			result.setUserGroup(userGroupService.updateUserGroup(userGroup));
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

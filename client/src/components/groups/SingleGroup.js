@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-
+import { Tabs, Table, Tag, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
@@ -8,7 +8,6 @@ import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { Tabs, Button, Table, Tag } from 'antd';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import {
   getGroupDetails,
@@ -123,8 +122,15 @@ const SingleGroup = ({
     },
     {
       title: 'Role',
+      dataIndex: 'role',
       key: 'role',
-      dataIndex: 'role'
+      render: role => (
+        <span>
+          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
+            {role.toUpperCase()}
+          </Tag>
+        </span>
+      )
     },
     {
       title: 'Description',
@@ -178,7 +184,14 @@ const SingleGroup = ({
     {
       title: 'Role',
       dataIndex: 'role',
-      key: 'role'
+      key: 'role',
+      render: role => (
+        <span>
+          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
+            {role.toUpperCase()}
+          </Tag>
+        </span>
+      )
     },
     {
       title: 'Action',

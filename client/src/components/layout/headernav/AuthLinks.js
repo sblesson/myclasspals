@@ -1,10 +1,8 @@
 import React from 'react';
-import { Image, Menu, Form, Input, Icon } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import DropDownMenu from '../dropdownmenu/DropDownMenu';
-
 import './HeaderNav.scss';
-import logo from '../../../assets/images/logo.jpg';
 
 const AuthLinks = (isLoggedIn = false) => {
   console.log(isLoggedIn);
@@ -18,13 +16,6 @@ const AuthLinks = (isLoggedIn = false) => {
           </div>
         </Menu.Item>
         <Menu.Menu className='nav-container'>
-          <Menu.Item className='search-input'>
-            <Form>
-              <Form.Field>
-                <Input placeholder='Search' size='small' action='Go' />
-              </Form.Field>
-            </Form>
-          </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item>
               <Link to='/dashboard'>{'Home'}</Link>

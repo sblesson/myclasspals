@@ -46,7 +46,9 @@
     }
   }
 
-  .create-group-btn {
+  .create-group-btn,
+  .send-invite-btn,
+  .send-post-btn {
     background: var(--primary-btn-color);
     color: floralwhite;
     display: inline-block;
