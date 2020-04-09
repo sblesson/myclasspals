@@ -5,13 +5,23 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import PrivateMessageModal from './modal/CreateGroupModal';
 import LeftNav from '../leftnav/LeftNav';
-import { getAllGroups, acceptUserGroupInvitation } from '../../actions/group';
+import {
+  getAllGroups,
+  acceptUserGroupInvitation,
+  declineUserGroupRequest
+} from '../../actions/group';
 import { Tabs, Table, Tag, Button, Input } from 'antd';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import './Groups.scss';
-const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
+const Groups = ({
+  getAllGroups,
+  acceptUserGroupInvitation,
+  declineUserGroupRequest,
+  group,
+  auth
+}) => {
   useEffect(() => {
     getAllGroups();
   }, [getAllGroups]);
@@ -108,7 +118,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       key: 'createdDate'
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       render: (text, record) => (
         <Dropdown overlay={menu} placement='bottomCenter'>
@@ -163,7 +173,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       key: 'createdDate'
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       render: (text, record, index) => (
         <Button
@@ -183,10 +193,10 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
 
   const requestedGroupsColumns = [
     {
-      title: 'GroupName',
+      title: 'Group Name',
       dataIndex: 'groupName',
       key: 'groupName',
-      render: text => <a>{text}</a>
+      render: (text, record) => <Link to={`/group/${record.id}`}>{text}</Link>
     },
     {
       title: 'Role',
@@ -195,7 +205,7 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       render: role => (
         <span>
           <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role.toUpperCase()}
+            {role ? role.toUpperCase() : null}
           </Tag>
         </span>
       )
@@ -206,52 +216,26 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
       key: 'description'
     },
     {
-      title: 'Member Count',
-      dataIndex: 'memberCount',
-      key: 'memberCount'
+      title: 'Privacy',
+      dataIndex: 'privacy',
+      key: 'privacy'
     },
     {
       title: 'Created Date',
       dataIndex: 'createdDate',
       key: 'createdDate'
     },
-    /*     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      )
-    }, */
     {
-      title: 'Action',
+      title: '',
       key: 'action',
-      render: (text, record) => (
+      render: (text, record, index) => (
         <Button
-          onClick={record => {
-            console.log(record);
-          }}
+          type='link'
+          style={{ marginRight: 16 }}
+          onClick={() => declineUserGroupRequest(record)}
         >
-          Click me
+          Withdraw
         </Button>
-
-        /*     <Dropdown overlay={requestedGroupsMenu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown> */
       )
     }
   ];
@@ -303,11 +287,11 @@ const Groups = ({ getAllGroups, acceptUserGroupInvitation, group, auth }) => {
                     )}
                   </TabPane>
                   <TabPane tab='Pending Requests' key='3'>
-                    {group.requestedGroupsData &&
-                    group.requestedGroupsData.length > 0 ? (
+                    {group.requestedUserGroup &&
+                    group.requestedUserGroup.length > 0 ? (
                       <Table
                         columns={requestedGroupsColumns}
-                        dataSource={group.requestedGroupsData}
+                        dataSource={group.requestedUserGroup}
                         rowKey='id'
                       />
                     ) : (
@@ -337,5 +321,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   getAllGroups,
-  acceptUserGroupInvitation
+  acceptUserGroupInvitation,
+  declineUserGroupRequest
 })(Groups);

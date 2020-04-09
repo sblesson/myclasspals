@@ -51,7 +51,7 @@ const SingleGroup = ({
       render: text => <a>{text}</a>
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       render: (text, record) => (
         <Dropdown overlay={requestToJoinMenu} placement='bottomCenter'>
@@ -138,7 +138,7 @@ const SingleGroup = ({
       key: 'description'
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       render: (text, record) => (
         <Dropdown overlay={membersMenu} placement='bottomCenter'>
@@ -194,7 +194,7 @@ const SingleGroup = ({
       )
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       render: (text, record, index) => (
         <div>

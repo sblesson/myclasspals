@@ -1,12 +1,22 @@
 $mainColor: #fff;
 
 :root {
+  --color-input-search-button: #45b3e0;
+  --bg-input-search-button: rgb(243, 250, 253);
+  --bg-table-header: #fafafa;
+  --bg-post-head: #f5f6f7;
+  --bg-leftnav-sidebar: #f3fafd;
+  --bg-header-gradient1: #45b3e0;
+  --bg-header-gradient2: #45b3e0;
+  --color-header: floralwhite;
+  --color-header-hover: #444;
+  --color-primary-btn-hover: #444;
+  --bg-primary-btn-hover: #87ceeb;
+
   /*--primary-color: #fc6459;*/
   --primary-color: #45b3e0;
-  --primary-color: #45b3e0;
-  //--primary-btn-color: #0892ab;
+  --primary-link-color: #45b3e0;
   --primary-btn-color: #45b3e0;
-  --primary-btn-hover-color: #8cc2e3;
   --secondary-btn-color: #87ceeb;
 
   // --primary-color: #e00083;
@@ -28,15 +38,6 @@ $mainColor: #fff;
   --font-color-1: floralwhite;
   --font-color-2: #444;
   --font-color-3: #757575;
-
-  //--color-rank-1: #62c1d3;
-
-  --color-rank-1: #45b3e0;
-  --color-rank-5: #87ceeb;
-
-  --color-rank-3: #fafafa;
-  --color-rank-4: #f5f6f7;
-  --color-rank-5: #f3fafd;
 
   //additional
   --bg: #1d1e2a !important;
