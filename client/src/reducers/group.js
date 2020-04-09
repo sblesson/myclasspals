@@ -78,11 +78,12 @@ export default function(state = initialState, action) {
         requestedUserGroup: payload.requestedUserGroup
       };
     case SEARCH_ALL_GROUP:
+      console.log(payload);
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        searchResult: payload.userGroup
+        searchResult: payload.userGroupList
       };
     case GET_GROUP:
       return {

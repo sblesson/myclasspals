@@ -8,11 +8,19 @@ import LeftNav from '../leftnav/LeftNav';
 import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
+import { requestToJoinUserGroup } from '../../actions/group';
+
 import { Tabs, Table, Tag, Button, Input } from 'antd';
 
 import { searchGroup } from '../../actions/group';
 
-const DiscoverGroups = ({ loading, group, searchGroup }) => {
+const DiscoverGroups = ({
+  loading,
+  auth,
+  group,
+  searchGroup,
+  requestToJoinUserGroup
+}) => {
   const { TabPane } = Tabs;
   console.log(group);
   const { Search } = Input;
@@ -27,6 +35,32 @@ const DiscoverGroups = ({ loading, group, searchGroup }) => {
       <Menu.Item key='3'>Set as Member</Menu.Item>
     </Menu>
   );
+
+  const requestToJoinUserGroupClickHandler = record => {
+    requestToJoinUserGroup({
+      groupId: record.id,
+      role: 'member',
+      requestorUserId: auth.user.email
+    });
+  };
+
+  const isLoggedInUserJoinedUserGroup = group => {
+    let isUserJoinedGroup = false;
+    let memberArr = [];
+    const userId = JSON.parse(localStorage.getItem('user'))._id;
+
+    if (group && group.userGroupMembers && group.userGroupMembers.length > 0) {
+      memberArr = group.userGroupMembers.filter(item => {
+        return item._id === userId;
+      });
+    }
+    if (memberArr && memberArr.length > 0) {
+      //current user is already part of group
+      isUserJoinedGroup = true;
+    }
+    return isUserJoinedGroup;
+  };
+
   const myGroupsColumns = [
     {
       title: 'Name',
@@ -71,15 +105,43 @@ const DiscoverGroups = ({ loading, group, searchGroup }) => {
       key: 'createdDate'
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
-      render: (text, record) => (
-        <Dropdown overlay={menu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown>
-      )
+      render: (text, group, index) => {
+        //if user part of user group
+
+        let isLoggedInUserJoinedUserGroup = false;
+        let memberArr = [];
+        const userId = JSON.parse(localStorage.getItem('user'))._id;
+
+        if (
+          group &&
+          group.userGroupMembers &&
+          group.userGroupMembers.length > 0
+        ) {
+          memberArr = group.userGroupMembers.filter(item => {
+            return item._id === userId;
+          });
+        }
+        if (memberArr && memberArr.length > 0) {
+          //current user is already part of group
+          isLoggedInUserJoinedUserGroup = true;
+        }
+
+        console.log(isLoggedInUserJoinedUserGroup);
+
+        if (!isLoggedInUserJoinedUserGroup) {
+          return (
+            <Button
+              type='link'
+              style={{ marginRight: 16 }}
+              onClick={() => requestToJoinUserGroupClickHandler(group)}
+            >
+              Join
+            </Button>
+          );
+        }
+      }
     }
   ];
 
@@ -122,13 +184,16 @@ const DiscoverGroups = ({ loading, group, searchGroup }) => {
 };
 
 DiscoverGroups.propTypes = {
-  searchGroup: PropTypes.func.isRequired
+  searchGroup: PropTypes.func.isRequired,
+  requestToJoinUserGroup: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  group: state.group
+  group: state.group,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, {
-  searchGroup
+  searchGroup,
+  requestToJoinUserGroup
 })(DiscoverGroups);

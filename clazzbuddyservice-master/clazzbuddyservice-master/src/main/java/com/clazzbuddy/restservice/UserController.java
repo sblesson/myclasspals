@@ -102,8 +102,10 @@ public class UserController {
 //	}
 	
 	@PostMapping(value="/requestusergroup", produces={"application/json"})
-	public CommonResult requestUserGroup(@RequestBody GroupInvitationAction groupInvitationAction) {
-		CommonResult result  = new CommonResult();
+	public UserResult requestUserGroup(@RequestBody GroupInvitationAction groupInvitationAction) {
+		
+		
+		UserResult result  = new UserResult();
 		try {
 			userService.requestToJoinUserGroup(groupInvitationAction);
 		} catch (Exception e) {

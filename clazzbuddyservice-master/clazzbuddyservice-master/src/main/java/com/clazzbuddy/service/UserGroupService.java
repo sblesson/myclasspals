@@ -112,7 +112,6 @@ public class UserGroupService {
 
 		}
 		logger.info(userGroupSearch.toString());
-		filter.getSchoolZipCode().toString();
 		return mongoTemplate.find(userGroupSearch, UserGroup.class);
 
 	}

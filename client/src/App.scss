@@ -190,7 +190,8 @@ img {
   &:hover,
   &:active,
   &:focus {
-    background: var(--primary-btn-hover-color);
+    color: var(--color-primary-btn-hover);
+    background: var(--bg-primary-btn-hover);
   }
 }
 
@@ -482,7 +483,7 @@ button {
   margin-bottom: 20px;
 }
 .bg-post-head {
-  background-color: var(--color-rank-4);
+  background-color: var(--bg-post-head);
 }
 
 .react-autosuggest__container {
@@ -768,15 +769,15 @@ input[type='search']::-webkit-search-decoration {
 }
 
 .ant-btn-primary.ant-input-search-button {
-  color: var(--color-rank-1);
-  background-color: var(--light-blue);
-  border-color: var(--color-rank-2);
-  //border: 1px solid var(--light-grey-color);
+  color: var(--color-input-search-button);
+  background-color: var(--bg-input-search-button);
+  //border-color: var(--color-rank-2);
+  border: 1px solid var(--color-input-search-button);
 }
 
 thead {
   .ant-table-cell {
-    background: var(--color-rank-3) !important;
+    background: var(--bg-table-header) !important;
     //background: #fff !important;
     font-weight: 400 !important;
     border: none !important;
@@ -787,4 +788,8 @@ thead {
   .ant-table-cell {
     border: none !important;
   }
+}
+
+.ant-btn-link {
+  color: var(--primary-link-color) !important;
 }

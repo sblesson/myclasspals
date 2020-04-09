@@ -47,7 +47,8 @@ const LeftNav = ({
   ) : (
     <div className='leftnav-sidebar'>
       <List disablePadding dense>
-        {leftnav &&
+        {screen !== 'dashboard' &&
+          leftnav &&
           leftnav.length > 0 &&
           leftnav.map((leftNavItem, index) => (
             <React.Fragment key={`${leftNavItem.name}${index}`}>

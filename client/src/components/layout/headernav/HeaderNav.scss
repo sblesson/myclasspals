@@ -27,8 +27,8 @@
     width: 100%;
     background: linear-gradient(
       5deg,
-      var(--primary-color) 0%,
-      var(--primary-color) 100%
+      var(--bg-header-gradient1) 0%,
+      var(--bg-header-gradient1) 100%
     );
     //background: linear-gradient(5deg, #2bb5d0 0%, #178297 100%);
 
@@ -47,7 +47,7 @@
     .logo {
       width: 17rem;
       font-family: fantasy;
-      color: var(--font-color-1);
+      color: var(--color-header);
     }
     .nav-container {
       justify-content: space-between; /*maximize whitespace between elements*/
@@ -63,22 +63,22 @@
       }
 
       .header-icon {
-        color: var(--font-color-1);
+        color: var(--color-header);
       }
 
       a {
         top: 0;
         padding: 0.45rem;
         margin: 0 0.25rem;
-        color: var(--font-color-1);
+        color: var(--color-header);
         &:hover {
-          color: var(--font-color-2);
+          color: var(--color-header-hover);
           text-decoration: none;
         }
       }
       i {
         &:hover {
-          color: var(--font-color-2);
+          color: var(--color-header-hover);
           text-decoration: none;
         }
       }
