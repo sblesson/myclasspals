@@ -145,7 +145,7 @@ export const searchGroup = searchKey => async dispatch => {
 
     dispatch({
       type: SEARCH_ALL_GROUP,
-      payload: response.data.userGroupList[0]
+      payload: response.data
     });
   } catch (err) {
     dispatch({
