@@ -80,7 +80,7 @@ public class UserService {
 		return user;
 	}
 	
-	public void requestToJoinUserGroup(GroupInvitationAction action) {
+	public Users requestToJoinUserGroup(GroupInvitationAction action) {
 		
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 		
@@ -103,6 +103,8 @@ public class UserService {
 		
 		mongoTemplate.save(requestorUser);
 		mongoTemplate.save(userGroup);
+		
+		return requestorUser;
 		
 
 	}

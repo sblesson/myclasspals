@@ -228,9 +228,28 @@ const SingleGroup = ({
               <LeftNav screen='group' id={match.params.id} />
             </div>
 
-            <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
+            <div className='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+              <div>
+                <img
+                  src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
+                  alt='Custom banner image for this neighborhood group.'
+                  data-testid='groups-page-header-image'
+                ></img>
+              </div>
               {group !== null && group.currentGroup ? (
                 <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+                  <TabPane tab='Posts' key='members'>
+                    {group.currentGroup.userGroupMembers &&
+                    group.currentGroup.userGroupMembers.length > 0 ? (
+                      <Table
+                        columns={columns}
+                        dataSource={group.currentGroup.userGroupMembers}
+                        rowKey='_id'
+                      />
+                    ) : (
+                      'Current group member list is empty'
+                    )}
+                  </TabPane>
                   <TabPane tab='Members' key='members'>
                     {group.currentGroup.userGroupMembers &&
                     group.currentGroup.userGroupMembers.length > 0 ? (

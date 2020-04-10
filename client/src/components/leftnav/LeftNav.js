@@ -28,7 +28,7 @@ const LeftNav = ({
       title: group.groupName,
       value: group.id,
       icon: 'fas fa-users',
-      url: '/dashboard?group=' + group.id
+      url: '/dashboard/' + group.id
     }));
   }
   console.log(userGroup);

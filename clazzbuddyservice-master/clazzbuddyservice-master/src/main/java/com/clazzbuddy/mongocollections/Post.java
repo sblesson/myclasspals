@@ -5,27 +5,29 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 
 public class Post {
-	
+
 	@Id
 	private String _id;
 
 	private String message;
-	
-	private Date date;
-	
-	private String catagory;
-	
+
+	private String date;
+
+	private String catagoryId;
+
 	private String subject;
-	
+
 	private String userId;
-	
+
+	private String userName;
+
 	private String groupId;
-	
-	
+
 	private Boolean isPrivate;
-	
+
 	private String endUserId;
-	
+
+	private String endUserName;
 
 	public Boolean getIsPrivate() {
 		return isPrivate;
@@ -51,20 +53,12 @@ public class Post {
 		this.message = message;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
-	}
-
-	public String getCatagory() {
-		return catagory;
-	}
-
-	public void setCatagory(String catagory) {
-		this.catagory = catagory;
 	}
 
 	public String getSubject() {
@@ -83,7 +77,6 @@ public class Post {
 		this.userId = userId;
 	}
 
-
 	public String get_id() {
 		return _id;
 	}
@@ -100,11 +93,28 @@ public class Post {
 		this.groupId = groupId;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
 
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
+	public String getEndUserName() {
+		return endUserName;
+	}
 
-	
-	
-	
-	
+	public void setEndUserName(String endUserName) {
+		this.endUserName = endUserName;
+	}
+
+	public String getCatagoryId() {
+		return catagoryId;
+	}
+
+	public void setCatagoryId(String catagoryId) {
+		this.catagoryId = catagoryId;
+	}
+
 }

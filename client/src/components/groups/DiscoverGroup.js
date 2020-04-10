@@ -40,7 +40,8 @@ const DiscoverGroups = ({
     requestToJoinUserGroup({
       groupId: record.id,
       role: 'member',
-      requestorUserId: auth.user.email
+      requestorUserId: auth.user.email,
+      origin: 'discovergroup'
     });
   };
 
@@ -130,7 +131,10 @@ const DiscoverGroups = ({
 
         console.log(isLoggedInUserJoinedUserGroup);
 
-        if (!isLoggedInUserJoinedUserGroup) {
+        if (
+          !isLoggedInUserJoinedUserGroup &&
+          !group.isRequestUserGroupSuccess
+        ) {
           return (
             <Button
               type='link'

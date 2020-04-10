@@ -11,8 +11,7 @@ const AuthLinks = (isLoggedIn = false) => {
       <Menu borderless className='top-menu' fixed='top'>
         <Menu.Item header className='logo'>
           <div className='column docs-icon-set-column'>
-            <i aria-hidden='true' className='braille big icon'></i>
-            <p className='name'>clazzbuddy</p>
+            <p className='name'>ZZ</p>
           </div>
         </Menu.Item>
         <Menu.Menu className='nav-container'>
@@ -38,8 +37,7 @@ const AuthLinks = (isLoggedIn = false) => {
       <Menu borderless className='top-menu' fixed='top'>
         <Menu.Item header className='logo'>
           <div class='column docs-icon-set-column'>
-            <i aria-hidden='true' class='braille big icon'></i>
-            <p class='name'>clazzbuddy</p>
+            <p class='name'>ZZ</p>
           </div>
         </Menu.Item>
         <Menu.Menu className='nav-container'>

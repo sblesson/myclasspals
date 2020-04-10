@@ -3,26 +3,28 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import MessageItem from './MessageItem';
-import { getProfiles } from '../../actions/profile';
+import { searchPost } from '../../actions/post';
 import { FormOutlined } from '@ant-design/icons';
+import PrivateMessageModal from './modal/PrivateMessageModal';
 
 import { Tab, Header, List, Segment } from 'semantic-ui-react';
 
 import './Messages.scss';
-const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
+const Messages = ({ searchPost, post: { posts, loading }, auth }) => {
   useEffect(() => {
-    getProfiles();
-  }, [getProfiles]);
-  console.log(profiles);
+    searchPost({ userId: auth.user._id, isPrivate: true });
+  }, [searchPost, auth.user._id]);
+
+  console.log(posts);
   const getPanes = () => {
     let panes = [];
-    if (profiles.length > 0) {
-      panes = profiles.map(profile => ({
-        menuItem: profile.user.name,
+    if (posts && posts.length > 0) {
+      panes = posts.map(message => ({
+        menuItem: message.message,
         render: () => (
-          <Tab.Pane>
+          <Tab.Pane key={message._id}>
             {' '}
-            <MessageItem key={profile._id} profile={profile} />
+            <MessageItem key={message._id} message={message} />
           </Tab.Pane>
         )
       }));
@@ -45,6 +47,7 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
             <div as='h4' className='message-head-title message-head-link'>
               <FormOutlined className='message-head-icon' />
               Compose
+              <PrivateMessageModal />
             </div>
           </div>
 
@@ -64,12 +67,13 @@ const Messages = ({ getProfiles, profile: { profiles, loading } }) => {
 };
 
 Messages.propTypes = {
-  getProfiles: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
+  searchPost: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile
+  post: state.post,
+  auth: state.auth
 });
 
-export default connect(mapStateToProps, { getProfiles })(Messages);
+export default connect(mapStateToProps, { searchPost })(Messages);

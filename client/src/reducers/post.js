@@ -10,7 +10,9 @@ import {
   REMOVE_COMMENT,
   REMOVE_COMMENT_SINGLE_POST,
   GET_POST_CATEGORIES,
-  REMOVE_COMMENT_ERROR
+  REMOVE_COMMENT_ERROR,
+  SEARCH_POST_BY_GROUP_ID,
+  SEARCH_POST
 } from '../actions/types';
 
 const initialState = {
@@ -26,6 +28,18 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case GET_POSTS:
+      return {
+        ...state,
+        posts: payload,
+        loading: false
+      };
+    case SEARCH_POST_BY_GROUP_ID:
+      return {
+        ...state,
+        posts: payload,
+        loading: false
+      };
+    case SEARCH_POST:
       return {
         ...state,
         posts: payload,

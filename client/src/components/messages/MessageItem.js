@@ -2,28 +2,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List, Button } from 'semantic-ui-react';
-
-const ProfileItem = ({
-  profile: {
-    user: { _id, name },
-    status
-  }
-}) => {
+const MessageItem = ({ message }) => {
   return (
-    <List.Item>
+    <List.Item key={message._id}>
       <List.Content>
         <List.Header>
-          <Link to={`/profile/${_id}`}>{name}</Link>
+          <Link to={`/profile/${message.userId}`}>{message.userName}</Link>
         </List.Header>
+        <List.Description>{message.subject}</List.Description>
 
-        <List.Description>{status}</List.Description>
+        <List.Description>{message.message}</List.Description>
       </List.Content>
     </List.Item>
   );
 };
 
-ProfileItem.propTypes = {
-  profile: PropTypes.object.isRequired
+MessageItem.propTypes = {
+  message: PropTypes.object.isRequired
 };
 
-export default ProfileItem;
+export default MessageItem;

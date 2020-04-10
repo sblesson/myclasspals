@@ -12,61 +12,44 @@ import { Tabs } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addPost } from '../../../actions/post';
+import { addPost, searchPostByGroupId } from '../../../actions/post';
 import { DatePicker, TimePicker } from 'antd';
 
 import './PostModal.scss';
+import { fontWeight } from '@material-ui/system';
 
-const PostModal = ({ addPost, history, categories }) => {
-  const [text, setText] = useState('');
+const PostModal = ({
+  addPost,
+  history,
+  categories,
+  currentGroup,
+  auth,
+  searchPostByGroupId
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [selectedGroup, setSelectedGroup] = useState(undefined);
+  const [categoryId, setSelectedCategory] = useState(0);
 
   const { TabPane } = Tabs;
   const [formData, setFormData] = useState({
     subject: '',
     message: '',
-    category: '1',
-    schoolId: '1',
-    userid: '3' //get userid from db
+    categoryId: 'General',
+    groupId: currentGroup.id
   });
+
+  formData.userId = auth.user._id;
+  formData.userName = auth.user.name;
+  console.log(formData);
+
   function callback(key) {
     console.log(key);
   }
   console.log('inside post modal' + categories);
   const [modal, setModal] = useState(false);
 
-  const [category, setSelectedCategory] = useState('');
-
   const toggle = () => setModal(!modal);
 
   const { Option } = Select;
-  const all_groups = [
-    {
-      id: 'userId',
-      group_id: 'groupID room 34',
-      name: 'room 34',
-      type: 'inner'
-    },
-    {
-      id: 'userId',
-      group_id: 'groupID grade 6',
-      name: 'grade 6 + room 34',
-      type: 'outer'
-    },
-    {
-      id: 'userId',
-      group_id: 'groupID sunshine',
-      name: 'sunshine',
-      type: 'inner'
-    },
-    {
-      id: 'userId',
-      group_id: 'groupID prek',
-      name: 'pre-k + sunshine',
-      type: 'outer'
-    }
-  ];
 
   console.log(categories);
   const onChange = e =>
@@ -81,12 +64,8 @@ const PostModal = ({ addPost, history, categories }) => {
     setActiveIndex(newIndex);
   };
 
-  const onGroupChange = value => {
-    setSelectedGroup(value);
-  };
-
   const onCategoryChange = value => {
-    setSelectedCategory(value);
+    setFormData({ ...formData, ['categoryId']: categories[value].title });
   };
 
   const uploadProps = {
@@ -131,11 +110,10 @@ const PostModal = ({ addPost, history, categories }) => {
   };
 
   const postTab1Categories = categories.map(function(topic, index) {
-    if(topic === 'divider'){
-      
+    if (topic === 'divider') {
     }
     return <Option key={index}>{topic.title}</Option>;
-  })
+  });
 
   const MessagePostForm = (
     <Form>
@@ -147,20 +125,9 @@ const PostModal = ({ addPost, history, categories }) => {
           onChange={onCategoryChange}
         >
           {categories.map(function(topic, index) {
-            if(topic === 'divider'){}
+            if (topic === 'divider') {
+            }
             return <Option key={index}>{topic.title}</Option>;
-          })}
-        </Select>
-      </Form.Group>
-      <Form.Group className='post-form'>
-        <Select
-          allowClear
-          style={{ width: '100%' }}
-          placeholder='Choose group'
-          onChange={onGroupChange}
-        >
-          {all_groups.map(function(group, index) {
-            return <Option key={index}>{group.name}</Option>;
           })}
         </Select>
       </Form.Group>
@@ -206,18 +173,6 @@ const PostModal = ({ addPost, history, categories }) => {
           {categories.map(function(topic, index) {
             console.log(topic, index);
             return <Option key={index}>{topic.title}</Option>;
-          })}
-        </Select>
-      </Form.Group>
-      <Form.Group className='post-form'>
-        <Select
-          allowClear
-          style={{ width: '100%' }}
-          placeholder='Choose group'
-          onChange={onGroupChange}
-        >
-          {all_groups.map(function(group, index) {
-            return <Option key={index}>{group.name}</Option>;
           })}
         </Select>
       </Form.Group>
@@ -296,7 +251,9 @@ const PostModal = ({ addPost, history, categories }) => {
         </div>
       </div>
       <Modal isOpen={modal} fade={false} toggle={toggle}>
-        {/*  <ModalHeader toggle={toggle}> </ModalHeader> */}
+        <ModalHeader toggle={toggle}>
+          Post to {currentGroup.groupName}
+        </ModalHeader>
         <ModalBody>
           <Tabs defaultActiveKey='1' onChange={callback}>
             <TabPane tab='Speak Up' key='1'>
@@ -316,6 +273,9 @@ const PostModal = ({ addPost, history, categories }) => {
             onClick={e => {
               e.preventDefault();
               addPost(formData, history);
+              searchPostByGroupId({
+                groupId: currentGroup.id
+              });
             }}
           >
             Post
@@ -332,9 +292,13 @@ PostModal.propTypes = {
 
 const mapDispatchToProps = state => ({
   hideModal: state.hideModal,
-  categories: state.post.categories
+  categories: state.post.categories,
+  currentGroup: state.group.currentGroup,
+  auth: state.auth
 });
 
-export default connect(mapDispatchToProps, { addPost, mapDispatchToProps })(
-  withRouter(PostModal)
-);
+export default connect(mapDispatchToProps, {
+  addPost,
+  searchPostByGroupId,
+  mapDispatchToProps
+})(withRouter(PostModal));
