@@ -133,6 +133,13 @@ const Posts = ({
           <LeftNav />
         </div>
         <div className='col-xs-6 col-sm-6 col-md-8 col-lg-6'>
+          <div>
+            <img
+              src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
+              alt='Custom banner image for this neighborhood group.'
+              data-testid='groups-page-header-image'
+            ></img>
+          </div>
           <div className='feed-container'>
             <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
               <TabPane tab='My Groups' key='1'>
