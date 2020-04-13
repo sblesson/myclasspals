@@ -73,7 +73,7 @@ const PostItem = ({
           </List.Description>
         </List.Content>
       </List.Item>
-
+      {/* 
       {showActions && (
         <Fragment>
           <Menu>
@@ -132,7 +132,7 @@ const PostItem = ({
           )}
           <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
         </Fragment>
-      )}
+      )} */}
     </Segment>
   );
 };

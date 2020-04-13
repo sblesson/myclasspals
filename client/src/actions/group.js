@@ -237,10 +237,11 @@ export const requestToJoinUserGroup = requestData => async dispatch => {
     );
 
     console.log(res);
+    res.data.origin = requestData.origin;
 
     dispatch({
       type: REQUEST_JOIN_USER_GROUP,
-      payload: res
+      payload: res.data
     });
 
     dispatch(setAlert('User added to group', 'success'));

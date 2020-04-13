@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
-import { getPosts, getPostCategories } from '../../actions/post';
 import LeftNav from '../leftnav/LeftNav';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import { FixedSizeList as List } from 'react-window';
@@ -16,18 +15,29 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { StickyContainer, Sticky } from 'react-sticky';
 import CreateGroupModal from '../groups/modal/CreateGroupModal';
-
+import { getPosts, getPostCategories, searchPost } from '../../actions/post';
+import { getGroupDetails } from '../../actions/group';
 import './Posts.scss';
 const Posts = ({
   auth,
   getPosts,
   getPostCategories,
-  post: { posts, loading }
+  post: { posts, loading },
+  match,
+  getGroupDetails,
+  group,
+  searchPost
 }) => {
   useEffect(() => {
-    getPosts();
+    getGroupDetails(match.params.id);
+  }, [getGroupDetails, match.params.id]);
+
+  useEffect(() => {
+    searchPost({ groupId: match.params.id });
     getPostCategories();
-  }, [getPosts]);
+  }, [searchPost, match.params.id]);
+
+  console.log(match.params.id);
   const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
   const { Search } = Input;
 
@@ -50,7 +60,8 @@ const Posts = ({
   const getPostUrl = (rows, start) => `/api/posts?&rows=${rows}&start=${start}`;
 
   const Row = ({ index, style }) => {
-    const item = items[index];
+    const item = posts[index];
+    console.log(item);
     if (item) {
       return <PostItem key={item._id} post={item} />;
     }
@@ -102,8 +113,10 @@ const Posts = ({
   const operations = (
     <Search
       placeholder='Seach post'
-      onSearch={value => console.log(value)}
-      style={{ width: 300, marginBottom: 20 }}
+      onSearch={value =>
+        searchPost({ groupId: group.currentGroup.id, keyword: value })
+      }
+      style={{ width: 300, marginTop: 8 }}
       enterButton
     />
   );
@@ -142,34 +155,44 @@ const Posts = ({
           </div>
           <div className='feed-container'>
             <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
-              <TabPane tab='My Groups' key='1'>
-                <div id='main' className='feed-wrapper'>
-                  <PostModal />
-                  <AutoSizer>
-                    {({ height, width }) => (
-                      <InfiniteLoader
-                        isItemLoaded={isItemLoaded}
-                        loadMoreItems={loadMoreItems}
-                        itemCount={1000}
-                      >
-                        {({ onItemsRendered, ref }) => (
-                          <List
-                            className='List'
-                            height={height}
-                            itemCount={1000}
-                            itemSize={35}
-                            width={width}
-                            ref={ref}
-                            onItemsRendered={onItemsRendered}
-                          >
-                            {Row}
-                          </List>
-                        )}
-                      </InfiniteLoader>
-                    )}
-                  </AutoSizer>
-                </div>
-              </TabPane>
+              {group && group.currentGroup && group.currentGroup.groupName ? (
+                <TabPane tab={group.currentGroup.groupName} key='1'>
+                  <div id='main' className='feed-wrapper'>
+                    <PostModal />
+                    {posts && posts.length > 0
+                      ? posts.map(item => (
+                          <PostItem key={item._id} post={item} />
+                        ))
+                      : 'There are currently no post for this group.'}
+
+                    {/*                     <AutoSizer>
+                      {({ height, width }) => (
+                        <InfiniteLoader
+                          isItemLoaded={isItemLoaded}
+                          loadMoreItems={loadMoreItems}
+                          itemCount={1000}
+                        >
+                          {({ onItemsRendered, ref }) => (
+                            <List
+                              className='List'
+                              height={height}
+                              itemCount={1000}
+                              itemSize={35}
+                              width={width}
+                              ref={ref}
+                              onItemsRendered={onItemsRendered}
+                            >
+                              {Row}
+                            </List>
+                          )}
+                        </InfiniteLoader>
+                      )}
+                    </AutoSizer> */}
+                  </div>
+                </TabPane>
+              ) : (
+                ''
+              )}
             </Tabs>
           </div>
         </div>
@@ -206,10 +229,13 @@ Posts.propTypes = {
 
 const mapStateToProps = state => ({
   post: state.post,
-  auth: state.auth
+  auth: state.auth,
+  group: state.group
 });
 
 export default connect(mapStateToProps, {
   getPosts,
-  getPostCategories
+  getPostCategories,
+  getGroupDetails,
+  searchPost
 })(Posts);

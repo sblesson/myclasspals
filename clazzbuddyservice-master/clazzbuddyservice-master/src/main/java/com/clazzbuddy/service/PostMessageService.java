@@ -1,5 +1,6 @@
 package com.clazzbuddy.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -18,8 +19,10 @@ public class PostMessageService {
 	@Autowired
 	MongoTemplate mongoTemplate;
 
-	public void createPost(Post post) {
-		mongoTemplate.insert(post);
+	public Post createPost(Post post) {
+		Date current = new Date();
+		post.setDate(current.toString());
+		return mongoTemplate.insert(post);
 	}
 
 	public List<Post> searchPost(PostSearchQuery postSearchQuery) {
@@ -29,8 +32,15 @@ public class PostMessageService {
 			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase(), "i"));
 		}
 
-		postListQuery.addCriteria(Criteria.where("groupId").is(postSearchQuery.getGroupid()));
-
+		if ((postSearchQuery.getPrivateMessage() != null) && (postSearchQuery.getPrivateMessage() == true)) {
+			postListQuery.addCriteria(Criteria.where("endUserId").is(postSearchQuery.getUserId()));
+		}
+		if (postSearchQuery.getGroupId() != null) {
+			postListQuery.addCriteria(Criteria.where("groupId").is(postSearchQuery.getGroupId()));
+		}
+		if (postSearchQuery.getCatagoryId() != null) {
+			postListQuery.addCriteria(Criteria.where("catagoryId").is(postSearchQuery.getCatagoryId()));
+		}
 		if (postSearchQuery.getLastseen() != null) {
 			ObjectId objID = new ObjectId(postSearchQuery.getLastseen());
 			postListQuery.addCriteria(Criteria.where("_id").gt(objID));

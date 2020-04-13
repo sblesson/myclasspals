@@ -27,7 +27,8 @@ const initialState = {
   currentGroup: null,
   isGroupAdmin: false,
   loading: true,
-  error: {}
+  error: {},
+  isRequestUserGroupSuccess: false
 };
 
 const isLoggedInUserGroupAdmin = userGroupMembers => {
@@ -109,13 +110,33 @@ export default function(state = initialState, action) {
         loading: false
       };
     case REQUEST_JOIN_USER_GROUP:
-      return {
-        ...state,
-        userGroup: payload.user.userGroup,
-        pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
-        requestedUserGroup: payload.user.requestedUserGroup,
-        loading: false
-      };
+      let isRequestUserGroupSuccess = false;
+
+      if (payload && payload.origin === 'discovergroup') {
+        //searchResult = payload;
+        isRequestUserGroupSuccess = true;
+
+        return {
+          ...state,
+
+          ...state,
+          userGroup: payload.user.userGroup,
+          pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
+          requestedUserGroup: payload.user.requestedUserGroup,
+          loading: false,
+          isRequestUserGroupSuccess: true
+        };
+      } else {
+        return {
+          ...state,
+          userGroup: payload.user.userGroup,
+          pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
+          requestedUserGroup: payload.user.requestedUserGroup,
+          loading: false,
+          isRequestUserGroupSuccess: isRequestUserGroupSuccess
+        };
+      }
+
     case APPROVE_GROUP_REQUEST:
       return {
         ...state,

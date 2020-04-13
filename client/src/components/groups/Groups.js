@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
+import moment from 'moment';
+
 import PrivateMessageModal from './modal/CreateGroupModal';
 import LeftNav from '../leftnav/LeftNav';
 import {

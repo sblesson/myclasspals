@@ -13,7 +13,9 @@ import {
   ADD_COMMENT_SINGLE_POST,
   REMOVE_COMMENT_SINGLE_POST,
   REMOVE_COMMENT_ERROR,
-  SEND_PRIVATE_MESSAGE
+  SEND_PRIVATE_MESSAGE,
+  SEARCH_POST_BY_GROUP_ID,
+  SEARCH_POST
 } from './types';
 
 // Get posts
@@ -27,8 +29,8 @@ export const getPosts = () => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
@@ -112,7 +114,13 @@ export const addPost = formData => async dispatch => {
   };
 
   try {
-    const res = await axios.post('/api/posts', formData, config);
+    const res = await axios.post(
+      'http://localhost:8080/post/createpost',
+      formData,
+      config
+    );
+
+    console.log(res);
 
     dispatch({
       type: ADD_POST,
@@ -122,12 +130,68 @@ export const addPost = formData => async dispatch => {
     dispatch(setAlert('Post Created', 'success'));
   } catch (err) {
     dispatch({
-      type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
 
+// Search post by groupId
+export const searchPostByGroupId = formData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/post/searchpost',
+      formData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: SEARCH_POST_BY_GROUP_ID,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+// Search post by groupId
+export const searchPost = formData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post(
+      'http://localhost:8080/post/searchpost',
+      formData,
+      config
+    );
+
+    console.log(res);
+
+    dispatch({
+      type: SEARCH_POST,
+      payload: res.data.post
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
 // Add post
 export const sendPrivateMessage = formData => async dispatch => {
   const config = {
@@ -137,7 +201,11 @@ export const sendPrivateMessage = formData => async dispatch => {
   };
 
   try {
-    const res = await axios.post('/api/posts', formData, config);
+    const res = await axios.post(
+      'http://localhost:8080/post/createpost',
+      formData,
+      config
+    );
 
     dispatch({
       type: SEND_PRIVATE_MESSAGE,
@@ -147,8 +215,8 @@ export const sendPrivateMessage = formData => async dispatch => {
     dispatch(setAlert('Post Created', 'success'));
   } catch (err) {
     dispatch({
-      type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };

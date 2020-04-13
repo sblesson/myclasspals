@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.clazzbuddy.mongocollections.Post;
 import com.clazzbuddy.restmodel.CommonResult;
+import com.clazzbuddy.restmodel.PostResult;
 import com.clazzbuddy.restmodel.PostSearchQuery;
 import com.clazzbuddy.restmodel.PostSearchResult;
 import com.clazzbuddy.service.PostMessageService;
 
 @RestController
-@RequestMapping("/postmessage")
+@RequestMapping("/post")
 @CrossOrigin(origins = "*")
 public class PostMessagesController {
 
@@ -26,10 +27,10 @@ public class PostMessagesController {
 
 	@PostMapping(value="/createpost", produces={"application/json"})
 	public CommonResult createPost(@RequestBody Post post) {
-		CommonResult result = new CommonResult();
+		PostResult result = new PostResult();
 		
 		try {
-			postService.createPost(post);
+			result.setPost(postService.createPost(post));
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

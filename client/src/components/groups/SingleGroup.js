@@ -228,7 +228,7 @@ const SingleGroup = ({
               <LeftNav screen='group' id={match.params.id} />
             </div>
 
-            <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
+            <div className='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
               <div>
                 <img
                   src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'

@@ -107,7 +107,7 @@ public class UserController {
 		
 		UserResult result  = new UserResult();
 		try {
-			userService.requestToJoinUserGroup(groupInvitationAction);
+			result.setUser(userService.requestToJoinUserGroup(groupInvitationAction));
 		} catch (Exception e) {
 			result.setErrorCode(1);
 			result.setException(e.toString());

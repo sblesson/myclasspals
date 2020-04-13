@@ -852,6 +852,12 @@ thead {
   }
 }
 
+.ui.menu {
+  min-height: 2.2em !important;
+  font-weight: bold !important;
+  font-size: 12px;
+}
+
 .ant-table-tbody {
   .ant-table-cell {
     border: none !important;

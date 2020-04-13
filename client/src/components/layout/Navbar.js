@@ -14,7 +14,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   return (
     <nav className='navbar'>
       <h1>
-        <Link to='/'>clazzbuddy</Link>
+        <Link to='/'></Link>
       </h1>
       {!loading && (
         <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
