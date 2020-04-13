@@ -23,32 +23,28 @@ const Posts = ({
   getPosts,
   getPostCategories,
   post: { posts, loading },
-  match,
   getGroupDetails,
   group,
   searchPost
 }) => {
   useEffect(() => {
-    getGroupDetails(match.params.id);
-  }, [getGroupDetails, match.params.id]);
+    let user = null;
 
-  useEffect(() => {
-    searchPost({ groupId: match.params.id });
+    try {
+      user = JSON.parse(auth.user);
+    } catch (e) {
+      // You can read e for more info
+      // Let's assume the error is that we already have parsed the auth.user
+      // So just return that
+      user = auth.user;
+    }
+    const groupId = user.userGroup[0].id;
+    getGroupDetails(groupId);
+    searchPost({ groupId: groupId });
     getPostCategories();
-  }, [searchPost, match.params.id]);
+  }, [getGroupDetails, searchPost, auth.user]);
 
-  console.log(match.params.id);
-  const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
   const { Search } = Input;
-
-  let userGroupRadioOptions = [];
-  if (userGroup && userGroup.length > 0) {
-    userGroupRadioOptions = userGroup.map(group => ({
-      label: group.groupName,
-      value: group.id
-    }));
-  }
-  console.log(userGroup);
 
   const { TabPane } = Tabs;
 
