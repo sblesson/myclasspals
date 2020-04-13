@@ -273,9 +273,8 @@ const PostModal = ({
             onClick={e => {
               e.preventDefault();
               addPost(formData, history);
-              searchPostByGroupId({
-                groupId: currentGroup.id
-              });
+              setModal(false);
+              setActiveIndex(0);
             }}
           >
             Post

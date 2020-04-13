@@ -1,7 +1,17 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Tabs, Input, Radio, Card } from 'antd';
+import {
+  Tabs,
+  Input,
+  Radio,
+  Card,
+  List,
+  Typography,
+  Divider,
+  Row,
+  Col
+} from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,7 +20,7 @@ import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
 import LeftNav from '../leftnav/LeftNav';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
-import { FixedSizeList as List } from 'react-window';
+import { FixedSizeList } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -22,33 +32,52 @@ const Posts = ({
   auth,
   getPosts,
   getPostCategories,
-  post: { posts, loading },
-  match,
+  post: { posts, categories, loading },
   getGroupDetails,
   group,
-  searchPost
+  searchPost,
+  match
 }) => {
   useEffect(() => {
-    getGroupDetails(match.params.id);
-  }, [getGroupDetails, match.params.id]);
+    let user = null;
+    let groupId = null;
 
-  useEffect(() => {
-    searchPost({ groupId: match.params.id });
+    if (match && match.params && match.params.id) {
+      groupId = match.params.id;
+    } else {
+      //first time groupId is not passed in url param.
+      //So get groupId from user group first item
+      try {
+        user = JSON.parse(auth.user);
+      } catch (e) {
+        // You can read e for more info
+        // Let's assume the error is that we already have parsed the auth.user
+        // So just return that
+        user = auth.user;
+      }
+      groupId = user.userGroup[0].id;
+    }
+    getGroupDetails(groupId);
+    searchPost({ groupId: groupId });
     getPostCategories();
-  }, [searchPost, match.params.id]);
+  }, [getGroupDetails, searchPost, auth.user, match]);
 
-  console.log(match.params.id);
-  const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
+  const [filterPanel, setFilterPanel] = useState(false);
+
+  const toggleFilterPanel = () => setFilterPanel(!filterPanel);
+
+  /*   useEffect(() => {
+    const groupId = match.param.id;
+    getGroupDetails(groupId);
+    searchPost({ groupId: groupId });
+    getPostCategories();
+  }, [
+    getGroupDetails,
+    searchPost,
+    match && match.param && match.param.id ? match.param.id : null
+  ]); */
+
   const { Search } = Input;
-
-  let userGroupRadioOptions = [];
-  if (userGroup && userGroup.length > 0) {
-    userGroupRadioOptions = userGroup.map(group => ({
-      label: group.groupName,
-      value: group.id
-    }));
-  }
-  console.log(userGroup);
 
   const { TabPane } = Tabs;
 
@@ -109,14 +138,14 @@ const Posts = ({
       )}
     </Sticky>
   );
-
+  //if you use search in future, keep it
   const operations = (
     <Search
       placeholder='Seach post'
       onSearch={value =>
         searchPost({ groupId: group.currentGroup.id, keyword: value })
       }
-      style={{ width: 300, marginTop: 8 }}
+      style={{ width: 300, top: '0px' }}
       enterButton
     />
   );
@@ -137,16 +166,61 @@ const Posts = ({
     state.value = e.target.value;
   };
 
+  const data = [
+    'Racing car sprays burning fuel into crowd.',
+    'Japanese princess to wed commoner.',
+    'Australian walks 100km after outback crash.',
+    'Man charged over missing wedding girl.',
+    'Los Angeles battles huge wildfires.'
+  ];
   return loading ? (
     <Spinner />
   ) : (
     <Fragment>
       <div className='row'>
-        <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+        <div className='col-xs-1 col-sm-3 col-md-3 col-lg-3'>
           <LeftNav />
         </div>
         <div className='col-xs-6 col-sm-6 col-md-8 col-lg-6'>
-          <div>
+          <div className='filter-actions' onClick={toggleFilterPanel}>
+            <i className='fas fa-filter filter-icon'></i>
+            <span className='filter-label'> FILTER</span>
+          </div>
+          {filterPanel && (
+            <div className='filter-panel'>
+              <div className='row'>
+                <div className='col-xs-1 col-sm-1 col-md-4 col-lg-4'>
+                  <List
+                    size='small'
+                    header={<div>POST DATE</div>}
+                    bordered
+                    dataSource={data}
+                    renderItem={item => <List.Item>{item}</List.Item>}
+                  />
+                </div>
+                <div className='col-xs-1 col-sm-1 col-md-4 col-lg-4'>
+                  <List
+                    size='small'
+                    header={<div>CATEGORY</div>}
+                    bordered
+                    dataSource={categories}
+                    renderItem={item => <List.Item>{item.title}</List.Item>}
+                  />
+                </div>
+                <div className='col-xs-1 col-sm-1 col-md-4 col-lg-4'>
+                  <List
+                    size='small'
+                    header={<div>TYPE</div>}
+                    bordered
+                    dataSource={data}
+                    renderItem={item => <List.Item>{item}</List.Item>}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div style={{ marginTop: '20px' }}>
             <img
               src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
               alt='Custom banner image for this neighborhood group.'
@@ -154,7 +228,7 @@ const Posts = ({
             ></img>
           </div>
           <div className='feed-container'>
-            <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+            <Tabs defaultActiveKey='1' /* tabBarExtraContent={operations} */>
               {group && group.currentGroup && group.currentGroup.groupName ? (
                 <TabPane tab={group.currentGroup.groupName} key='1'>
                   <div id='main' className='feed-wrapper'>
@@ -173,7 +247,7 @@ const Posts = ({
                           itemCount={1000}
                         >
                           {({ onItemsRendered, ref }) => (
-                            <List
+                            <FixedSizeList
                               className='List'
                               height={height}
                               itemCount={1000}
@@ -183,7 +257,7 @@ const Posts = ({
                               onItemsRendered={onItemsRendered}
                             >
                               {Row}
-                            </List>
+                            </FixedSizeList>
                           )}
                         </InfiniteLoader>
                       )}
@@ -196,7 +270,7 @@ const Posts = ({
             </Tabs>
           </div>
         </div>
-        <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+        <div className='col-xs-2 col-sm-2 col-md-2 col-lg-2'>
           <CreateGroupModal />
           {/* 
           <Card

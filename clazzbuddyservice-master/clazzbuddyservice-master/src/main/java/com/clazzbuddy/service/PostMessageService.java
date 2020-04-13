@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -45,7 +46,8 @@ public class PostMessageService {
 			ObjectId objID = new ObjectId(postSearchQuery.getLastseen());
 			postListQuery.addCriteria(Criteria.where("_id").gt(objID));
 		}
-		postListQuery.limit(10);
+		postListQuery.with(new Sort(Sort.Direction.DESC, "_id"));
+		postListQuery.limit(30);
 		List<Post> posts = mongoTemplate.find(postListQuery, Post.class);
 		return posts;
 

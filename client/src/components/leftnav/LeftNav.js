@@ -77,6 +77,7 @@ const LeftNav = ({
                   depth={depth}
                   expanded={expanded}
                   item={leftNavItem}
+                  index={index}
                 />
               )}
             </React.Fragment>

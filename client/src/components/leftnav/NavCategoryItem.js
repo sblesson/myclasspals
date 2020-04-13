@@ -1,6 +1,8 @@
 import React from 'react';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import MenuItem from '@material-ui/core/MenuItem';
+
+//import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -12,9 +14,11 @@ const SideNavItem = ({
   depth = 0,
   expanded,
   item,
+  index,
   ...rest
 }) => {
   const [collapsed, setCollapsed] = React.useState(true);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const { title, icon, url, items, Icon, onClick: onClickProp } = item;
 
@@ -23,6 +27,9 @@ const SideNavItem = ({
   };
 
   const onClick = e => {
+    console.log(index);
+    setSelectedIndex(index);
+
     if (Array.isArray(items)) {
       toggleCollapse();
     }
@@ -48,12 +55,13 @@ const SideNavItem = ({
 
   return (
     <div>
-      <ListItem
+      <MenuItem
         className='leftnav-sidebar-item'
         onClick={onClick}
         button
         dense
         {...rest}
+        selected={selectedIndex == index}
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
@@ -67,7 +75,7 @@ const SideNavItem = ({
           </div>
         </div>
         {expandIcon}
-      </ListItem>
+      </MenuItem>
       <Collapse in={!collapsed} timeout='auto' unmountOnExit>
         {Array.isArray(items) ? (
           <List disablePadding dense>

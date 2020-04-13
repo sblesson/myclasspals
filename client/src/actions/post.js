@@ -122,6 +122,8 @@ export const addPost = formData => async dispatch => {
 
     console.log(res);
 
+    
+
     dispatch({
       type: ADD_POST,
       payload: res.data
