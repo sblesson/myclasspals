@@ -822,13 +822,34 @@ input[type='search']::-webkit-search-decoration {
   border: 1px solid var(--color-input-search-button);
 }
  */
+
+//Antdesign component css
+
 .ant-btn-primary.ant-input-search-button {
-  border: 0;
-  border-top-right-radius: 27px;
+  height: 22px;
+  //border: 1px solid var(--bg-leftnav-sidebar);
+
+  /* border-top-right-radius: 27px;
   border-bottom-right-radius: 27px;
   border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  background-image: -webkit-gradient(
+  border-bottom-left-radius: 8px; */
+  color: var(--bg-gradient1);
+  background: var(--bg-leftnav-sidebar);
+
+  border: none;
+  border-radius: 0 2px 2px 0;
+  bottom: 0;
+  cursor: pointer;
+  display: block;
+  line-height: 1;
+  padding: 0 10px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  z-index: 1;
+
+  /*   background-image: -webkit-gradient(
     linear,
     left top,
     right top,
@@ -839,9 +860,15 @@ input[type='search']::-webkit-search-decoration {
     90deg,
     var(--bg-gradient1),
     var(--bg-gradient2)
-  );
-  padding: 0 22px 0 18px;
-  color: floralwhite;
+  ); */
+  // padding: 0 22px 0 18px;
+}
+
+.ant-input-wrapper.ant-input-group {
+  .ant-input {
+    height: 22px;
+    font-size: 0.8em;
+  }
 }
 thead {
   .ant-table-cell {
@@ -873,4 +900,9 @@ thead {
 }
 .ant-tabs-ink-bar {
   background: var(--color-active-tab-border) !important;
+}
+
+///////////
+.filter {
+  background: url('/assets/images/filter.svg');
 }

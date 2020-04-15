@@ -17,6 +17,7 @@ const SideNavItem = ({
   ...rest
 }) => {
   const [collapsed, setCollapsed] = React.useState(true);
+  const [selectedIndex, setSelectedIndex] = React.useState(false);
 
   const { label, icon, url, items, Icon, onClick: onClickProp } = item;
 
@@ -29,6 +30,7 @@ const SideNavItem = ({
       toggleCollapse();
     }
     if (onClickProp) {
+      console.log(item);
       onClickProp(e, item);
     }
   };
@@ -56,6 +58,7 @@ const SideNavItem = ({
         button
         dense
         {...rest}
+        selected={selectedIndex}
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
