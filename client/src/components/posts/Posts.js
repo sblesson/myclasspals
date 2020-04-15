@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { Tabs, Input, Radio, Card } from 'antd';
+import { Tabs, Input } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,47 +9,66 @@ import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
 import LeftNav from '../leftnav/LeftNav';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
-import { FixedSizeList as List } from 'react-window';
+import { FixedSizeList } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { StickyContainer, Sticky } from 'react-sticky';
 import CreateGroupModal from '../groups/modal/CreateGroupModal';
 import { getPosts, getPostCategories, searchPost } from '../../actions/post';
 import { getGroupDetails } from '../../actions/group';
+import PostFilters from '../common/filterpanel/FilterPanel';
+
 import './Posts.scss';
 const Posts = ({
   auth,
   getPosts,
   getPostCategories,
-  post: { posts, loading },
+  post: { posts, categories, loading },
   getGroupDetails,
   group,
-  searchPost
+  searchPost,
+  match
 }) => {
   useEffect(() => {
     let user = null;
+    let groupId = null;
 
-    try {
-      user = JSON.parse(auth.user);
-    } catch (e) {
-      // You can read e for more info
-      // Let's assume the error is that we already have parsed the auth.user
-      // So just return that
-      user = auth.user;
+    if (match && match.params && match.params.id) {
+      groupId = match.params.id;
+    } else {
+      //first time groupId is not passed in url param.
+      //So get groupId from user group first item
+      try {
+        user = JSON.parse(auth.user);
+      } catch (e) {
+        // You can read e for more info
+        // Let's assume the error is that we already have parsed the auth.user
+        // So just return that
+        user = auth.user;
+      }
+      groupId = user.userGroup[0].id;
     }
-    const groupId = user.userGroup[0].id;
     getGroupDetails(groupId);
     searchPost({ groupId: groupId });
     getPostCategories();
-  }, [getGroupDetails, searchPost, auth.user]);
+  }, [getGroupDetails, searchPost, auth.user, match]);
+
+  /*   useEffect(() => {
+    const groupId = match.param.id;
+    getGroupDetails(groupId);
+    searchPost({ groupId: groupId });
+    getPostCategories();
+  }, [
+    getGroupDetails,
+    searchPost,
+    match && match.param && match.param.id ? match.param.id : null
+  ]); */
 
   const { Search } = Input;
 
   const { TabPane } = Tabs;
 
   const [items, setItems] = useState({});
-  const [activeItem, setActiveItem] = useState('catherine');
-
   const [requestCache, setRequestCache] = useState({});
 
   const getPostUrl = (rows, start) => `/api/posts?&rows=${rows}&start=${start}`;
@@ -105,14 +123,14 @@ const Posts = ({
       )}
     </Sticky>
   );
-
+  //if you use search in future, keep it
   const operations = (
     <Search
       placeholder='Seach post'
       onSearch={value =>
         searchPost({ groupId: group.currentGroup.id, keyword: value })
       }
-      style={{ width: 300, marginTop: 8 }}
+      style={{ width: 300, top: '0px' }}
       enterButton
     />
   );
@@ -138,11 +156,12 @@ const Posts = ({
   ) : (
     <Fragment>
       <div className='row'>
-        <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+        <div className='col-xs-1 col-sm-3 col-md-3 col-lg-3'>
           <LeftNav />
         </div>
         <div className='col-xs-6 col-sm-6 col-md-8 col-lg-6'>
-          <div>
+          <PostFilters categories={categories} />
+          <div style={{ marginTop: '20px' }}>
             <img
               src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
               alt='Custom banner image for this neighborhood group.'
@@ -150,7 +169,7 @@ const Posts = ({
             ></img>
           </div>
           <div className='feed-container'>
-            <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+            <Tabs defaultActiveKey='1' /* tabBarExtraContent={operations} */>
               {group && group.currentGroup && group.currentGroup.groupName ? (
                 <TabPane tab={group.currentGroup.groupName} key='1'>
                   <div id='main' className='feed-wrapper'>
@@ -169,7 +188,7 @@ const Posts = ({
                           itemCount={1000}
                         >
                           {({ onItemsRendered, ref }) => (
-                            <List
+                            <FixedSizeList
                               className='List'
                               height={height}
                               itemCount={1000}
@@ -179,7 +198,7 @@ const Posts = ({
                               onItemsRendered={onItemsRendered}
                             >
                               {Row}
-                            </List>
+                            </FixedSizeList>
                           )}
                         </InfiniteLoader>
                       )}
@@ -192,7 +211,7 @@ const Posts = ({
             </Tabs>
           </div>
         </div>
-        <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+        <div className='col-xs-2 col-sm-2 col-md-2 col-lg-2'>
           <CreateGroupModal />
           {/* 
           <Card

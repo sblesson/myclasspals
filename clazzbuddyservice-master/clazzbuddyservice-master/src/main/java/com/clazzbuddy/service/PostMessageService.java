@@ -22,7 +22,7 @@ public class PostMessageService {
 
 	public Post createPost(Post post) {
 		Date current = new Date();
-		post.setDate(current.toString());
+		post.setPostedDate(current);
 		return mongoTemplate.insert(post);
 	}
 
@@ -42,10 +42,17 @@ public class PostMessageService {
 		if (postSearchQuery.getCatagoryId() != null) {
 			postListQuery.addCriteria(Criteria.where("catagoryId").is(postSearchQuery.getCatagoryId()));
 		}
+		if (postSearchQuery.getDateFilterGreaterThan() != null) {
+			postListQuery.addCriteria(Criteria.where("postedDate").gte(postSearchQuery.getDateFilterGreaterThan()));
+		}
+		if (postSearchQuery.getDateFilterLessThan() != null) {
+			postListQuery.addCriteria(Criteria.where("postedDate").lte(postSearchQuery.getDateFilterLessThan()));
+		}
 		if (postSearchQuery.getLastseen() != null) {
 			ObjectId objID = new ObjectId(postSearchQuery.getLastseen());
 			postListQuery.addCriteria(Criteria.where("_id").gt(objID));
 		}
+
 		postListQuery.with(new Sort(Sort.Direction.DESC, "_id"));
 		postListQuery.limit(30);
 		List<Post> posts = mongoTemplate.find(postListQuery, Post.class);

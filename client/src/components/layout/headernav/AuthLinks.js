@@ -2,9 +2,14 @@ import React from 'react';
 import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import DropDownMenu from '../dropdownmenu/DropDownMenu';
+import { Tabs, Input, Radio, Card } from 'antd';
+
 import './HeaderNav.scss';
 
-const AuthLinks = (isLoggedIn = false) => {
+const AuthLinks = (isLoggedIn = false, match) => {
+  console.log(match);
+  const { Search } = Input;
+
   console.log(isLoggedIn);
   if (isLoggedIn) {
     return (
@@ -13,6 +18,16 @@ const AuthLinks = (isLoggedIn = false) => {
           <div className='column docs-icon-set-column'>
             <p className='name'>ZZ</p>
           </div>
+        </Menu.Item>
+        <Menu.Item>
+          <Search
+            placeholder='Seach post'
+            /*   onSearch={value =>
+                  searchPost({ groupId: group.currentGroup.id, keyword: value })
+                } */
+            style={{ width: 300 }}
+            enterButton
+          />{' '}
         </Menu.Item>
         <Menu.Menu className='nav-container'>
           <Menu.Menu position='right'>
