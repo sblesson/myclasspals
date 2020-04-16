@@ -6,7 +6,8 @@ import { Tabs, Input, Radio, Card } from 'antd';
 
 import './HeaderNav.scss';
 
-const AuthLinks = (isLoggedIn = false) => {
+const AuthLinks = (isLoggedIn = false, match) => {
+  console.log(match);
   const { Search } = Input;
 
   console.log(isLoggedIn);
@@ -24,7 +25,7 @@ const AuthLinks = (isLoggedIn = false) => {
             /*   onSearch={value =>
                   searchPost({ groupId: group.currentGroup.id, keyword: value })
                 } */
-            style={{ width: 300}}
+            style={{ width: 300 }}
             enterButton
           />{' '}
         </Menu.Item>

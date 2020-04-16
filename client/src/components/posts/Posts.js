@@ -1,17 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import {
-  Tabs,
-  Input,
-  Radio,
-  Card,
-  List,
-  Typography,
-  Divider,
-  Row,
-  Col
-} from 'antd';
+import { Tabs, Input } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -27,6 +16,8 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import CreateGroupModal from '../groups/modal/CreateGroupModal';
 import { getPosts, getPostCategories, searchPost } from '../../actions/post';
 import { getGroupDetails } from '../../actions/group';
+import PostFilters from '../common/filterpanel/FilterPanel';
+
 import './Posts.scss';
 const Posts = ({
   auth,
@@ -62,10 +53,6 @@ const Posts = ({
     getPostCategories();
   }, [getGroupDetails, searchPost, auth.user, match]);
 
-  const [filterPanel, setFilterPanel] = useState(false);
-
-  const toggleFilterPanel = () => setFilterPanel(!filterPanel);
-
   /*   useEffect(() => {
     const groupId = match.param.id;
     getGroupDetails(groupId);
@@ -82,8 +69,6 @@ const Posts = ({
   const { TabPane } = Tabs;
 
   const [items, setItems] = useState({});
-  const [activeItem, setActiveItem] = useState('catherine');
-
   const [requestCache, setRequestCache] = useState({});
 
   const getPostUrl = (rows, start) => `/api/posts?&rows=${rows}&start=${start}`;
@@ -166,13 +151,6 @@ const Posts = ({
     state.value = e.target.value;
   };
 
-  const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.'
-  ];
   return loading ? (
     <Spinner />
   ) : (
@@ -182,44 +160,7 @@ const Posts = ({
           <LeftNav />
         </div>
         <div className='col-xs-6 col-sm-6 col-md-8 col-lg-6'>
-          <div className='filter-actions' onClick={toggleFilterPanel}>
-            <i className='fas fa-filter filter-icon'></i>
-            <span className='filter-label'> FILTER</span>
-          </div>
-          {filterPanel && (
-            <div className='filter-panel'>
-              <div className='row'>
-                <div className='col-xs-1 col-sm-1 col-md-4 col-lg-4'>
-                  <List
-                    size='small'
-                    header={<div>POST DATE</div>}
-                    bordered
-                    dataSource={data}
-                    renderItem={item => <List.Item>{item}</List.Item>}
-                  />
-                </div>
-                <div className='col-xs-1 col-sm-1 col-md-4 col-lg-4'>
-                  <List
-                    size='small'
-                    header={<div>CATEGORY</div>}
-                    bordered
-                    dataSource={categories}
-                    renderItem={item => <List.Item>{item.title}</List.Item>}
-                  />
-                </div>
-                <div className='col-xs-1 col-sm-1 col-md-4 col-lg-4'>
-                  <List
-                    size='small'
-                    header={<div>TYPE</div>}
-                    bordered
-                    dataSource={data}
-                    renderItem={item => <List.Item>{item}</List.Item>}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
+          <PostFilters categories={categories} />
           <div style={{ marginTop: '20px' }}>
             <img
               src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
