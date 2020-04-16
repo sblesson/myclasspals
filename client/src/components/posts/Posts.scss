@@ -1,28 +1,6 @@
 @import '../../styles/abstracts/mixins';
 @import '../../styles/abstracts/variables';
 
-.ant-list-item {
-  font-size: 0.8em !important;
-}
-.filter-actions {
-  cursor: pointer;
-  .filter-icon {
-    color: var(--bg-gradient1);
-  }
-  .filter-label {
-    color: #909090;
-    font-weight: bold;
-    margin-left: 4px;
-  }
-}
-
-.filter-panel {
-  background: var(--bg-filter-panel);
-  min-height: 100px;
-  margin-top: 8px;
-  font-size: -8em;
-}
-
 .post-container {
   @include respond(tab-land) {
     font-size: 56.25%;

@@ -11,7 +11,7 @@ public class Post {
 
 	private String message;
 
-	private String date;
+	private Date postedDate;
 
 	private String catagoryId;
 
@@ -53,13 +53,6 @@ public class Post {
 		this.message = message;
 	}
 
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
 
 	public String getSubject() {
 		return subject;
@@ -115,6 +108,14 @@ public class Post {
 
 	public void setCatagoryId(String catagoryId) {
 		this.catagoryId = catagoryId;
+	}
+
+	public Date getPostedDate() {
+		return postedDate;
+	}
+
+	public void setPostedDate(Date postedDate) {
+		this.postedDate = postedDate;
 	}
 
 }

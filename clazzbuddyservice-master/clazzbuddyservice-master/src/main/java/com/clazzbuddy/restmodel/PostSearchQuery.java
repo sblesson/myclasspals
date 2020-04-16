@@ -1,5 +1,7 @@
 package com.clazzbuddy.restmodel;
 
+import java.util.Date;
+
 public class PostSearchQuery {
 
 	private String keyword;
@@ -11,6 +13,10 @@ public class PostSearchQuery {
 	private Boolean privateMessage;
 
 	private String userId;
+	
+	private Date dateFilterGreaterThan;
+	
+	private Date dateFilterLessThan;
 
 	private String lastseen;
 
@@ -60,6 +66,22 @@ public class PostSearchQuery {
 
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
+	}
+
+	public Date getDateFilterLessThan() {
+		return dateFilterLessThan;
+	}
+
+	public void setDateFilterLessThan(Date dateFilterLessThan) {
+		this.dateFilterLessThan = dateFilterLessThan;
+	}
+
+	public Date getDateFilterGreaterThan() {
+		return dateFilterGreaterThan;
+	}
+
+	public void setDateFilterGreaterThan(Date dateFilterGreaterThan) {
+		this.dateFilterGreaterThan = dateFilterGreaterThan;
 	}
 
 }

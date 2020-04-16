@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import moment from 'moment';
+import GroupFilters from '../common/filterpanel/FilterPanel';
 
 import PrivateMessageModal from './modal/CreateGroupModal';
 import LeftNav from '../leftnav/LeftNav';
@@ -256,12 +257,7 @@ const Groups = ({
             </div>
 
             <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
-              <Search
-                placeholder='Seach my group'
-                onSearch={value => console.log(value)}
-                style={{ width: 300, marginBottom: 30 }}
-                enterButton
-              />
+              <GroupFilters />
               {group !== null ? (
                 <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
                   <TabPane tab='My Groups' key='1'>
