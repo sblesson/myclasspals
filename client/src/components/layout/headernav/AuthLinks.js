@@ -1,13 +1,38 @@
-import React from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+
 import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import DropDownMenu from '../dropdownmenu/DropDownMenu';
 import { Tabs, Input, Radio, Card } from 'antd';
-
 import './HeaderNav.scss';
 
-const AuthLinks = (isLoggedIn = false, match) => {
-  console.log(match);
+const AuthLinks = (isLoggedIn = false, match, user, searchPost) => {
+  console.log(user);
+  let groupId = null;
+
+  useEffect(() => {
+    if (match && match.params && match.params.id) {
+      groupId = match.params.id;
+    } else {
+      //first time groupId is not passed in url param.
+      //So get groupId from user first item
+      //groupId = user.userGroup[0].id;
+      console.log(user);
+      //first time groupId is not passed in url param.
+      //So get groupId from user group first item
+      try {
+        user = JSON.parse(user);
+        groupId = user.userGroup[0].id;
+        console.log(user);
+        console.log(groupId);
+      } catch (e) {
+        // You can read e for more info
+        // Let's assume the error is that we already have parsed the
+      }
+    }
+  }, [user, match]);
+
   const { Search } = Input;
 
   console.log(isLoggedIn);
@@ -22,9 +47,13 @@ const AuthLinks = (isLoggedIn = false, match) => {
         <Menu.Item>
           <Search
             placeholder='Seach post'
-            /*   onSearch={value =>
-                  searchPost({ groupId: group.currentGroup.id, keyword: value })
-                } */
+            onSearch={value => {
+              console.log(value);
+
+              {
+                searchPost({ groupId: groupId, keyword: value });
+              }
+            }}
             style={{ width: 300 }}
             enterButton
           />{' '}
