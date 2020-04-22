@@ -1,6 +1,7 @@
 package com.clazzbuddy.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import org.bson.types.ObjectId;
@@ -33,6 +34,7 @@ public class UserService {
 				userGroup.setId(userGroupFromDB.getId());
 			}
 		}
+		user.setCreatedDate(new Date());
 		mongoTemplate.insert(user);
 	}
 
@@ -51,7 +53,7 @@ public class UserService {
 		return userFromDB;
 	}
 
-	public Users getUser(String userKey) {
+	public Users getUserDetails(String userKey) {
 		Query userByName = new Query();
 		userByName.addCriteria(Criteria.where("email").is(userKey));
 		Users user = mongoTemplate.findOne(userByName, Users.class);
@@ -84,7 +86,7 @@ public class UserService {
 		
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 		
-		Users requestorUser = getUser(action.getRequestorUserId());
+		Users requestorUser = getUserDetails(action.getRequestorUserId());
 		
 		GroupInvitations invitation = new GroupInvitations();
 		invitation.setGroupId(action.getGroupId());
@@ -114,7 +116,7 @@ public class UserService {
 		
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 		
-		Users invitedUser = getUser(action.getInvitedUserId());
+		Users invitedUser = getUserDetails(action.getInvitedUserId());
 		
 		GroupInvitations invitation = new GroupInvitations();
 		invitation.setGroupId(action.getGroupId());
@@ -144,7 +146,7 @@ public class UserService {
 		if (userGroup == null) {
 			throw new Exception("Not a valid user group");
 		}
-		Users invitedUser = getUser(action.getInvitedUserId());
+		Users invitedUser = getUserDetails(action.getInvitedUserId());
 		
 		if (invitedUser == null) {
 			throw new Exception("Not a valid user");
@@ -200,7 +202,7 @@ public class UserService {
 		
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 		
-		Users invitedUser = getUser(action.getRequestorUserId());
+		Users invitedUser = getUserDetails(action.getRequestorUserId());
 		
 		if (action.getAction().equals(GroupInvitationActions.REQUEST_ACCEPT.toString())) {
 			

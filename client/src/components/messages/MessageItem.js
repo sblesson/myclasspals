@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { List, Button } from 'semantic-ui-react';
 const MessageItem = ({ message }) => {
   return (
-    <List.Item key={message._id}>
+    <List.Item key={message._id} className='message-content'>
       <List.Content>
         <List.Header>
           <Link to={`/profile/${message.userId}`}>{message.userName}</Link>

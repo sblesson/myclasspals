@@ -14,14 +14,24 @@ const FilterPanel = ({
   searchPost,
   post: { posts, loading }
 }) => {
-  const groupId = group.currentGroup.id;
   const [filterPanel, showFilterPanel] = useState(false);
   const [dateFilterSelected, setDateFilterSelected] = useState(null);
+
   const [categoryFilterSelected, setCategoryFilterSelected] = useState(null);
 
   const toggleFilterPanel = () => showFilterPanel(!filterPanel);
   const [text, setText] = useState('');
   const data = ['People', 'Groups'];
+  let [filterObjectSelected, setFilterObjectSelected] = useState(null);
+  let groupId;
+  useEffect(() => {
+    if (group.currentGroup && group.currentGroup.id) {
+      groupId = group.currentGroup.id;
+      setFilterObjectSelected({
+        groupId: groupId
+      });
+    }
+  }, [group.currentGroup]);
 
   const dateFilters = [
     'Last hour',
@@ -31,10 +41,9 @@ const FilterPanel = ({
     'This year'
   ];
   const getUTCDate = item => {
-    console.log(groupId);
     let dateFilterLessThan = moment()
         .utc()
-        .format('YYYY-MM-DD HH:mm:ss'),
+        .format(),
       dateFilterGreaterThan = null;
 
     switch (item) {
@@ -42,11 +51,9 @@ const FilterPanel = ({
         dateFilterGreaterThan = moment()
           .utc()
           .startOf('hour')
-          .format('YYYY-MM-DD HH:mm:ss');
-        console.log(dateFilterLessThan);
-        console.log(dateFilterGreaterThan);
+          .format();
+
         return {
-          groupId: groupId,
           dateFilterGreaterThan: dateFilterGreaterThan,
           dateFilterLessThan: dateFilterLessThan
         };
@@ -54,13 +61,9 @@ const FilterPanel = ({
         dateFilterGreaterThan = moment()
           .utc()
           .startOf('day')
-          .format('YYYY-MM-DD HH:mm:ss');
-
-        console.log(dateFilterLessThan);
-        console.log(dateFilterGreaterThan);
+          .format();
 
         return {
-          groupId: groupId,
           dateFilterGreaterThan: dateFilterGreaterThan,
           dateFilterLessThan: dateFilterLessThan
         };
@@ -68,12 +71,8 @@ const FilterPanel = ({
         dateFilterGreaterThan = moment()
           .utc()
           .startOf('week')
-          .format('YYYY-MM-DD HH:mm:ss');
-
-        console.log(dateFilterLessThan);
-        console.log(dateFilterGreaterThan);
+          .format();
         return {
-          groupId: groupId,
           dateFilterGreaterThan: dateFilterGreaterThan,
           dateFilterLessThan: dateFilterLessThan
         };
@@ -81,12 +80,9 @@ const FilterPanel = ({
         dateFilterGreaterThan = moment()
           .utc()
           .startOf('month')
-          .format('YYYY-MM-DD HH:mm:ss');
+          .format();
 
-        console.log(dateFilterLessThan);
-        console.log(dateFilterGreaterThan);
         return {
-          groupId: groupId,
           dateFilterGreaterThan: dateFilterGreaterThan,
           dateFilterLessThan: dateFilterLessThan
         };
@@ -94,34 +90,87 @@ const FilterPanel = ({
         dateFilterGreaterThan = moment()
           .utc()
           .startOf('year')
-          .format('YYYY-MM-DD HH:mm:ss');
-
-        console.log(dateFilterLessThan);
-        console.log(dateFilterGreaterThan);
+          .format();
 
         return {
-          groupId: groupId,
           dateFilterGreaterThan: dateFilterGreaterThan,
           dateFilterLessThan: dateFilterLessThan
         };
     }
   };
+
   const handleDateFilterClick = (item, event) => {
     setDateFilterSelected(item);
+
     let dateFilter = getUTCDate(item);
-    searchPost(dateFilter);
+
+    if (filterObjectSelected && filterObjectSelected.dateFilterLessThan) {
+      //filter already exist
+      filterObjectSelected.dateFilterLessThan = dateFilter.dateFilterLessThan;
+
+      if (filterObjectSelected && filterObjectSelected.dateFilterGreaterThan) {
+        //filter already exist
+        filterObjectSelected.dateFilterGreaterThan =
+          dateFilter.dateFilterGreaterThan;
+      }
+    } else {
+      //first time filter
+      filterObjectSelected = Object.assign(filterObjectSelected, dateFilter);
+      setFilterObjectSelected(filterObjectSelected);
+    }
+
+    searchPost(filterObjectSelected);
   };
+
   const removeDateFilterHandler = (item, event) => {
-    console.log(item);
-    console.log('removeFilterHandler');
+    event.stopPropagation();
+    if (filterObjectSelected.dateFilterGreaterThan)
+      delete filterObjectSelected.dateFilterGreaterThan;
+    if (filterObjectSelected.dateFilterLessThan)
+      delete filterObjectSelected.dateFilterLessThan;
+
+    setDateFilterSelected(null);
+
+    setFilterObjectSelected(filterObjectSelected);
+
+    searchPost(filterObjectSelected);
   };
+
   const handleCategoryFilterClick = (item, event) => {
-    setCategoryFilterSelected(item);
-  };
-  const removeCategoryFilterHandler = (item, event) => {
     console.log(item);
-    console.log('removeCategoryFilterHandler');
+    setCategoryFilterSelected(item);
+
+    if (filterObjectSelected && filterObjectSelected.groupId) {
+      //filter already exist
+
+      //check if categoryId exist, then update it else create new
+      if (filterObjectSelected.catagoryId) {
+        filterObjectSelected.catagoryId = item;
+      } else {
+        filterObjectSelected = Object.assign(filterObjectSelected, {
+          catagoryId: item
+        });
+      }
+    } else {
+      //first time filter add group and categoryId
+      setFilterObjectSelected({ groupId: groupId, catagoryId: item });
+    }
+
+    searchPost(filterObjectSelected);
   };
+
+  const removeCategoryFilterHandler = (item, event) => {
+    event.stopPropagation();
+
+    if (filterObjectSelected.catagoryId) delete filterObjectSelected.catagoryId;
+
+    setCategoryFilterSelected(null);
+
+    setFilterObjectSelected(filterObjectSelected);
+
+    searchPost(filterObjectSelected);
+  };
+
   return (
     <div className='post-filters'>
       <div className='filter-actions' onClick={toggleFilterPanel}>
@@ -181,7 +230,7 @@ const FilterPanel = ({
                           className='svg-icon'
                           viewBox='0 0 20 20'
                           onClick={event =>
-                            removeDateFilterHandler(item, event)
+                            removeCategoryFilterHandler(item, event)
                           }
                         >
                           <path

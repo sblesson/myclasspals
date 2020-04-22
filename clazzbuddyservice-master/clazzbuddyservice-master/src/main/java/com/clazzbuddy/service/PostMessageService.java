@@ -1,5 +1,6 @@
 package com.clazzbuddy.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,28 @@ public class PostMessageService {
 		Date current = new Date();
 		post.setPostedDate(current);
 		return mongoTemplate.insert(post);
+	}
+
+	public Post addComment(String postId, Post post) throws Exception {
+		Post parentPost = getPost(postId);
+		if (parentPost == null) {
+			throw new Exception("Post is not valid" + postId);
+		}
+		Date current = new Date();
+		post.setPostedDate(current);
+		mongoTemplate.insert(post);
+		if (parentPost.getComments() == null) {
+			parentPost.setComments(new ArrayList<Post>());
+		}
+		parentPost.getComments().add(post);
+		return mongoTemplate.save(parentPost);
+	}
+
+	public Post getPost(String postId) {
+		ObjectId objID = new ObjectId(postId);
+		Query postById = new Query();
+		postById.addCriteria(Criteria.where("_id").is(objID));
+		return mongoTemplate.findOne(postById, Post.class);
 	}
 
 	public List<Post> searchPost(PostSearchQuery postSearchQuery) {

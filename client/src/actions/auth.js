@@ -12,7 +12,9 @@ import {
   SEND_USER_EMAIL,
   EMAIL_SEND_ERROR,
   GET_USER_GROUP,
-  GET_USER_GROUP_ERROR
+  GET_USER_GROUP_ERROR,
+  GET_USER_PROFILE_BY_ID,
+  GET_USER
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -21,9 +23,9 @@ export const getUserGroup = userId => async dispatch => {
   try {
     const userId = JSON.parse(localStorage.getItem('user'))._id;
     console.log(userId);
-
+    //todo change profile api to get minimum response
     const userGroupRes = await axios.get(
-      'http://localhost:8080/user/getprofile?user=' + userId
+      'http://localhost:8080/user/getuserdetails?user=' + userId
     );
     console.log();
     dispatch({
@@ -71,7 +73,7 @@ export const loadUser = () => async dispatch => {
     console.log(res);
 
     const userGroupRes = await axios.get(
-      'http://localhost:8080/user/getprofile?user=' + res.data._id
+      'http://localhost:8080/user/getuserdetails?user=' + res.data._id
     );
 
     console.log(userGroupRes);
@@ -87,6 +89,47 @@ export const loadUser = () => async dispatch => {
   }
 };
 
+export const getUser = userId => async dispatch => {
+  try {
+    const userResp = await axios.get(
+      'http://localhost:8080/user/getuser?user=' + userId
+    );
+
+    console.log(userResp);
+
+    dispatch({
+      type: GET_USER,
+      payload: userResp.data
+    });
+  } catch (err) {
+    dispatch({
+      // type: AUTH_ERROR //todo add error later
+    });
+  }
+};
+
+export const searchUser = userId => async dispatch => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
+  try {
+    const userResp = await axios.get(
+      'http://localhost:8080/user/getuserdetails?user=' + userId
+    );
+
+    console.log(userResp);
+
+    dispatch({
+      type: GET_USER_PROFILE_BY_ID,
+      payload: userResp.data
+    });
+  } catch (err) {
+    dispatch({
+      // type: AUTH_ERROR //todo add error later
+    });
+  }
+};
 // Load User
 const sendEmailConfirmation = (body, config) => async dispatch => {
   console.log(body);

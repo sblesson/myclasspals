@@ -7,6 +7,17 @@ $color-grey-light-2: grey;
 $color-secondary: orange;
 $color-link: #0073b1;
 
+.message-content {
+  display: flex;
+  max-width: 32rem;
+  min-width: 32rem;
+  border: 1px solid #cdcfd2;
+  min-height: 30rem;
+  flex-direction: column;
+  border-radius: 3px 3px 0 0;
+  margin-left: -10px;
+}
+
 .message-head {
   width: 200px;
 

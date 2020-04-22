@@ -8,6 +8,8 @@ import MyProfile from '../profile/MyProfile';
 import CreateProfile from '../profile/CreateProfile';
 import AccountSettings from '../profile/AccountSettings';
 import Profiles from '../profiles/Profiles';
+import Profile from '../profile/Profile';
+
 import Messages from '../messages/Messages.js';
 import Groups from '../groups/Groups.js';
 import DiscoverGroup from '../groups/DiscoverGroup.js';
@@ -29,8 +31,8 @@ const Routes = () => {
         <PrivateRoute exact path='/discovergroup' component={DiscoverGroup} />
         <PrivateRoute exact path='/group/:id' component={SingleGroup} />
         <PrivateRoute exact path='/group/members/:id' component={SingleGroup} />
-        {/*         <PrivateRoute exact path='/profile/:id' component={Profile} />
-         */}{' '}
+        <PrivateRoute exact path='/profile/:id' component={Profile} />
+
         <PrivateRoute exact path='/dashboard' component={Posts} />
         <PrivateRoute exact path='/dashboard/:id' component={Posts} />
         <PrivateRoute exact path='/view-profile' component={MyProfile} />

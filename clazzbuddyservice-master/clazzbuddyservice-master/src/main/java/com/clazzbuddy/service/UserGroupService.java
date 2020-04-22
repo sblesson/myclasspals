@@ -43,7 +43,7 @@ public class UserGroupService {
 		
 		if (userGroup.getUserGroupMembers() != null) {
 			for (UserGroupMembers userId : userGroup.getUserGroupMembers()) {
-				Users user = userService.getUser(userId.get_id());
+				Users user = userService.getUserDetails(userId.get_id());
 				if (user == null) {
 					throw new Exception("Not a valid creator user: " + userId);
 				}

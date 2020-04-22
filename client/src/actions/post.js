@@ -47,7 +47,8 @@ export const getPostCategories = () => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err, status: err }
+      //payload: { msg: err.response.statusText, status: err.response.status } //todo change error message
     });
   }
 };
@@ -64,7 +65,7 @@ export const addLike = id => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err, status: err } //todo change error message
     });
   }
 };
@@ -121,8 +122,6 @@ export const addPost = formData => async dispatch => {
     );
 
     console.log(res);
-
-    
 
     dispatch({
       type: ADD_POST,

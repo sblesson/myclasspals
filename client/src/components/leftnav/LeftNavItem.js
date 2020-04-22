@@ -25,7 +25,7 @@ const SideNavItem = ({
     setCollapsed(prevValue => !prevValue);
   };
 
-  const onClick = e => {
+  const handleLeftNavItemClick = (item, e) => {
     if (Array.isArray(items)) {
       toggleCollapse();
     }
@@ -54,11 +54,11 @@ const SideNavItem = ({
     <>
       <ListItem
         className='leftnav-sidebar-item'
-        onClick={onClick}
+        onClick={event => handleLeftNavItemClick(item, event)}
         button
         dense
         {...rest}
-        selected={selectedIndex}
+        selected={selectedIndex === item ? true : false}
       >
         <div
           style={{ paddingLeft: depth * depthStep }}

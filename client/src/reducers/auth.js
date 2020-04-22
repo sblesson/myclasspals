@@ -9,26 +9,45 @@ import {
   ACCOUNT_DELETED,
   SEND_USER_EMAIL,
   GET_USER_GROUP,
-  GET_USER_GROUP_ERROR
+  GET_USER_GROUP_ERROR,
+  GET_USER_PROFILE_BY_ID,
+  GET_USER
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   loading: true,
-  user: localStorage.getItem('user')
+  user: localStorage.getItem('user'),
+  profileUser: null
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case GET_USER:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: payload
+      };
     case GET_USER_GROUP:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
         user: payload
+      };
+    case GET_USER_PROFILE_BY_ID:
+      console.log(payload);
+
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        profileUser: payload.user
       };
     case USER_LOADED:
       localStorage.setItem('user', JSON.stringify(payload.user));
