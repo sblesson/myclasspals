@@ -73,7 +73,7 @@ const PostItem = ({
           </List.Description>
         </List.Content>
       </List.Item>
-      {/* 
+
       {showActions && (
         <Fragment>
           <Menu>
@@ -85,12 +85,12 @@ const PostItem = ({
             </Menu.Item>
 
             <Menu.Menu position='right'>
-              {likes.length > 0 && (
+              {likes && likes.length > 0 && (
                 <Menu.Item name='thanked'>
                   <i className='far fa-smile'></i> &nbsp;&nbsp;{likes.length}
                 </Menu.Item>
               )}
-              {comments.length > 0 && (
+              {comments && comments.length > 0 && (
                 <Menu.Item name='commented'>
                   <i className='far fa-comment-alt'></i>&nbsp;&nbsp;
                   {comments.length}
@@ -100,7 +100,7 @@ const PostItem = ({
           </Menu>
           {showAllComments === true ? (
             <List divided relaxed>
-              {comments.length > 0 ? (
+              {comments && comments.length > 0 ? (
                 comments.map(comment => (
                   <CommentItem
                     key={comment._id}
@@ -115,7 +115,7 @@ const PostItem = ({
             </List>
           ) : (
             <List divided relaxed>
-              {comments.length > 0 ? (
+              {comments && comments.length > 0 ? (
                 comments
                   .slice(0, 3)
                   .map(comment => (
@@ -132,7 +132,7 @@ const PostItem = ({
           )}
           <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
         </Fragment>
-      )} */}
+      )}
     </Segment>
   );
 };

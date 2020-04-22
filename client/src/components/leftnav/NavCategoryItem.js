@@ -18,7 +18,7 @@ const SideNavItem = ({
   ...rest
 }) => {
   const [collapsed, setCollapsed] = React.useState(true);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedNavItem, setSelectedNavItem] = React.useState(null);
 
   const { title, icon, url, items, Icon, onClick: onClickProp } = item;
 
@@ -26,9 +26,8 @@ const SideNavItem = ({
     setCollapsed(prevValue => !prevValue);
   };
 
-  const onClick = e => {
-    console.log(index);
-    setSelectedIndex(index);
+  const handleLeftNavItemClick = (item, e) => {
+    setSelectedNavItem(item.title);
 
     if (Array.isArray(items)) {
       toggleCollapse();
@@ -57,11 +56,11 @@ const SideNavItem = ({
     <div>
       <MenuItem
         className='leftnav-sidebar-item'
-        onClick={onClick}
+        onClick={event => handleLeftNavItemClick(item, event)}
         button
         dense
         {...rest}
-        selected={selectedIndex == index}
+        selected={selectedNavItem === item.title}
       >
         <div
           style={{ paddingLeft: depth * depthStep }}

@@ -5,6 +5,15 @@
   //background-color: var(--bg-leftnav-sidebar);
 
   //background-color: #f4f5f7;
+  //width: 150px;
+
+  .MuiListItem-root.Mui-selected,
+  .MuiListItem-root.Mui-selected:hover {
+    background: none !important;
+
+    border-left: 1.5px solid var(--color-active-tab-border);
+    width: 150px;
+  }
   &-item {
     display: flex;
     justify-content: space-between;
@@ -14,7 +23,8 @@
       font-size: 12px;
       font-weight: 600;
       padding: 3px 0;
-      width: 100%;
+      padding-right: 10px;
+
       a {
         margin-left: 0.5rem;
         margin-top: 0.3rem;
@@ -38,7 +48,6 @@
       overflow: hidden;
       display: flex;
       align-items: center;
-      width: 100%;
     }
     &-expand-arrow {
       font-size: 1.2rem !important;
