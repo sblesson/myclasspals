@@ -84,13 +84,18 @@ export default function(state = initialState, action) {
         loading: false
       };
     case ADD_COMMENT:
+      console.log(payload);
       return {
         ...state,
         posts: state.posts.map(post =>
           post._id === payload.postId
-            ? { ...post, comments: payload.comments }
+            ? {
+                ...post,
+                comments: payload.comments
+              }
             : post
         ),
+
         loading: false
       };
     case ADD_COMMENT_SINGLE_POST:

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { Upload, Button } from 'antd';
 import { UploadOutlined, StarOutlined } from '@ant-design/icons';
@@ -37,28 +37,23 @@ const PostModal = ({
     groupId: currentGroup.id
   });
 
-  formData.userId = auth.user._id;
-  formData.userName = auth.user.name;
-  console.log(formData);
+  useEffect(() => {
+    formData.userId = auth.user._id;
+    formData.userName = auth.user.name;
+  }, [auth.user]);
 
-  function callback(key) {
-    console.log(key);
-  }
-  console.log('inside post modal' + categories);
+  function callback(key) {}
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
   const { Option } = Select;
 
-  console.log(categories);
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleClick = (e, titleProps) => {
-    console.log('cool', titleProps);
     const { index } = titleProps;
-    console.log('index', index);
 
     const newIndex = activeIndex === index ? -1 : index;
     setActiveIndex(newIndex);
@@ -72,7 +67,6 @@ const PostModal = ({
     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
     onChange({ file, fileList }) {
       if (file.status !== 'uploading') {
-        console.log(file, fileList);
       }
     },
     defaultFileList: [
@@ -103,7 +97,9 @@ const PostModal = ({
       showRemoveIcon: true,
       removeIcon: (
         <StarOutlined
-          onClick={e => console.log(e, 'custom removeIcon event')}
+          onClick={e => {
+            /*console.log(e, 'custom removeIcon event')*/
+          }}
         />
       )
     }
@@ -171,7 +167,6 @@ const PostModal = ({
           onChange={onCategoryChange}
         >
           {categories.map(function(topic, index) {
-            console.log(topic, index);
             return <Option key={index}>{topic.title}</Option>;
           })}
         </Select>

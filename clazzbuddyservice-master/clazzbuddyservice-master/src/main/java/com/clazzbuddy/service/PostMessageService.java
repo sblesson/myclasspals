@@ -1,5 +1,6 @@
 package com.clazzbuddy.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,14 +27,37 @@ public class PostMessageService {
 		return mongoTemplate.insert(post);
 	}
 
+	public Post addComment(String postId, Post post) throws Exception {
+		Post parentPost = getPost(postId);
+		if (parentPost == null) {
+			throw new Exception("Post is not valid" + postId);
+		}
+		Date current = new Date();
+		post.setPostedDate(current);
+		post.setIsComment(true);
+		mongoTemplate.insert(post);
+		if (parentPost.getComments() == null) {
+			parentPost.setComments(new ArrayList<Post>());
+		}
+		parentPost.getComments().add(post);
+		return mongoTemplate.save(parentPost);
+	}
+
+	public Post getPost(String postId) {
+		ObjectId objID = new ObjectId(postId);
+		Query postById = new Query();
+		postById.addCriteria(Criteria.where("_id").is(objID));
+		return mongoTemplate.findOne(postById, Post.class);
+	}
+
 	public List<Post> searchPost(PostSearchQuery postSearchQuery) {
 
 		Query postListQuery = new Query();
 		if (postSearchQuery.getKeyword() != null) {
-			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase(), "i"));
+			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase()));
 		}
 
-		if ((postSearchQuery.getPrivateMessage() != null) && (postSearchQuery.getPrivateMessage() == true)) {
+		if ((postSearchQuery.getIsPrivate() != null) && (postSearchQuery.getIsPrivate() == true)) {
 			postListQuery.addCriteria(Criteria.where("endUserId").is(postSearchQuery.getUserId()));
 		}
 		if (postSearchQuery.getGroupId() != null) {
@@ -52,6 +76,12 @@ public class PostMessageService {
 			ObjectId objID = new ObjectId(postSearchQuery.getLastseen());
 			postListQuery.addCriteria(Criteria.where("_id").gt(objID));
 		}
+		if (postSearchQuery.getIsPrivate() != null) {
+			postListQuery.addCriteria(Criteria.where("isPrivate").is(postSearchQuery.getIsPrivate()));
+		} else {
+			postListQuery.addCriteria(Criteria.where("isPrivate").is(false));
+		}
+		postListQuery.addCriteria(Criteria.where("isComment").ne(true));
 
 		postListQuery.with(new Sort(Sort.Direction.DESC, "_id"));
 		postListQuery.limit(30);

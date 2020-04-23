@@ -17,21 +17,39 @@ const LeftNav = ({
   id,
   getLeftNav,
   leftnav: { leftnav, loading },
-  categories
+  categories,
+  auth
 }) => {
   console.log(categories);
-  const userGroup = JSON.parse(localStorage.getItem('user')).userGroup;
   let myGroups = [];
-  if (userGroup && userGroup.length > 0) {
-    myGroups = userGroup.map(group => ({
-      id: group.id,
-      title: group.groupName,
-      value: group.id,
-      icon: 'fas fa-users',
-      url: '/dashboard/' + group.id
-    }));
-  }
-  console.log(userGroup);
+  let user = null;
+  let userGroup = null;
+  useEffect(() => {
+    //first time groupId is not passed in url param.
+    //So get groupId from user group first item
+    try {
+      user = JSON.parse(auth.user);
+    } catch (e) {
+      // You can read e for more info
+      // Let's assume the error is that we already have parsed the auth.user
+      // So just return that
+      user = auth.user;
+    }
+    if (user && user.userGroup && user.userGroup.length > 0) {
+       userGroup = user.userGroup;
+    }
+
+    if (userGroup && userGroup.length > 0) {
+      myGroups = userGroup.map(group => ({
+        id: group.id,
+        title: group.groupName,
+        value: group.id,
+        icon: 'fas fa-users',
+        url: '/dashboard/' + group.id
+      }));
+    }
+  }, [auth.user]);
+
   let depthStep = 10,
     depth = 0,
     expanded;
@@ -95,7 +113,8 @@ LeftNav.propTypes = {
 const mapStateToProps = state => {
   return {
     leftnav: state.leftnav,
-    categories: state.post.categories
+    categories: state.post.categories,
+    auth: state.auth
   };
 };
 

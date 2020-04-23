@@ -92,7 +92,7 @@ export const getAllGroups = userId => async dispatch => {
     console.log(userId);
 
     const response = await axios.get(
-      'http://localhost:8080/user/getprofile?user=' + userId
+      'http://localhost:8080/user/getuserdetails?user=' + userId
     );
     console.log(response);
     dispatch({
@@ -101,8 +101,8 @@ export const getAllGroups = userId => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: GET_ALL_GROUPS_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: GET_ALL_GROUPS_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };

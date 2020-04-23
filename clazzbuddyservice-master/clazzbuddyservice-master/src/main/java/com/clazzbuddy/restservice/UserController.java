@@ -31,8 +31,8 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	@PostMapping(value="/createprofile", produces={"application/json"})
-	public CommonResult createProfile(@RequestBody Users user) {
+	@PostMapping(value="/createuser", produces={"application/json"})
+	public CommonResult createUser(@RequestBody Users user) {
 		CommonResult result = new CommonResult();
 		
 		try {
@@ -48,8 +48,8 @@ public class UserController {
 		
 	}
 	
-	@PutMapping(value="/updateprofile", produces={"application/json"})
-	public CommonResult updateProfile(@RequestBody Users user) {
+	@PutMapping(value="/updateuser", produces={"application/json"})
+	public CommonResult updateuser(@RequestBody Users user) {
 		CommonResult result = new CommonResult();
 		
 		try {
@@ -65,12 +65,50 @@ public class UserController {
 		
 	}
 	
-	@GetMapping(value="/getprofile", produces={"application/json"})
+	@GetMapping(value="/getuserdetails", produces={"application/json"})
+	public CommonResult getUserDetailsx(@RequestParam(value = "user") String userkey) {
+		UserResult result = new UserResult();
+		
+		try {
+			result.setUser(userService.getUserDetails(userkey));
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error", e);
+		}
+		
+		return result;
+		
+	}
+	//basic user info
+	@GetMapping(value="/getuser", produces={"application/json"})
 	public CommonResult getUser(@RequestParam(value = "user") String userkey) {
 		UserResult result = new UserResult();
 		
 		try {
-			result.setUser(userService.getUser(userkey));
+			Users user = new Users();
+			result.setUser(userService.getUserDetails(userkey));
+			user.setEmail(user.getEmail());
+			user.setName(user.getName());
+			user.setCreatedDate(user.getCreatedDate());
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error", e);
+		}
+		
+		return result;
+		
+	}
+	
+	@GetMapping(value="/searchuser", produces={"application/json"})
+	public CommonResult searchUser(@RequestParam(value = "user") String userkey) {
+		UserResult result = new UserResult();
+		
+		try {
+			result.setUsers(userService.searchUser(userkey));
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

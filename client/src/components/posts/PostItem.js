@@ -117,7 +117,7 @@ const PostItem = ({
             <List divided relaxed>
               {comments && comments.length > 0 ? (
                 comments
-                  .slice(0, 3)
+                  .slice(comments.length - 3, comments.length)
                   .map(comment => (
                     <CommentItem
                       key={comment._id}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Button } from 'antd';
 import { UploadOutlined, StarOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
@@ -7,15 +7,17 @@ import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
+import { FormOutlined } from '@ant-design/icons';
+
+import { Formik, ErrorMessage } from 'formik';
+import AutoCompleteUserSearch from '../../common/autocompleteusersearch/AutoCompleteUserSearch';
 import './PrivateMessageModal.scss';
 
 const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
   const [formData, setFormData] = useState({
     subject: '',
     message: '',
-    privateMessage: true,
-    userId: auth.user._id,
-    endUserId: auth.user._id
+    isPrivate: true
   });
 
   const [modal, setModal] = useState(false);
@@ -67,15 +69,47 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
 
   return (
     <div>
-      <div className='private-message-modal' onClick={toggle}>
-        <Button type='primary' className='pinkBtn'>
+      <div className='private-message-modal'>
+        <div as='h4' className='message-head-title'>
+          Inbox
+        </div>
+        <div
+          as='h4'
+          className='message-head-title message-head-link'
+          onClick={toggle}
+        >
+          <FormOutlined className='message-head-icon' />
+          Compose
+        </div>
+        {/*    <Button type='primary' className='pinkBtn'>
           Message
-        </Button>
+        </Button> */}
       </div>
       <Modal isOpen={modal} fade={false} toggle={toggle}>
         <ModalHeader toggle={toggle}> Send Your Message</ModalHeader>
         <ModalBody>
           <Form>
+            <Form.Group>
+              <AutoCompleteUserSearch />
+            </Form.Group>
+            <Form.Group className='private-message-modal-field'>
+              <Input
+                className='post-form-text-input'
+                type='text'
+                name='endUserId'
+                placeholder='end userId'
+                onChange={e => onChange(e)}
+              />
+            </Form.Group>
+            <Form.Group className='private-message-modal-field'>
+              <Input
+                className='post-form-text-input'
+                type='text'
+                name='subject'
+                placeholder='Subject'
+                onChange={e => onChange(e)}
+              />
+            </Form.Group>
             <Form.Group className='private-message-modal-field'>
               <Input
                 className='post-form-text-input'
@@ -110,6 +144,7 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
             color='primary'
             onClick={e => {
               e.preventDefault();
+              formData.userId = auth.user.email;
               sendPrivateMessage(formData, history);
             }}
           >

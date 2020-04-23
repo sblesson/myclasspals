@@ -46,7 +46,9 @@ const Posts = ({
         // So just return that
         user = auth.user;
       }
-      groupId = user.userGroup[0].id;
+      if (user && user.userGroup && user.userGroup.length > 0) {
+        groupId = user.userGroup[0].id;
+      }
     }
     getGroupDetails(groupId);
     searchPost({ groupId: groupId });
@@ -75,7 +77,6 @@ const Posts = ({
 
   const Row = ({ index, style }) => {
     const item = posts[index];
-    console.log(item);
     if (item) {
       return <PostItem key={item._id} post={item} />;
     }
@@ -145,12 +146,6 @@ const Posts = ({
     value: 1
   };
 
-  const onGroupChange = e => {
-    console.log('radio checked', e.target.value);
-
-    state.value = e.target.value;
-  };
-
   return loading ? (
     <Spinner />
   ) : (
@@ -213,24 +208,6 @@ const Posts = ({
         </div>
         <div className='col-xs-2 col-sm-2 col-md-2 col-lg-2'>
           <CreateGroupModal />
-          {/* 
-          <Card
-            style={{ marginTop: 6, background: 'rgb(243, 250, 253)' }}
-            type='inner'
-            title='Groups'
-          >
-            {userGroup && userGroup.length > 0 ? (
-              <Radio.Group name='selectedUserGroup' onChange={onGroupChange}>
-                {userGroup.map(group => (
-                  <Radio key={group.id} style={radioStyle} value={group.id}>
-                    <Link to={`/group/${group.id}`}>{group.groupName}</Link>
-                  </Radio>
-                ))}
-              </Radio.Group>
-            ) : (
-              'No Groups Found'
-            )}
-          </Card> */}
         </div>
       </div>
     </Fragment>
