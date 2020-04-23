@@ -7,7 +7,7 @@ import { searchPost } from '../../actions/post';
 import { FormOutlined } from '@ant-design/icons';
 import PrivateMessageModal from './modal/PrivateMessageModal';
 
-import { Tab, Header, List, Segment } from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 
 import './Messages.scss';
 const Messages = ({ searchPost, post: { posts, loading }, auth }) => {
@@ -41,14 +41,7 @@ const Messages = ({ searchPost, post: { posts, loading }, auth }) => {
       ) : (
         <Fragment>
           <div className='message-head'>
-            <div as='h4' className='message-head-title'>
-              Inbox
-            </div>
-            <div as='h4' className='message-head-title message-head-link'>
-              <FormOutlined className='message-head-icon' />
-              Compose
-              <PrivateMessageModal />
-            </div>
+            <PrivateMessageModal />
           </div>
 
           {panes.length > 0 ? (

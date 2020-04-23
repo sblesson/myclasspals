@@ -23,12 +23,14 @@ const FilterPanel = ({
   const [text, setText] = useState('');
   const data = ['People', 'Groups'];
   let [filterObjectSelected, setFilterObjectSelected] = useState(null);
-  let groupId = null;
+  let groupId;
   useEffect(() => {
-    groupId = group.currentGroup.id;
-    setFilterObjectSelected({
-      groupId: groupId
-    });
+    if (group.currentGroup && group.currentGroup.id) {
+      groupId = group.currentGroup.id;
+      setFilterObjectSelected({
+        groupId: groupId
+      });
+    }
   }, [group.currentGroup]);
 
   const dateFilters = [

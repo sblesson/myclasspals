@@ -119,7 +119,7 @@ export const createProfile = (
     };
 
     const res = await axios.post(
-      'http://localhost:8080/user/createprofile',
+      'http://localhost:8080/user/createuser',
       formData,
       config
     );
@@ -158,7 +158,7 @@ export const updateCommunity = (formData, history) => async dispatch => {
     };
 
     const res = await axios.put(
-      'http://localhost:8080/user/updateprofile',
+      'http://localhost:8080/user/updateuser',
       formData,
       config
     );

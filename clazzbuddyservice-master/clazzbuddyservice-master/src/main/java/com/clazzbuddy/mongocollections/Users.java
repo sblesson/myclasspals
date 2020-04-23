@@ -1,5 +1,6 @@
 package com.clazzbuddy.mongocollections;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -14,6 +15,8 @@ public class Users {
 	private String name;
 	
 	private String password;
+	
+	private Date createdDate;
 
 	public String getPassword() {
 		return password;
@@ -150,6 +153,14 @@ public class Users {
 
 	public void setRequestedUserGroup(List<UserGroup> requestedUserGroup) {
 		this.requestedUserGroup = requestedUserGroup;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	

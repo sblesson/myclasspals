@@ -1,8 +1,10 @@
 package com.clazzbuddy.mongocollections;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public class Post {
 
@@ -28,6 +30,9 @@ public class Post {
 	private String endUserId;
 
 	private String endUserName;
+	
+	@DBRef
+	private List<Post> comments;
 
 	public Boolean getIsPrivate() {
 		return isPrivate;
@@ -116,6 +121,14 @@ public class Post {
 
 	public void setPostedDate(Date postedDate) {
 		this.postedDate = postedDate;
+	}
+
+	public List<Post> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Post> comments) {
+		this.comments = comments;
 	}
 
 }

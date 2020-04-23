@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Menu } from 'semantic-ui-react';
 import { logout } from '../../actions/auth';
-import AuthLinks from './headernav/AuthLinks';
 import GuestLinks from './headernav/GuestLinks';
 import { searchPost } from '../../actions/post';
+import { searchGroup } from '../../actions/group';
+import { getUser } from '../../actions/auth';
 import { Input } from 'antd';
 import DropDownMenu from './dropdownmenu/DropDownMenu';
 
@@ -14,12 +15,15 @@ const Navbar = ({
   auth: { isAuthenticated, loading, user },
   logout,
   searchPost,
+  searchGroup,
+  getUser,
   match,
   group
 }) => {
   let groupId;
+  let pageName = window.location.pathname.split('/')[1];
+  console.log(pageName);
   const { Search } = Input;
-
   useEffect(() => {
     if (match && match.params && match.params.id) {
       groupId = match.params.id;
@@ -27,23 +31,17 @@ const Navbar = ({
       //first time groupId is not passed in url param.
       //So get groupId from user first item
       //groupId = user.userGroup[0].id;
-      console.log(user);
       //first time groupId is not passed in url param.
       //So get groupId from user group first item
       try {
         user = JSON.parse(user);
         groupId = user.userGroup[0].id;
-        console.log('fsklflksklfdsklsdfkl');
-
-        console.log(groupId);
       } catch (e) {
         // You can read e for more info
         // Let's assume the error is that we already have parsed the
       }
     }
   }, [user, match, searchPost]);
-
-  const authLinks = <AuthLinks user={user} searchPost={searchPost} />;
 
   const guestLinks = <GuestLinks />;
 
@@ -62,16 +60,43 @@ const Navbar = ({
                 </div>
               </Menu.Item>
               <Menu.Item>
-                <Search
-                  placeholder='Seach post'
-                  onSearch={value => {
-                    console.log(value);
-
-                    searchPost({ groupId: groupId, keyword: value });
-                  }}
-                  style={{ width: 300 }}
-                  enterButton
-                />{' '}
+                {(() => {
+                  switch (pageName) {
+                    case 'groups':
+                      return (
+                        <Search
+                          placeholder='Seach group'
+                          onSearch={value => {
+                            searchGroup(value);
+                          }}
+                          style={{ width: 300 }}
+                          enterButton
+                        />
+                      );
+                    case 'messages':
+                      return (
+                        <Search
+                          placeholder='Seach user'
+                          onSearch={value => {
+                            getUser(value);
+                          }}
+                          style={{ width: 300 }}
+                          enterButton
+                        />
+                      );
+                    default:
+                      return (
+                        <Search
+                          placeholder='Seach post'
+                          onSearch={value => {
+                            searchPost({ groupId: groupId, keyword: value });
+                          }}
+                          style={{ width: 300 }}
+                          enterButton
+                        />
+                      );
+                  }
+                })()}
               </Menu.Item>
               <Menu.Menu className='nav-container'>
                 <Menu.Menu position='right'>
@@ -109,4 +134,9 @@ const mapStateToProps = state => ({
   group: state.group
 });
 
-export default connect(mapStateToProps, { logout, searchPost })(Navbar);
+export default connect(mapStateToProps, {
+  logout,
+  searchPost,
+  searchGroup,
+  getUser
+})(Navbar);

@@ -47,7 +47,8 @@ export const getPostCategories = () => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err, status: err }
+      //payload: { msg: err.response.statusText, status: err.response.status } //todo change error message
     });
   }
 };
