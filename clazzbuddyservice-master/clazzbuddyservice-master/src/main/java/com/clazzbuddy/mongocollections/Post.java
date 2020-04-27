@@ -33,6 +33,8 @@ public class Post {
 	
 	@DBRef
 	private List<Post> comments;
+	
+	private Boolean isComment;
 
 	public Boolean getIsPrivate() {
 		return isPrivate;
@@ -129,6 +131,14 @@ public class Post {
 
 	public void setComments(List<Post> comments) {
 		this.comments = comments;
+	}
+
+	public Boolean getIsComment() {
+		return isComment;
+	}
+
+	public void setIsComment(Boolean isComment) {
+		this.isComment = isComment;
 	}
 
 }

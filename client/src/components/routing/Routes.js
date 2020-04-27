@@ -11,6 +11,7 @@ import Profiles from '../profiles/Profiles';
 import Profile from '../profile/Profile';
 
 import Messages from '../messages/Messages.js';
+
 import Groups from '../groups/Groups.js';
 import DiscoverGroup from '../groups/DiscoverGroup.js';
 import SingleGroup from '../groups/SingleGroup.js';
@@ -27,6 +28,8 @@ const Routes = () => {
         <Route exact path='/login' component={Login} />
         <PrivateRoute exact path='/profiles' component={Profiles} />
         <PrivateRoute exact path='/messages' component={Messages} />
+        <PrivateRoute exact path='/messages/:id' component={Messages} />
+
         <PrivateRoute exact path='/groups' component={Groups} />
         <PrivateRoute exact path='/discovergroup' component={DiscoverGroup} />
         <PrivateRoute exact path='/group/:id' component={SingleGroup} />

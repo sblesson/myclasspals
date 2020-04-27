@@ -103,6 +103,23 @@ public class UserController {
 		
 	}
 	
+	@GetMapping(value="/searchuser", produces={"application/json"})
+	public CommonResult searchUser(@RequestParam(value = "user") String userkey) {
+		UserResult result = new UserResult();
+		
+		try {
+			result.setUsers(userService.searchUser(userkey));
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error", e);
+		}
+		
+		return result;
+		
+	}
+	
 //	@PostMapping(value="/validateuser", produces={"application/json"})
 //	public CommonResult validateProfile(@RequestBody Users user) {
 //		UserResult result = new UserResult();

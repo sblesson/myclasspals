@@ -7,7 +7,7 @@ import { logout } from '../../actions/auth';
 import GuestLinks from './headernav/GuestLinks';
 import { searchPost } from '../../actions/post';
 import { searchGroup } from '../../actions/group';
-import { getUser } from '../../actions/auth';
+import { searchUser } from '../../actions/auth';
 import { Input } from 'antd';
 import DropDownMenu from './dropdownmenu/DropDownMenu';
 
@@ -16,7 +16,7 @@ const Navbar = ({
   logout,
   searchPost,
   searchGroup,
-  getUser,
+  searchUser,
   match,
   group
 }) => {
@@ -78,7 +78,7 @@ const Navbar = ({
                         <Search
                           placeholder='Seach user'
                           onSearch={value => {
-                            getUser(value);
+                            searchUser(value);
                           }}
                           style={{ width: 300 }}
                           enterButton
@@ -138,5 +138,5 @@ export default connect(mapStateToProps, {
   logout,
   searchPost,
   searchGroup,
-  getUser
+  searchUser
 })(Navbar);

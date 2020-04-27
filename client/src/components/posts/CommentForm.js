@@ -23,13 +23,13 @@ const CommentForm = ({
           if (isSinglePost) {
             addCommentToSinglePost(postId, { text });
           } else {
-            addComment(postId, { text });
+            addComment(postId, text);
           }
           setText('');
         }}
       >
         <textarea
-          name='text'
+          name='message'
           className='comment-text'
           placeholder='Write a comment...'
           value={text}

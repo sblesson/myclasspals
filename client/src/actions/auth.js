@@ -13,8 +13,8 @@ import {
   EMAIL_SEND_ERROR,
   GET_USER_GROUP,
   GET_USER_GROUP_ERROR,
-  GET_USER_PROFILE_BY_ID,
-  GET_USER
+  GET_USER,
+  SEARCH_USER
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -108,28 +108,25 @@ export const getUser = userId => async dispatch => {
   }
 };
 
-export const searchUser = userId => async dispatch => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
-
+export const searchUser = keyword => async dispatch => {
   try {
     const userResp = await axios.get(
-      'http://localhost:8080/user/getuserdetails?user=' + userId
+      'http://localhost:8080/user/searchuser?user=' + keyword
     );
 
     console.log(userResp);
 
     dispatch({
-      type: GET_USER_PROFILE_BY_ID,
+      type: SEARCH_USER,
       payload: userResp.data
     });
   } catch (err) {
     dispatch({
-      // type: AUTH_ERROR //todo add error later
+      type: AUTH_ERROR //todo add error later
     });
   }
 };
+
 // Load User
 const sendEmailConfirmation = (body, config) => async dispatch => {
   console.log(body);

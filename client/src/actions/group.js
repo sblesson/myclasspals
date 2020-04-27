@@ -101,8 +101,8 @@ export const getAllGroups = userId => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: GET_ALL_GROUPS_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: GET_ALL_GROUPS_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };

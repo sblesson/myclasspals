@@ -8,7 +8,7 @@ import { Image, List, Button } from 'semantic-ui-react';
 
 const CommentItem = ({
   postId,
-  comment: { _id, text, name, avatar, user, date },
+  comment: { _id, message, userName, avatar, user, date },
   auth,
   deleteComment,
   isSinglePost,
@@ -37,11 +37,11 @@ const CommentItem = ({
 
     <List.Content>
       <List.Header>
-        <Link to={`/profile/${_id}`}>{name}</Link>
+        <Link to={`/profile/${_id}`}>{userName}</Link>
       </List.Header>
 
       <List.Description>
-        {text}
+        {message}
         <p className='post-date'>
           Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
         </p>

@@ -3,6 +3,7 @@ package com.clazzbuddy.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.mongocollections.Community;
 import com.clazzbuddy.mongocollections.GroupInvitations;
+import com.clazzbuddy.mongocollections.School;
+import com.clazzbuddy.mongocollections.SchoolSearches;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.mongocollections.UserGroup;
 import com.clazzbuddy.mongocollections.UserGroupMembers;
@@ -56,6 +59,8 @@ public class UserService {
 	public Users getUserDetails(String userKey) {
 		Query userByName = new Query();
 		userByName.addCriteria(Criteria.where("email").is(userKey));
+		userByName.addCriteria(Criteria.where("name").is(userKey));
+
 		Users user = mongoTemplate.findOne(userByName, Users.class);
 		if (user == null) {
 			ObjectId objID = new ObjectId(userKey);
@@ -80,6 +85,17 @@ public class UserService {
 			}
 		}
 		return user;
+	}
+	
+	public List<Users> searchUser(String searchKey) throws Exception {
+		Query schoolListQuery = new Query();
+		schoolListQuery.addCriteria(Criteria.where("email").regex("^" + searchKey.toLowerCase(), "i"));			
+		schoolListQuery.fields().include("email");
+		List<Users> schools = mongoTemplate.find(schoolListQuery, Users.class);
+		
+		return schools;
+		
+		
 	}
 	
 	public Users requestToJoinUserGroup(GroupInvitationAction action) {
