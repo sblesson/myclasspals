@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
 import { Upload, Button } from 'antd';
 import { UploadOutlined, StarOutlined } from '@ant-design/icons';
@@ -37,8 +37,10 @@ const PostModal = ({
     groupId: currentGroup.id
   });
 
-  formData.userId = auth.user._id;
-  formData.userName = auth.user.name;
+  useEffect(() => {
+    formData.userId = auth.user._id;
+    formData.userName = auth.user.name;
+  }, [auth.user]);
 
   function callback(key) {}
   const [modal, setModal] = useState(false);

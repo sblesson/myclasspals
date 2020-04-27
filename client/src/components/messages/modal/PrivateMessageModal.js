@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Button } from 'antd';
 import { UploadOutlined, StarOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
@@ -13,18 +13,12 @@ import { Formik, ErrorMessage } from 'formik';
 import AutoCompleteUserSearch from '../../common/autocompleteusersearch/AutoCompleteUserSearch';
 import './PrivateMessageModal.scss';
 
-const PrivateMessageModal = ({
-  sendPrivateMessage,
-  getUser,
-  history,
-  auth
-}) => {
+const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
   const [formData, setFormData] = useState({
+    endUserId: '',
     subject: '',
     message: '',
-    privateMessage: true,
-    userId: auth.user._id,
-    endUserId: auth.user._id
+    isPrivate: true
   });
 
   const [modal, setModal] = useState(false);
@@ -109,15 +103,6 @@ const PrivateMessageModal = ({
               />
             </Form.Group>
             <Form.Group className='private-message-modal-field'>
-              <Input
-                className='post-form-text-input'
-                type='text'
-                name='subject'
-                placeholder='Subject'
-                onChange={e => onChange(e)}
-              />
-            </Form.Group>
-            <Form.Group className='private-message-modal-field'>
               <textarea
                 className='post-form-text-input post-form-textarea'
                 name='message'
@@ -142,7 +127,10 @@ const PrivateMessageModal = ({
             color='primary'
             onClick={e => {
               e.preventDefault();
+              formData.userId = auth.user.email;
+              formData.endUserId = auth.senderEmail;
               sendPrivateMessage(formData, history);
+              setModal(false);
             }}
           >
             Send

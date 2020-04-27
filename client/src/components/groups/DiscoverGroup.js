@@ -2,17 +2,14 @@ import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { List } from 'semantic-ui-react';
 import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
-import { Menu, Dropdown, message } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import { requestToJoinUserGroup } from '../../actions/group';
-
-import { Tabs, Table, Tag, Button, Input } from 'antd';
+import PrivateMessageModal from './modal/CreateGroupModal';
+import { Card, Avatar, Tabs, Table, Tag, Button, Input } from 'antd';
 
 import { searchGroup } from '../../actions/group';
+import './DiscoverGroups.scss';
 
 const DiscoverGroups = ({
   loading,
@@ -21,20 +18,9 @@ const DiscoverGroups = ({
   searchGroup,
   requestToJoinUserGroup
 }) => {
-  const { TabPane } = Tabs;
-  console.log(group);
-  const { Search } = Input;
+  const { Meta } = Card;
 
-  const onClick = ({ key }) => {
-    message.info(`Click on item ${key}`);
-  };
-  const menu = (
-    <Menu onClick={onClick}>
-      <Menu.Item key='2'>Leave Group</Menu.Item>
-      <Menu.Item key='3'>Set as Moderator</Menu.Item>
-      <Menu.Item key='3'>Set as Member</Menu.Item>
-    </Menu>
-  );
+  const { Search } = Input;
 
   const requestToJoinUserGroupClickHandler = record => {
     requestToJoinUserGroup({
@@ -62,92 +48,25 @@ const DiscoverGroups = ({
     return isUserJoinedGroup;
   };
 
-  const myGroupsColumns = [
-    {
-      title: 'Name',
-      dataIndex: 'groupName',
-      key: 'id',
-      render: (text, record) => <Link to={`/group/${record.id}`}>{text}</Link>
-    },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-      render: role => (
-        <span>
-          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role}
-          </Tag>
-        </span>
-      )
-      /*      filters: [
-        { text: 'admin', value: 'admin' },
-        { text: 'member', value: 'member' }
-      ] */
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description'
-    },
-    {
-      title: 'Member Count',
-      dataIndex: 'memberCount',
-      key: 'memberCount'
-    },
-    {
-      title: 'Privacy',
-      dataIndex: 'privacy',
-      key: 'privacy'
-    },
-    {
-      title: 'Created Date',
-      dataIndex: 'createdDate',
-      key: 'createdDate'
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (text, group, index) => {
-        //if user part of user group
+  const groupActionMenu = group => {
+    //if user part of user group
+    let isMemberUserGroup = isLoggedInUserJoinedUserGroup(group);
 
-        let isLoggedInUserJoinedUserGroup = false;
-        let memberArr = [];
-        const userId = JSON.parse(localStorage.getItem('user'))._id;
-
-        if (
-          group &&
-          group.userGroupMembers &&
-          group.userGroupMembers.length > 0
-        ) {
-          memberArr = group.userGroupMembers.filter(item => {
-            return item._id === userId;
-          });
-        }
-        if (memberArr && memberArr.length > 0) {
-          //current user is already part of group
-          isLoggedInUserJoinedUserGroup = true;
-        }
-
-        console.log(isLoggedInUserJoinedUserGroup);
-
-        if (
-          !isLoggedInUserJoinedUserGroup &&
-          !group.isRequestUserGroupSuccess
-        ) {
-          return (
-            <Button
-              type='link'
-              style={{ marginRight: 16 }}
-              onClick={() => requestToJoinUserGroupClickHandler(group)}
-            >
-              Join
-            </Button>
-          );
-        }
-      }
+    if (!isMemberUserGroup && !group.isRequestUserGroupSuccess) {
+      return (
+        <Button
+          type='link'
+          style={{ marginRight: 16 }}
+          onClick={() => requestToJoinUserGroupClickHandler(group)}
+        >
+          {' '}
+          Join
+        </Button>
+      );
+    } else if (isMemberUserGroup) {
+      return <Tag color={'green'}>{'Joined'}</Tag>;
     }
-  ];
+  };
 
   return (
     <Fragment>
@@ -159,8 +78,7 @@ const DiscoverGroups = ({
             <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
               <LeftNav screen='discovergroup' />
             </div>
-
-            <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
+            <div className='col-xs-3 col-sm-3 col-md-6 col-lg-6'>
               <Search
                 placeholder='Search group'
                 onSearch={value => searchGroup(value)}
@@ -169,16 +87,37 @@ const DiscoverGroups = ({
               />
               {group !== null &&
               group.searchResult &&
-              group.searchResult.length > 0 ? (
-                <Table
-                  columns={myGroupsColumns}
-                  dataSource={group.searchResult}
-                  rowKey='id'
-                  loading={group.loading}
-                />
-              ) : (
-                ''
-              )}
+              group.searchResult.length > 0
+                ? group.searchResult.map((group, index) => (
+                    <Card
+                      key={index}
+                      style={{
+                        width: 300,
+                        marginBottom: 16
+                      }}
+                      actions={[
+                        <div className='member-count'>
+                          {group.userGroupMembers.length === 1
+                            ? group.userGroupMembers.length + ' member'
+                            : group.userGroupMembers.length + ' members'}{' '}
+                        </div>,
+                        null,
+                        groupActionMenu(group)
+                      ]}
+                    >
+                      <Link to={`/group/${group.id}`}>
+                        <Meta
+                          avatar={<i className='fas fa-users icon-group'></i>}
+                          title={group.groupName}
+                          description={group.description}
+                        />
+                      </Link>
+                    </Card>
+                  ))
+                : ''}
+            </div>
+            <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
+              <PrivateMessageModal />
             </div>
           </div>
         </Fragment>

@@ -46,7 +46,9 @@ const Posts = ({
         // So just return that
         user = auth.user;
       }
-      groupId = user.userGroup[0].id;
+      if (user && user.userGroup && user.userGroup.length > 0) {
+        groupId = user.userGroup[0].id;
+      }
     }
     getGroupDetails(groupId);
     searchPost({ groupId: groupId });

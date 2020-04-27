@@ -10,8 +10,8 @@ import {
   SEND_USER_EMAIL,
   GET_USER_GROUP,
   GET_USER_GROUP_ERROR,
-  GET_USER_PROFILE_BY_ID,
-  GET_USER
+  GET_USER,
+  SEARCH_USER
 } from '../actions/types';
 
 const initialState = {
@@ -19,7 +19,9 @@ const initialState = {
   isAuthenticated: false,
   loading: true,
   user: localStorage.getItem('user'),
-  profileUser: null
+  profileUser: null,
+  searchUserResult: [],
+  senderEmail: null
 };
 
 export default function(state = initialState, action) {
@@ -33,6 +35,15 @@ export default function(state = initialState, action) {
         loading: false,
         user: payload
       };
+    case SEARCH_USER:
+      console.log(payload);
+
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        searchUserResult: payload.users
+      };
     case GET_USER_GROUP:
       return {
         ...state,
@@ -40,15 +51,7 @@ export default function(state = initialState, action) {
         loading: false,
         user: payload
       };
-    case GET_USER_PROFILE_BY_ID:
-      console.log(payload);
 
-      return {
-        ...state,
-        isAuthenticated: true,
-        loading: false,
-        profileUser: payload.user
-      };
     case USER_LOADED:
       localStorage.setItem('user', JSON.stringify(payload.user));
       console.log('USER_LOADED');

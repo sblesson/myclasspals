@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,7 @@ public class PostMessageService {
 		}
 		Date current = new Date();
 		post.setPostedDate(current);
+		post.setIsComment(true);
 		mongoTemplate.insert(post);
 		if (parentPost.getComments() == null) {
 			parentPost.setComments(new ArrayList<Post>());
@@ -53,11 +55,15 @@ public class PostMessageService {
 
 		Query postListQuery = new Query();
 		if (postSearchQuery.getKeyword() != null) {
-			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase(), "i"));
+			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase()));
 		}
 
-		if ((postSearchQuery.getPrivateMessage() != null) && (postSearchQuery.getPrivateMessage() == true)) {
-			postListQuery.addCriteria(Criteria.where("endUserId").is(postSearchQuery.getUserId()));
+		if ((postSearchQuery.getIsPrivate() != null) && (postSearchQuery.getIsPrivate() == true)) {
+			postListQuery.addCriteria(new Criteria()
+			        .orOperator(
+			                Criteria.where("endUserId").is(postSearchQuery.getUserId()),
+			                Criteria.where("userId").is(postSearchQuery.getUserId())
+			            ) );
 		}
 		if (postSearchQuery.getGroupId() != null) {
 			postListQuery.addCriteria(Criteria.where("groupId").is(postSearchQuery.getGroupId()));
@@ -75,6 +81,12 @@ public class PostMessageService {
 			ObjectId objID = new ObjectId(postSearchQuery.getLastseen());
 			postListQuery.addCriteria(Criteria.where("_id").gt(objID));
 		}
+		if (postSearchQuery.getIsPrivate() != null) {
+			postListQuery.addCriteria(Criteria.where("isPrivate").is(postSearchQuery.getIsPrivate()));
+		} else {
+			postListQuery.addCriteria(Criteria.where("isPrivate").is(false));
+		}
+		postListQuery.addCriteria(Criteria.where("isComment").ne(true));
 
 		postListQuery.with(new Sort(Sort.Direction.DESC, "_id"));
 		postListQuery.limit(30);

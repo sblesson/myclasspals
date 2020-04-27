@@ -200,6 +200,7 @@ export const sendPrivateMessage = formData => async dispatch => {
       'Content-Type': 'application/json'
     }
   };
+  console.log(formData);
 
   try {
     const res = await axios.post(
@@ -208,6 +209,7 @@ export const sendPrivateMessage = formData => async dispatch => {
       config
     );
 
+    console.log(res.data);
     dispatch({
       type: SEND_PRIVATE_MESSAGE,
       payload: res.data
@@ -222,25 +224,28 @@ export const sendPrivateMessage = formData => async dispatch => {
   }
 };
 
-// Get post
+// Search post by postId
 export const getPost = id => async dispatch => {
+  console.log(id);
   try {
-    const res = await axios.get(`/api/posts/${id}`);
+    const res = await axios.get(`http://localhost:8080/post/getpost?id=${id}`);
+
+    console.log(res);
 
     dispatch({
       type: GET_POST,
-      payload: res.data
+      payload: res.data.post
     });
   } catch (err) {
     dispatch({
-      type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
 
 // Add comment
-export const addComment = (postId, formData) => async dispatch => {
+export const addMessageReply = (postId, formData) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -249,21 +254,56 @@ export const addComment = (postId, formData) => async dispatch => {
 
   try {
     const res = await axios.post(
-      `/api/posts/comment/${postId}`,
+      `http://localhost:8080/post/${postId}/addcomment`,
       formData,
       config
     );
 
     dispatch({
       type: ADD_COMMENT,
-      payload: { postId, comments: res.data }
+      payload: { postId, comments: res.data.post.comments }
     });
 
     dispatch(setAlert('Comment Added', 'success'));
   } catch (err) {
     dispatch({
-      type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Add comment
+export const addComment = (postId, message) => async dispatch => {
+  const formData = {
+    message: message,
+    groupId: '5e866d173a4aad3d75d10448',
+    userId: '5e866ca0d6f79c4a79085a5f',
+    userName: 'susan'
+  };
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post(
+      `http://localhost:8080/post/${postId}/addcomment`,
+      formData,
+      config
+    );
+
+    dispatch({
+      type: ADD_COMMENT,
+      payload: { postId, comments: res.data.post.comments }
+    });
+
+    dispatch(setAlert('Comment Added', 'success'));
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
@@ -278,14 +318,14 @@ export const addCommentToSinglePost = (postId, formData) => async dispatch => {
 
   try {
     const res = await axios.post(
-      `/api/posts/comment/${postId}`,
+      `http://localhost:8080/post/${postId}/addcomment`,
       formData,
       config
     );
 
     dispatch({
       type: ADD_COMMENT_SINGLE_POST,
-      payload: { postId, comments: res.data }
+      payload: { postId, comments: res.data.post.comments }
     });
 
     dispatch(setAlert('Comment Added', 'success'));

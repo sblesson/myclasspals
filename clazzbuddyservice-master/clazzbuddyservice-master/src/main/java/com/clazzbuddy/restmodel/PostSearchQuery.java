@@ -10,7 +10,7 @@ public class PostSearchQuery {
 
 	private String catagoryId;
 
-	private Boolean privateMessage;
+	private Boolean isPrivate;
 
 	private String userId;
 	
@@ -36,13 +36,6 @@ public class PostSearchQuery {
 		this.lastseen = lastseen;
 	}
 
-	public Boolean getPrivateMessage() {
-		return privateMessage;
-	}
-
-	public void setPrivateMessage(Boolean privateMessage) {
-		this.privateMessage = privateMessage;
-	}
 
 	public String getUserId() {
 		return userId;
@@ -82,6 +75,14 @@ public class PostSearchQuery {
 
 	public void setDateFilterGreaterThan(Date dateFilterGreaterThan) {
 		this.dateFilterGreaterThan = dateFilterGreaterThan;
+	}
+
+	public Boolean getIsPrivate() {
+		return isPrivate;
+	}
+
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 
 }

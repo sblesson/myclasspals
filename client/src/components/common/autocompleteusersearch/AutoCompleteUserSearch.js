@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Downshift from 'downshift';
 import { Div } from 'glamorous';
-import { getUser } from '../../../actions/auth';
+import { searchUser } from '../../../actions/auth';
 import {
   SubmitButton,
   Input,
@@ -25,15 +25,19 @@ import { Formik, ErrorMessage } from 'formik';
 
 import './AutoCompleteUserSearch.scss';
 
-const AutoCompleteUserSearch = ({ getUser, auth }) => {
+const AutoCompleteUserSearch = ({ searchUser, auth }) => {
+  auth.senderEmail = null;
   const endUserNameSelectHandler = selectedItem => {
-    console.log(selectedItem);
-    //setSelectedSchool(selectedItem);
+    if (selectedItem && selectedItem.email) {
+      auth.senderEmail = selectedItem.email;
+    } else {
+      auth.senderEmail = null;
+    }
   };
 
   const endUserNameToString = (item, index) => {
     console.log(item);
-    return item;
+    return item.email;
   };
 
   const inputOnChange = event => {
@@ -46,11 +50,9 @@ const AutoCompleteUserSearch = ({ getUser, auth }) => {
 
   const fetchUser = searchTerm => {
     setTimeout(() => {
-      getUser(searchTerm);
+      searchUser(searchTerm);
     }, Math.random() * 1000);
   };
-
-  const users = ['abc', 'bbb', 'ccc'];
 
   return (
     <Downshift
@@ -100,22 +102,24 @@ const AutoCompleteUserSearch = ({ getUser, auth }) => {
           </Div>
           {isOpen ? (
             <Menu>
-              {users.map((item, index) => (
-                <Item
-                  key={index}
-                  {...getItemProps({
-                    item,
-                    index,
-                    isActive: highlightedIndex === index,
-                    isSelected: selectedItem === item
-                  })}
-                >
-                  {item}
-                </Item>
-              ))}
+              {auth.searchUserResult && auth.searchUserResult.length > 0
+                ? auth.searchUserResult.map((item, index) => (
+                    <Item
+                      key={item._id}
+                      {...getItemProps({
+                        item,
+                        index
+                        //isActive: highlightedIndex === index,
+                        //isSelected: selectedItem === item
+                      })}
+                    >
+                      {item.email}
+                    </Item>
+                  ))
+                : 'No user found'}
             </Menu>
           ) : null}
-                            </div>
+        </div>
       )}
     </Downshift>
   );
@@ -123,4 +127,4 @@ const AutoCompleteUserSearch = ({ getUser, auth }) => {
 const mapStateToProps = state => ({
   auth: state.auth
 });
-export default connect(mapStateToProps, { getUser })(AutoCompleteUserSearch);
+export default connect(mapStateToProps, { searchUser })(AutoCompleteUserSearch);

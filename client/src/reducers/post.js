@@ -12,7 +12,8 @@ import {
   GET_POST_CATEGORIES,
   REMOVE_COMMENT_ERROR,
   SEARCH_POST_BY_GROUP_ID,
-  SEARCH_POST
+  SEARCH_POST,
+  SEND_PRIVATE_MESSAGE
 } from '../actions/types';
 
 const initialState = {
@@ -63,6 +64,12 @@ export default function(state = initialState, action) {
         posts: [payload.post, ...state.posts],
         loading: false
       };
+    case SEND_PRIVATE_MESSAGE:
+      return {
+        ...state,
+        posts: [payload.post, ...state.posts],
+        loading: false
+      };
     case DELETE_POST:
       return {
         ...state,
@@ -84,13 +91,18 @@ export default function(state = initialState, action) {
         loading: false
       };
     case ADD_COMMENT:
+      console.log(payload);
       return {
         ...state,
         posts: state.posts.map(post =>
           post._id === payload.postId
-            ? { ...post, comments: payload.comments }
+            ? {
+                ...post,
+                comments: payload.comments
+              }
             : post
         ),
+
         loading: false
       };
     case ADD_COMMENT_SINGLE_POST:

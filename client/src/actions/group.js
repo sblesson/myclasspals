@@ -101,8 +101,8 @@ export const getAllGroups = userId => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: GET_ALL_GROUPS_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: GET_ALL_GROUPS_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
@@ -172,12 +172,14 @@ export const inviteToJoinUserGroup = formData => async dispatch => {
     );
 
     console.log(res);
-
+    console.log(res.data.errorCode);
     dispatch({
       type: INVITE_TO_GROUP,
       payload: formData
     });
-
+    /*  if (res.data.errorCode === null) {
+      getGroupDetails(JSON.parse(formData).groupId);
+    } */
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
     dispatch({
