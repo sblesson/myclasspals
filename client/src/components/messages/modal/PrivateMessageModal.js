@@ -15,6 +15,7 @@ import './PrivateMessageModal.scss';
 
 const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
   const [formData, setFormData] = useState({
+    endUserId: '',
     subject: '',
     message: '',
     isPrivate: true
@@ -96,24 +97,6 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
               <Input
                 className='post-form-text-input'
                 type='text'
-                name='endUserId'
-                placeholder='end userId'
-                onChange={e => onChange(e)}
-              />
-            </Form.Group>
-            <Form.Group className='private-message-modal-field'>
-              <Input
-                className='post-form-text-input'
-                type='text'
-                name='subject'
-                placeholder='Subject'
-                onChange={e => onChange(e)}
-              />
-            </Form.Group>
-            <Form.Group className='private-message-modal-field'>
-              <Input
-                className='post-form-text-input'
-                type='text'
                 name='subject'
                 placeholder='Subject'
                 onChange={e => onChange(e)}
@@ -145,7 +128,9 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
             onClick={e => {
               e.preventDefault();
               formData.userId = auth.user.email;
+              formData.endUserId = auth.senderEmail;
               sendPrivateMessage(formData, history);
+              setModal(false);
             }}
           >
             Send

@@ -19,38 +19,48 @@ const Messages = ({
   auth,
   history
 }) => {
+  const [messagePanelSelected, setMessagePanelItemSelected] = useState(null);
+  const [chatFormData, setChatForm] = useState({
+    submitting: false,
+    value: ''
+  });
   useEffect(() => {
     searchPost({ userId: auth.user.email, isPrivate: true });
   }, [searchPost, auth.user._id]);
-  const [messagePanelSelected, setMessagePanelItemSelected] = useState(null);
-  const [chatMessage, setChatMessage] = useState(null);
+
+  useEffect(() => {
+    let recentPost = posts[0];
+    if (recentPost) {
+      setMessagePanelItemSelected(recentPost);
+      getPost(recentPost._id);
+      const redirectUrl = `/messages/${recentPost._id}`;
+      history.push(redirectUrl);
+    }
+  }, [posts]);
 
   const { TextArea } = Input;
 
   const handleMessageItemClick = (item, event) => {
-    console.log(item);
     setMessagePanelItemSelected(item);
     getPost(item._id);
-
     const redirectUrl = `/messages/${item._id}`;
-    console.log(redirectUrl);
     history.push(redirectUrl);
   };
 
   const onChatSubmit = async e => {
     e.preventDefault();
-    console.log(e);
-    console.log(messagePanelSelected);
     const formData = {
-      message: chatMessage,
-      //endUserId: messagePanelSelected.endUserId,
-      isPrivate: true,
+      message: chatFormData.value,
+      endUserId: messagePanelSelected.endUserId,
       subject: messagePanelSelected.subject
     };
+    setChatForm({ ...chatFormData, ['submitting']: true });
+
     addMessageReply(messagePanelSelected._id, formData);
   };
   const onChangeChatMessage = event => {
-    setChatMessage(event.target.value);
+    event.preventDefault();
+    setChatForm({ ...chatFormData, ['value']: event.target.value });
   };
   const comments = [
     {
@@ -74,29 +84,6 @@ const Messages = ({
       itemLayout='horizontal'
       renderItem={props => <Comment {...props} />}
     />
-  );
-
-  const Editor = ({ onChange, onSubmit, submitting, value }) => (
-    <div>
-      <Form.Item>
-        <TextArea
-          // name='reply'
-          rows={4}
-          onChange={e => onChangeChatMessage(e)}
-          placeholder='Type a message'
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button
-          htmlType='submit'
-          loading={submitting}
-          onClick={onChatSubmit}
-          type='primary'
-        >
-          Send
-        </Button>
-      </Form.Item>
-    </div>
   );
   return (
     <Fragment>
@@ -138,7 +125,7 @@ const Messages = ({
                         }
                         description={
                           <Ellipsis length={100} tooltip>
-                            {message.userId}
+                            {message.endUserId}
                           </Ellipsis>
                         }
                       />
@@ -153,11 +140,8 @@ const Messages = ({
             <div className='col-xs-6 col-sm-6 col-md- col-lg-6'>
               {post ? (
                 <Card style={{ width: 300 }}>
-                  <p>{post.endUserId}</p>
-
                   <p>{post.subject}</p>
                   <p>{post.endUserId}</p>
-                  <p>{post.message}</p>
                 </Card>
               ) : (
                 'No message history'
@@ -171,13 +155,25 @@ const Messages = ({
                   />
                 }
                 content={
-                  <Editor
-
-                  //onChange={this.handleChange}
-                  //onSubmit={this.handleSubmit}
-                  //submitting={submitting}
-                  //value={value}
-                  />
+                  <div>
+                    <Form.Item>
+                      <TextArea
+                        name='reply'
+                        rows={4}
+                        onChange={e => onChangeChatMessage(e)}
+                        placeholder='Type a message'
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        htmlType='submit'
+                        onClick={onChatSubmit}
+                        type='primary'
+                      >
+                        Send
+                      </Button>
+                    </Form.Item>
+                  </div>
                 }
               />
 

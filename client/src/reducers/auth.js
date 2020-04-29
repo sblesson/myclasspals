@@ -20,7 +20,8 @@ const initialState = {
   loading: true,
   user: localStorage.getItem('user'),
   profileUser: null,
-  searchUserResult: []
+  searchUserResult: [],
+  senderEmail: null
 };
 
 export default function(state = initialState, action) {

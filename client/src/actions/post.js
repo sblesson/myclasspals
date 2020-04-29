@@ -209,6 +209,7 @@ export const sendPrivateMessage = formData => async dispatch => {
       config
     );
 
+    console.log(res.data);
     dispatch({
       type: SEND_PRIVATE_MESSAGE,
       payload: res.data

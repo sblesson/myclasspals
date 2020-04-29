@@ -12,7 +12,8 @@ import {
   GET_POST_CATEGORIES,
   REMOVE_COMMENT_ERROR,
   SEARCH_POST_BY_GROUP_ID,
-  SEARCH_POST
+  SEARCH_POST,
+  SEND_PRIVATE_MESSAGE
 } from '../actions/types';
 
 const initialState = {
@@ -58,6 +59,12 @@ export default function(state = initialState, action) {
         loading: false
       };
     case ADD_POST:
+      return {
+        ...state,
+        posts: [payload.post, ...state.posts],
+        loading: false
+      };
+    case SEND_PRIVATE_MESSAGE:
       return {
         ...state,
         posts: [payload.post, ...state.posts],

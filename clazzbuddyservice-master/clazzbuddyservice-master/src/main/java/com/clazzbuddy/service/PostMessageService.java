@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -58,7 +59,11 @@ public class PostMessageService {
 		}
 
 		if ((postSearchQuery.getIsPrivate() != null) && (postSearchQuery.getIsPrivate() == true)) {
-			postListQuery.addCriteria(Criteria.where("endUserId").is(postSearchQuery.getUserId()));
+			postListQuery.addCriteria(new Criteria()
+			        .orOperator(
+			                Criteria.where("endUserId").is(postSearchQuery.getUserId()),
+			                Criteria.where("userId").is(postSearchQuery.getUserId())
+			            ) );
 		}
 		if (postSearchQuery.getGroupId() != null) {
 			postListQuery.addCriteria(Criteria.where("groupId").is(postSearchQuery.getGroupId()));

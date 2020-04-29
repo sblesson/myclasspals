@@ -26,14 +26,18 @@ import { Formik, ErrorMessage } from 'formik';
 import './AutoCompleteUserSearch.scss';
 
 const AutoCompleteUserSearch = ({ searchUser, auth }) => {
+  auth.senderEmail = null;
   const endUserNameSelectHandler = selectedItem => {
-    console.log(selectedItem);
-    //setSelectedSchool(selectedItem);
+    if (selectedItem && selectedItem.email) {
+      auth.senderEmail = selectedItem.email;
+    } else {
+      auth.senderEmail = null;
+    }
   };
 
   const endUserNameToString = (item, index) => {
     console.log(item);
-    return item;
+    return item.email;
   };
 
   const inputOnChange = event => {

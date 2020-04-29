@@ -68,7 +68,7 @@ const InviteUsersToGroupModal = ({ inviteToJoinUserGroup, auth, group }) => {
           }}
           onSubmit={(values, actions) => {
             console.log(JSON.stringify(values));
-            values.groupId = group.newGroup.id;
+            values.groupId = group.currentGroup.id;
             inviteToJoinUserGroup(JSON.stringify(values));
             actions.setSubmitting(false);
             actions.resetForm();

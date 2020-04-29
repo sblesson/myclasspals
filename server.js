@@ -30,7 +30,7 @@ app.use(cors());
 
 const { sendEmail } = require('./routes/api/mail');
 
-app.post('/api/sendMail', (req, res) => {
+/* app.post('/api/sendMail', (req, res) => {
   console.log(req.body);
 
   const adminEmail = config.get('adminEmail');
@@ -40,6 +40,19 @@ app.post('/api/sendMail', (req, res) => {
   console.log(adminEmailPass);
 
   sendEmail(req.body.email, req.body.name, adminEmail, adminEmailPass, 'hello');
+}); */
+
+app.post('/api/sendMail/signup', (req, res) => {
+  const adminEmail = config.get('adminEmail');
+  const adminEmailPass = config.get('adminEmailPass');
+  console.log(req);
+  sendEmail(
+    req.body.email,
+    req.body.name,
+    adminEmail,
+    adminEmailPass,
+    'welcome to my group' + req.body.id
+  );
 });
 
 // Serve static assets in production
