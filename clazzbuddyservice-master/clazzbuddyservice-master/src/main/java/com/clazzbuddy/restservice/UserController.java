@@ -66,7 +66,7 @@ public class UserController {
 	}
 	
 	@GetMapping(value="/getuserdetails", produces={"application/json"})
-	public CommonResult getUserDetailsx(@RequestParam(value = "user") String userkey) {
+	public CommonResult getUserDetails(@RequestParam(value = "user") String userkey) {
 		UserResult result = new UserResult();
 		
 		try {
@@ -91,6 +91,26 @@ public class UserController {
 			result.setUser(userService.getUserDetails(userkey));
 			user.setEmail(user.getEmail());
 			user.setName(user.getName());
+			user.setCreatedDate(user.getCreatedDate());
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error", e);
+		}
+		
+		return result;
+		
+	}
+	
+	@GetMapping(value="/getuserbyregid", produces={"application/json"})
+	public CommonResult getUserByRegId(@RequestParam(value = "id") String id) {
+		UserResult result = new UserResult();
+		
+		try {
+			Users user = new Users();
+			result.setUser(userService.getUserDetailsFromRegistrationId(id));
+			user.setEmail(user.getEmail());
 			user.setCreatedDate(user.getCreatedDate());
 			result.setErrorCode(0);
 		} catch (Exception e) {

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Register from '../auth/Register';
 import Login from '../auth/Login';
-
+import PendingRegistration from '../auth/PendingRegistration';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -11,6 +11,18 @@ import { withRouter } from 'react-router-dom';
 const Landing = ({ isAuthenticated, location }) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
+  }
+
+  var loginComponent;
+  var currentLocation = location.pathname;
+  console.log(currentLocation);
+  if (currentLocation.includes('/login')) {
+    loginComponent = <Login />;
+  } else if (currentLocation.includes('/invite/group/')) {
+    console.log('here');
+    loginComponent = <PendingRegistration />;
+  } else {
+    loginComponent = <Register />;
   }
 
   return (
@@ -34,9 +46,7 @@ const Landing = ({ isAuthenticated, location }) => {
               </div>
             </section>
           </div>
-          <div className='col col-4'>
-            {location.pathname === '/login' ? <Login /> : <Register />}
-          </div>
+          <div className='col col-4'>{loginComponent}</div>
         </div>
       </section>
       <Footer />

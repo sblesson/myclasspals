@@ -10,7 +10,7 @@ import { createProfile, getCurrentProfile } from '../../actions/profile';
 import { Tab, Button, Checkbox } from 'semantic-ui-react';
 
 import UserAccountForm from './UserAccountForm';
-import AddChildForm from './AddChildForm';
+import DiscoverGroup from '../groups/DiscoverGroup';
 import WelcomeForm from './WelcomeForm';
 
 import './CreateProfile.scss';
@@ -58,11 +58,11 @@ const CreateProfile = ({
         </Tab.Pane>
       )
     },
-    /*     {
-      menuItem: "Child's Class Info",
+    {
+      menuItem: 'Discover groups',
       render: () => (
         <Tab.Pane attached={false}>
-          <AddChildForm profileData={profileData} showwAddChildButton={true} />
+          <DiscoverGroup newRegistration={true} />
 
           <Button
             content='Proceed'
@@ -73,7 +73,7 @@ const CreateProfile = ({
           />
         </Tab.Pane>
       )
-    }, */
+    },
     {
       menuItem: 'Summary',
       render: () => (

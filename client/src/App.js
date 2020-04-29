@@ -41,6 +41,8 @@ const App = () => {
           <Switch>
             <Route exact path='/' component={Landing} />
             <Route exact path='/register' component={Landing} />
+            <Route exact path='/invite/group/:id' component={Landing} />
+
             <Route exact path='/login' component={Landing} />
             <Route exact path='/our-story' component={OurStory} />
             <Route exact path='/our-mission' component={OurMission} />

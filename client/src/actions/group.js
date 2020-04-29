@@ -172,12 +172,14 @@ export const inviteToJoinUserGroup = formData => async dispatch => {
     );
 
     console.log(res);
-
+    console.log(res.data.errorCode);
     dispatch({
       type: INVITE_TO_GROUP,
       payload: formData
     });
-
+    /*  if (res.data.errorCode === null) {
+      getGroupDetails(JSON.parse(formData).groupId);
+    } */
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
     dispatch({

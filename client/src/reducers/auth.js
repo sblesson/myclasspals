@@ -11,7 +11,8 @@ import {
   GET_USER_GROUP,
   GET_USER_GROUP_ERROR,
   GET_USER,
-  SEARCH_USER
+  SEARCH_USER,
+  GET_USER_BY_REGISTRATION_ID
 } from '../actions/types';
 
 const initialState = {
@@ -20,7 +21,9 @@ const initialState = {
   loading: true,
   user: localStorage.getItem('user'),
   profileUser: null,
-  searchUserResult: []
+  searchUserResult: [],
+  senderEmail: null,
+  pendingRegUser: null
 };
 
 export default function(state = initialState, action) {
@@ -42,6 +45,14 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         searchUserResult: payload.users
+      };
+
+    case GET_USER_BY_REGISTRATION_ID:
+      return {
+        ...state,
+        isAuthenticated: false,
+        loading: false,
+        pendingRegUser: payload.user
       };
     case GET_USER_GROUP:
       return {
@@ -83,6 +94,9 @@ export default function(state = initialState, action) {
     case LOGOUT:
     case ACCOUNT_DELETED:
       localStorage.removeItem('token');
+      localStorage.setItem('isAuthenticated', false);
+      localStorage.setItem('user', null);
+
       return {
         ...state,
         token: null,

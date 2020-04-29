@@ -2,7 +2,8 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Downshift from 'downshift';
 import { Div } from 'glamorous';
-import { searchUser } from '../../../actions/auth';
+import { getSchoolData } from '../../../actions/school';
+
 import {
   SubmitButton,
   Input,
@@ -23,52 +24,47 @@ import {
 } from '../DownshiftComponents';
 import { Formik, ErrorMessage } from 'formik';
 
-import './AutoCompleteUserSearch.scss';
+import './AutoCompleteSchoolSearch.scss';
 
-const AutoCompleteUserSearch = ({ searchUser, auth }) => {
-  auth.senderEmail = null;
-  const endUserNameSelectHandler = selectedItem => {
-    if (selectedItem && selectedItem.email) {
-      auth.senderEmail = selectedItem.email;
-    } else {
-      auth.senderEmail = null;
-    }
-  };
-
-  const endUserNameToString = (item, index) => {
-    console.log(item);
-    return item.email;
-  };
+const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
+  const [selectedSchool, setSelectedSchool] = useState('');
 
   const inputOnChange = event => {
     console.log(event.target.value);
     if (!event.target.value) {
       return;
     }
-    fetchUser(event.target.value);
+    fetchSchools(event.target.value);
   };
 
-  const fetchUser = searchTerm => {
+  const schoolNameSelectHandler = selectedItem => {
+    console.log(selectedItem);
+    setSelectedSchool(selectedItem);
+  };
+
+  const fetchSchools = searchTerm => {
     setTimeout(() => {
-      searchUser(searchTerm);
+      getSchoolData(searchTerm);
     }, Math.random() * 1000);
+  };
+
+  const schoolNameToString = (item, index) => {
+    console.log(item);
+    return item ? item.schoolName : '';
   };
 
   return (
     <Downshift
-      onChange={selectedItem => endUserNameSelectHandler(selectedItem)}
-      itemToString={endUserNameToString}
+      onChange={selectedItem => schoolNameSelectHandler(selectedItem)}
+      itemToString={schoolNameToString}
     >
       {({
         getInputProps,
         getToggleButtonProps,
         getItemProps,
         isOpen,
-        toggleMenu,
         clearSelection,
         selectedItem,
-        inputValue,
-        getLabelProps,
         highlightedIndex
       }) => (
         <div>
@@ -81,7 +77,7 @@ const AutoCompleteUserSearch = ({ searchUser, auth }) => {
             /> */}
             <input
               {...getInputProps({
-                placeholder: 'Type email or name ...',
+                placeholder: 'Type school or district or city, zip...',
                 onKeyUp: inputOnChange
               })}
             />
@@ -102,21 +98,21 @@ const AutoCompleteUserSearch = ({ searchUser, auth }) => {
           </Div>
           {isOpen ? (
             <Menu>
-              {auth.searchUserResult && auth.searchUserResult.length > 0
-                ? auth.searchUserResult.map((item, index) => (
+              {school && school.results.length > 0
+                ? school.results.map((item, index) => (
                     <Item
-                      key={item._id}
+                      key={item.schoolid}
                       {...getItemProps({
                         item,
-                        index
-                        //isActive: highlightedIndex === index,
-                        //isSelected: selectedItem === item
+                        index,
+                        isActive: highlightedIndex === index,
+                        isSelected: selectedItem === item
                       })}
                     >
-                      {item.email}
+                      {item.schoolName}
                     </Item>
                   ))
-                : 'No user found'}
+                : 'No school found'}
             </Menu>
           ) : null}
         </div>
@@ -125,6 +121,8 @@ const AutoCompleteUserSearch = ({ searchUser, auth }) => {
   );
 };
 const mapStateToProps = state => ({
-  auth: state.auth
+  school: state.school
 });
-export default connect(mapStateToProps, { searchUser })(AutoCompleteUserSearch);
+export default connect(mapStateToProps, { getSchoolData })(
+  AutoCompleteSchoolSearch
+);

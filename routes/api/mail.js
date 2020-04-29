@@ -2,7 +2,7 @@ const mailer = require('nodemailer');
 const { Hello } = require('./email_templates/hello_template');
 const { Thanks } = require('./email_templates/thanks_template');
 
-const getEmailData = (to, name, template) => {
+const getEmailData = (to, name, template, token) => {
   let data = null;
 
   switch (template) {
@@ -24,12 +24,17 @@ const getEmailData = (to, name, template) => {
       };
       break;
     default:
-      data;
+      data = {
+        from: 'clazzbuddy.com <support@clazzbuddy.com>',
+        to: to,
+        subject: `REGISTER ${name} ${token}`,
+        html: Thanks()
+      };
   }
   return data;
 };
 
-const sendEmail = (toEmail, name, adminEmail, adminPassword, type) => {
+const sendEmail = (toEmail, name, adminEmail, adminPassword, type, token) => {
   const smtpTransport = mailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -45,7 +50,7 @@ const sendEmail = (toEmail, name, adminEmail, adminPassword, type) => {
     }
   });
 
-  const mail = getEmailData(toEmail, name, type);
+  const mail = getEmailData(toEmail, name, type, token);
 
   smtpTransport.sendMail(mail, function(error, response) {
     if (error) {
