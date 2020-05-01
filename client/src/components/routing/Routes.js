@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Register from '../auth/Register';
 import Login from '../auth/Login';
 import Alert from '../layout/Alert';
 
@@ -20,12 +19,15 @@ import Posts from '../posts/Posts';
 import SinglePost from '../posts/SinglePost';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
+
 const Routes = () => {
   return (
     <section className='container'>
       <Alert />
       <Switch>
         <Route exact path='/login' component={Login} />
+{/*         <Route exact path='/invite/group/:id' component={PendingRegistration} />
+ */}
         <PrivateRoute exact path='/profiles' component={Profiles} />
         <PrivateRoute exact path='/messages' component={Messages} />
         <PrivateRoute exact path='/messages/:id' component={Messages} />

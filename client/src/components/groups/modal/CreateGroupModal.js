@@ -315,7 +315,9 @@ const CreateGroupModal = ({
                                     </Item>
                                   ))}
                                 </Menu>
-                              ) : null}
+                              ) : (
+                                'No school found'
+                              )}
                             </div>
                           )}
                         </Downshift>
