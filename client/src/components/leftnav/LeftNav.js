@@ -20,7 +20,6 @@ const LeftNav = ({
   categories,
   auth
 }) => {
-  console.log(categories);
   let myGroups = [];
   let user = null;
   let userGroup = null;
@@ -36,7 +35,7 @@ const LeftNav = ({
       user = auth.user;
     }
     if (user && user.userGroup && user.userGroup.length > 0) {
-       userGroup = user.userGroup;
+      userGroup = user.userGroup;
     }
 
     if (userGroup && userGroup.length > 0) {
@@ -60,12 +59,32 @@ const LeftNav = ({
     }
   }, [getLeftNav]);
 
-  return loading & (screen !== 'dashboard') ? (
-    <Spinner />
-  ) : (
-    <div className='leftnav-sidebar'>
-      <List disablePadding dense>
-        {screen !== 'dashboard' &&
+  const getNavByScreen = screen => {
+    switch (screen) {
+      case 'dashboard': {
+        return (
+          myGroups &&
+          myGroups.length > 0 &&
+          myGroups.map((leftNavItem, index) => (
+            <React.Fragment key={`${leftNavItem.title}${index}`}>
+              console.log(leftNavItem);
+              {leftNavItem === 'divider' ? (
+                <Divider style={{ margin: '6px 0' }} />
+              ) : (
+                <NavCategoryItem
+                  depthStep={depthStep}
+                  depth={depth}
+                  expanded={expanded}
+                  item={leftNavItem}
+                  index={index}
+                />
+              )}
+            </React.Fragment>
+          ))
+        );
+      }
+      default: {
+        return (
           leftnav &&
           leftnav.length > 0 &&
           leftnav.map((leftNavItem, index) => (
@@ -81,25 +100,18 @@ const LeftNav = ({
                 />
               )}
             </React.Fragment>
-          ))}
-        {screen == 'dashboard' &&
-          myGroups &&
-          myGroups.length > 0 &&
-          myGroups.map((leftNavItem, index) => (
-            <React.Fragment key={`${leftNavItem.title}${index}`}>
-              {leftNavItem === 'divider' ? (
-                <Divider style={{ margin: '6px 0' }} />
-              ) : (
-                <NavCategoryItem
-                  depthStep={depthStep}
-                  depth={depth}
-                  expanded={expanded}
-                  item={leftNavItem}
-                  index={index}
-                />
-              )}
-            </React.Fragment>
-          ))}
+          ))
+        );
+      }
+    }
+  };
+
+  return loading & (screen !== 'dashboard') ? (
+    <Spinner />
+  ) : (
+    <div className='leftnav-sidebar'>
+      <List disablePadding dense>
+        {getNavByScreen(screen)}
       </List>
     </div>
   );

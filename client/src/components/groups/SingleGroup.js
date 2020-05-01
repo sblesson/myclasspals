@@ -1,12 +1,11 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Table, Tag, Button } from 'antd';
+import { Tabs, Table, Tag, Button, Menu, Dropdown, message } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
 import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
-import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import {
@@ -14,7 +13,8 @@ import {
   approveUserGroupRequest,
   declineUserGroupRequest,
   changeGroupUserRole,
-  removeUserFromGroup
+  removeUserFromGroup,
+  acceptUserGroupInvitation
 } from '../../actions/group';
 
 const SingleGroup = ({
@@ -22,11 +22,20 @@ const SingleGroup = ({
   group,
   getGroupDetails,
   approveUserGroupRequest,
-  match
+  acceptUserGroupInvitation,
+  match,
+  auth
 }) => {
   useEffect(() => {
     getGroupDetails(match.params.id);
   }, [getGroupDetails, match.params.id]);
+
+  const isNewUserInvitedToGroup = false;
+
+  const isUserInvitedToGroup = requestedInvitations => {
+    requestedInvitations.filter(invitations => console.log(invitations));
+    isNewUserInvitedToGroup = true;
+  };
 
   const { TabPane } = Tabs;
   console.log(group);
@@ -62,8 +71,6 @@ const SingleGroup = ({
       )
     }
   ];
-
-  const operations = <InviteUsersToGroupModal />;
 
   //TODO check if you are admin, creator or member and decide menu actions
   const membersMenu = (
@@ -217,6 +224,41 @@ const SingleGroup = ({
     }
   ];
 
+  const acceptPendingInviteActionClick = currentGroup => {
+    acceptUserGroupInvitation({
+      groupId: currentGroup.id,
+      role: 'member',
+      invitedUserId: auth.user.email
+    });
+  };
+
+  const isUserInPendingRequestedInvitations = currentGroup => {
+    let found = false;
+    if (currentGroup && currentGroup.requestedInvitations.length > 0) {
+      found = currentGroup.requestedInvitations.find(
+        request => request.invitedUserId === auth.user.email
+      );
+    }
+    message.config({
+      top: 140,
+      duration: 5,
+      maxCount: 3,
+      rtl: true
+    });
+    if (found) {
+      message.warning('Action required. Click Join to be a member');
+      return (
+        <Button
+          className='ant-btn btn-primary'
+          style={{ marginRight: 16 }}
+          onClick={() => acceptPendingInviteActionClick(currentGroup)}
+        >
+          Join
+        </Button>
+      );
+    } else return <InviteUsersToGroupModal />;
+  };
+
   return (
     <Fragment>
       {loading ? (
@@ -237,7 +279,12 @@ const SingleGroup = ({
                 ></img>
               </div>
               {group !== null && group.currentGroup ? (
-                <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+                <Tabs
+                  defaultActiveKey='1'
+                  tabBarExtraContent={isUserInPendingRequestedInvitations(
+                    group.currentGroup
+                  )}
+                >
                   <TabPane tab='Posts' key='members'>
                     {group.currentGroup.userGroupMembers &&
                     group.currentGroup.userGroupMembers.length > 0 ? (
@@ -262,6 +309,12 @@ const SingleGroup = ({
                       'Current group member list is empty'
                     )}
                   </TabPane>
+                  {group.currentGroup.requestedInvitations &&
+                  group.currentGroup.requestedInvitations.length > 0 ? (
+                    <div>cool</div>
+                  ) : (
+                    'There are no pending request for this user group'
+                  )}
                   {group.isGroupAdmin ? (
                     <TabPane tab='Pending Requests' key='request'>
                       {group.currentGroup.requestedInvitations &&
@@ -311,11 +364,13 @@ SingleGroup.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  group: state.group
+  group: state.group,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, {
   getGroupDetails,
   declineUserGroupRequest,
-  approveUserGroupRequest
+  approveUserGroupRequest,
+  acceptUserGroupInvitation
 })(SingleGroup);

@@ -5,15 +5,8 @@ import { connect } from 'react-redux';
 
 import _ from 'lodash';
 
-import {
-  Input,
-  Grid,
-  Select,
-  Radio,
-  Form,
-  Button,
-  Checkbox
-} from 'semantic-ui-react';
+import { Input, Form } from 'semantic-ui-react';
+import AutoCompleteSchoolSearch from '../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
 
 const UserAccountForm = ({ profileData }) => {
   //const [formData, setFormData] = useState({ user });
@@ -30,41 +23,11 @@ const UserAccountForm = ({ profileData }) => {
       />
       <Form.Field
         control={Input}
-        placeholder='Phone Number'
-        name='phone'
-        defaultValue={profileData.phone}
-        onChange={e => onChange(e)}
-        required
-      />
-      <Form.Field
-        control={Input}
-        placeholder='Street'
-        name='street'
-        defaultValue={profileData.street}
-        onChange={e => onChange(e)}
-      />
-      <Form.Field
-        control={Input}
-        placeholder='Apt/Suite'
-        name='suite'
-        defaultValue={profileData.suite}
-        onChange={e => onChange(e)}
-      />
-      <Form.Field
-        control={Input}
         placeholder='City'
         name='city'
         defaultValue={profileData.city}
         onChange={e => onChange(e)}
       />
-
-      {/*       <Form.Field widths='equal'>
-        <Form.Select
-          fluid
-          //options={userData.address.state}
-          placeholder='Gender'
-        />
-      </Form.Field> */}
       <Form.Field
         control={Input}
         placeholder='Zip'
@@ -72,6 +35,7 @@ const UserAccountForm = ({ profileData }) => {
         defaultValue={profileData.zip}
         onChange={e => onChange(e)}
       />
+      <AutoCompleteSchoolSearch />
     </Form>
   );
 
