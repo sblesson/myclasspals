@@ -4,7 +4,8 @@ import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import {
   getuserbyregistrationid,
-  registerPendingInvitedUser
+  registerPendingInvitedUser,
+  getUser
 } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
@@ -13,14 +14,14 @@ const PendingRegistration = ({
   getuserbyregistrationid,
   registerPendingInvitedUser,
   isAuthenticated,
-  auth
+  auth,
+  match
 }) => {
-  let regId = 373321;
   useEffect(() => {
-    if (regId) {
-      getuserbyregistrationid(regId);
+    if (match.params.id) {
+      getuserbyregistrationid(match.params.id);
     }
-  }, [getuserbyregistrationid, regId]);
+  }, [getuserbyregistrationid, match.params.id]);
 
   const [formData, setFormData] = useState({
     name: '',
