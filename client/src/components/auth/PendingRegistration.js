@@ -4,8 +4,11 @@ import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import {
   getuserbyregistrationid,
-  registerPendingInvitedUser
+  registerPendingInvitedUser,
+  getUser
 } from '../../actions/auth';
+import { getGroupDetails } from '../../actions/group';
+
 import PropTypes from 'prop-types';
 
 const PendingRegistration = ({
@@ -13,14 +16,19 @@ const PendingRegistration = ({
   getuserbyregistrationid,
   registerPendingInvitedUser,
   isAuthenticated,
-  auth
+  getGroupDetails,
+  auth,
+  token
 }) => {
-  let regId = 373321;
+  console.log(token);
+
   useEffect(() => {
-    if (regId) {
-      getuserbyregistrationid(regId);
+    if (token) {
+      getuserbyregistrationid(token);
     }
-  }, [getuserbyregistrationid, regId]);
+  }, [getuserbyregistrationid, token]);
+
+  const [groupId, setGroupId] = useState(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -39,14 +47,16 @@ const PendingRegistration = ({
       setAlert('Passwords do not match', 'danger');
     } else {
       console.log(auth);
-      if (auth && auth.pendingRegUser && auth.pendingRegUser.email) {
-        console.log(auth.pendingRegUser.email);
-        let email = auth.pendingRegUser.email;
+      if (auth && auth.user && auth.user.email) {
+        console.log(auth);
+        let email = auth.user.email;
+        //setGroupId(auth.user.pendingInvitedUserGroups[0].id);
         registerPendingInvitedUser({
           name,
           email,
           password /* city, zipcode  */
         });
+        //getGroupDetails(groupId);
       }
     }
   };
@@ -117,5 +127,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setAlert,
   getuserbyregistrationid,
-  registerPendingInvitedUser
+  registerPendingInvitedUser,
+  getGroupDetails
 })(PendingRegistration);

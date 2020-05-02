@@ -53,7 +53,7 @@ app.post('/api/sendMail/signup', (req, res) => {
     req.body.name,
     adminEmail,
     adminEmailPass,
-    'welcome to my group',
+    'welcome_group',
     req.body.id
   );
   let responseJSON = {

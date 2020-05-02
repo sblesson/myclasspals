@@ -22,8 +22,7 @@ const initialState = {
   user: localStorage.getItem('user'),
   profileUser: null,
   searchUserResult: [],
-  senderEmail: null,
-  pendingRegUser: null
+  senderEmail: null
 };
 
 export default function(state = initialState, action) {
@@ -35,7 +34,7 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload
+        user: payload.user
       };
     case SEARCH_USER:
       console.log(payload);
@@ -52,7 +51,7 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: false,
         loading: false,
-        pendingRegUser: payload.user
+        user: payload.user
       };
     case GET_USER_GROUP:
       return {

@@ -72,6 +72,7 @@ const InviteUsersToGroupModal = ({ inviteToJoinUserGroup, auth, group }) => {
             inviteToJoinUserGroup(JSON.stringify(values));
             actions.setSubmitting(false);
             actions.resetForm();
+            setModal(false);
           }}
           validate={values => {
             if (!values.invitedUsers) {

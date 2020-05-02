@@ -1,6 +1,7 @@
 const mailer = require('nodemailer');
 const { Hello } = require('./email_templates/hello_template');
 const { Thanks } = require('./email_templates/thanks_template');
+const { WelcomeToGroup } = require('./email_templates/welcome_to_group');
 
 const getEmailData = (to, name, template, token) => {
   let data = null;
@@ -23,12 +24,19 @@ const getEmailData = (to, name, template, token) => {
         html: Thanks()
       };
       break;
+    case 'welcome_group':
+      data = {
+        from: 'clazzbuddy.com <support@clazzbuddy.com>',
+        to: to,
+        subject: `Welcome to group ${name} ${token}`,
+        html: WelcomeToGroup(token)
+      };
     default:
       data = {
         from: 'clazzbuddy.com <support@clazzbuddy.com>',
         to: to,
         subject: `REGISTER ${name} ${token}`,
-        html: Thanks()
+        html: WelcomeToGroup(token)
       };
   }
   return data;
@@ -49,6 +57,7 @@ const sendEmail = (toEmail, name, adminEmail, adminPassword, type, token) => {
       pass: adminPassword
     }
   });
+  console.log(type);
 
   const mail = getEmailData(toEmail, name, type, token);
 

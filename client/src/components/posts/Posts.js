@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Tabs, Input } from 'antd';
+import { Link } from 'react-router-dom';
 
+import { Tabs, Input } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
@@ -27,7 +28,8 @@ const Posts = ({
   getGroupDetails,
   group,
   searchPost,
-  match
+  match,
+  history
 }) => {
   useEffect(() => {
     let user = null;
@@ -35,36 +37,43 @@ const Posts = ({
 
     if (match && match.params && match.params.id) {
       groupId = match.params.id;
-    } else {
-      //first time groupId is not passed in url param.
-      //So get groupId from user group first item
+      //user clicked on another group from dashboard leftnav groups menu,
+      //get groupId from params
+      getGroupDetails(groupId);
+      searchPost({ groupId: groupId });
+      getPostCategories();
+    } else if (auth.user) {
       try {
         user = JSON.parse(auth.user);
       } catch (e) {
         // You can read e for more info
-        // Let's assume the error is that we already have parsed the auth.user
-        // So just return that
+        // Let's assume the error is that we already have parsed the auth.user so just return that
         user = auth.user;
       }
+      console.log(user);
       if (user && user.userGroup && user.userGroup.length > 0) {
+        //first time groupId is not passed in url param.
+        //So get groupId from user group first item
         groupId = user.userGroup[0].id;
+        getGroupDetails(groupId);
+        searchPost({ groupId: groupId });
+      } else if (
+        user &&
+        user.pendingInvitedUserGroups &&
+        user.pendingInvitedUserGroups.length > 0
+      ) {
+        //New user who got invitation from another group, redirect to groups page
+        console.log(user.pendingInvitedUserGroups);
+        group.currentGroup = user.pendingInvitedUserGroups[0];
+        groupId = user.pendingInvitedUserGroups[0].id;
+
+        history.push(`/group/${groupId}`);
+      } else {
+        //New user login for first time, not part of any groups, redirect to create profile and help user discover group
+        history.push(`/create-profile`);
       }
     }
-    getGroupDetails(groupId);
-    searchPost({ groupId: groupId });
-    getPostCategories();
   }, [getGroupDetails, searchPost, auth.user, match]);
-
-  /*   useEffect(() => {
-    const groupId = match.param.id;
-    getGroupDetails(groupId);
-    searchPost({ groupId: groupId });
-    getPostCategories();
-  }, [
-    getGroupDetails,
-    searchPost,
-    match && match.param && match.param.id ? match.param.id : null
-  ]); */
 
   const { Search } = Input;
 
@@ -152,7 +161,7 @@ const Posts = ({
     <Fragment>
       <div className='row'>
         <div className='col-xs-1 col-sm-3 col-md-3 col-lg-3'>
-          <LeftNav />
+          <LeftNav screen='dashboard' />
         </div>
         <div className='col-xs-6 col-sm-6 col-md-8 col-lg-6'>
           <PostFilters categories={categories} />
@@ -201,7 +210,12 @@ const Posts = ({
                   </div>
                 </TabPane>
               ) : (
-                ''
+                <Fragment>
+                  <p>You have not yet setup a profile, please add some info</p>
+                  <Link to='/create-profile' className='btn btn-primary my-1'>
+                    Create Profile
+                  </Link>
+                </Fragment>
               )}
             </Tabs>
           </div>

@@ -19,7 +19,7 @@ import {
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
-// Get all profiles
+/* // Get all profiles
 export const getUserGroup = userId => async dispatch => {
   try {
     const userId = JSON.parse(localStorage.getItem('user'))._id;
@@ -39,7 +39,7 @@ export const getUserGroup = userId => async dispatch => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
-};
+}; */
 
 /* export const getUserGroups = () => async dispatch => {
 
@@ -91,9 +91,13 @@ export const loadUser = () => async dispatch => {
 };
 
 export const getUser = userId => async dispatch => {
+  console.log(userId);
   try {
+    const res = await axios.get('/api/auth');
+    console.log(res);
+
     const userResp = await axios.get(
-      'http://localhost:8080/user/getuser?user=' + userId
+      'http://localhost:8080/user/getuserdetails?user=' + userId
     );
 
     console.log(userResp);
@@ -104,7 +108,7 @@ export const getUser = userId => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      // type: AUTH_ERROR //todo add error later
+      type: AUTH_ERROR
     });
   }
 };
@@ -233,11 +237,11 @@ export const registerPendingInvitedUser = ({
 
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
+    /*   const errors = err.response.data.errorCode;
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    }
+    } */
 
     dispatch({
       type: REGISTER_FAIL

@@ -1,12 +1,11 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Table, Tag, Button } from 'antd';
+import { Tabs, Table, Tag, Button, Menu, Dropdown, message } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
 import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
-import { Menu, Dropdown, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import {
@@ -14,7 +13,8 @@ import {
   approveUserGroupRequest,
   declineUserGroupRequest,
   changeGroupUserRole,
-  removeUserFromGroup
+  removeUserFromGroup,
+  acceptUserGroupInvitation
 } from '../../actions/group';
 
 const SingleGroup = ({
@@ -22,14 +22,22 @@ const SingleGroup = ({
   group,
   getGroupDetails,
   approveUserGroupRequest,
-  match
+  acceptUserGroupInvitation,
+  match,
+  auth
 }) => {
   useEffect(() => {
     getGroupDetails(match.params.id);
   }, [getGroupDetails, match.params.id]);
 
+  const isNewUserInvitedToGroup = false;
+
+  const isUserInvitedToGroup = requestedInvitations => {
+    requestedInvitations.filter(invitations => console.log(invitations));
+    isNewUserInvitedToGroup = true;
+  };
+
   const { TabPane } = Tabs;
-  console.log(group);
 
   const onClick = ({ key }) => {
     console.log(`Click on item ${key}`);
@@ -42,28 +50,6 @@ const SingleGroup = ({
       <Menu.Item key='2'>Decline</Menu.Item>
     </Menu>
   );
-
-  const requestToJoinColumn = [
-    {
-      title: 'Member Request',
-      dataIndex: 'invitedUserId',
-      key: 'invitedUserId',
-      render: text => <a>{text}</a>
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (text, record) => (
-        <Dropdown overlay={requestToJoinMenu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown>
-      )
-    }
-  ];
-
-  const operations = <InviteUsersToGroupModal />;
 
   //TODO check if you are admin, creator or member and decide menu actions
   const membersMenu = (
@@ -174,6 +160,15 @@ const SingleGroup = ({
     console.log(record);
   };
 
+  const requestToJoinColumn = [
+    {
+      title: 'Name',
+      dataIndex: 'invitedUserId',
+      key: 'invitedUserId',
+      render: text => <a>{text}</a>
+    }
+  ];
+
   const pendingInvitationsColumns = [
     {
       title: 'Requested Users',
@@ -217,6 +212,45 @@ const SingleGroup = ({
     }
   ];
 
+  const acceptPendingInviteActionClick = currentGroup => {
+    acceptUserGroupInvitation({
+      groupId: currentGroup.id,
+      role: 'member',
+      invitedUserId: auth.user.email
+    });
+  };
+
+  const isUserInPendingRequestedInvitations = currentGroup => {
+    let found = false;
+    if (
+      currentGroup &&
+      currentGroup.requestedInvitations &&
+      currentGroup.requestedInvitations.length > 0
+    ) {
+      found = currentGroup.requestedInvitations.find(
+        request => request.invitedUserId === auth.user.email
+      );
+    }
+    message.config({
+      top: 140,
+      duration: 5,
+      maxCount: 3,
+      rtl: true
+    });
+    if (found) {
+      message.warning('Action required. Click Join to be a member');
+      return (
+        <Button
+          className='ant-btn btn-primary'
+          style={{ marginRight: 16 }}
+          onClick={() => acceptPendingInviteActionClick(currentGroup)}
+        >
+          Join
+        </Button>
+      );
+    } else return <InviteUsersToGroupModal />;
+  };
+
   return (
     <Fragment>
       {loading ? (
@@ -228,7 +262,7 @@ const SingleGroup = ({
               <LeftNav screen='group' id={match.params.id} />
             </div>
 
-            <div className='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+            <div className='col-xs-6 col-sm-6 col-md-9 col-lg-9'>
               <div>
                 <img
                   src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
@@ -237,18 +271,17 @@ const SingleGroup = ({
                 ></img>
               </div>
               {group !== null && group.currentGroup ? (
-                <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
-                  <TabPane tab='Posts' key='members'>
+                <Tabs
+                  defaultActiveKey='1'
+                  tabBarExtraContent={isUserInPendingRequestedInvitations(
+                    group.currentGroup
+                  )}
+                >
+                  <TabPane tab='Posts' key='posts'>
                     {group.currentGroup.userGroupMembers &&
-                    group.currentGroup.userGroupMembers.length > 0 ? (
-                      <Table
-                        columns={columns}
-                        dataSource={group.currentGroup.userGroupMembers}
-                        rowKey='_id'
-                      />
-                    ) : (
-                      'Current group member list is empty'
-                    )}
+                    group.currentGroup.userGroupMembers.length > 0
+                      ? 'create  new post'
+                      : 'There are no post for this group'}
                   </TabPane>
                   <TabPane tab='Members' key='members'>
                     {group.currentGroup.userGroupMembers &&
@@ -262,22 +295,19 @@ const SingleGroup = ({
                       'Current group member list is empty'
                     )}
                   </TabPane>
-                  {group.isGroupAdmin ? (
-                    <TabPane tab='Pending Requests' key='request'>
-                      {group.currentGroup.requestedInvitations &&
-                      group.currentGroup.requestedInvitations.length > 0 ? (
-                        <Table
-                          columns={requestToJoinColumn}
-                          dataSource={group.currentGroup.requestedInvitations}
-                          rowKey='groupId'
-                        />
-                      ) : (
-                        'There are no pending request for this user group'
-                      )}
-                    </TabPane>
-                  ) : (
-                    ''
-                  )}
+                  <TabPane tab='Pending Invitations' key='request'>
+                    {group.currentGroup.requestedInvitations &&
+                    group.currentGroup.requestedInvitations.length > 0 ? (
+                      <Table
+                        columns={requestToJoinColumn}
+                        dataSource={group.currentGroup.requestedInvitations}
+                        rowKey='invitedUserId'
+                      />
+                    ) : (
+                      'There are no pending invitations send from this group'
+                    )}
+                  </TabPane>
+
                   {group.isGroupAdmin ? (
                     <TabPane tab='Pending Approvals' key='approvals'>
                       {group.currentGroup.pendingInvitations &&
@@ -311,11 +341,13 @@ SingleGroup.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  group: state.group
+  group: state.group,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, {
   getGroupDetails,
   declineUserGroupRequest,
-  approveUserGroupRequest
+  approveUserGroupRequest,
+  acceptUserGroupInvitation
 })(SingleGroup);
