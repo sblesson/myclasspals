@@ -23,7 +23,7 @@ const initialState = {
   profileUser: null,
   searchUserResult: [],
   senderEmail: null,
-  pendingRegUser: null
+  invalidRegistrationToken: false
 };
 
 export default function(state = initialState, action) {
@@ -35,11 +35,9 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload
+        user: payload.user
       };
     case SEARCH_USER:
-      console.log(payload);
-
       return {
         ...state,
         isAuthenticated: true,
@@ -48,12 +46,25 @@ export default function(state = initialState, action) {
       };
 
     case GET_USER_BY_REGISTRATION_ID:
-      return {
-        ...state,
-        isAuthenticated: false,
-        loading: false,
-        pendingRegUser: payload.user
-      };
+      console.log(payload);
+      if (payload.exception) {
+        return {
+          ...state,
+          isAuthenticated: false,
+          loading: false,
+          user: null,
+          invalidRegistrationToken: true
+        };
+      } else {
+        return {
+          ...state,
+          isAuthenticated: false,
+          loading: false,
+          user: payload.user,
+          invalidRegistrationToken: false
+        };
+      }
+
     case GET_USER_GROUP:
       return {
         ...state,
@@ -64,10 +75,6 @@ export default function(state = initialState, action) {
 
     case USER_LOADED:
       localStorage.setItem('user', JSON.stringify(payload.user));
-      console.log('USER_LOADED');
-
-      console.log(payload);
-
       return {
         ...state,
         isAuthenticated: true,
@@ -78,9 +85,6 @@ export default function(state = initialState, action) {
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
       localStorage.setItem('isAuthenticated', payload.isAuthenticated);
-
-      console.log('LOGIN_SUCCESS');
-      console.log(payload);
 
       return {
         ...state,

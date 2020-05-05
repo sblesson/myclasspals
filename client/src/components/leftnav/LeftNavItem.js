@@ -17,9 +17,9 @@ const SideNavItem = ({
   ...rest
 }) => {
   const [collapsed, setCollapsed] = React.useState(true);
-  const [selectedIndex, setSelectedIndex] = React.useState(false);
+  const [selectedNavItem, setSelectedNavItem] = React.useState('');
 
-  const { label, icon, url, items, Icon, onClick: onClickProp } = item;
+  const { title, icon, url, items, Icon, onClick: onClickProp } = item;
 
   const toggleCollapse = () => {
     setCollapsed(prevValue => !prevValue);
@@ -30,8 +30,10 @@ const SideNavItem = ({
       toggleCollapse();
     }
     if (onClickProp) {
-      console.log(item);
       onClickProp(e, item);
+    }
+    if (selectedNavItem !== item.title) {
+      setSelectedNavItem(item.title);
     }
   };
 
@@ -58,7 +60,7 @@ const SideNavItem = ({
         button
         dense
         {...rest}
-        selected={selectedIndex === item ? true : false}
+        selected={selectedNavItem === item.title}
       >
         <div
           style={{ paddingLeft: depth * depthStep }}
@@ -68,7 +70,7 @@ const SideNavItem = ({
            */}{' '}
           <div className='leftnav-sidebar-item-text'>
             <i className={`${icon} leftnav-sidebar-item-icon`}></i>
-            <Link to={`${url}`}>{label}</Link>
+            <Link to={`${url}`}>{title}</Link>
           </div>
         </div>
         {expandIcon}

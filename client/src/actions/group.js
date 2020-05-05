@@ -38,8 +38,6 @@ export const addGroup = formData => async dispatch => {
       config
     );
 
-    console.log(res);
-
     dispatch({
       type: ADD_GROUP,
       payload: res.data
@@ -69,8 +67,6 @@ export const updateGroup = formData => async dispatch => {
       config
     );
 
-    console.log(res);
-
     dispatch({
       type: UPDATE_GROUP,
       payload: res.data
@@ -89,12 +85,10 @@ export const updateGroup = formData => async dispatch => {
 export const getAllGroups = userId => async dispatch => {
   try {
     const userId = JSON.parse(localStorage.getItem('user'))._id;
-    console.log(userId);
 
     const response = await axios.get(
       'http://localhost:8080/user/getuserdetails?user=' + userId
     );
-    console.log(response);
     dispatch({
       type: GET_ALL_GROUPS,
       payload: response.data.user
@@ -157,7 +151,6 @@ export const searchGroup = searchKey => async dispatch => {
 
 //Admin sends users invitation to join userGroup
 export const inviteToJoinUserGroup = formData => async dispatch => {
-  console.log(formData);
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -170,12 +163,9 @@ export const inviteToJoinUserGroup = formData => async dispatch => {
       formData,
       config
     );
-
-    console.log(res);
-    console.log(res.data.errorCode);
     dispatch({
       type: INVITE_TO_GROUP,
-      payload: formData
+      payload: res.data
     });
     /*  if (res.data.errorCode === null) {
       getGroupDetails(JSON.parse(formData).groupId);
@@ -195,7 +185,6 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
       'Content-Type': 'application/json'
     }
   };
-  console.log(requestData);
   requestData.action = 'INVITE_ACCEPT';
   try {
     const res = await axios.post(
@@ -204,11 +193,12 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
       config
     );
 
-    console.log(res);
-
+    let currentGroup = res.data.user.userGroup.find(
+      request => request.id === requestData.groupId
+    );
     dispatch({
       type: ACCEPT_USER_GROUP,
-      payload: res.data
+      payload: { user: res.data.user, currentGroup: currentGroup }
     });
 
     dispatch(setAlert('User added to group', 'success'));
@@ -222,14 +212,11 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
 
 //User sends request to join user group
 export const requestToJoinUserGroup = requestData => async dispatch => {
-  console.log(requestData);
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
-
-  //requestData.action =
 
   try {
     const res = await axios.post(
@@ -237,8 +224,6 @@ export const requestToJoinUserGroup = requestData => async dispatch => {
       requestData,
       config
     );
-
-    console.log(res);
     res.data.origin = requestData.origin;
 
     dispatch({
@@ -256,7 +241,6 @@ export const requestToJoinUserGroup = requestData => async dispatch => {
 };
 //Admin approves group request initiated by user
 export const approveUserGroupRequest = requestData => async dispatch => {
-  console.log(requestData);
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -270,8 +254,6 @@ export const approveUserGroupRequest = requestData => async dispatch => {
       requestData,
       config
     );
-
-    console.log(res);
 
     dispatch({
       type: APPROVE_GROUP_REQUEST,
@@ -290,7 +272,6 @@ export const approveUserGroupRequest = requestData => async dispatch => {
 
 //Admin approves group request initiated by user
 export const declineUserGroupRequest = requestData => async dispatch => {
-  console.log(requestData);
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -304,9 +285,6 @@ export const declineUserGroupRequest = requestData => async dispatch => {
       requestData,
       config
     );
-
-    console.log(res);
-
     dispatch({
       type: APPROVE_GROUP_REQUEST,
       payload: res
@@ -334,9 +312,6 @@ export const changeGroupUserRole = requestData => async dispatch => {
       requestData,
       config
     );
-
-    console.log(res);
-
     dispatch({
       type: CHANGE_GROUP_USER_ROLE,
       payload: res
@@ -364,9 +339,6 @@ export const removeUserFromGroup = requestData => async dispatch => {
       requestData,
       config
     );
-
-    console.log(res);
-
     dispatch({
       type: CHANGE_GROUP_USER_ROLE,
       payload: res

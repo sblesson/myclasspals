@@ -8,6 +8,8 @@ import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
+import UserCard from './UserCard';
+
 import {
   getGroupDetails,
   approveUserGroupRequest,
@@ -38,11 +40,8 @@ const SingleGroup = ({
   };
 
   const { TabPane } = Tabs;
-  console.log(group);
 
-  const onClick = ({ key }) => {
-    console.log(`Click on item ${key}`);
-  };
+  const onClick = ({ key }) => {};
 
   //TODO check if you are admin, creator or member and decide menu actions
   const requestToJoinMenu = (
@@ -51,26 +50,6 @@ const SingleGroup = ({
       <Menu.Item key='2'>Decline</Menu.Item>
     </Menu>
   );
-
-  const requestToJoinColumn = [
-    {
-      title: 'Member Request',
-      dataIndex: 'invitedUserId',
-      key: 'invitedUserId',
-      render: text => <a>{text}</a>
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (text, record) => (
-        <Dropdown overlay={requestToJoinMenu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-            <DownOutlined />
-          </a>
-        </Dropdown>
-      )
-    }
-  ];
 
   //TODO check if you are admin, creator or member and decide menu actions
   const membersMenu = (
@@ -168,8 +147,6 @@ const SingleGroup = ({
   );
 
   const approveUserGroupRequestClick = record => {
-    console.log(record);
-
     approveUserGroupRequest({
       groupId: record.groupId,
       role: record.role,
@@ -177,9 +154,16 @@ const SingleGroup = ({
     });
   };
 
-  const declineUserGroupRequestClick = record => {
-    console.log(record);
-  };
+  const declineUserGroupRequestClick = record => {};
+
+  const requestToJoinColumn = [
+    {
+      title: 'Name',
+      dataIndex: 'invitedUserId',
+      key: 'invitedUserId',
+      render: text => <a>{text}</a>
+    }
+  ];
 
   const pendingInvitationsColumns = [
     {
@@ -234,7 +218,11 @@ const SingleGroup = ({
 
   const isUserInPendingRequestedInvitations = currentGroup => {
     let found = false;
-    if (currentGroup && currentGroup.requestedInvitations.length > 0) {
+    if (
+      currentGroup &&
+      currentGroup.requestedInvitations &&
+      currentGroup.requestedInvitations.length > 0
+    ) {
       found = currentGroup.requestedInvitations.find(
         request => request.invitedUserId === auth.user.email
       );
@@ -270,7 +258,7 @@ const SingleGroup = ({
               <LeftNav screen='group' id={match.params.id} />
             </div>
 
-            <div className='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+            <div className='col-xs-6 col-sm-6 col-md-9 col-lg-9'>
               <div>
                 <img
                   src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
@@ -285,21 +273,21 @@ const SingleGroup = ({
                     group.currentGroup
                   )}
                 >
-                  <TabPane tab='Posts' key='members'>
+                  <TabPane tab='Posts' key='posts'>
                     {group.currentGroup.userGroupMembers &&
-                    group.currentGroup.userGroupMembers.length > 0 ? (
-                      <Table
-                        columns={columns}
-                        dataSource={group.currentGroup.userGroupMembers}
-                        rowKey='_id'
-                      />
-                    ) : (
-                      'Current group member list is empty'
-                    )}
+                    group.currentGroup.userGroupMembers.length > 0
+                      ? 'create  new post'
+                      : 'There are no post for this group'}
                   </TabPane>
                   <TabPane tab='Members' key='members'>
                     {group.currentGroup.userGroupMembers &&
                     group.currentGroup.userGroupMembers.length > 0 ? (
+                      /*       <UserCard />
+                      <GroupCard
+                      currentGroup={group}
+                      index={index}
+                      type='requestedUserGroup'
+                    /> */
                       <Table
                         columns={columns}
                         dataSource={group.currentGroup.userGroupMembers}
@@ -309,28 +297,19 @@ const SingleGroup = ({
                       'Current group member list is empty'
                     )}
                   </TabPane>
-                  {group.currentGroup.requestedInvitations &&
-                  group.currentGroup.requestedInvitations.length > 0 ? (
-                    <div>cool</div>
-                  ) : (
-                    'There are no pending request for this user group'
-                  )}
-                  {group.isGroupAdmin ? (
-                    <TabPane tab='Pending Requests' key='request'>
-                      {group.currentGroup.requestedInvitations &&
-                      group.currentGroup.requestedInvitations.length > 0 ? (
-                        <Table
-                          columns={requestToJoinColumn}
-                          dataSource={group.currentGroup.requestedInvitations}
-                          rowKey='groupId'
-                        />
-                      ) : (
-                        'There are no pending request for this user group'
-                      )}
-                    </TabPane>
-                  ) : (
-                    ''
-                  )}
+                  <TabPane tab='Pending Invitations' key='request'>
+                    {group.currentGroup.requestedInvitations &&
+                    group.currentGroup.requestedInvitations.length > 0 ? (
+                      <Table
+                        columns={requestToJoinColumn}
+                        dataSource={group.currentGroup.requestedInvitations}
+                        rowKey='invitedUserId'
+                      />
+                    ) : (
+                      'There are no pending invitations send from this group'
+                    )}
+                  </TabPane>
+
                   {group.isGroupAdmin ? (
                     <TabPane tab='Pending Approvals' key='approvals'>
                       {group.currentGroup.pendingInvitations &&

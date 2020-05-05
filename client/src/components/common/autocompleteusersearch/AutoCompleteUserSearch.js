@@ -36,12 +36,10 @@ const AutoCompleteUserSearch = ({ searchUser, auth }) => {
   };
 
   const endUserNameToString = (item, index) => {
-    console.log(item);
     return item.email;
   };
 
   const inputOnChange = event => {
-    console.log(event.target.value);
     if (!event.target.value) {
       return;
     }

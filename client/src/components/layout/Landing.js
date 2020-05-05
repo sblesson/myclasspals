@@ -8,19 +8,16 @@ import PropTypes from 'prop-types';
 import Footer from './Footer';
 import { withRouter } from 'react-router-dom';
 
-const Landing = ({ isAuthenticated, location }) => {
+const Landing = ({ isAuthenticated, location, match }) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
-
   var loginComponent;
   var currentLocation = location.pathname;
-  console.log(currentLocation);
   if (currentLocation.includes('/login')) {
     loginComponent = <Login />;
   } else if (currentLocation.includes('/invite/group/')) {
-    console.log('here');
-    loginComponent = <PendingRegistration />;
+    loginComponent = <PendingRegistration token={match.params.id} />;
   } else {
     loginComponent = <Register />;
   }
