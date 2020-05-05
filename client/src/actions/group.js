@@ -204,11 +204,12 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
       config
     );
 
-    console.log(res);
-
+    let currentGroup = res.data.user.userGroup.find(
+      request => request.id === requestData.groupId
+    );
     dispatch({
       type: ACCEPT_USER_GROUP,
-      payload: res.data
+      payload: { user: res.data.user, currentGroup: currentGroup }
     });
 
     dispatch(setAlert('User added to group', 'success'));

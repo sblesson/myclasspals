@@ -1,5 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 import { Tabs, Input } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -48,7 +50,7 @@ const Posts = ({
         // Let's assume the error is that we already have parsed the auth.user so just return that
         user = auth.user;
       }
-
+      console.log(user);
       if (user && user.userGroup && user.userGroup.length > 0) {
         //first time groupId is not passed in url param.
         //So get groupId from user group first item
@@ -62,7 +64,9 @@ const Posts = ({
       ) {
         //New user who got invitation from another group, redirect to groups page
         console.log(user.pendingInvitedUserGroups);
+        group.currentGroup = user.pendingInvitedUserGroups[0];
         groupId = user.pendingInvitedUserGroups[0].id;
+
         history.push(`/group/${groupId}`);
       } else {
         //New user login for first time, not part of any groups, redirect to create profile and help user discover group
@@ -206,7 +210,12 @@ const Posts = ({
                   </div>
                 </TabPane>
               ) : (
-                ''
+                <Fragment>
+                  <p>You have not yet setup a profile, please add some info</p>
+                  <Link to='/create-profile' className='btn btn-primary my-1'>
+                    Create Profile
+                  </Link>
+                </Fragment>
               )}
             </Tabs>
           </div>

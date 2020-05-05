@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Login from '../auth/Login';
 import Alert from '../layout/Alert';
+import PendingRegistration from '../auth/PendingRegistration';
 
 import MyProfile from '../profile/MyProfile';
 import CreateProfile from '../profile/CreateProfile';
@@ -26,8 +27,9 @@ const Routes = () => {
       <Alert />
       <Switch>
         <Route exact path='/login' component={Login} />
-{/*         <Route exact path='/invite/group/:id' component={PendingRegistration} />
- */}
+
+        <Route exact path='/invite/group/:id' component={PendingRegistration} />
+
         <PrivateRoute exact path='/profiles' component={Profiles} />
         <PrivateRoute exact path='/messages' component={Messages} />
         <PrivateRoute exact path='/messages/:id' component={Messages} />

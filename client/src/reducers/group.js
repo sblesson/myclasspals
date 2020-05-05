@@ -87,8 +87,10 @@ export default function(state = initialState, action) {
         searchResult: payload.userGroupList
       };
     case GET_GROUP:
+      console.log(payload);
       return {
         ...state,
+        isAuthenticated: true,
         loading: false,
         currentGroup: payload,
         isGroupAdmin: isLoggedInUserGroupAdmin(payload.userGroupMembers)
@@ -104,6 +106,7 @@ export default function(state = initialState, action) {
     case ACCEPT_USER_GROUP:
       return {
         ...state,
+        currentGroup: payload.currentGroup,
         userGroup: payload.user.userGroup,
         pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
         requestedUserGroup: payload.user.requestedUserGroup,
