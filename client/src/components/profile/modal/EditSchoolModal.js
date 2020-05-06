@@ -168,7 +168,6 @@ EditSchoolModal.propTypes = {
 };
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     results: state.school.results,
     isLoading: state.school.isLoading,

@@ -12,7 +12,7 @@ import {
   requestToJoinUserGroup
 } from '../../actions/group';
 
-const GroupCard = ({
+const UserCard = ({
   currentGroup,
   index,
   type,
@@ -169,7 +169,7 @@ const GroupCard = ({
   );
 };
 
-GroupCard.propTypes = {
+UserCard.propTypes = {
   currentGroup: PropTypes.object.isRequired
 };
 
@@ -181,4 +181,4 @@ export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
   declineUserGroupRequest,
   requestToJoinUserGroup
-})(GroupCard);
+})(UserCard);

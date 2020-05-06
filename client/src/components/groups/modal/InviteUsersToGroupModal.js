@@ -32,7 +32,6 @@ const InviteUsersToGroupModal = ({ inviteToJoinUserGroup, auth, group }) => {
 
   const toggle = () => setModal(!modal);
   const onChange = e => {
-    console.log(e.target.name, e.target.value);
     //setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -40,9 +39,7 @@ const InviteUsersToGroupModal = ({ inviteToJoinUserGroup, auth, group }) => {
     console.log(`selected ${value}`);
   };
 
-  const onCreateGroupSubmit = data => {
-    console.log(data);
-  };
+  const onCreateGroupSubmit = data => {};
 
   const validateRequired = value => {
     return value ? undefined : 'required';

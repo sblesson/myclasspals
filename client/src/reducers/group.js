@@ -51,7 +51,6 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case ADD_GROUP:
-      console.log(payload);
       return {
         ...state,
         groups: [payload.userGroup, ...state.groups],
@@ -60,7 +59,6 @@ export default function(state = initialState, action) {
         loading: false
       };
     case UPDATE_GROUP:
-      console.log(payload);
       return {
         ...state,
         groups: [payload.userGroup, ...state.groups],
@@ -79,7 +77,6 @@ export default function(state = initialState, action) {
         requestedUserGroup: payload.requestedUserGroup
       };
     case SEARCH_ALL_GROUP:
-      console.log(payload);
       return {
         ...state,
         isAuthenticated: true,
@@ -87,7 +84,6 @@ export default function(state = initialState, action) {
         searchResult: payload.userGroupList
       };
     case GET_GROUP:
-      console.log(payload);
       return {
         ...state,
         isAuthenticated: true,
@@ -98,9 +94,10 @@ export default function(state = initialState, action) {
     case INVITE_TO_GROUP:
       return {
         ...state,
-        userGroup: payload.user.userGroup,
-        pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
-        requestedUserGroup: payload.user.requestedUserGroup,
+        currentGroup: payload.userGroup,
+        userGroup: payload.userGroup,
+        pendingInvitedUserGroups: payload.userGroup.pendingInvitations,
+        requestedUserGroup: payload.userGroup.requestedInvitations,
         loading: false
       };
     case ACCEPT_USER_GROUP:

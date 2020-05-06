@@ -149,7 +149,7 @@ public class UserService {
 
 	}
 
-	public void inviteToJoinUserGroup(GroupInvitationAction action) throws Exception {
+	public UserGroup inviteToJoinUserGroup(GroupInvitationAction action) throws Exception {
 
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 
@@ -184,6 +184,8 @@ public class UserService {
 
 		mongoTemplate.save(invitedUser);
 		mongoTemplate.save(userGroup);
+		
+		return userGroup;
 	}
 
 	public Users acceptGroupInvitation(GroupInvitationAction action) throws Exception {
@@ -288,6 +290,15 @@ public class UserService {
 			mongoTemplate.save(invitedUser);
 			mongoTemplate.save(userGroup);
 		}
+	}
+	
+	public void deleteUserRegToken(String id) {
+		
+		Query userRegById = new Query();
+		userRegById.addCriteria(Criteria.where("id").is(id));
+		UserRegistration userReg = mongoTemplate.findOne(userRegById, UserRegistration.class);
+		
+		mongoTemplate.remove(userReg);
 	}
 
 }

@@ -24,7 +24,6 @@ import './styles.css';
 
 const DownshiftTwo = ({ getSchoolData, schools, school, grade, classroom }) => {
   const inputOnChange = event => {
-    console.log(event.target.value);
     if (!event.target.value) {
       return;
     }
@@ -32,14 +31,12 @@ const DownshiftTwo = ({ getSchoolData, schools, school, grade, classroom }) => {
   };
 
   const gradeInputOnChange = event => {
-    console.log(event.target.value);
     if (!event.target.value) {
       return;
     }
   };
 
   const classRoomInputOnChange = event => {
-    console.log(event.target.value);
     if (!event.target.value) {
       return;
     }

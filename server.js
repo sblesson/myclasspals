@@ -17,11 +17,6 @@ app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/posts'));
-app.use('/api/leftnav', require('./routes/api/leftnav'));
-app.use('/api/categories', require('./routes/api/categories'));
-
-app.use('/api/leftnav', require('./routes/api/leftnav'));
-app.use('/api/categories', require('./routes/api/categories'));
 //send email
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

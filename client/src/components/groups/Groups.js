@@ -55,7 +55,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
                       ? group.userGroup.map((group, index) => (
                           <GroupCard
                             currentGroup={group}
-                            index={index}
+                            key={index}
                             type='mygroups'
                           />
                         ))
@@ -67,7 +67,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
                       ? group.pendingInvitedUserGroups.map((group, index) => (
                           <GroupCard
                             currentGroup={group}
-                            index={index}
+                            key={index}
                             type='pendingInvitedUserGroups'
                           />
                         ))

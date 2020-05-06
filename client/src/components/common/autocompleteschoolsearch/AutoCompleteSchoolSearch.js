@@ -30,7 +30,6 @@ const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
   const [selectedSchool, setSelectedSchool] = useState('');
 
   const inputOnChange = event => {
-    console.log(event.target.value);
     if (!event.target.value) {
       return;
     }
@@ -38,7 +37,6 @@ const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
   };
 
   const schoolNameSelectHandler = selectedItem => {
-    console.log(selectedItem);
     setSelectedSchool(selectedItem);
   };
 
@@ -49,7 +47,6 @@ const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
   };
 
   const schoolNameToString = (item, index) => {
-    console.log(item);
     return item ? item.schoolName : '';
   };
 

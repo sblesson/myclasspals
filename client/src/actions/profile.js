@@ -246,7 +246,6 @@ export const addReminder = (formData, history) => async dispatch => {
 // Delete school
 export const deleteSchool = id => async dispatch => {
   try {
-    console.log('deleteSchool');
     const res = await axios.delete(`/api/profile/community/${id}`);
 
     dispatch({

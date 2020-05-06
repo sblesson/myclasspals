@@ -137,7 +137,6 @@ const FilterPanel = ({
   };
 
   const handleCategoryFilterClick = (item, event) => {
-    console.log(item);
     setCategoryFilterSelected(item);
 
     if (filterObjectSelected && filterObjectSelected.groupId) {

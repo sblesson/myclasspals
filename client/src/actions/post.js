@@ -15,7 +15,8 @@ import {
   REMOVE_COMMENT_ERROR,
   SEND_PRIVATE_MESSAGE,
   SEARCH_POST_BY_GROUP_ID,
-  SEARCH_POST
+  SEARCH_POST,
+  GET_POST_CATEGORIES_ERROR
 } from './types';
 
 // Get posts
@@ -38,15 +39,13 @@ export const getPosts = () => async dispatch => {
 // Get posts
 export const getPostCategories = () => async dispatch => {
   try {
-    const res = await axios.get('/api/categories');
-
     dispatch({
       type: GET_POST_CATEGORIES,
-      payload: res.data
+      payload: { screen: 'dash' }
     });
   } catch (err) {
     dispatch({
-      type: POST_ERROR,
+      type: GET_POST_CATEGORIES_ERROR,
       payload: { msg: err, status: err }
       //payload: { msg: err.response.statusText, status: err.response.status } //todo change error message
     });
@@ -120,9 +119,6 @@ export const addPost = formData => async dispatch => {
       formData,
       config
     );
-
-    console.log(res);
-
     dispatch({
       type: ADD_POST,
       payload: res.data
@@ -152,8 +148,6 @@ export const searchPostByGroupId = formData => async dispatch => {
       config
     );
 
-    console.log(res);
-
     dispatch({
       type: SEARCH_POST_BY_GROUP_ID,
       payload: res.data
@@ -179,9 +173,6 @@ export const searchPost = formData => async dispatch => {
       formData,
       config
     );
-
-    console.log(res);
-
     dispatch({
       type: SEARCH_POST,
       payload: res.data.post
@@ -200,8 +191,6 @@ export const sendPrivateMessage = formData => async dispatch => {
       'Content-Type': 'application/json'
     }
   };
-  console.log(formData);
-
   try {
     const res = await axios.post(
       'http://localhost:8080/post/createpost',
@@ -209,7 +198,6 @@ export const sendPrivateMessage = formData => async dispatch => {
       config
     );
 
-    console.log(res.data);
     dispatch({
       type: SEND_PRIVATE_MESSAGE,
       payload: res.data
@@ -226,11 +214,8 @@ export const sendPrivateMessage = formData => async dispatch => {
 
 // Search post by postId
 export const getPost = id => async dispatch => {
-  console.log(id);
   try {
     const res = await axios.get(`http://localhost:8080/post/getpost?id=${id}`);
-
-    console.log(res);
 
     dispatch({
       type: GET_POST,
@@ -348,9 +333,7 @@ export const deleteComment = (postId, commentId) => async dispatch => {
     });
 
     dispatch(setAlert('Comment Removed', 'success'));
-    console.log(commentId);
   } catch (err) {
-    console.log(err);
     dispatch({
       type: REMOVE_COMMENT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
@@ -371,9 +354,7 @@ export const deleteSinglePostComment = (
     });
 
     dispatch(setAlert('Comment Removed', 'success'));
-    console.log(commentId);
   } catch (err) {
-    console.log(err);
     dispatch({
       type: REMOVE_COMMENT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
