@@ -50,20 +50,19 @@ const Posts = ({
         // Let's assume the error is that we already have parsed the auth.user so just return that
         user = auth.user;
       }
-      console.log(user);
       if (user && user.userGroup && user.userGroup.length > 0) {
         //first time groupId is not passed in url param.
         //So get groupId from user group first item
         groupId = user.userGroup[0].id;
         getGroupDetails(groupId);
         searchPost({ groupId: groupId });
+        getPostCategories();
       } else if (
         user &&
         user.pendingInvitedUserGroups &&
         user.pendingInvitedUserGroups.length > 0
       ) {
         //New user who got invitation from another group, redirect to groups page
-        console.log(user.pendingInvitedUserGroups);
         group.currentGroup = user.pendingInvitedUserGroups[0];
         groupId = user.pendingInvitedUserGroups[0].id;
 
@@ -173,8 +172,8 @@ const Posts = ({
             ></img>
           </div>
           <div className='feed-container'>
-            <Tabs defaultActiveKey='1' /* tabBarExtraContent={operations} */>
-              {group && group.currentGroup && group.currentGroup.groupName ? (
+            {group && group.currentGroup && group.currentGroup.groupName ? (
+              <Tabs defaultActiveKey='1' /* tabBarExtraContent={operations} */>
                 <TabPane tab={group.currentGroup.groupName} key='1'>
                   <div id='main' className='feed-wrapper'>
                     <PostModal />
@@ -209,15 +208,15 @@ const Posts = ({
                     </AutoSizer> */}
                   </div>
                 </TabPane>
-              ) : (
-                <Fragment>
-                  <p>You have not yet setup a profile, please add some info</p>
-                  <Link to='/create-profile' className='btn btn-primary my-1'>
-                    Create Profile
-                  </Link>
-                </Fragment>
-              )}
-            </Tabs>
+              </Tabs>
+            ) : (
+              <Fragment>
+                <p>You have not yet setup a profile, please add some info</p>
+                <Link to='/create-profile' className='btn btn-primary my-1'>
+                  Create Profile
+                </Link>
+              </Fragment>
+            )}
           </div>
         </div>
         <div className='col-xs-2 col-sm-2 col-md-2 col-lg-2'>

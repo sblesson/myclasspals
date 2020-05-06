@@ -20,13 +20,21 @@ const PendingRegistration = ({
   auth,
   token
 }) => {
-  console.log(token);
-
   useEffect(() => {
     if (token) {
       getuserbyregistrationid(token);
     }
   }, [getuserbyregistrationid, token]);
+
+  useEffect(() => {
+    console.log('yay');
+    console.log(auth.user);
+    if (auth.invalidRegistrationToken) {
+      //todo change window.location logic later
+      window.location.pathname = '/register';
+      //return <Redirect to='/register' />;
+    }
+  }, [auth.user]);
 
   const [groupId, setGroupId] = useState(null);
 
@@ -46,9 +54,7 @@ const PendingRegistration = ({
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      console.log(auth);
       if (auth && auth.user && auth.user.email) {
-        console.log(auth);
         let email = auth.user.email;
         //setGroupId(auth.user.pendingInvitedUserGroups[0].id);
         registerPendingInvitedUser({

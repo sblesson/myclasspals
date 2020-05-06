@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import LeftNavItem from './LeftNavItem';
-import NavCategoryItem from './NavCategoryItem';
+import DashboardLeftNavItem from './DashboardLeftNavItem';
 import Spinner from '../layout/Spinner';
 
 import { getLeftNav } from '../../actions/leftnav';
@@ -17,13 +17,22 @@ const LeftNav = ({
   id,
   getLeftNav,
   leftnav: { leftnav, loading },
-  categories,
-  auth
+  auth,
+  group
 }) => {
-  let myGroups = [];
-  let user = null;
-  let userGroup = null;
+  let depthStep = 10,
+    depth = 0,
+    expanded;
   useEffect(() => {
+    if (screen !== 'dashboard') {
+      getLeftNav(screen, id);
+    }
+  }, [getLeftNav]);
+
+  const getUserGroups = () => {
+    let user = null;
+    let userGroup = null;
+    let myGroups = [];
     //first time groupId is not passed in url param.
     //So get groupId from user group first item
     try {
@@ -46,37 +55,31 @@ const LeftNav = ({
         icon: 'fas fa-users',
         url: '/dashboard/' + group.id
       }));
+      console.log(myGroups);
     }
-  }, [auth.user]);
 
-  let depthStep = 10,
-    depth = 0,
-    expanded;
-
-  useEffect(() => {
-    if (screen !== 'dashboard') {
-      getLeftNav(screen, id);
-    }
-  }, [getLeftNav]);
+    return myGroups;
+  };
 
   const getNavByScreen = screen => {
     switch (screen) {
       case 'dashboard': {
+        const myGroups = getUserGroups();
         return (
           myGroups &&
           myGroups.length > 0 &&
           myGroups.map((leftNavItem, index) => (
             <React.Fragment key={`${leftNavItem.title}${index}`}>
-              console.log(leftNavItem);
               {leftNavItem === 'divider' ? (
                 <Divider style={{ margin: '6px 0' }} />
               ) : (
-                <NavCategoryItem
+                <DashboardLeftNavItem
                   depthStep={depthStep}
                   depth={depth}
                   expanded={expanded}
                   item={leftNavItem}
-                  index={index}
+                  key={index}
+                  group={group}
                 />
               )}
             </React.Fragment>
@@ -97,6 +100,7 @@ const LeftNav = ({
                   depth={depth}
                   expanded={expanded}
                   item={leftNavItem}
+                  key={index}
                 />
               )}
             </React.Fragment>
@@ -126,7 +130,8 @@ const mapStateToProps = state => {
   return {
     leftnav: state.leftnav,
     categories: state.post.categories,
-    auth: state.auth
+    auth: state.auth,
+    group: state.group
   };
 };
 

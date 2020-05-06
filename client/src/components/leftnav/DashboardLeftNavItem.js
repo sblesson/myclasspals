@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import List from '@material-ui/core/List';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -9,31 +9,43 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import Collapse from '@material-ui/core/Collapse';
 import { Link } from 'react-router-dom';
 
-const SideNavItem = ({
+const DashboardLeftNavItem = ({
   depthStep = 10,
   depth = 0,
   expanded,
   item,
   index,
-  ...rest
+  selectedItem,
+  group,
+  ...rest,
 }) => {
   const [collapsed, setCollapsed] = React.useState(true);
   const [selectedNavItem, setSelectedNavItem] = React.useState(null);
 
   const { title, icon, url, items, Icon, onClick: onClickProp } = item;
 
+  useEffect(() => { 
+    if(group && group.currentGroup && group.currentGroup.groupName){
+      setSelectedNavItem(group.currentGroup.groupName);
+    }
+  }, [group.currentGroup]);
+
+
   const toggleCollapse = () => {
     setCollapsed(prevValue => !prevValue);
   };
 
   const handleLeftNavItemClick = (item, e) => {
-    setSelectedNavItem(item.title);
 
     if (Array.isArray(items)) {
       toggleCollapse();
     }
     if (onClickProp) {
       onClickProp(e, item);
+    }
+
+    if(selectedNavItem !== item.title){
+      setSelectedNavItem(item.title);
     }
   };
 
@@ -83,7 +95,7 @@ const SideNavItem = ({
                 {subItem === 'divider' ? (
                   <Divider style={{ margin: '6px 0' }} />
                 ) : (
-                  <SideNavItem
+                  <DashboardLeftNavItem
                     depth={depth + 1}
                     depthStep={depthStep}
                     item={subItem}
@@ -97,4 +109,4 @@ const SideNavItem = ({
     </div>
   );
 };
-export default SideNavItem;
+export default DashboardLeftNavItem;

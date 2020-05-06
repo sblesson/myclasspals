@@ -15,7 +15,10 @@ import {
   GET_USER_GROUP_ERROR,
   GET_USER,
   SEARCH_USER,
-  GET_USER_BY_REGISTRATION_ID
+  GET_USER_BY_REGISTRATION_ID,
+  GET_USER_BY_REGISTRATION_ID_ERROR,
+  DELETE_USER_REGISTRATION_TOKEN,
+  DELETE_USER_REGISTRATION_TOKEN_ERROR
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -71,13 +74,9 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
-    console.log(res);
-
     const userGroupRes = await axios.get(
       'http://localhost:8080/user/getuserdetails?user=' + res.data._id
     );
-
-    console.log(userGroupRes);
 
     dispatch({
       type: USER_LOADED,
@@ -91,17 +90,12 @@ export const loadUser = () => async dispatch => {
 };
 
 export const getUser = userId => async dispatch => {
-  console.log(userId);
   try {
     const res = await axios.get('/api/auth');
-    console.log(res);
 
     const userResp = await axios.get(
       'http://localhost:8080/user/getuserdetails?user=' + userId
     );
-
-    console.log(userResp);
-
     dispatch({
       type: GET_USER,
       payload: userResp.data
@@ -118,9 +112,6 @@ export const searchUser = keyword => async dispatch => {
     const userResp = await axios.get(
       'http://localhost:8080/user/searchuser?user=' + keyword
     );
-
-    console.log(userResp);
-
     dispatch({
       type: SEARCH_USER,
       payload: userResp.data
@@ -134,7 +125,6 @@ export const searchUser = keyword => async dispatch => {
 
 // Load User
 const sendEmailConfirmation = (body, config) => async dispatch => {
-  console.log(body);
   //SET admin password
   try {
     const res = await axios.get(
@@ -154,19 +144,49 @@ const sendEmailConfirmation = (body, config) => async dispatch => {
   }
 };
 
-export const getuserbyregistrationid = token => async dispatch => {
+export const getuserbyregistrationid = (token, history) => async dispatch => {
   try {
     const response = await axios.get(
-      'http://localhost:8080/user/getuserbyregid?id=' + token
+      'http://localhost:8080/user/userbyregid/' + token
     );
-
-    console.log(response);
-
     dispatch({
       type: GET_USER_BY_REGISTRATION_ID,
       payload: response.data
     });
+    if (response.data.errorCode !== 1) {
+      //no error valid case
+      dispatch(deleteUserRegistrationToken(token));
+    } else {
+      dispatch(
+        setAlert(
+          response.data.exception !== null
+            ? response.data.exception
+            : 'Token Invalid',
+          'error'
+        )
+      );
+      history.push('/register');
+    }
   } catch (err) {
+    dispatch(setAlert('Token Invalid', 'error'));
+    /*    dispatch({
+      type: GET_USER_BY_REGISTRATION_ID_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    }); */
+  }
+};
+
+export const deleteUserRegistrationToken = token => async dispatch => {
+  try {
+    const response = await axios.delete(
+      'http://localhost:8080/user/userbyregid/' + token
+    );
+    dispatch({
+      type: DELETE_USER_REGISTRATION_TOKEN,
+      payload: response.data
+    });
+  } catch (err) {
+    console.log(err);
     dispatch({
       // type: AUTH_ERROR //todo add error later
     });
@@ -192,9 +212,6 @@ export const register = ({ name, email, password }) => async dispatch => {
     });
 
     const emailRes = await axios.post('/api/sendMail', body, config);
-
-    console.log(emailRes);
-
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
@@ -232,9 +249,6 @@ export const registerPendingInvitedUser = ({
     });
 
     const emailRes = await axios.post('/api/sendMail', body, config);
-
-    console.log(emailRes);
-
     dispatch(loadUser());
   } catch (err) {
     /*   const errors = err.response.data.errorCode;

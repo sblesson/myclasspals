@@ -12,7 +12,6 @@ const Landing = ({ isAuthenticated, location, match }) => {
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
-  console.log(match);
   var loginComponent;
   var currentLocation = location.pathname;
   if (currentLocation.includes('/login')) {

@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.restmodel.CommonResult;
 import com.clazzbuddy.restmodel.GroupInvitationAction;
+import com.clazzbuddy.restmodel.UserGroupResult;
 import com.clazzbuddy.restmodel.UserResult;
 import com.clazzbuddy.service.UserService;
 import org.apache.logging.log4j.Logger;
@@ -103,8 +106,8 @@ public class UserController {
 		
 	}
 	
-	@GetMapping(value="/getuserbyregid", produces={"application/json"})
-	public CommonResult getUserByRegId(@RequestParam(value = "id") String id) {
+	@GetMapping(value="/userbyregid/{id}", produces={"application/json"})
+	public CommonResult getUserByRegId(@PathVariable("id") String id) {
 		UserResult result = new UserResult();
 		
 		try {
@@ -121,6 +124,19 @@ public class UserController {
 		
 		return result;
 		
+	}
+	
+	@DeleteMapping(value="/userbyregid/{id}", produces={"application/json"})
+	public CommonResult deleteUserRegToken(@PathVariable("id") String id) {
+		CommonResult result  = new CommonResult();
+		try {
+			userService.deleteUserRegToken(id);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error", e);
+		}
+		return result;
 	}
 	
 	@GetMapping(value="/searchuser", produces={"application/json"})
@@ -176,7 +192,7 @@ public class UserController {
 	
 	@PostMapping(value="/invitetousergroup", produces={"application/json"})
 	public CommonResult inviteToUserGroup(@RequestBody GroupInvitationAction groupInvitationAction) {
-		CommonResult result  = new CommonResult();
+		UserGroupResult result  = new UserGroupResult();
 		try {
 			if (groupInvitationAction.getInvitedUsers() != null) {
 				String[] emailAddresses = groupInvitationAction.getInvitedUsers().split(",");
@@ -185,10 +201,10 @@ public class UserController {
 					newGroupInvitationAction.setGroupId(groupInvitationAction.getGroupId());
 					newGroupInvitationAction.setInvitedUserId(emailAddresses[count]);
 					newGroupInvitationAction.setRole(groupInvitationAction.getRole());
-					userService.inviteToJoinUserGroup(newGroupInvitationAction);
+					result.setUserGroup(userService.inviteToJoinUserGroup(newGroupInvitationAction));
 				}
 			} else {
-				userService.inviteToJoinUserGroup(groupInvitationAction);
+				result.setUserGroup(userService.inviteToJoinUserGroup(groupInvitationAction));
 			}
 		} catch (Exception e) {
 			result.setErrorCode(1);
@@ -223,6 +239,8 @@ public class UserController {
 		}
 		return result;
 	}
+	
+	
 	
 	
 	

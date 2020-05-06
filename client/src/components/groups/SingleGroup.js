@@ -8,6 +8,8 @@ import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
+import UserCard from './UserCard';
+
 import {
   getGroupDetails,
   approveUserGroupRequest,
@@ -39,9 +41,7 @@ const SingleGroup = ({
 
   const { TabPane } = Tabs;
 
-  const onClick = ({ key }) => {
-    console.log(`Click on item ${key}`);
-  };
+  const onClick = ({ key }) => {};
 
   //TODO check if you are admin, creator or member and decide menu actions
   const requestToJoinMenu = (
@@ -147,8 +147,6 @@ const SingleGroup = ({
   );
 
   const approveUserGroupRequestClick = record => {
-    console.log(record);
-
     approveUserGroupRequest({
       groupId: record.groupId,
       role: record.role,
@@ -156,9 +154,7 @@ const SingleGroup = ({
     });
   };
 
-  const declineUserGroupRequestClick = record => {
-    console.log(record);
-  };
+  const declineUserGroupRequestClick = record => {};
 
   const requestToJoinColumn = [
     {
@@ -286,6 +282,12 @@ const SingleGroup = ({
                   <TabPane tab='Members' key='members'>
                     {group.currentGroup.userGroupMembers &&
                     group.currentGroup.userGroupMembers.length > 0 ? (
+                      /*       <UserCard />
+                      <GroupCard
+                      currentGroup={group}
+                      index={index}
+                      type='requestedUserGroup'
+                    /> */
                       <Table
                         columns={columns}
                         dataSource={group.currentGroup.userGroupMembers}

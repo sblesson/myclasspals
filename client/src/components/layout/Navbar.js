@@ -22,7 +22,6 @@ const Navbar = ({
 }) => {
   let groupId;
   let pageName = window.location.pathname.split('/')[1];
-  console.log(pageName);
   const { Search } = Input;
   useEffect(() => {
     if (match && match.params && match.params.id) {
