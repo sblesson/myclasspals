@@ -15,7 +15,7 @@ const Messages = ({
   searchPost,
   getPost,
   addMessageReply,
-  post: { posts, loading, post },
+  post: { posts, loading, currentPost },
   auth,
   history
 }) => {
@@ -25,11 +25,19 @@ const Messages = ({
     value: ''
   });
   useEffect(() => {
-    searchPost({ userId: auth.user.email, isPrivate: true });
+    if (auth && auth.user && auth.user.email) {
+      searchPost({ userId: auth.user.email, isPrivate: true });
+    } else {
+      let user = localStorage.getItem('user');
+      if (user) {
+        const userEmail = JSON.parse(localStorage.getItem('user')).email;
+        searchPost({ userId: userEmail, isPrivate: true });
+      }
+    }
   }, [searchPost, auth.user._id]);
 
   useEffect(() => {
-    let recentPost = posts[0];
+    const recentPost = posts && posts.length > 0 ? posts[0] : null;
     if (recentPost) {
       setMessagePanelItemSelected(recentPost);
       getPost(recentPost._id);
@@ -47,58 +55,39 @@ const Messages = ({
     history.push(redirectUrl);
   };
 
-  const onChatSubmit = async e => {
-    e.preventDefault();
+  const onChatSubmit = async event => {
+    event.preventDefault();
+
     const formData = {
       message: chatFormData.value,
       endUserId: messagePanelSelected.endUserId,
       subject: messagePanelSelected.subject
     };
-    setChatForm({ ...chatFormData, ['submitting']: true });
 
+    setChatForm({ ...chatFormData, ['submitting']: true });
+    setChatForm({ ...chatFormData, ['value']: '' });
     addMessageReply(messagePanelSelected._id, formData);
   };
+
   const onChangeChatMessage = event => {
     event.preventDefault();
     setChatForm({ ...chatFormData, ['value']: event.target.value });
   };
-  const comments = [
-    {
-      author: 'Han Solo',
-      avatar:
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-      content: <p>{'this.state.value'}</p>,
-      datetime: '12-12-12'
-    },
-    {
-      author: 'Saaaa dsdfs',
-      avatar:
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-      content: <p>{'this.state.value'}</p>,
-      datetime: '12-12-12'
-    }
-  ];
-  const CommentList = ({ comments }) => (
-    <List
-      dataSource={comments}
-      itemLayout='horizontal'
-      renderItem={props => <Comment {...props} />}
-    />
-  );
+
   return (
     <Fragment>
       {loading ? (
         <Spinner />
       ) : (
         <Fragment>
-          <div className='message-head'>
+          <div className='row message-head'>
             <PrivateMessageModal />
           </div>
           <div className='row'>
-            <div className='col-xs-1 col-sm-3 col-md-3 col-lg-3'>
+            <div className='col-xs-1 col-sm-3 col-md-3 col-lg-3 message-inbox-list'>
               {posts && posts.length > 0 ? (
                 <List
-                  className='message-list'
+                  //className='message-list'
                   itemLayout='horizontal'
                   dataSource={posts}
                   renderItem={message => (
@@ -119,13 +108,13 @@ const Messages = ({
                           ></Avatar>
                         }
                         title={
-                          <Ellipsis length={100} tooltip>
-                            {message.subject}
+                          <Ellipsis length={40} tooltip>
+                            {message.endUserId}
                           </Ellipsis>
                         }
                         description={
-                          <Ellipsis length={100} tooltip>
-                            {message.endUserId}
+                          <Ellipsis length={40} tooltip>
+                            {message.subject}
                           </Ellipsis>
                         }
                       />
@@ -136,24 +125,44 @@ const Messages = ({
                 'No messages found'
               )}
             </div>
+            <div className='col-xs-6 col-sm-6 col-md- col-lg-6 message-chat-history'>
+              {currentPost ? (
+                <Comment
+                  //avatar={<i className='fas fa-users icon-group'></i>}
 
-            <div className='col-xs-6 col-sm-6 col-md- col-lg-6'>
-              {post ? (
-                <Card style={{ width: 300 }}>
-                  <p>{post.subject}</p>
-                  <p>{post.endUserId}</p>
-                </Card>
+                  avatar={
+                    <Avatar
+                      src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                      alt='Han Solo'
+                    />
+                  }
+                >
+                  <p>{currentPost.subject}</p>
+                  <p>{currentPost.endUserId}</p>
+                </Comment>
               ) : (
                 'No message history'
               )}
-              {comments.length > 0 && <CommentList comments={posts.comments} />}
+              {currentPost &&
+                currentPost.comments &&
+                currentPost.comments.length > 0 &&
+                currentPost.comments.map((item, index) => (
+                  <Comment
+                    key={index}
+                    //avatar={<i className='fas fa-users icon-group'></i>}
+
+                    avatar={
+                      <Avatar
+                        src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                        alt='Han Solo'
+                      />
+                    }
+                  >
+                    <p>{item.message}</p>
+                    <p>{item.endUserId}</p>
+                  </Comment>
+                ))}
               <Comment
-                avatar={
-                  <Avatar
-                    src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                    alt='Han Solo'
-                  />
-                }
                 content={
                   <div>
                     <Form.Item>
@@ -162,13 +171,16 @@ const Messages = ({
                         rows={4}
                         onChange={e => onChangeChatMessage(e)}
                         placeholder='Type a message'
+                        value={chatFormData.value}
                       />
                     </Form.Item>
                     <Form.Item>
                       <Button
-                        htmlType='submit'
+                        htmlType='button'
                         onClick={onChatSubmit}
                         type='primary'
+                        style={{ float: 'right' }}
+                        className='btn-primary'
                       >
                         Send
                       </Button>
@@ -176,24 +188,7 @@ const Messages = ({
                   </div>
                 }
               />
-
-              {/*              <List
-                className='message-content'
-                itemLayout='horizontal'
-                dataSource={post}
-                renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                      }
-                      title={<a href='https://ant.design'>{item.subject}</a>}
-                      description={item.message}
-                    />
-                  </List.Item>
-                )}
-              /> */}
-            </div>
+            </div>{' '}
           </div>
         </Fragment>
       )}

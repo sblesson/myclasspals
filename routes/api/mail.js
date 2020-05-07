@@ -12,7 +12,8 @@ const getEmailData = (to, name, template, token) => {
         to: to,
         from: 'clazzbuddy.com <support@clazzbuddy.com>',
         subject: `Hello ${name}`,
-        html: Hello()
+        html: Hello(),
+        text: `this is so cool ${token}`
       };
       break;
 
@@ -21,7 +22,8 @@ const getEmailData = (to, name, template, token) => {
         from: 'clazzbuddy.com <support@clazzbuddy.com>',
         to: to,
         subject: `Hello ${name}`,
-        html: Thanks()
+        html: Thanks(),
+        text: `this is so cool ${token}`
       };
       break;
     case 'welcome_group':
@@ -29,14 +31,16 @@ const getEmailData = (to, name, template, token) => {
         from: 'clazzbuddy.com <support@clazzbuddy.com>',
         to: to,
         subject: `Welcome to group ${name} ${token}`,
-        html: WelcomeToGroup(token)
+        html: WelcomeToGroup(token),
+        text: `this is so cool ${token}`
       };
     default:
       data = {
         from: 'clazzbuddy.com <support@clazzbuddy.com>',
         to: to,
         subject: `REGISTER ${name} ${token}`,
-        html: WelcomeToGroup(token)
+        html: WelcomeToGroup(token),
+        text: `this is so cool ${token}`
       };
   }
   return data;
