@@ -20,7 +20,7 @@ import {
 const initialState = {
   posts: [],
   categories: [],
-  post: null,
+  currentPost: null,
   loading: true,
   error: {}
 };
@@ -128,7 +128,7 @@ export default function(state = initialState, action) {
     case GET_POST:
       return {
         ...state,
-        post: payload,
+        currentPost: payload,
         loading: false
       };
     case ADD_POST:
@@ -180,7 +180,7 @@ export default function(state = initialState, action) {
     case ADD_COMMENT_SINGLE_POST:
       return {
         ...state,
-        post: { ...state.post, comments: payload.comments },
+        currentPost: { ...state.post, comments: payload.comments },
         loading: false
       };
     case REMOVE_COMMENT:
@@ -202,7 +202,7 @@ export default function(state = initialState, action) {
     case REMOVE_COMMENT_SINGLE_POST:
       return {
         ...state,
-        post: {
+        currentPost: {
           ...state.post,
           comments: state.post.comments.filter(
             comment => comment._id !== payload.commentId

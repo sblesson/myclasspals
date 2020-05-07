@@ -6,12 +6,12 @@ import Spinner from '../layout/Spinner';
 import PostItem from './PostItem';
 import { getPost } from '../../actions/post';
 
-const SinglePost = ({ getPost, post: { post, loading }, match }) => {
+const SinglePost = ({ getPost, post: { currentPost, loading }, match }) => {
   useEffect(() => {
     getPost(match.params.id);
   }, [getPost]);
 
-  return loading || post === null ? (
+  return loading || currentPost === null ? (
     <Spinner />
   ) : (
     <Fragment>
@@ -19,7 +19,7 @@ const SinglePost = ({ getPost, post: { post, loading }, match }) => {
         Back To Posts
       </Link>
       <PostItem
-        post={post}
+        post={currentPost}
         showActions={true}
         showAllComments={true}
         isSinglePost={true}

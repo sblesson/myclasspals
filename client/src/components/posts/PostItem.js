@@ -5,7 +5,9 @@ import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
-import { Menu, Segment, List, Button, Image } from 'semantic-ui-react';
+import { Avatar, Card } from 'antd';
+import Ellipsis from 'ant-design-pro/lib/Ellipsis';
+import { Menu, List, Button, Image } from 'semantic-ui-react';
 
 import { addLike, removeLike, deletePost } from '../../actions/post';
 import './PostItem.scss';
@@ -19,13 +21,13 @@ const PostItem = ({
     _id,
     subject,
     message,
-    name,
+    userName,
     avatar,
     user,
     likes,
     thanks,
     comments,
-    date
+    postedDate
   },
   showActions,
   showAllComments,
@@ -42,10 +44,14 @@ const PostItem = ({
       removeLike(_id);
     }
   };
+  const firstLetterUserName = userName => {
+    if (typeof userName !== 'string') return '';
+    return userName.charAt(0).toUpperCase();
+  };
+
   return (
-    <Segment className='post bg-white p-1'>
+    <div className='feed'>
       <List.Item>
-        <Image avatar src={avatar} />
         <List.Content floated='right'>
           {!auth.loading && user === auth.user._id && (
             <Button
@@ -59,17 +65,40 @@ const PostItem = ({
         </List.Content>
         <List.Content>
           <List.Header>
-            <Link to={`/profile/${_id}`}>{name}</Link>
+            <Link to={`/profile/${_id}`}>
+              {' '}
+              <Avatar
+                style={{
+                  backgroundColor: '#00a2ae',
+                  verticalAlign: 'middle'
+                }}
+                shape='circle'
+                size='64'
+              >
+                {firstLetterUserName(userName)}
+              </Avatar>
+              <div className='feed-author'>
+                <span className='feed-author-title'>{userName}</span>
+                <div className='feed-author-time'>
+                  <Moment fromNow ago>
+                    {postedDate}
+                  </Moment>
+                </div>
+              </div>
+            </Link>
           </List.Header>
-          <List.Header>
-            <Link to={`/posts/${_id}`}>{subject}</Link>
+          <List.Header style={{ marginTop: 8 }}>
+            <Link className='feed-title' to={`/posts/${_id}`}>
+              <Ellipsis length={100} tooltip>
+                {subject}
+              </Ellipsis>
+            </Link>
           </List.Header>
 
-          <List.Description>
-            {message}
-            <p className='post-date'>
-              Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
-            </p>
+          <List.Description style={{ marginTop: 8 }}>
+            <Ellipsis length={200} tooltip>
+              {message}
+            </Ellipsis>
           </List.Description>
         </List.Content>
       </List.Item>
@@ -133,7 +162,7 @@ const PostItem = ({
           <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
         </Fragment>
       )}
-    </Segment>
+    </div>
   );
 };
 

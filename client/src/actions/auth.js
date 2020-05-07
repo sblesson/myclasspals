@@ -214,7 +214,10 @@ export const register = ({ name, email, password }) => async dispatch => {
     const emailRes = await axios.post('/api/sendMail', body, config);
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
+    const errors =
+      err && err.response && err.response.data && err.response.data.errors
+        ? 'err.response.data.errors'
+        : 'Error occured when sending email';
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
