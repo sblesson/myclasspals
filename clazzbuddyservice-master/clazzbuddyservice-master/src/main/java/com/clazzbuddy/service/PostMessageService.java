@@ -25,6 +25,9 @@ public class PostMessageService {
 	public Post createPost(Post post) {
 		Date current = new Date();
 		post.setPostedDate(current);
+		if (post.getIsPrivate() == null) {
+			post.setIsPrivate(false);
+		}
 		return mongoTemplate.insert(post);
 	}
 

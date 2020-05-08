@@ -1,26 +1,20 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-const ProfileAbout = ({
-  profile: {
-    bio,
-    skills,
-    user: { name }
-  }
-}) => (
+const ProfileAbout = ({ profile: { email, userGroup, name } }) => (
   <div className='profile-about bg-light p-2'>
-    {bio && (
+    {name && (
       <Fragment>
         <h2 className='text-primary'>{name.trim().split(' ')[0]}s Bio</h2>
-        <p>{bio}</p>
+        <p>{email}</p>
         <div className='line' />
       </Fragment>
     )}
     <h2 className='text-primary'>Skill Set</h2>
     <div className='skills'>
-      {skills.map((skill, index) => (
+      {userGroup.map((group, index) => (
         <div key={index} className='p-1'>
-          <i className='fas fa-check' /> {skill}
+          <i className='fas fa-check' /> {group.groupName}
         </div>
       ))}
     </div>

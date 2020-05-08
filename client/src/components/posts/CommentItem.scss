@@ -1,3 +1,32 @@
+.comment-author {
+  display: inline-block;
+  margin-left: 10px;
+  flex-grow: 1;
+  flex-basis: 0;
+  margin-left: 8px;
+  overflow: hidden;
+  vertical-align: middle;
+  &-title {
+    //font-weight: 500;
+    color: var(--color-primary-text);
+    line-height: 1.5;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &-time {
+    font-size: 8px;
+    color: var(--font-color-3);
+  }
+}
+.comment-title {
+  font-weight: 500;
+  color: var(--color-primary-text);
+  line-height: 1.5;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .ui {
   .comment-form {
     height: 70px;

@@ -2,11 +2,10 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createProfile, getCurrentProfile } from '../../actions/profile';
+import { createProfile } from '../../actions/profile';
 
 const CreateProfile = ({
   createProfile,
-  getCurrentProfile,
   profile: { profile, loading },
   history
 }) => {
@@ -23,10 +22,7 @@ const CreateProfile = ({
     e.preventDefault();
     createProfile(formData, history);
   };
-  useEffect(() => {
-    getCurrentProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getCurrentProfile]);
+
   return loading && profile === null ? (
     <Redirect to='/dashboard' />
   ) : (

@@ -1,11 +1,31 @@
 @import '../../styles/abstracts/variables';
 
 .leftnav-sidebar {
-  /*  background-color: #f7f7f7; */
-  //background-color: var(--bg-leftnav-sidebar);
+  .ant-menu-vertical {
+    border-right: none;
+    .ant-menu-item {
+      border-bottom: 0.8px solid #f0f0f0 !important;
+    }
 
-  //background-color: #f4f5f7;
-  //width: 150px;
+    .ant-menu-item-selected {
+      background: none !important;
+      border-left: 2px solid var(--color-active-tab-border) !important;
+
+      color: #444;
+      font-weight: 500;
+    }
+    .ant-menu-item-active {
+      color: var(--bg-gradient1);
+      font-weight: 500;
+    }
+    .ant-menu-item-selected .ant-menu-item-active {
+      background: none !important;
+      border-left: 2px solid var(--color-active-tab-border) !important;
+
+      color: #444;
+      font-weight: 500;
+    }
+  }
 
   .MuiListItem-root.Mui-selected,
   .MuiListItem-root.Mui-selected:hover {

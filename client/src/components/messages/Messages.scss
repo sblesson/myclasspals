@@ -29,8 +29,11 @@ $color-link: #0073b1;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+
     .ant-list-item {
       margin-right: 0;
+      border-bottom: 1px solid #f0f0f0 !important;
+      border-left: 1px solid #f0f0f0;
       &:first-child {
         border-top: 1px solid #dfe1e4;
       }
@@ -39,7 +42,7 @@ $color-link: #0073b1;
       }
       &.selected {
         background: none !important;
-        border-left: 1.5px solid var(--color-active-tab-border);
+        border-left: 2px solid var(--color-active-tab-border) !important;
       }
     }
   }
@@ -94,8 +97,5 @@ $color-link: #0073b1;
     padding: 12px 8px;
     display: table-cell;
     vertical-align: top;
-  }
-  .ant-list-split .ant-list-item {
-    border-bottom: 1px solid #f0f0f0 !important;
   }
 }

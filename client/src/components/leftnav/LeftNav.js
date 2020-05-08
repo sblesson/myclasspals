@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import LeftNavItem from './LeftNavItem';
-import DashboardLeftNavItem from './DashboardLeftNavItem';
 import Spinner from '../layout/Spinner';
+import { Menu } from 'antd';
+import { Link, withRouter } from 'react-router-dom';
 
 import { getLeftNav } from '../../actions/leftnav';
 
@@ -17,106 +14,76 @@ const LeftNav = ({
   id,
   getLeftNav,
   leftnav: { leftnav, loading },
-  auth,
-  group
+  auth
 }) => {
-  let depthStep = 10,
-    depth = 0,
-    expanded;
+  const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
+
   useEffect(() => {
     if (screen !== 'dashboard') {
       getLeftNav(screen, id);
     }
   }, [getLeftNav]);
 
-  const getUserGroups = () => {
-    let user = null;
-    let userGroup = null;
-    let myGroups = [];
-    //first time groupId is not passed in url param.
-    //So get groupId from user group first item
-    try {
-      user = JSON.parse(auth.user);
-    } catch (e) {
-      // You can read e for more info
-      // Let's assume the error is that we already have parsed the auth.user
-      // So just return that
-      user = auth.user;
-    }
-    if (user && user.userGroup && user.userGroup.length > 0) {
-      userGroup = user.userGroup;
-    }
-
-    if (userGroup && userGroup.length > 0) {
-      myGroups = userGroup.map(group => ({
-        id: group.id,
-        title: group.groupName,
-        value: group.id,
-        icon: 'fas fa-users',
-        url: '/dashboard/' + group.id
-      }));
-      console.log(myGroups);
-    }
-
-    return myGroups;
-  };
-
   const getNavByScreen = screen => {
     switch (screen) {
       case 'dashboard': {
-        const myGroups = getUserGroups();
-        return (
-          myGroups &&
-          myGroups.length > 0 &&
-          myGroups.map((leftNavItem, index) => (
-            <React.Fragment key={`${leftNavItem.title}${index}`}>
-              {leftNavItem === 'divider' ? (
-                <Divider style={{ margin: '6px 0' }} />
-              ) : (
-                <DashboardLeftNavItem
-                  depthStep={depthStep}
-                  depth={depth}
-                  expanded={expanded}
-                  item={leftNavItem}
-                  key={index}
-                  group={group}
-                />
-              )}
-            </React.Fragment>
-          ))
-        );
+        let user = null;
+        let userGroup = null;
+        let myGroups = [];
+        //first time groupId is not passed in url param.
+        //So get groupId from user group first item
+        try {
+          user = JSON.parse(auth.user);
+        } catch (e) {
+          // You can read e for more info
+          // Let's assume the error is that we already have parsed the auth.user
+          // So just return that
+          user = auth.user;
+        }
+        if (user && user.userGroup && user.userGroup.length > 0) {
+          userGroup = user.userGroup;
+        }
+
+        if (userGroup && userGroup.length > 0) {
+          myGroups = userGroup.map(group => ({
+            id: group.id,
+            title: group.groupName,
+            value: group.id,
+            icon: 'fas fa-users',
+            url: '/dashboard/' + group.id
+          }));
+        }
+
+        return myGroups;
       }
-      default: {
-        return (
-          leftnav &&
-          leftnav.length > 0 &&
-          leftnav.map((leftNavItem, index) => (
-            <React.Fragment key={`${leftNavItem.name}${index}`}>
-              {leftNavItem === 'divider' ? (
-                <Divider style={{ margin: '6px 0' }} />
-              ) : (
-                <LeftNavItem
-                  depthStep={depthStep}
-                  depth={depth}
-                  expanded={expanded}
-                  item={leftNavItem}
-                  key={index}
-                />
-              )}
-            </React.Fragment>
-          ))
-        );
-      }
+      default:
+        return leftnav;
     }
   };
+  const sideNavMenu = getNavByScreen(screen);
 
   return loading & (screen !== 'dashboard') ? (
     <Spinner />
   ) : (
     <div className='leftnav-sidebar'>
-      <List disablePadding dense>
-        {getNavByScreen(screen)}
-      </List>
+      <Menu
+        selectedKeys={selectedMenuItem}
+        defaultSelectedKeys={selectedMenuItem}
+        onClick={e => {
+          setSelectedNavItem([e.key]);
+        }}
+      >
+        {sideNavMenu &&
+          sideNavMenu.length > 0 &&
+          sideNavMenu.map((sideNavItem, index) => (
+            <Menu.Item key={index} icon={sideNavItem.icon}>
+              {sideNavItem.title}
+              <Link className='btn btn-light my-1' to={sideNavItem.url}>
+                {sideNavItem.title}
+              </Link>
+            </Menu.Item>
+          ))}
+      </Menu>
     </div>
   );
 };
@@ -135,4 +102,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getLeftNav })(LeftNav);
+export default connect(mapStateToProps, { getLeftNav })(withRouter(LeftNav));
