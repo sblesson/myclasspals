@@ -23,6 +23,7 @@ body {
   color: #444;
   overflow-x: auto;
   padding: 10px;
+  //background: var(--main-body-bg-color);
 }
 .modal-body {
   font-size: 0.8rem;
@@ -936,7 +937,6 @@ thead {
 .ant-tabs-ink-bar {
   background: var(--color-active-tab-border) !important;
 }
-
 
 ///////////
 .filter {

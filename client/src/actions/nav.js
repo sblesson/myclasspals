@@ -12,7 +12,7 @@ import {
   GET_SCHOOL_DETAILS
 } from './types';
 
-// Get current users profile
+/* // Get current users profile
 export const getCurrentProfile = () => async dispatch => {
   try {
     const res = await axios.get('/api/profile/me');
@@ -28,7 +28,7 @@ export const getCurrentProfile = () => async dispatch => {
     });
   }
 };
-
+ */
 // Get all profiles
 export const getProfiles = () => async dispatch => {
   dispatch({ type: CLEAR_PROFILE });

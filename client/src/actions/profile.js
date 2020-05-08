@@ -8,7 +8,6 @@ import {
   UPDATE_PROFILE,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
-  GET_REPOS,
   GET_SCHOOL_DETAILS,
   CREATE_PROFILE
 } from './types';
@@ -55,38 +54,21 @@ export const getProfiles = () => async dispatch => {
 // Get profile by ID
 export const getProfileById = userId => async dispatch => {
   try {
-    const res = await axios.get(`/api/profile/user/${userId}`);
-
+    const userResp = await axios.get(
+      'http://localhost:8080/user/getuserdetails?user=' + userId
+    );
     dispatch({
       type: GET_PROFILE,
-      payload: res.data
+      payload: userResp.data
     });
   } catch (err) {
     dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: PROFILE_ERROR
     });
   }
 };
 
-// Get Github repos
-export const getGithubRepos = username => async dispatch => {
-  try {
-    const res = await axios.get(`/api/profile/github/${username}`);
-
-    dispatch({
-      type: GET_REPOS,
-      payload: res.data
-    });
-  } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-
-// Get Github repos
+// Get getSchoolDetails
 export const getSchoolDetails = searchTerm => async dispatch => {
   try {
     const res = await axios.get(
