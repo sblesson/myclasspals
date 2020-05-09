@@ -102,7 +102,6 @@ const PostItem = ({
           </List.Description>
         </List.Content>
       </List.Item>
-
       {showActions && (
         <Fragment>
           <Menu>
@@ -127,6 +126,7 @@ const PostItem = ({
               )}
             </Menu.Menu>
           </Menu>
+          <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
           {showAllComments === true ? (
             <List divided relaxed>
               {comments && comments.length > 0 ? (
@@ -146,7 +146,8 @@ const PostItem = ({
             <List divided relaxed>
               {comments && comments.length > 0 ? (
                 comments
-                  .slice(comments.length - 3, comments.length)
+                  .slice(-3)
+                  .reverse()
                   .map(comment => (
                     <CommentItem
                       key={comment._id}
@@ -159,7 +160,6 @@ const PostItem = ({
               )}
             </List>
           )}
-          <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
         </Fragment>
       )}
     </div>
