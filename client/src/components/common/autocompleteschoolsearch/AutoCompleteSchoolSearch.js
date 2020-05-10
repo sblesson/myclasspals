@@ -1,120 +1,55 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import Downshift from 'downshift';
-import { Div } from 'glamorous';
+import { AutoComplete } from 'antd';
 import { getSchoolData } from '../../../actions/school';
-
-import {
-  SubmitButton,
-  Input,
-  Checkbox,
-  Radio,
-  ResetButton,
-  FormikDebug,
-  Form,
-  FormItem
-} from 'formik-antd';
-import {
-  Menu,
-  ControllerButton,
-  //Input,
-  Item,
-  ArrowIcon,
-  XIcon
-} from '../DownshiftComponents';
-import { Formik, ErrorMessage } from 'formik';
-
 import './AutoCompleteSchoolSearch.scss';
 
 const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
-  const [selectedSchool, setSelectedSchool] = useState('');
+  const Option = AutoComplete.Option;
 
-  const inputOnChange = event => {
-    if (!event.target.value) {
-      return;
+  const handleSchoolSearch = searchTerm => {
+    if (searchTerm) {
+      setTimeout(() => {
+        getSchoolData(searchTerm);
+      }, Math.random() * 1000);
     }
-    fetchSchools(event.target.value);
   };
 
-  const schoolNameSelectHandler = selectedItem => {
-    setSelectedSchool(selectedItem);
+  const onSchoolSelect = (value, option) => {
+    if (school && school.results && school.results.length > 0) {
+      //update selected school in the reducer
+      school.selectedSchool = school.results[option.key];
+    }
   };
 
-  const fetchSchools = searchTerm => {
-    setTimeout(() => {
-      getSchoolData(searchTerm);
-    }, Math.random() * 1000);
-  };
-
-  const schoolNameToString = (item, index) => {
-    return item ? item.schoolName : '';
-  };
+  const children =
+    school &&
+    school.results &&
+    school.results.length > 0 &&
+    school.results.map((item, index) => {
+      console.log(item);
+      let selectedSchool = item.schoolName + ', ' + item.state;
+      return (
+        <Option key={index} value={selectedSchool}>
+          <span style={{ fontWeigth: 'bolder' }}>
+            {' '}
+            {item.schoolName}, {item.state}
+          </span>
+        </Option>
+      );
+    });
 
   return (
-    <Downshift
-      onChange={selectedItem => schoolNameSelectHandler(selectedItem)}
-      itemToString={schoolNameToString}
+    <AutoComplete
+      allowClear={true}
+      backfill={true}
+      style={{ width: '100%' }}
+      onSelect={onSchoolSelect}
+      onSearch={handleSchoolSearch}
+      placeholder='School name'
     >
-      {({
-        getInputProps,
-        getToggleButtonProps,
-        getItemProps,
-        isOpen,
-        clearSelection,
-        selectedItem,
-        highlightedIndex
-      }) => (
-        <div>
-          <Div position='relative' css={{ paddingRight: '1.75em' }}>
-            {/*       <Input
-              {...getInputProps({
-                placeholder: 'Type email or name ...',
-                onKeyUp: inputOnChange
-              })}
-            /> */}
-            <input
-              {...getInputProps({
-                placeholder: 'Type school or district or city, zip...',
-                onKeyUp: inputOnChange
-              })}
-            />
-
-            {selectedItem ? (
-              <ControllerButton
-                css={{ paddingTop: 4, top: 5 }}
-                onClick={clearSelection}
-                aria-label='clear selection'
-              >
-                <XIcon />
-              </ControllerButton>
-            ) : (
-              <ControllerButton {...getToggleButtonProps()}>
-                <ArrowIcon isOpen={isOpen} className='icon-auto-open' />
-              </ControllerButton>
-            )}
-          </Div>
-          {isOpen ? (
-            <Menu>
-              {school && school.results.length > 0
-                ? school.results.map((item, index) => (
-                    <Item
-                      key={item.schoolid}
-                      {...getItemProps({
-                        item,
-                        index,
-                        isActive: highlightedIndex === index,
-                        isSelected: selectedItem === item
-                      })}
-                    >
-                      {item.schoolName}
-                    </Item>
-                  ))
-                : 'No school found'}
-            </Menu>
-          ) : null}
-        </div>
-      )}
-    </Downshift>
+      {children}
+    </AutoComplete>
   );
 };
 const mapStateToProps = state => ({

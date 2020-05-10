@@ -5,8 +5,10 @@ import Spinner from '../layout/Spinner';
 import LeftNav from '../leftnav/LeftNav';
 import PrivateMessageModal from './modal/CreateGroupModal';
 import { Input } from 'antd';
+import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
 
 import { searchGroup } from '../../actions/group';
+
 import GroupCard from './GroupCard';
 
 import './DiscoverGroups.scss';
@@ -30,20 +32,22 @@ const DiscoverGroups = ({ group, searchGroup, newRegistration }) => {
             )}
 
             <div className='col-xs-3 col-sm-3 col-md-6 col-lg-6'>
-              {newRegistration ? <PrivateMessageModal /> : ''}
+              {newRegistration ? '' : <div style={{ marginBottom: 50 }} />}
               <Search
                 placeholder='Search group'
                 onSearch={value => searchGroup(value)}
                 style={{ width: 300, marginBottom: 30 }}
                 enterButton
               />
+              <GroupFilterPanel />
+
               {group !== null &&
               group.searchResult &&
               group.searchResult.length > 0
                 ? group.searchResult.map((group, index) => (
                     <GroupCard
                       currentGroup={group}
-                      index={index}
+                      key={index}
                       type='discover'
                     />
                   ))

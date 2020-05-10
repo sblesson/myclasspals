@@ -5,29 +5,31 @@ import { connect } from 'react-redux';
 
 import _ from 'lodash';
 
-import { createProfile, getCurrentProfile } from '../../actions/profile';
+import { Tabs } from 'antd';
 
-import { Tab, Button, Checkbox } from 'semantic-ui-react';
+import { createProfile } from '../../actions/profile';
 
 import UserAccountForm from './UserAccountForm';
 import DiscoverGroup from '../groups/DiscoverGroup';
-import WelcomeForm from './WelcomeForm';
+import ProfileCreateGroup from './ProfileCreateGroup';
 
 import './CreateProfile.scss';
 
 const CreateProfile = ({
   createProfile,
-  getCurrentProfile,
   profile: { profile, loading },
-  history
+  auth,
+  history,
+  match
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const { TabPane } = Tabs;
 
-  const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
+  const [activeKey, setActiveKey] = useState(match.params.id);
 
-  const handlePageChange = e => {
-    setActiveIndex(e.target.value);
-    console.log(profileData);
+  const handleTabChange = activeKey => setActiveKey(activeKey);
+
+  const goToManageGroups = e => {
+    setActiveKey('2');
   };
 
   const [profileData, setProfileData] = useState({
@@ -41,98 +43,46 @@ const CreateProfile = ({
     isTandCAccepted: false
   });
 
-  const panes = [
-    {
-      menuItem: 'Your Info',
-      render: () => (
-        <Tab.Pane attached={false}>
-          <UserAccountForm profileData={profileData} />
-
-          <Button
-            content='Proceed'
-            color='pink'
-            className='actionBtnWrapper'
-            onClick={handlePageChange}
-            value={1}
-          />
-        </Tab.Pane>
-      )
-    },
-    {
-      menuItem: 'Discover groups',
-      render: () => (
-        <Tab.Pane attached={false}>
-          <DiscoverGroup newRegistration={true} />
-
-          <Button
-            content='Proceed'
-            className='actionBtnWrapper'
-            color='pink'
-            onClick={handlePageChange}
-            value={2}
-          />
-        </Tab.Pane>
-      )
-    },
-    {
-      menuItem: 'Summary',
-      render: () => (
-        <Tab.Pane attached={false}>
-          <WelcomeForm />
-          <Checkbox
-            label={'I agree to the Terms and Conditions'}
-            defaultIndeterminate={profileData.isTandCAccepted}
-            name='isTandCAccepted'
-            onChange={(e, data) => onChangeCheckBoxHandler(e, data)}
-          />
-          <Button
-            content='Submit'
-            className='actionBtnWrapper'
-            color='pink'
-            disabled={profileData.isTandCAccepted}
-            onClick={handleSubmitProfile}
-          />
-        </Tab.Pane>
-      )
-    }
-  ];
-
-  const onChangeCheckBoxHandler = (event, data) => {
-    profileData.isTandCAccepted = data.checked;
-  };
-
   const handleSubmitProfile = e => {
     e.preventDefault();
     console.log(profileData);
     createProfile(profileData, history);
     history.push('/dashboard');
   };
-  useEffect(() => {
-    getCurrentProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getCurrentProfile]);
-  return loading && profile === null ? (
+
+  return loading &&
+    auth &&
+    auth.user.userGroup &&
+    auth.user.userGroup.lenth > 0 ? (
     <Redirect to='/dashboard' />
   ) : (
     <Fragment>
-      <div className='create-profile-component-container'>
-        <div className='create-profile-component-header'>
-          <h4 className='create-profile-component-title'>
-            Create Your Profile
-          </h4>
-        </div>
-        <div className='create-profile-component-content'>
-          <small>Don\'t worry you change change this info later </small>
-          <br />
-          <small>* = required field</small>
+      <div className='create-profile-component-content'>
+        <Tabs
+          defaultActiveKey='1'
+          activeKey={activeKey}
+          onChange={handleTabChange}
+        >
+          <TabPane
+            tab={<Link to='/create-profile/1'>Enter Your Profile</Link>}
+            key='1'
+          >
+            <UserAccountForm profileData={profileData} />
+          </TabPane>
 
-          <Tab
-            menu={{ secondary: true, pointing: true }}
-            panes={panes}
-            activeIndex={activeIndex}
-            onTabChange={handleTabChange}
-          />
-        </div>
+          <TabPane
+            tab={<Link to='/create-profile/2'>Discover Groups</Link>}
+            key='2'
+          >
+            <DiscoverGroup newRegistration={true} />
+          </TabPane>
+          <TabPane
+            tab={<Link to='/create-profile/3'>Create Group</Link>}
+            key='3'
+          >
+            <ProfileCreateGroup />
+          </TabPane>
+        </Tabs>
       </div>
     </Fragment>
   );
@@ -140,14 +90,11 @@ const CreateProfile = ({
 
 CreateProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
-  profile: state.profile,
-  isLoading: state.school.isLoading
+  profile: state.profile
 });
 export default connect(mapStateToProps, {
-  createProfile,
-  getCurrentProfile
+  createProfile
 })(withRouter(CreateProfile));

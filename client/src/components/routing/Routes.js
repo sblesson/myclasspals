@@ -4,7 +4,6 @@ import Login from '../auth/Login';
 import Alert from '../layout/Alert';
 import PendingRegistration from '../auth/PendingRegistration';
 
-import MyProfile from '../profile/MyProfile';
 import CreateProfile from '../profile/CreateProfile';
 import AccountSettings from '../profile/AccountSettings';
 import Profiles from '../profiles/Profiles';
@@ -42,8 +41,11 @@ const Routes = () => {
 
         <PrivateRoute exact path='/dashboard' component={Posts} />
         <PrivateRoute exact path='/dashboard/:id' component={Posts} />
-        <PrivateRoute exact path='/view-profile' component={MyProfile} />
-        <PrivateRoute exact path='/create-profile' component={CreateProfile} />
+        <PrivateRoute
+          exact
+          path='/create-profile/:id'
+          component={CreateProfile}
+        />
         <PrivateRoute exact path='/account' component={AccountSettings} />
         <PrivateRoute exact path='/posts' component={Posts} />
         <PrivateRoute exact path='/posts/:id' component={SinglePost} />

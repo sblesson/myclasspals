@@ -4,7 +4,8 @@ const initialState = {
   results: [],
   isLoading: true,
   value: '',
-  error: {}
+  error: {},
+  selectedSchool: null
 };
 
 export default function(state = initialState, action) {

@@ -22,7 +22,7 @@ const CommentItem = ({
     return userName.charAt(0).toUpperCase();
   };
   return (
-    <List.Item>
+    <List.Item className='feed-comment'>
       <List.Content floated='right'>
         {!auth.loading && user === auth.user._id && (
           <Button

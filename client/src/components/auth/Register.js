@@ -3,9 +3,13 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
-import PropTypes from 'prop-types';
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
+
+import PropTypes from 'prop-types';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
+
+const Register = ({ setAlert, register, isAuthenticated, address }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,7 +27,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      register({ name, email, password });
+      //also pass user address along with
+      let userAddress = address.selectedAddress;
+      console.log(userAddress);
+      register({ name, email, password, userAddress });
     }
   };
 
@@ -73,6 +80,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             onChange={e => onChange(e)}
           />
         </div>
+        <div className='form-group autocomplete'>
+          <AutoCompleteCitySeach />
+        </div>
+
         <input
           type='submit'
           className='btn btn-primary'
@@ -95,7 +106,8 @@ Register.propTypes = {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.school.isLoading
+  isLoading: state.school.isLoading,
+  address: state.address
 });
 
 export default connect(mapStateToProps, { setAlert, register })(Register);

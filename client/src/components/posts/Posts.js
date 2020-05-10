@@ -69,7 +69,7 @@ const Posts = ({
         history.push(`/group/${groupId}`);
       } else {
         //New user login for first time, not part of any groups, redirect to create profile and help user discover group
-        history.push(`/create-profile`);
+        history.push(`/create-profile/1`);
       }
     }
   }, [getGroupDetails, searchPost, auth.user, match]);
@@ -212,7 +212,7 @@ const Posts = ({
             ) : (
               <Fragment>
                 <p>You have not yet setup a profile, please add some info</p>
-                <Link to='/create-profile' className='btn btn-primary my-1'>
+                <Link to='/create-profile/1' className='btn btn-primary my-1'>
                   Create Profile
                 </Link>
               </Fragment>

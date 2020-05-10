@@ -3,16 +3,14 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  createProfile,
+  createProfile
   //deleteAccount,
-  getCurrentProfile
 } from '../../actions/profile';
 import LeftNav from '../leftnav/LeftNav';
 import Account from './account/Account';
 const AccountSettings = ({
   profile: { profile, loading },
   createProfile,
-  getCurrentProfile,
   //deleteAccount,
   history
 }) => {
@@ -31,10 +29,8 @@ const AccountSettings = ({
   });
 
   useEffect(() => {
-    getCurrentProfile();
-
     setFormData({});
-  }, [loading, getCurrentProfile]);
+  }, [loading]);
 
   const { username, location, status } = formData;
 
@@ -60,7 +56,6 @@ const AccountSettings = ({
 
 AccountSettings.propTypes = {
   createProfile: PropTypes.func.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
   //deleteAccount: PropTypes.func.isRequired
 };
@@ -70,7 +65,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  createProfile,
-  getCurrentProfile
+  createProfile
+
   //deleteAccount
 })(withRouter(AccountSettings));

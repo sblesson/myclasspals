@@ -7,6 +7,7 @@ const config = require('config');
 const { check, validationResult } = require('express-validator/check');
 
 const User = require('../../models/User');
+const Address = require('../../models/Address');
 
 // @route    POST api/users
 // @desc     Register user
@@ -28,8 +29,8 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
-    const { name, email, password } = req.body;
+    console.log(req.body);
+    const { name, email, password, userAddress } = req.body;
 
     try {
       let user = await User.findOne({ email });
@@ -45,14 +46,23 @@ router.post(
         r: 'pg',
         d: 'mm'
       });
+      let address = new Address({
+        city: userAddress.city,
+        state: userAddress.state,
+        zipcode: userAddress.postalcode,
+        country: userAddress.country
+      });
+
+      console.log(address);
 
       user = new User({
         name,
         email,
         avatar,
-        password
+        password,
+        address
       });
-
+      console.log(user);
       const salt = await bcrypt.genSalt(10);
 
       user.password = await bcrypt.hash(password, salt);
