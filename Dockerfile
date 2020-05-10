@@ -63,14 +63,17 @@ RUN chmod 777 /classbuddyserver/mongoscript.sh && \
 ADD mongo.conf    /etc/supervisor/conf.d/mongo.conf
 
 RUN mkdir -p /classbuddynodeserver/log
-COPY client /classbuddynodeserver/client
+RUN mkdir -p /classbuddynodeserver/client
+COPY client/public /classbuddynodeserver/client/public
+COPY client/src /classbuddynodeserver/client/src
+COPY client/package.json /classbuddynodeserver/client/package.json
 COPY middleware /classbuddynodeserver/middleware
 COPY config /classbuddynodeserver/config
 COPY models /classbuddynodeserver/models
-COPY package.json /classbuddynodeserver/package.json
-COPY node_modules /classbuddynodeserver/node_modules	
+COPY package.json /classbuddynodeserver/package.json	
 COPY routes /classbuddynodeserver/routes
 COPY server.js /classbuddynodeserver/server.js
+COPY nodeinstall.sh /classbuddynodeserver/nodeinstall.sh
 
 
 RUN apt-get update && \
@@ -78,7 +81,10 @@ RUN apt-get update && \
 	bash /var/tmp/nodesource_setup.sh && \
 	apt-get install -y nodejs && \
 	apt install -y build-essential;
-	
+
+RUN chmod 777 /classbuddynodeserver/nodeinstall.sh && \
+   /classbuddynodeserver/nodeinstall.sh
+   
 ADD clazzvilla-node.conf   /etc/supervisor/conf.d/clazzvilla-node.conf
 
 # Expose all ports
