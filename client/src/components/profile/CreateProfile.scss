@@ -21,16 +21,23 @@
   }
   .create-profile-component-content {
     padding: 16px 16px;
-    .ui.segment {
-      min-height: 400px;
+    min-height: 400px;
 
-      box-shadow: none;
-      border: none;
-    }
     .actionBtnWrapper {
       margin-bottom: 20px;
       margin-top: 20px;
       float: right;
     }
+  }
+}
+.create-profile-component-content {
+  padding: 16px 16px;
+  min-height: 400px;
+  max-width: 600px;
+  margin: auto;
+  .actionBtnWrapper {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    float: right;
   }
 }

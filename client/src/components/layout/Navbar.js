@@ -83,7 +83,7 @@ const Navbar = ({
                           enterButton
                         />
                       );
-                    default:
+                    case 'post':
                       return (
                         <Search
                           placeholder='Seach post'
@@ -94,6 +94,8 @@ const Navbar = ({
                           enterButton
                         />
                       );
+                    default:
+                      return;
                   }
                 })()}
               </Menu.Item>

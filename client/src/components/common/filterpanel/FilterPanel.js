@@ -18,11 +18,14 @@ const FilterPanel = ({
   const [dateFilterSelected, setDateFilterSelected] = useState(null);
 
   const [categoryFilterSelected, setCategoryFilterSelected] = useState(null);
+  const [groupTypeFilterSelected, setGroupTypeFilterSelected] = useState(null);
 
   const toggleFilterPanel = () => showFilterPanel(!filterPanel);
-  const [text, setText] = useState('');
-  const data = ['People', 'Groups'];
-  let [filterObjectSelected, setFilterObjectSelected] = useState(null);
+
+  let [filterObjectSelected, setFilterObjectSelected] = useState({
+    groupId: null
+  });
+
   let groupId;
   useEffect(() => {
     if (group.currentGroup && group.currentGroup.id) {
@@ -136,7 +139,7 @@ const FilterPanel = ({
     searchPost(filterObjectSelected);
   };
 
-  const handleCategoryFilterClick = (item, event) => {
+  const handlePostCategoryFilterClick = (item, event) => {
     setCategoryFilterSelected(item);
 
     if (filterObjectSelected && filterObjectSelected.groupId) {
@@ -217,7 +220,7 @@ const FilterPanel = ({
                   renderItem={item => (
                     <List.Item
                       onClick={event =>
-                        handleCategoryFilterClick(item.title, event)
+                        handlePostCategoryFilterClick(item.title, event)
                       }
                       className={
                         categoryFilterSelected === item.title ? ' selected' : ''

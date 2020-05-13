@@ -194,14 +194,19 @@ export const deleteUserRegistrationToken = token => async dispatch => {
 };
 
 // Register User
-export const register = ({ name, email, password }) => async dispatch => {
+export const register = ({
+  name,
+  email,
+  password,
+  userAddress
+}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  const body = JSON.stringify({ name, email, password });
+  const body = JSON.stringify({ name, email, password, userAddress });
 
   try {
     const res = await axios.post('/api/users', body, config);
@@ -219,8 +224,9 @@ export const register = ({ name, email, password }) => async dispatch => {
         ? 'err.response.data.errors'
         : 'Error occured when sending email';
 
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    if (errors && errors.length > 0) {
+      console.log(errors);
+      //errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
 
     dispatch({

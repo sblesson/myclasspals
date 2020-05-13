@@ -13,14 +13,8 @@ import {
   inviteToJoinUserGroup,
   updateGroup
 } from '../../../actions/group';
-import {
-  Menu,
-  ControllerButton,
-  //Input,
-  Item,
-  ArrowIcon,
-  XIcon
-} from '../../common/DownshiftComponents';
+import AutoCompleteSchoolSearch from '../../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
+
 import { Formik, ErrorMessage } from 'formik';
 
 import {
@@ -83,30 +77,6 @@ const CreateGroupModal = ({
     console.log(e.target.name, e.target.value);
   };
 
-  const inputOnChange = event => {
-    console.log(event.target.value);
-    if (!event.target.value) {
-      return;
-    }
-    fetchSchools(event.target.value);
-  };
-
-  const fetchSchools = searchTerm => {
-    setTimeout(() => {
-      getSchoolData(searchTerm);
-    }, Math.random() * 1000);
-  };
-
-  const schoolNameSelectHandler = selectedItem => {
-    console.log(selectedItem);
-    setSelectedSchool(selectedItem);
-  };
-
-  const schoolNameToString = (item, index) => {
-    console.log(item);
-    return item ? item.schoolName : '';
-  };
-
   const onCreateGroupSubmit = data => {
     console.log(data);
   };
@@ -165,11 +135,11 @@ const CreateGroupModal = ({
               }}
               onSubmit={(values, actions) => {
                 message.info(JSON.stringify(values, null, 4));
-                values.schoolName = selectedSchool.schoolName;
-                values.schoolId = selectedSchool.schoolid;
-                values.schoolCity = selectedSchool.city;
-                values.schoolState = selectedSchool.state;
-                values.schoolZipCode = selectedSchool.zip;
+                values.schoolName = schools.selectedSchool.schoolName;
+                values.schoolId = schools.selectedSchool.schoolid;
+                values.schoolCity = schools.selectedSchool.city;
+                values.schoolState = schools.selectedSchool.state;
+                values.schoolZipCode = schools.selectedSchool.zip;
 
                 //deleting unwanted property
                 delete values['downshift-0-input'];
@@ -252,75 +222,7 @@ const CreateGroupModal = ({
                         required={true}
                         validate={validateRequired}
                       >
-                        <Downshift
-                          onChange={selectedItem =>
-                            schoolNameSelectHandler(selectedItem)
-                          }
-                          itemToString={schoolNameToString}
-                        >
-                          {({
-                            getInputProps,
-                            getToggleButtonProps,
-                            getItemProps,
-                            isOpen,
-                            toggleMenu,
-                            clearSelection,
-                            selectedItem,
-                            inputValue,
-                            getLabelProps,
-                            highlightedIndex
-                          }) => (
-                            <div>
-                              <Div
-                                position='relative'
-                                css={{ paddingRight: '1.75em' }}
-                              >
-                                <Input
-                                  {...getInputProps({
-                                    placeholder:
-                                      'Type school or district or city, zip...',
-                                    onKeyUp: inputOnChange
-                                  })}
-                                />
-                                {selectedItem ? (
-                                  <ControllerButton
-                                    css={{ paddingTop: 4, top: 5 }}
-                                    onClick={clearSelection}
-                                    aria-label='clear selection'
-                                  >
-                                    <XIcon />
-                                  </ControllerButton>
-                                ) : (
-                                  <ControllerButton {...getToggleButtonProps()}>
-                                    <ArrowIcon
-                                      isOpen={isOpen}
-                                      className='icon-auto-open'
-                                    />
-                                  </ControllerButton>
-                                )}
-                              </Div>
-                              {isOpen ? (
-                                <Menu>
-                                  {schools.map((item, index) => (
-                                    <Item
-                                      key={item.schoolid}
-                                      {...getItemProps({
-                                        item,
-                                        index,
-                                        isActive: highlightedIndex === index,
-                                        isSelected: selectedItem === item
-                                      })}
-                                    >
-                                      {item.schoolName}
-                                    </Item>
-                                  ))}
-                                </Menu>
-                              ) : (
-                                'No school found'
-                              )}
-                            </div>
-                          )}
-                        </Downshift>
+                        <AutoCompleteSchoolSearch />
                       </FormItem>
                     ) : (
                       ''
