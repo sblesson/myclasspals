@@ -44,7 +44,7 @@ const AutoCompleteCitySearch = ({ getCityData, address }) => {
       style={{ width: '100%' }}
       onSelect={onCitySelect}
       onSearch={handleCitySearch}
-      placeholder='City'
+      placeholder='Your City'
     >
       {children}
     </AutoComplete>

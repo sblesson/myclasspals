@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { message, Button, Row, Col } from 'antd';
 import { Formik, ErrorMessage } from 'formik';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Div } from 'glamorous';
-import Downshift from 'downshift';
-
+import { ModalFooter } from 'reactstrap';
+import AutoCompleteSchoolSearch from '../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
+import MultiSelectUserSearch from '../common/multiselectusersearch/MultiSelectUserSearch';
 import { createProfile } from '../../actions/profile';
 import {
   addGroup,
@@ -27,18 +26,8 @@ import {
   Form,
   FormItem
 } from 'formik-antd';
-import {
-  Menu,
-  ControllerButton,
-  //Input,
-  Item,
-  ArrowIcon,
-  XIcon
-} from '../common/DownshiftComponents';
 
-import { getSchoolData } from '../../actions/school';
-
-const ProfileCreateGroup = ({ addGroup, getSchoolData, schools, auth }) => {
+const ProfileCreateGroup = ({ addGroup, schools, auth }) => {
   //for group
   const [selectedSchool, setSelectedSchool] = useState('');
   const [isSchoolVisible, setIsSchoolVisible] = useState(false);
@@ -66,28 +55,7 @@ const ProfileCreateGroup = ({ addGroup, getSchoolData, schools, auth }) => {
       setIsSchoolVisible(false);
     }
   };
-  const schoolNameSelectHandler = selectedItem => {
-    console.log(selectedItem);
-    setSelectedSchool(selectedItem);
-  };
-  const inputOnChange = event => {
-    console.log(event.target.value);
-    if (!event.target.value) {
-      return;
-    }
-    fetchSchools(event.target.value);
-  };
 
-  const fetchSchools = searchTerm => {
-    setTimeout(() => {
-      getSchoolData(searchTerm);
-    }, Math.random() * 1000);
-  };
-
-  const schoolNameToString = (item, index) => {
-    console.log(item);
-    return item ? item.schoolName : '';
-  };
   const validateSchoolGroupRadio = value => {
     console.log(value);
   };
@@ -121,9 +89,6 @@ const ProfileCreateGroup = ({ addGroup, getSchoolData, schools, auth }) => {
           values.schoolState = selectedSchool.state;
           values.schoolZipCode = selectedSchool.zip;
 
-          //deleting unwanted property
-          delete values['downshift-0-input'];
-
           values.userGroupMembers = [
             {
               _id: auth.user._id,
@@ -152,6 +117,14 @@ const ProfileCreateGroup = ({ addGroup, getSchoolData, schools, auth }) => {
                 validate={validateRequired}
               >
                 <Input name='groupName' placeholder='Group Name' />
+              </FormItem>
+              <FormItem
+                name='groupUsers'
+                label='Add Users'
+                required={true}
+                validate={validateRequired}
+              >
+                <MultiSelectUserSearch />
               </FormItem>
               <FormItem
                 name='privacyLabel'
@@ -202,75 +175,7 @@ const ProfileCreateGroup = ({ addGroup, getSchoolData, schools, auth }) => {
                   required={true}
                   validate={validateRequired}
                 >
-                  <Downshift
-                    onChange={selectedItem =>
-                      schoolNameSelectHandler(selectedItem)
-                    }
-                    itemToString={schoolNameToString}
-                  >
-                    {({
-                      getInputProps,
-                      getToggleButtonProps,
-                      getItemProps,
-                      isOpen,
-                      toggleMenu,
-                      clearSelection,
-                      selectedItem,
-                      inputValue,
-                      getLabelProps,
-                      highlightedIndex
-                    }) => (
-                      <div>
-                        <Div
-                          position='relative'
-                          css={{ paddingRight: '1.75em' }}
-                        >
-                          <Input
-                            {...getInputProps({
-                              placeholder:
-                                'Type school or district or city, zip...',
-                              onKeyUp: inputOnChange
-                            })}
-                          />
-                          {selectedItem ? (
-                            <ControllerButton
-                              css={{ paddingTop: 4, top: 5 }}
-                              onClick={clearSelection}
-                              aria-label='clear selection'
-                            >
-                              <XIcon />
-                            </ControllerButton>
-                          ) : (
-                            <ControllerButton {...getToggleButtonProps()}>
-                              <ArrowIcon
-                                isOpen={isOpen}
-                                className='icon-auto-open'
-                              />
-                            </ControllerButton>
-                          )}
-                        </Div>
-                        {isOpen ? (
-                          <Menu>
-                            {schools.map((item, index) => (
-                              <Item
-                                key={item.schoolid}
-                                {...getItemProps({
-                                  item,
-                                  index,
-                                  isActive: highlightedIndex === index,
-                                  isSelected: selectedItem === item
-                                })}
-                              >
-                                {item.schoolName}
-                              </Item>
-                            ))}
-                          </Menu>
-                        ) : (
-                          'No school found'
-                        )}
-                      </div>
-                    )}
-                  </Downshift>
+                  <AutoCompleteSchoolSearch />
                 </FormItem>
               ) : (
                 ''
@@ -282,8 +187,6 @@ const ProfileCreateGroup = ({ addGroup, getSchoolData, schools, auth }) => {
                 </SubmitButton>{' '}
               </ModalFooter>{' '}
             </div>
-            {/*                   <FormikDebug style={{ maxWidth: 400 }} />
-             */}{' '}
           </Form>
         )}
       />
@@ -297,6 +200,5 @@ const mapStateToProps = state => ({
 });
 export default connect(mapStateToProps, {
   createProfile,
-  addGroup,
-  getSchoolData
+  addGroup
 })(withRouter(ProfileCreateGroup));

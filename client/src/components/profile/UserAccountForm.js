@@ -2,15 +2,14 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Div } from 'glamorous';
-
 import _ from 'lodash';
 import { Formik, ErrorMessage } from 'formik';
 import { ModalFooter } from 'reactstrap';
-
 import { SubmitButton, Input, Form, FormItem } from 'formik-antd';
-import AutoCompleteSchoolSearch from '../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
+
 import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
+
+import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
 const UserAccountForm = ({ auth }) => {
   //const [formData, setFormData] = useState({ user });
@@ -56,33 +55,32 @@ const UserAccountForm = ({ auth }) => {
               size: componentSize
             }}
           >
-            {auth && auth.user && auth.user.name === null ? (
-              <FormItem name='name' label='Name'>
-                <Div
-                  position='relative'
-                  css={{ paddingRight: '1.75em', width: '400px' }}
-                >
-                  <Input
-                    name='userName'
-                    placeholder='What should we call you?'
-                  />
-                </Div>
+            {auth !== null && auth.user && auth.user.name === null ? (
+              <FormItem
+                name='name'
+                //label='Name'
+                required={true}
+                validate={validateRequired}
+              >
+                <Input name='userName' placeholder='What should we call you?' />
               </FormItem>
             ) : (
               ''
             )}
-
             <FormItem
               name='city'
-              label='City'
-              required={true}
+              //label='City'
+              //required={true}
               validate={validateRequired}
             >
               <AutoCompleteCitySeach />
             </FormItem>
-            <FormItem name='schoolName' label='School' required={false}>
-              {' '}
-              <AutoCompleteSchoolSearch />
+            <FormItem
+              name='schoolName'
+              //label='Schools you want to follow'
+              required={false}
+            >
+              <MultiSelectSchoolSearch />
             </FormItem>
             <ModalFooter>
               <SubmitButton> Proceed</SubmitButton>
