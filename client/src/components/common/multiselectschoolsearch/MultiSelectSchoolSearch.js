@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AutoComplete } from 'antd';
+import { Select, Spin } from 'antd';
+import debounce from 'lodash.debounce';
 import { getSchoolData } from '../../../actions/school';
-import './AutoCompleteSchoolSearch.scss';
 
-const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
-  const Option = AutoComplete.Option;
+const MultiSelectSchoolSearch = ({ getSchoolData, school }) => {
+  const Option = Select.Option;
 
-  const handleSchoolSearch = searchTerm => {
+  const fetchSchool = searchTerm => {
     if (searchTerm) {
+      //debounce(searchUser(searchTerm), 800);
       setTimeout(() => {
         getSchoolData(searchTerm);
       }, Math.random() * 1000);
@@ -40,22 +41,24 @@ const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
     });
 
   return (
-    <AutoComplete
-      allowClear={true}
-      backfill={true}
+    <Select
+      mode='multiple'
+      labelInValue
+      //value={value}
+      placeholder='Type schools ..'
+      //notFoundContent={auth.loading ? <Spin size='small' /> : null}
+      filterOption={false}
+      onSearch={fetchSchool}
+      onChange={onSchoolSelect}
       style={{ width: '100%' }}
-      onSelect={onSchoolSelect}
-      onSearch={handleSchoolSearch}
-      placeholder='School name'
-      name='schoolName'
     >
       {children}
-    </AutoComplete>
+    </Select>
   );
 };
 const mapStateToProps = state => ({
   school: state.school
 });
 export default connect(mapStateToProps, { getSchoolData })(
-  AutoCompleteSchoolSearch
+  MultiSelectSchoolSearch
 );

@@ -32,6 +32,9 @@ public class UserService {
 	
 	@Autowired
 	EmailServiceClient emailServiceClient;
+	
+	@Autowired
+	SchoolCache schoolCache;
 
 	public void createUser(Users user) throws Exception {
 		if (user.getUserGroup() != null) {
@@ -44,8 +47,27 @@ public class UserService {
 		mongoTemplate.insert(user);
 	}
 
-	public void updateUser(Users user) {
-		mongoTemplate.save(user);
+	public Users updateUser(Users user) throws Exception {
+		Query userByEmail = new Query();
+		userByEmail.addCriteria(Criteria.where("email").is(user.getEmail()));
+		Users userFromDB = mongoTemplate.findOne(userByEmail, Users.class);
+		if (userFromDB == null) {
+			throw new Exception("No user match found");
+		}
+		
+		if (user.getCity() != null) {
+			userFromDB.setCity(user.getCity());
+		}
+		if (user.getZipcode() != null) {
+			userFromDB.setZipcode(user.getZipcode());
+		}
+		if (user.getState() != null) {
+			userFromDB.setState(user.getState());
+		}
+		if (user.getSchools() != null) {
+			userFromDB.setSchools(user.getSchools());
+		}
+		return mongoTemplate.save(userFromDB);
 	}
 
 	public Users validateUser(Users user) throws Exception {

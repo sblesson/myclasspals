@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { AutoComplete } from 'antd';
+
 import { getCityData } from '../../../actions/address';
 
 const AutoCompleteCitySearch = ({ getCityData, address }) => {
@@ -44,7 +45,7 @@ const AutoCompleteCitySearch = ({ getCityData, address }) => {
       style={{ width: '100%' }}
       onSelect={onCitySelect}
       onSearch={handleCitySearch}
-      placeholder='City'
+      placeholder='Your City'
     >
       {children}
     </AutoComplete>

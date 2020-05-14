@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import _ from 'lodash';
-
-import { Tabs } from 'antd';
+import { Steps, Button, message, Tabs } from 'antd';
 
 import { createProfile } from '../../actions/profile';
 
@@ -25,6 +24,7 @@ const CreateProfile = ({
   const { TabPane } = Tabs;
 
   const [activeKey, setActiveKey] = useState(match.params.id);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const handleTabChange = activeKey => setActiveKey(activeKey);
 
@@ -42,6 +42,7 @@ const CreateProfile = ({
     zipcode: '',
     isTandCAccepted: false
   });
+  const Step = Steps.Step;
 
   const handleSubmitProfile = e => {
     e.preventDefault();
@@ -49,6 +50,32 @@ const CreateProfile = ({
     createProfile(profileData, history);
     history.push('/dashboard');
   };
+
+  const next = () => {
+    console.log(currentStep);
+    const current = currentStep + 1;
+    console.log(current);
+
+    setCurrentStep({ current });
+  };
+  const prev = () => {
+    const current = currentStep - 1;
+    setCurrentStep({ current });
+  };
+  const steps = [
+    {
+      title: 'First',
+      content: 'First-content'
+    },
+    {
+      title: 'Second',
+      content: 'Second-content'
+    },
+    {
+      title: 'Last',
+      content: 'Last-content'
+    }
+  ];
 
   return loading &&
     auth &&
@@ -58,21 +85,50 @@ const CreateProfile = ({
   ) : (
     <Fragment>
       <div className='create-profile-component-content'>
+{/*         <div>
+          <Steps current={currentStep}>
+            {steps.map(item => (
+              <Step key={item.title} title={item.title} />
+            ))}
+          </Steps>
+          <div className='steps-content'>{steps[1].content}</div>
+          <div className='steps-action'>
+            {currentStep < steps.length - 1 && (
+              <Button type='primary' onClick={() => next()}>
+                Next
+              </Button>
+            )}
+            {currentStep === steps.length - 1 && (
+              <Button
+                type='primary'
+                onClick={() => message.success('Processing complete!')}
+              >
+                Done
+              </Button>
+            )}
+            {currentStep > 0 && (
+              <Button style={{ marginLeft: 8 }} onClick={() => prev()}>
+                Previous
+              </Button>
+            )}
+          </div>
+        </div> */}
         <Tabs
           defaultActiveKey='1'
           activeKey={activeKey}
           onChange={handleTabChange}
+          //tabPosition='left'
         >
           <TabPane
             tab={<Link to='/create-profile/1'>Enter Your Profile</Link>}
-            key='1' 
+            key='1'
           >
             <UserAccountForm profileData={profileData} />
           </TabPane>
 
           <TabPane
             tab={<Link to='/create-profile/2'>Discover Groups</Link>}
-            key='2' 
+            key='2'
           >
             <DiscoverGroup newRegistration={true} />
           </TabPane>

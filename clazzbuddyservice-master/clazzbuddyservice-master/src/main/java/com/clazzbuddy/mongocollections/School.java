@@ -1,6 +1,11 @@
 package com.clazzbuddy.mongocollections;
 
+import org.springframework.data.annotation.Id;
+
 public class School {
+	
+	@Id
+	private String _id;
 
 	private String schoolid;
 	
@@ -140,6 +145,14 @@ public class School {
 
 	public void setRankStars(Integer rankStars) {
 		this.rankStars = rankStars;
+	}
+
+	public String get_id() {
+		return _id;
+	}
+
+	public void set_id(String _id) {
+		this._id = _id;
 	}
 
 	

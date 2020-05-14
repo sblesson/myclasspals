@@ -18,7 +18,9 @@ import {
   GET_USER_BY_REGISTRATION_ID,
   GET_USER_BY_REGISTRATION_ID_ERROR,
   DELETE_USER_REGISTRATION_TOKEN,
-  DELETE_USER_REGISTRATION_TOKEN_ERROR
+  DELETE_USER_REGISTRATION_TOKEN_ERROR,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_ERROR
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -194,19 +196,14 @@ export const deleteUserRegistrationToken = token => async dispatch => {
 };
 
 // Register User
-export const register = ({
-  name,
-  email,
-  password,
-  userAddress
-}) => async dispatch => {
+export const register = ({ name, email, password }) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  const body = JSON.stringify({ name, email, password, userAddress });
+  const body = JSON.stringify({ name, email, password });
 
   try {
     const res = await axios.post('/api/users', body, config);
@@ -268,6 +265,36 @@ export const registerPendingInvitedUser = ({
 
     dispatch({
       type: REGISTER_FAIL
+    });
+  }
+};
+
+// Change User Password
+export const changePassword = ({ password }) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ password });
+
+  try {
+    const res = await axios.put('/api/users', body, config);
+
+    dispatch({
+      type: CHANGE_PASSWORD_SUCCESS,
+      payload: res.data
+    });
+  } catch (err) {
+    /*   const errors = err.response.data.errorCode;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    } */
+
+    dispatch({
+      type: CHANGE_PASSWORD_ERROR
     });
   }
 };
