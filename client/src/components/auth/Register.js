@@ -3,21 +3,16 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
-
-import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
-
 import PropTypes from 'prop-types';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
 
-const Register = ({ setAlert, register, isAuthenticated, address }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
     password2: ''
   });
 
-  const { name, email, password, password2 } = formData;
+  const { email, password, password2 } = formData;
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,10 +22,7 @@ const Register = ({ setAlert, register, isAuthenticated, address }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      //also pass user address along with
-      let userAddress = address.selectedAddress;
-      console.log(userAddress);
-      register({ name, email, password, userAddress });
+      register({ email, password });
     }
   };
 
@@ -44,15 +36,6 @@ const Register = ({ setAlert, register, isAuthenticated, address }) => {
         <i className='fas fa-user' /> Create Your Account
       </p>
       <form className='form' onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Name'
-            name='name'
-            value={name}
-            onChange={e => onChange(e)}
-          />
-        </div>
         <div className='form-group'>
           <input
             type='email'
@@ -80,10 +63,6 @@ const Register = ({ setAlert, register, isAuthenticated, address }) => {
             onChange={e => onChange(e)}
           />
         </div>
-        <div className='form-group autocomplete'>
-          <AutoCompleteCitySeach />
-        </div>
-
         <input
           type='submit'
           className='btn btn-primary'
@@ -106,8 +85,7 @@ Register.propTypes = {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.school.isLoading,
-  address: state.address
+  isLoading: state.school.isLoading
 });
 
 export default connect(mapStateToProps, { setAlert, register })(Register);

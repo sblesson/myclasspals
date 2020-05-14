@@ -46,13 +46,6 @@ input {
   padding: 1rem 0.5rem;
 }
 
-.downshift-dropdown {
-  margin: 0 auto;
-  width: 20rem;
-  border: 1px solid whitesmoke;
-  border-bottom: none;
-}
-
 .dropdown-item {
   padding: 0.5rem;
   cursor: pointer;

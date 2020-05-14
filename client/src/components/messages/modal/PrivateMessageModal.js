@@ -10,7 +10,7 @@ import { sendPrivateMessage } from '../../../actions/post';
 import { FormOutlined } from '@ant-design/icons';
 
 import { Formik, ErrorMessage } from 'formik';
-import AutoCompleteUserSearch from '../../common/autocompleteusersearch/AutoCompleteUserSearch';
+import AutoCompleteUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
 import './PrivateMessageModal.scss';
 
 const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {

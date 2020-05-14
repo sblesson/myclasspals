@@ -62,6 +62,7 @@ const CreateProfile = ({
           defaultActiveKey='1'
           activeKey={activeKey}
           onChange={handleTabChange}
+          //tabPosition='left'
         >
           <TabPane
             tab={<Link to='/create-profile/1'>Enter Your Profile</Link>}

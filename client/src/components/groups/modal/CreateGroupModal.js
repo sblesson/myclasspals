@@ -14,6 +14,7 @@ import {
   updateGroup
 } from '../../../actions/group';
 import AutoCompleteSchoolSearch from '../../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
+import MultiSelectUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
 
 import { Formik, ErrorMessage } from 'formik';
 
@@ -29,15 +30,10 @@ import {
 } from 'formik-antd';
 import { message, Button, Row, Col } from 'antd';
 
-import { Div } from 'glamorous';
-
-import Downshift from 'downshift';
-
 import './CreateGroupModal.scss';
 
 const CreateGroupModal = ({
   sendPrivateMessage,
-  getSchoolData,
   schools,
   history,
   addGroup,
@@ -120,6 +116,26 @@ const CreateGroupModal = ({
       }
     }
   };
+  const submitProfileForm = (values, actions) => {
+    message.info(JSON.stringify(values, null, 4));
+    values.schoolName = schools.selectedSchool.schoolName;
+    values.schoolId = schools.selectedSchool.schoolid;
+    values.schoolCity = schools.selectedSchool.city;
+    values.schoolState = schools.selectedSchool.state;
+    values.schoolZipCode = schools.selectedSchool.zip;
+
+    values.userGroupMembers = [
+      {
+        _id: auth.user._id,
+        name: auth.user.name,
+        role: 'admin'
+      }
+    ];
+    addGroup(JSON.stringify(values));
+    actions.setSubmitting(false);
+    actions.resetForm();
+    setActiveIndex(1);
+  };
   const panes = [
     {
       menuItem: 'Create New Group',
@@ -134,27 +150,7 @@ const CreateGroupModal = ({
                 isSchoolGroup: 'no'
               }}
               onSubmit={(values, actions) => {
-                message.info(JSON.stringify(values, null, 4));
-                values.schoolName = schools.selectedSchool.schoolName;
-                values.schoolId = schools.selectedSchool.schoolid;
-                values.schoolCity = schools.selectedSchool.city;
-                values.schoolState = schools.selectedSchool.state;
-                values.schoolZipCode = schools.selectedSchool.zip;
-
-                //deleting unwanted property
-                delete values['downshift-0-input'];
-
-                values.userGroupMembers = [
-                  {
-                    _id: auth.user._id,
-                    name: auth.user.name,
-                    role: 'admin'
-                  }
-                ];
-                addGroup(JSON.stringify(values));
-                actions.setSubmitting(false);
-                actions.resetForm();
-                setActiveIndex(1);
+                submitProfileForm(values, actions);
               }}
               render={() => (
                 <Form
@@ -172,6 +168,14 @@ const CreateGroupModal = ({
                       validate={validateRequired}
                     >
                       <Input name='groupName' placeholder='Group Name' />
+                    </FormItem>
+                    <FormItem
+                      name='groupUsers'
+                      label='Add Users'
+                      required={true}
+                      validate={validateRequired}
+                    >
+                      <MultiSelectUserSearch />
                     </FormItem>
                     <FormItem
                       name='privacyLabel'
