@@ -43,6 +43,9 @@ public class Users {
 	@DBRef
 	private List<School> schools;
 	
+	@Transient
+	private List<String> schoolId;
+	
 	@DBRef
 	private List<UserGroup> userGroup;
 	
@@ -163,6 +166,14 @@ public class Users {
 
 	public void setSchools(List<School> schools) {
 		this.schools = schools;
+	}
+
+	public List<String> getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(List<String> schoolId) {
+		this.schoolId = schoolId;
 	}
 
 	

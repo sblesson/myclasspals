@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.externalclients.EmailServiceClient;
 import com.clazzbuddy.mongocollections.GroupInvitations;
+import com.clazzbuddy.mongocollections.School;
 import com.clazzbuddy.mongocollections.UserGroup;
 import com.clazzbuddy.mongocollections.UserGroupMembers;
 import com.clazzbuddy.mongocollections.UserRegistration;
@@ -64,8 +65,16 @@ public class UserService {
 		if (user.getState() != null) {
 			userFromDB.setState(user.getState());
 		}
-		if (user.getSchools() != null) {
-			userFromDB.setSchools(user.getSchools());
+		if (user.getSchoolId() != null) {
+			List<School> schools = new ArrayList<School>();
+			for(String id: user.getSchoolId()) {
+				School school = schoolCache.getSchoolBySchoolId(id);
+				if (school == null) {
+					throw new Exception("school id is incorrect:" + id);
+				}
+				schools.add(school);
+			}
+			userFromDB.setSchools(schools);;
 		}
 		return mongoTemplate.save(userFromDB);
 	}
