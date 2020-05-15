@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { AutoComplete } from 'antd';
+
 import { getCityData } from '../../../actions/address';
 
 const AutoCompleteCitySearch = ({ getCityData, address }) => {

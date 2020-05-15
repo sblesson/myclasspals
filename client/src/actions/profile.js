@@ -81,7 +81,7 @@ export const createProfile = (
     };
 
     const res = await axios.post(
-      'http://localhost:8080/user/createuser',
+      'http://localhost:8080/user/updateuser',
       formData,
       config
     );

@@ -5,15 +5,16 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Formik, ErrorMessage } from 'formik';
 import { ModalFooter } from 'reactstrap';
-import { SubmitButton, Input, Form, FormItem } from 'formik-antd';
+import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 
 import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
 
 import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
-const UserAccountForm = ({ auth }) => {
+const UserAccountForm = ({ auth, address, school }) => {
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
+    console.log(value);
     return value ? undefined : 'required';
   };
   const [componentSize, setComponentSize] = useState('small');
@@ -34,16 +35,21 @@ const UserAccountForm = ({ auth }) => {
       sm: { span: 16 }
     }
   };
+  let selectedAddress = address.selectedAddress;
+  let selectedSchool = school.selectedSchool;
   const yourInfo = (
     <Formik
       initialValues={{
-        schoolName: '',
-        city: ''
+        userName: '',
+        city: '',
+        schoolName: ''
       }}
       onSubmit={(values, actions) => {
-        console.log(actions);
+        console.log(school.selectedSchool);
+        //console.log(school.selectedSchool);
         console.log(JSON.stringify(values));
       }}
+      validator={() => ({})}
       //validate={values => {}}
       render={() => (
         <div style={{ flex: 1, padding: 10 }}>
@@ -57,10 +63,10 @@ const UserAccountForm = ({ auth }) => {
           >
             {auth !== null && auth.user && auth.user.name === null ? (
               <FormItem
-                name='name'
+                name='userName'
                 //label='Name'
-                required={true}
-                validate={validateRequired}
+                //required={true}
+                //validate={validateRequired}
               >
                 <Input name='userName' placeholder='What should we call you?' />
               </FormItem>
@@ -71,7 +77,7 @@ const UserAccountForm = ({ auth }) => {
               name='city'
               //label='City'
               //required={true}
-              validate={validateRequired}
+              //validate={validateRequired}
             >
               <AutoCompleteCitySeach />
             </FormItem>
@@ -86,6 +92,9 @@ const UserAccountForm = ({ auth }) => {
               <SubmitButton> Proceed</SubmitButton>
             </ModalFooter>
           </Form>
+          <pre style={{ flex: 1 }}>
+            <FormikDebug />
+          </pre>
         </div>
       )}
     />
@@ -98,7 +107,9 @@ UserAccountForm.propTypes = {
   //profileData: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  school: state.school,
+  address: state.address
 });
 
 export default connect(mapStateToProps, {})(withRouter(UserAccountForm));

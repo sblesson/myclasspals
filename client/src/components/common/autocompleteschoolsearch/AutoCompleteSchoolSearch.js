@@ -47,6 +47,7 @@ const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
       onSelect={onSchoolSelect}
       onSearch={handleSchoolSearch}
       placeholder='School name'
+      name='schoolName'
     >
       {children}
     </AutoComplete>
