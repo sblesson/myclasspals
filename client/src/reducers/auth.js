@@ -12,7 +12,8 @@ import {
   GET_USER_GROUP_ERROR,
   GET_USER,
   SEARCH_USER,
-  GET_USER_BY_REGISTRATION_ID
+  GET_USER_BY_REGISTRATION_ID,
+  CHANGE_PASSWORD_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -92,6 +93,14 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false
       };
+    case CHANGE_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false
+      };
+
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:

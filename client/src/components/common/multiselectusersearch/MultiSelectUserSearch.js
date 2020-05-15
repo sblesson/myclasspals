@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Select, Spin } from 'antd';
+import { Spin } from 'antd';
+import { Select } from 'formik-antd';
 import debounce from 'lodash.debounce';
 import { searchUser } from '../../../actions/auth';
 
@@ -28,10 +29,8 @@ const MultiSelectUserSearch = ({ searchUser, auth }) => {
     auth.searchUserResult &&
     auth.searchUserResult.length > 0 &&
     auth.searchUserResult.map((item, index) => {
-      console.log(item);
-      let selectedUser = item.email;
       return (
-        <Option key={index} value={selectedUser}>
+        <Option key={index} value={item.email}>
           <span style={{ fontWeigth: 'bolder' }}> {item.email}</span>
         </Option>
       );
@@ -39,15 +38,12 @@ const MultiSelectUserSearch = ({ searchUser, auth }) => {
 
   return (
     <Select
+      name='usersSelect'
+      style={{ width: '100%' }}
+      placeholder='Select users'
       mode='multiple'
-      labelInValue
-      //value={value}
-      placeholder='Type users'
-      //notFoundContent={auth.loading ? <Spin size='small' /> : null}
-      filterOption={false}
       onSearch={fetchUser}
       onChange={onUserSelect}
-      style={{ width: '100%' }}
     >
       {children}
     </Select>

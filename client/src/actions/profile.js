@@ -74,14 +74,15 @@ export const createProfile = (
   edit = false
 ) => async dispatch => {
   try {
+    console.log(formData);
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     };
 
-    const res = await axios.post(
-      'http://localhost:8080/user/createuser',
+    const res = await axios.put(
+      'http://localhost:8080/user/updateuser',
       formData,
       config
     );
@@ -93,9 +94,9 @@ export const createProfile = (
 
     dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
 
-    if (!edit) {
+    /*    if (!edit) {
       history.push('/dashboard');
-    }
+    } */
   } catch (err) {
     const errors = err.response.data.errors;
 

@@ -40,7 +40,11 @@ public class Users {
 
 	private String zipcode;
 	
-	private List<Community> community;
+	@DBRef
+	private List<School> schools;
+	
+	@Transient
+	private List<String> schoolId;
 	
 	@DBRef
 	private List<UserGroup> userGroup;
@@ -115,13 +119,6 @@ public class Users {
 		this.zipcode = zipcode;
 	}
 
-	public List<Community> getCommunity() {
-		return community;
-	}
-
-	public void setCommunity(List<Community> community) {
-		this.community = community;
-	}
 
 	public String get_id() {
 		return _id;
@@ -161,6 +158,22 @@ public class Users {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public List<School> getSchools() {
+		return schools;
+	}
+
+	public void setSchools(List<School> schools) {
+		this.schools = schools;
+	}
+
+	public List<String> getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(List<String> schoolId) {
+		this.schoolId = schoolId;
 	}
 
 	

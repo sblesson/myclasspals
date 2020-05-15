@@ -53,10 +53,10 @@ public class UserController {
 	
 	@PutMapping(value="/updateuser", produces={"application/json"})
 	public CommonResult updateuser(@RequestBody Users user) {
-		CommonResult result = new CommonResult();
+		UserResult result = new UserResult();
 		
 		try {
-			userService.updateUser(user);
+			result.setUser(userService.updateUser(user));
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

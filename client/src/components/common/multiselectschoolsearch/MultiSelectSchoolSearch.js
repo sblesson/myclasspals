@@ -1,26 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Select, Spin } from 'antd';
+import { Spin } from 'antd';
+import { Select } from 'formik-antd';
 import debounce from 'lodash.debounce';
-import { getSchoolData } from '../../../actions/school';
+import { fetchSchool } from '../../../actions/school';
 
-const MultiSelectSchoolSearch = ({ getSchoolData, school }) => {
+const MultiSelectSchoolSearch = ({ fetchSchool, school }) => {
   const Option = Select.Option;
 
-  const fetchSchool = searchTerm => {
+  const onSearchSchool = searchTerm => {
     if (searchTerm) {
       //debounce(searchUser(searchTerm), 800);
       setTimeout(() => {
-        getSchoolData(searchTerm);
+        school.isLoading = true;
+        fetchSchool(searchTerm);
       }, Math.random() * 1000);
     }
   };
 
-  const onSchoolSelect = (value, option) => {
-    if (school && school.results && school.results.length > 0) {
+  const onSchoolChange = (value, option) => {
+    console.log(value);
+    /*     if (school && school.results && school.results.length > 0) {
       //update selected school in the reducer
       school.selectedSchool = school.results[option.key];
-    }
+    } */
   };
 
   const children =
@@ -28,13 +31,11 @@ const MultiSelectSchoolSearch = ({ getSchoolData, school }) => {
     school.results &&
     school.results.length > 0 &&
     school.results.map((item, index) => {
-      console.log(item);
-      let selectedSchool = item.schoolName + ', ' + item.state;
       return (
-        <Option key={index} value={selectedSchool}>
+        <Option key={index} value={item.schoolid}>
           <span style={{ fontWeigth: 'bolder' }}>
             {' '}
-            {item.schoolName}, {item.state}
+            {item.schoolName}, {item.city} {item.state}
           </span>
         </Option>
       );
@@ -42,15 +43,14 @@ const MultiSelectSchoolSearch = ({ getSchoolData, school }) => {
 
   return (
     <Select
+      name='schoolId'
+      placeholder='Select schools'
       mode='multiple'
+      onSearch={onSearchSchool}
+      onSelect={onSchoolChange}
       labelInValue
-      //value={value}
-      placeholder='Type schools ..'
-      //notFoundContent={auth.loading ? <Spin size='small' /> : null}
+      notFoundContent={school.isLoading ? <Spin size='small' /> : null}
       filterOption={false}
-      onSearch={fetchSchool}
-      onChange={onSchoolSelect}
-      style={{ width: '100%' }}
     >
       {children}
     </Select>
@@ -59,6 +59,6 @@ const MultiSelectSchoolSearch = ({ getSchoolData, school }) => {
 const mapStateToProps = state => ({
   school: state.school
 });
-export default connect(mapStateToProps, { getSchoolData })(
+export default connect(mapStateToProps, { fetchSchool })(
   MultiSelectSchoolSearch
 );

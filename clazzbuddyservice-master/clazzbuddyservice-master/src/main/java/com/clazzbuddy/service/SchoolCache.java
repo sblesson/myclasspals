@@ -54,4 +54,11 @@ public class SchoolCache {
 		
 		
 	}
+	public School getSchoolBySchoolId(String id) throws Exception {
+		Query schoolQuery = new Query();
+		schoolQuery.addCriteria(Criteria.where("schoolid").is(id));
+		
+		return mongoTemplate.findOne(schoolQuery, School.class);
+		
+	}
 }
