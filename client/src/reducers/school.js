@@ -1,8 +1,8 @@
-import { GET_SCHOOL_DATA, GET_SCHOOL_DATA_ERROR } from '../actions/types';
+import { FETCH_SCHOOL, FETCH_SCHOOL_ERROR } from '../actions/types';
 
 const initialState = {
   results: [],
-  isLoading: true,
+  isLoading: false,
   value: '',
   error: {},
   selectedSchool: null
@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_SCHOOL_DATA:
+    case FETCH_SCHOOL:
       return {
         ...state,
         results: payload.schoolMatches,
@@ -20,7 +20,7 @@ export default function(state = initialState, action) {
         value: ''
       };
 
-    case GET_SCHOOL_DATA_ERROR:
+    case FETCH_SCHOOL_ERROR:
       return {
         ...state,
         error: payload,

@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AutoComplete } from 'antd';
-import { getSchoolData } from '../../../actions/school';
-import './AutoCompleteSchoolSearch.scss';
+import { Select } from 'formik-antd';
+import { fetchSchool } from '../../../actions/school';
 
-const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
-  const Option = AutoComplete.Option;
+const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
+  const Option = Select.Option;
 
   const handleSchoolSearch = searchTerm => {
     if (searchTerm) {
       setTimeout(() => {
-        getSchoolData(searchTerm);
+        fetchSchool(searchTerm);
       }, Math.random() * 1000);
     }
   };
@@ -40,22 +39,20 @@ const AutoCompleteSchoolSearch = ({ getSchoolData, school }) => {
     });
 
   return (
-    <AutoComplete
-      allowClear={true}
-      backfill={true}
-      style={{ width: '100%' }}
-      onSelect={onSchoolSelect}
+    <Select
+      name='schoolSelect'
+      showSearch
+      placeholder='Select your school'
       onSearch={handleSchoolSearch}
-      placeholder='School name'
-      name='schoolName'
+      onChange={onSchoolSelect}
     >
       {children}
-    </AutoComplete>
+    </Select>
   );
 };
 const mapStateToProps = state => ({
   school: state.school
 });
-export default connect(mapStateToProps, { getSchoolData })(
+export default connect(mapStateToProps, { fetchSchool })(
   AutoCompleteSchoolSearch
 );

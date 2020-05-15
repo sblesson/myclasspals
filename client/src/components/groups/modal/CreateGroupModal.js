@@ -7,7 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
-import { getSchoolData } from '../../../actions/school';
+import { fetchSchool } from '../../../actions/school';
 import {
   addGroup,
   inviteToJoinUserGroup,
@@ -403,7 +403,7 @@ const mapDispatchToProps = state => ({
 
 export default connect(mapDispatchToProps, {
   sendPrivateMessage,
-  getSchoolData,
+  fetchSchool,
   addGroup,
   inviteToJoinUserGroup,
   updateGroup,
