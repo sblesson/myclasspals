@@ -47,8 +47,7 @@ const MultiSelectSchoolSearch = ({ fetchSchool, school }) => {
       placeholder='Select schools'
       mode='multiple'
       onSearch={onSearchSchool}
-      onSelect={onSchoolChange}
-      labelInValue
+      onChange={onSchoolChange}
       notFoundContent={school.isLoading ? <Spin size='small' /> : null}
       filterOption={false}
     >

@@ -20,7 +20,7 @@ import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoComplete
 
 import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
-const UserAccountForm = ({ auth, createProfile }) => {
+const UserAccountForm = ({ auth, createProfile, current, onStepChange }) => {
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
     console.log(value);
@@ -68,6 +68,7 @@ const UserAccountForm = ({ auth, createProfile }) => {
           zipcode: myAddress.postalCode,
           schoolId: values.schoolId
         });
+        onStepChange(current);
         /*      let myAddress = JSON.parse(values.selectedCity);
         let mySchools = JSON.parse(values.schools);
         console.log(myAddress);
