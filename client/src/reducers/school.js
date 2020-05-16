@@ -5,7 +5,7 @@ const initialState = {
   isLoading: false,
   value: '',
   error: {},
-  selectedSchool: null
+  selectedSchools: []
 };
 
 export default function(state = initialState, action) {
