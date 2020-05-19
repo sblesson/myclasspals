@@ -103,9 +103,25 @@ public class UserGroupService {
 			userGroupSearch.addCriteria(Criteria.where("schoolName").regex(filter.getSchoolName()));
 
 		}
+		if (filter.getCity() != null) {
+			userGroupSearch.addCriteria(Criteria.where("city").regex(filter.getCity()));
+		}
+		if (filter.getState() != null) {
+			userGroupSearch.addCriteria(Criteria.where("state").regex(filter.getState()));
+		}
+		if (filter.getZipcode() != null) {
+			userGroupSearch.addCriteria(Criteria.where("zipcode").regex(filter.getZipcode()));
+		}
+		if (filter.getSchoolId() != null) {
+			userGroupSearch.addCriteria(Criteria.where("schoolId").regex(filter.getSchoolId()));
+
+		}
+		if (filter.getSchoolZipCode() != null) {
+			userGroupSearch.addCriteria(Criteria.where("schoolZipCode").regex(filter.getSchoolZipCode()));
+
+		}
 		if (filter.getSchoolCity() != null) {
 			userGroupSearch.addCriteria(Criteria.where("schoolCity").regex(filter.getSchoolCity()));
-
 		}
 		if (filter.getSchoolZipCode() != null) {
 			userGroupSearch.addCriteria(Criteria.where("schoolZipCode").regex(filter.getSchoolZipCode()));

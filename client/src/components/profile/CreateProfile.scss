@@ -33,24 +33,23 @@
 .create-profile-component-content {
   padding: 16px 16px;
   min-height: 400px;
-  max-width: 600px;
+  min-width: 600px;
   margin: auto;
   .actionBtnWrapper {
     margin-bottom: 20px;
     margin-top: 20px;
     float: right;
   }
-  .steps-content {
-    margin-top: 16px;
-    border: 1px dashed #e9e9e9;
-    border-radius: 6px;
-    background-color: #fafafa;
-    min-height: 200px;
-    text-align: center;
-    padding-top: 80px;
-  }
-
-  .steps-action {
-    margin-top: 24px;
+  .profile-step {
+    .ant-steps-item-icon {
+      background: var(--bg-primary-btn) !important;
+      border-color: transparent;
+    }
+    .ant-steps-item-icon > .ant-steps-icon {
+      color: floralwhite !important;
+    }
+    .ant-steps-item-title::after {
+      background: #f0f0f0 !important;
+    }
   }
 }

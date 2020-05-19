@@ -6,15 +6,15 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Steps } from 'antd';
 
-import UserAccountForm from './UserAccountForm';
-import DiscoverGroup from '../groups/DiscoverGroup';
+import UserAccountForm from './UserProfileForm';
+import DiscoverGroup from './DiscoverGroup';
 
 import './CreateProfile.scss';
 
 const CreateProfile = ({ auth }) => {
   const { Step } = Steps;
 
-  const [current, setCurrentStep] = useState(0);
+  const [current, setCurrentStep] = useState(1);
 
   const handleStepChange = current => {
     current = current + 1;
@@ -40,6 +40,8 @@ const CreateProfile = ({ auth }) => {
       <div className='create-profile-component-content'>
         <Steps
           current={current}
+          size='small'
+          className='profile-step'
           /* onChange={handleStepChange} */
         >
           {steps.map(item => (

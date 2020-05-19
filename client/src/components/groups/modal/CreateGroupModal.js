@@ -368,8 +368,11 @@ const CreateGroupModal = ({
   return (
     <div>
       <div onClick={toggle}>
-        <Button className='btn-primary' icon={<UsergroupAddOutlined />}>
-          Create Group
+        <Button
+          className='btn-primary add-group'
+          icon={<UsergroupAddOutlined />}
+        >
+          Create
         </Button>
       </div>
       <Modal
