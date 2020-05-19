@@ -6,6 +6,15 @@ public class UserGroupSearchFilter {
 	
 	private String privacy;
 	
+	private String city;
+
+	private String state;
+
+	private String zipcode;
+	
+	private String schoolId;
+
+	
 	private String schoolName;
 	
 	private String schoolCity;
@@ -50,6 +59,38 @@ public class UserGroupSearchFilter {
 
 	public void setSchoolZipCode(String schoolZipCode) {
 		this.schoolZipCode = schoolZipCode;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+	public String getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(String schoolId) {
+		this.schoolId = schoolId;
 	}
 	
 	

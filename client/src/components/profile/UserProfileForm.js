@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { createProfile } from '../../actions/profile';
+import { searchGroupWithFilters } from '../../actions/group';
+
 import { Formik, ErrorMessage } from 'formik';
 import { ModalFooter } from 'reactstrap';
 import {
@@ -20,7 +22,13 @@ import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoComplete
 
 import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
-const UserAccountForm = ({ auth, createProfile, current, onStepChange }) => {
+const UserAccountForm = ({
+  auth,
+  createProfile,
+  searchGroupWithFilters,
+  current,
+  onStepChange
+}) => {
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
     console.log(value);
@@ -65,8 +73,14 @@ const UserAccountForm = ({ auth, createProfile, current, onStepChange }) => {
           name: values.userName,
           city: myAddress.city,
           state: myAddress.state,
-          zipcode: myAddress.postalCode,
+          zipcode: myAddress.postalcode,
           schoolId: values.schoolId
+        });
+        searchGroupWithFilters({
+          //schoolId: values.schoolId,
+          city: myAddress.city,
+          state: myAddress.state,
+          zipcode: myAddress.postalcode
         });
         onStepChange(current);
         /*      let myAddress = JSON.parse(values.selectedCity);
@@ -142,6 +156,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { createProfile })(
-  withRouter(UserAccountForm)
-);
+export default connect(mapStateToProps, {
+  createProfile,
+  searchGroupWithFilters
+})(withRouter(UserAccountForm));

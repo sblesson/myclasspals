@@ -6,8 +6,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inviteToJoinUserGroup } from '../../../actions/group';
-import InviteUsersToGroupForm from './InviteUsersToGroupForm';
-
 import { Formik } from 'formik';
 
 import {
@@ -24,12 +22,13 @@ import { message, Button, Row, Col } from 'antd';
 
 import './CreateGroupModal.scss';
 
-const InviteUsersToGroupModal = ({
+const InviteUsersToGroupForm = ({
   inviteToJoinUserGroup,
   auth,
   group,
   current,
-  onStepChange
+  onStepChange,
+  newGroup
 }) => {
   console.log(current);
 
@@ -57,24 +56,55 @@ const InviteUsersToGroupModal = ({
 
   return (
     <div>
-      <div onClick={toggle}>
-        <Button className='pinkBtn' icon={<UsergroupAddOutlined />}>
-          Invite
-        </Button>
-      </div>
-      <Modal
-        className='create-group-modal'
-        isOpen={modal}
-        fade={false}
-        toggle={toggle}
-      >
-        <InviteUsersToGroupForm />
-      </Modal>
+      <Formik
+        initialValues={{
+          invitedUsers: '',
+          action: 'INVITE'
+        }}
+        onSubmit={(values, actions) => {
+          console.log(JSON.stringify(values));
+          console.log(newGroup);
+          values.groupId = newGroup ? group.newGroup.id : group.currentGroup.id;
+          inviteToJoinUserGroup(JSON.stringify(values));
+          actions.setSubmitting(false);
+          actions.resetForm();
+          if (newGroup) {
+            onStepChange(current + 1);
+          }
+        }}
+        validate={values => {
+          if (!values.invitedUsers) {
+            return { invitedUsers: 'required' };
+          }
+          return {};
+        }}
+        render={() => (
+          <Form>
+            <Input.TextArea
+              className='post-form-text-input post-form-textarea'
+              name='invitedUsers'
+              cols='30'
+              rows='5'
+              placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
+              onChange={e => onChange(e)}
+              required
+            />
+            <Row style={{ marginTop: 60 }}>
+              <Col offset={8}>
+                <Button.Group>
+                  <ResetButton>Reset</ResetButton>
+                  <SubmitButton> Send Invite</SubmitButton>
+                </Button.Group>
+              </Col>
+            </Row>
+          </Form>
+        )}
+      />
     </div>
   );
 };
 
-InviteUsersToGroupModal.propTypes = {
+InviteUsersToGroupForm.propTypes = {
   inviteToJoinUserGroup: PropTypes.func.isRequired
 };
 
@@ -86,4 +116,4 @@ const mapDispatchToProps = state => ({
 export default connect(mapDispatchToProps, {
   inviteToJoinUserGroup,
   mapDispatchToProps
-})(withRouter(InviteUsersToGroupModal));
+})(withRouter(InviteUsersToGroupForm));

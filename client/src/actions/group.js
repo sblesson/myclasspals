@@ -7,6 +7,7 @@ import {
   SEARCH_ALL_GROUP,
   GROUP_ERROR,
   GET_ALL_GROUPS,
+  SEARCH_GROUP_WITH_FILTERS,
   GET_ALL_GROUPS_ERROR,
   GET_GROUP,
   GET_GROUP_ERROR,
@@ -139,6 +140,32 @@ export const searchGroup = searchKey => async dispatch => {
 
     dispatch({
       type: SEARCH_ALL_GROUP,
+      payload: response.data
+    });
+  } catch (err) {
+    dispatch({
+      type: SEARCH_ALL_GROUP_ERROR,
+      payload: { msg: err, status: err }
+    });
+  }
+};
+
+// Search Groups
+export const searchGroupWithFilters = requestData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/usergroup/getgroupbyfilter`,
+      requestData,
+      config
+    );
+
+    dispatch({
+      type: SEARCH_GROUP_WITH_FILTERS,
       payload: response.data
     });
   } catch (err) {

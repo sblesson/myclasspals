@@ -14,7 +14,8 @@ import {
   REQUEST_JOIN_USER_GROUP_ERROR,
   APPROVE_GROUP_REQUEST,
   APPROVE_GROUP_REQUEST_ERROR,
-  CHANGE_GROUP_USER_ROLE
+  CHANGE_GROUP_USER_ROLE,
+  SEARCH_GROUP_WITH_FILTERS
 } from '../actions/types';
 
 const initialState = {
@@ -77,6 +78,13 @@ export default function(state = initialState, action) {
         requestedUserGroup: payload.requestedUserGroup
       };
     case SEARCH_ALL_GROUP:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        searchResult: payload.userGroupList
+      };
+    case SEARCH_GROUP_WITH_FILTERS:
       return {
         ...state,
         isAuthenticated: true,

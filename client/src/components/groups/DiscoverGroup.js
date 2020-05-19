@@ -7,13 +7,18 @@ import PrivateMessageModal from './modal/CreateGroupModal';
 import { Input } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
 
-import { searchGroup } from '../../actions/group';
+import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
 import GroupCard from './GroupCard';
 
 import './DiscoverGroups.scss';
 
-const DiscoverGroups = ({ group, searchGroup, newRegistration }) => {
+const DiscoverGroups = ({
+  group,
+  searchGroup,
+  searchGroupWithFilters,
+  newRegistration
+}) => {
   const { Search } = Input;
 
   return (
@@ -76,5 +81,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  searchGroup
+  searchGroup,
+  searchGroupWithFilters
 })(DiscoverGroups);

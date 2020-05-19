@@ -3,6 +3,9 @@
   padding: 0 !important;
   margin: 0 !important;
 }
+.add-group {
+  font-size: 0.8rem !important;
+}
 .create-group-btn {
   background: var(--primary-btn-color);
   color: floralwhite;
@@ -117,4 +120,31 @@
     width: 80%;
     padding: 16px 8px;
   }
+}
+.create-group-modal-wrapper {
+  padding: 16px 16px;
+  //min-height: 400px;
+  width: 100%;
+  margin: auto;
+  .actionBtnWrapper {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    float: right;
+  }
+  .group-step {
+    .ant-steps-item-icon {
+      background: var(--bg-primary-btn) !important;
+      border-color: transparent;
+    }
+    .ant-steps-item-icon > .ant-steps-icon {
+      color: floralwhite !important;
+    }
+    .ant-steps-item-title::after {
+      background: #f0f0f0 !important;
+    }
+  }
+}
+
+.ant-radio-wrapper {
+  display: block !important;
 }
