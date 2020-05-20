@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,15 +6,24 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Steps } from 'antd';
 
-import UserAccountForm from './UserProfileForm';
+import UserProfileForm from './UserProfileForm';
 import DiscoverGroup from './DiscoverGroup';
 
 import './CreateProfile.scss';
 
-const CreateProfile = ({ auth }) => {
+const CreateProfile = ({ auth, history }) => {
+  useEffect(() => {
+    if (auth && auth.user) {
+      if (auth.user.userGroup && auth.user.userGroup.length > 0) {
+        history.push('/dashboard');
+      } else if (auth.user.city) {
+        handleStepChange(current);
+      }
+    }
+  }, [auth]);
   const { Step } = Steps;
 
-  const [current, setCurrentStep] = useState(1);
+  const [current, setCurrentStep] = useState(0);
 
   const handleStepChange = current => {
     current = current + 1;
@@ -24,7 +33,7 @@ const CreateProfile = ({ auth }) => {
     {
       title: 'Enter your profile',
       content: (
-        <UserAccountForm onStepChange={handleStepChange} current={current} />
+        <UserProfileForm onStepChange={handleStepChange} current={current} />
       )
     },
     {
@@ -33,7 +42,7 @@ const CreateProfile = ({ auth }) => {
     }
   ];
 
-  return auth && auth.user.userGroup && auth.user.userGroup.lenth > 0 ? (
+  return auth && auth.user.userGroup && auth.user.userGroup.length > 0 ? (
     <Redirect to='/dashboard' />
   ) : (
     <Fragment>

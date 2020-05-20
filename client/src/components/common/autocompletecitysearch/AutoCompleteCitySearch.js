@@ -40,7 +40,7 @@ const AutoCompleteCitySeach = ({ getCityData, address }) => {
     <Select
       name='citySelect'
       showSearch
-      placeholder='Select your city'
+      placeholder='Select City'
       onSearch={handleCitySearch}
       onChange={onCitySelect}
     >

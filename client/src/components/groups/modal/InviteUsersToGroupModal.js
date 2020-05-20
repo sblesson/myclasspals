@@ -6,6 +6,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inviteToJoinUserGroup } from '../../../actions/group';
+import InviteUsersToGroupForm from './InviteUsersToGroupForm';
+
 import { Formik } from 'formik';
 
 import {
@@ -22,7 +24,15 @@ import { message, Button, Row, Col } from 'antd';
 
 import './CreateGroupModal.scss';
 
-const InviteUsersToGroupModal = ({ inviteToJoinUserGroup, auth, group }) => {
+const InviteUsersToGroupModal = ({
+  inviteToJoinUserGroup,
+  auth,
+  group,
+  current,
+  onStepChange
+}) => {
+  console.log(current);
+
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -48,7 +58,10 @@ const InviteUsersToGroupModal = ({ inviteToJoinUserGroup, auth, group }) => {
   return (
     <div>
       <div onClick={toggle}>
-        <Button className='pinkBtn' icon={<UsergroupAddOutlined />}>
+        <Button
+          className='ant-btn btn-primary pinkBtn'
+          icon={<UsergroupAddOutlined />}
+        >
           Invite
         </Button>
       </div>
@@ -58,48 +71,7 @@ const InviteUsersToGroupModal = ({ inviteToJoinUserGroup, auth, group }) => {
         fade={false}
         toggle={toggle}
       >
-        <Formik
-          initialValues={{
-            invitedUsers: '',
-            action: 'INVITE'
-          }}
-          onSubmit={(values, actions) => {
-            console.log(JSON.stringify(values));
-            values.groupId = group.currentGroup.id;
-            inviteToJoinUserGroup(JSON.stringify(values));
-            actions.setSubmitting(false);
-            actions.resetForm();
-            setModal(false);
-          }}
-          validate={values => {
-            if (!values.invitedUsers) {
-              return { invitedUsers: 'required' };
-            }
-            return {};
-          }}
-          render={() => (
-            <Form>
-              <Input.TextArea
-                className='post-form-text-input post-form-textarea'
-                name='invitedUsers'
-                cols='30'
-                rows='5'
-                placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
-                onChange={e => onChange(e)}
-                required
-              />
-              <Row style={{ marginTop: 60 }}>
-                <Col offset={8}>
-                  <Button.Group>
-                    <ResetButton>Reset</ResetButton>
-                    <SubmitButton> Send Invite</SubmitButton>
-                  </Button.Group>
-                </Col>
-              </Row>
-            </Form>
-          )}
-        />
-        ;
+        <InviteUsersToGroupForm />
       </Modal>
     </div>
   );

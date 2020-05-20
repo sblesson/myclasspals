@@ -44,12 +44,13 @@ const MultiSelectSchoolSearch = ({ fetchSchool, school }) => {
   return (
     <Select
       name='schoolId'
-      placeholder='Select schools'
+      placeholder='Select Schools'
       mode='multiple'
       onSearch={onSearchSchool}
       onChange={onSchoolChange}
       notFoundContent={school.isLoading ? <Spin size='small' /> : null}
       filterOption={false}
+      showArrow={true}
     >
       {children}
     </Select>

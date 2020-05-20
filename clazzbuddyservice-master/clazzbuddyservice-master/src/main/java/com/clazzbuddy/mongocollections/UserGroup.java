@@ -34,6 +34,8 @@ public class UserGroup {
 	private String schoolName;
 	
 	private String schoolId;
+	
+	private String grade;
 
 	
 	private String schoolState;
@@ -218,6 +220,14 @@ public class UserGroup {
 
 	public void setGroupRules(String groupRules) {
 		this.groupRules = groupRules;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
 	}
 
 	

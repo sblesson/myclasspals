@@ -860,6 +860,19 @@ input[type='search']::-webkit-search-decoration {
 } */
 
 //Antdesign component css
+.ant-btn-primary {
+  box-shadow: none !important;
+  &:hover,
+  &:active,
+  &:focus {
+    color: var(--color-primary-btn-hover);
+    background: var(--bg-primary-btn-hover) !important;
+  }
+}
+.ant-steps-item-wait,
+.ant-steps-item-finish {
+  display: none !important;
+}
 
 .ant-btn-primary.ant-input-search-button {
   height: 22px;
