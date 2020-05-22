@@ -2,20 +2,41 @@ import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
-import { Row, Col, Divider, Card, Input } from 'antd';
+import { Row, Col, Div, Divider, Card, Input, Empty } from 'antd';
 
 import LeftNav from '../leftnav/LeftNav';
 import PrivateMessageModal from '../groups/modal/CreateGroupModal';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
+import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
 
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
 import GroupCard from '../groups/GroupCard';
+import { RightCircleFilled } from '@ant-design/icons';
 
-import './DiscoverGroups.scss';
-
-const DiscoverGroups = ({ group, searchGroup, searchGroupWithFilters }) => {
+/* import './DiscoverGroups.scss';
+ */
+const DiscoverGroups = ({ group, auth, history }) => {
   const { Search } = Input;
+  useEffect(() => {
+    if (auth && auth.user) {
+      console.log(auth.user);
+
+      let user = auth.user;
+      if (user.userGroup && user.userGroup.length > 0) {
+        history
+          ? history.push('/dashboard')
+          : (window.location.pathname = '/dashboard');
+      } else if (
+        user.requestedUserGroup &&
+        user.requestedUserGroup.length > 0
+      ) {
+        history
+          ? history.push('/groups')
+          : (window.location.pathname = '/groups');
+      }
+    }
+  }, [auth]);
 
   return (
     <Fragment>
@@ -24,38 +45,37 @@ const DiscoverGroups = ({ group, searchGroup, searchGroupWithFilters }) => {
       ) : (
         <Fragment>
           <Row>
-            <Col md={{ span: 12, offset: 6 }}>
-              <Divider
-                orientation='right'
-                style={{ color: '#333', fontWeight: 'normal' }}
+            <Col xs={{ span: 4 }} md={{ span: 12, offset: 6 }}>
+              <div
+                style={{
+                  color: '#333',
+                  textAlign: 'right',
+                  fontWeight: 'normal',
+                  marginBottom: 10
+                }}
               >
                 <PrivateMessageModal />
-              </Divider>
-              <Card style={{ textAlign: 'center' }}>
-                <Search
-                  placeholder='Search group'
-                  onSearch={value => searchGroup(value)}
-                  style={{ width: 300, marginBottom: 30 }}
-                  enterButton
-                />
+              </div>
+              <Card style={{ marginBottom: 30 }}>
+                <AutoCompleteGroupSearch />
                 <div className='filter-wrapper'>
                   <GroupFilterPanel />
                 </div>{' '}
-                <div
-                  style={{ textAlign: 'center', marginLeft: 80, marginTop: 30 }}
-                >
-                  {group !== null &&
-                  group.searchResult &&
-                  group.searchResult.length > 0
-                    ? group.searchResult.map((group, index) => (
-                        <GroupCard
-                          currentGroup={group}
-                          key={index}
-                          type='discover'
-                        />
-                      ))
-                    : ''}
-                </div>
+              </Card>
+              <Card>
+                {group !== null &&
+                group.searchResult &&
+                group.searchResult.length > 0 ? (
+                  group.searchResult.map((group, index) => (
+                    <GroupCard
+                      currentGroup={group}
+                      key={index}
+                      type='discover'
+                    />
+                  ))
+                ) : (
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )}
               </Card>
             </Col>
           </Row>
@@ -70,7 +90,8 @@ DiscoverGroups.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  group: state.group
+  group: state.group,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, {

@@ -40,10 +40,11 @@ const MultiSelectUserSearch = ({ searchUser, auth }) => {
     <Select
       name='usersSelect'
       style={{ width: '100%' }}
-      placeholder='Select users'
+      placeholder='Select Members'
       mode='multiple'
       onSearch={fetchUser}
       onChange={onUserSelect}
+      showArrow={true}
     >
       {children}
     </Select>

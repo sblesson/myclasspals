@@ -56,6 +56,10 @@ public class UserService {
 			throw new Exception("No user match found");
 		}
 		
+		if (user.getName() != null) {
+			userFromDB.setName(user.getName());
+		}
+		
 		if (user.getCity() != null) {
 			userFromDB.setCity(user.getCity());
 		}

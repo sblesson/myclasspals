@@ -52,10 +52,11 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case ADD_GROUP:
+      debugger;
       return {
         ...state,
         groups: [payload.userGroup, ...state.groups],
-        userGroup: payload.userGroup,
+        userGroup: [payload.userGroup, ...state.groups],
         newGroup: payload.userGroup,
         loading: false
       };
@@ -119,7 +120,7 @@ export default function(state = initialState, action) {
       };
     case REQUEST_JOIN_USER_GROUP:
       let isRequestUserGroupSuccess = false;
-
+      console.log(payload);
       if (payload && payload.origin === 'discovergroup') {
         //searchResult = payload;
         isRequestUserGroupSuccess = true;

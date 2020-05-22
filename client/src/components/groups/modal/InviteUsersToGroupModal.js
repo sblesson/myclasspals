@@ -58,7 +58,10 @@ const InviteUsersToGroupModal = ({
   return (
     <div>
       <div onClick={toggle}>
-        <Button className='pinkBtn' icon={<UsergroupAddOutlined />}>
+        <Button
+          className='ant-btn btn-primary pinkBtn'
+          icon={<UsergroupAddOutlined />}
+        >
           Invite
         </Button>
       </div>
