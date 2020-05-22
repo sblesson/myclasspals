@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inviteToJoinUserGroup } from '../../../actions/group';
 import { Formik } from 'formik';
+import MultiSelectUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
 
 import {
   SubmitButton,
@@ -28,7 +29,7 @@ const InviteUsersToGroupForm = ({
   group,
   current,
   onStepChange,
-  newGroup
+  isNewGroup
 }) => {
   console.log(current);
 
@@ -62,13 +63,17 @@ const InviteUsersToGroupForm = ({
           action: 'INVITE'
         }}
         onSubmit={(values, actions) => {
-          console.log(JSON.stringify(values));
-          console.log(newGroup);
-          values.groupId = newGroup ? group.newGroup.id : group.currentGroup.id;
+          values.invitedUsers =
+            values.usersSelect.toString() + ',' + values.invitedUsers;
+          delete values.usersSelect;
+
+          values.groupId = isNewGroup
+            ? group.newGroup.id
+            : group.currentGroup.id;
           inviteToJoinUserGroup(JSON.stringify(values));
           actions.setSubmitting(false);
           actions.resetForm();
-          if (newGroup) {
+          if (isNewGroup) {
             onStepChange(current + 1);
           }
         }}
@@ -80,7 +85,17 @@ const InviteUsersToGroupForm = ({
         }}
         render={() => (
           <Form>
+            <FormItem
+              name='usersSelect'
+              style={{ marginTop: 40 }}
+              //label='Add Users'
+              required={true}
+              validate={validateRequired}
+            >
+              <MultiSelectUserSearch />
+            </FormItem>
             <Input.TextArea
+              style={{ marginTop: 20 }}
               className='post-form-text-input post-form-textarea'
               name='invitedUsers'
               cols='30'
@@ -89,14 +104,13 @@ const InviteUsersToGroupForm = ({
               onChange={e => onChange(e)}
               required
             />
-            <Row style={{ marginTop: 60 }}>
-              <Col offset={8}>
-                <Button.Group>
-                  <ResetButton>Reset</ResetButton>
-                  <SubmitButton> Send Invite</SubmitButton>
-                </Button.Group>
-              </Col>
-            </Row>
+            <ModalFooter>
+              <SubmitButton className='ant-btn btn-primary'>
+                {' '}
+                Invite
+              </SubmitButton>
+            </ModalFooter>
+            <FormikDebug />
           </Form>
         )}
       />

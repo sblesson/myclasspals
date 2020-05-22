@@ -45,7 +45,7 @@ const CreateGroupModal = ({
     console.log(current);
     //current = current + 1;
     setCurrentStep(current);
-    if (current == 2) {
+    if (current == 3) {
       setModal(false);
       current = 0;
     }
@@ -64,12 +64,12 @@ const CreateGroupModal = ({
         <InviteUsersToGroupForm
           onStepChange={handleStepChange}
           current={current}
-          newGroup={true}
+          isNewGroup={true}
         />
       )
     },
     {
-      title: 'Group Rules',
+      title: 'About Group',
       content: (
         <GroupRulesForm
           onStepChange={handleStepChange}

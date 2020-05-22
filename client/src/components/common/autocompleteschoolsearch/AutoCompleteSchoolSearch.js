@@ -14,26 +14,23 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
     }
   };
 
-  const onSchoolSelect = (value, option) => {
-    if (school && school.results && school.results.length > 0) {
-      //update selected school in the reducer
-      school.selectedSchool = school.results[option.key];
-    }
-  };
-
   const children =
     school &&
     school.results &&
     school.results.length > 0 &&
     school.results.map((item, index) => {
       console.log(item);
-      let selectedSchool = item.schoolName + ', ' + item.state;
+      let selectedSchool =
+        item.schoolName +
+        ', ' +
+        item.city +
+        ', ' +
+        item.state +
+        ', ' +
+        item.zip;
       return (
-        <Option key={index} value={selectedSchool}>
-          <span style={{ fontWeigth: 'bolder' }}>
-            {' '}
-            {item.schoolName}, {item.state}
-          </span>
+        <Option key={selectedSchool} value={selectedSchool}>
+          <span style={{ fontWeigth: 'bolder' }}> {selectedSchool}</span>
         </Option>
       );
     });
@@ -41,10 +38,10 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
   return (
     <Select
       name='schoolSelect'
-      showSearch
-      placeholder='Select your school'
+      showSearch={true}
+      placeholder='Select School'
       onSearch={handleSchoolSearch}
-      onChange={onSchoolSelect}
+      allowClear={true}
     >
       {children}
     </Select>

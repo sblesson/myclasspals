@@ -19,6 +19,7 @@ import {
 } from 'formik-antd';
 
 import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
+import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
 
 import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
@@ -27,8 +28,21 @@ const UserAccountForm = ({
   createProfile,
   searchGroupWithFilters,
   current,
-  onStepChange
+  onStepChange,
+  history
 }) => {
+  useEffect(() => {
+    if (
+      auth &&
+      auth.user &&
+      auth.user.userGroup &&
+      auth.user.userGroup.length > 0
+    ) {
+      history.push('/dashboard');
+    } else if (auth.user.city) {
+      onStepChange(current);
+    }
+  }, [auth.user]);
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
     console.log(value);
@@ -77,9 +91,6 @@ const UserAccountForm = ({
           schoolId: values.schoolId
         });
         searchGroupWithFilters({
-          //schoolId: values.schoolId,
-          city: myAddress.city,
-          state: myAddress.state,
           zipcode: myAddress.postalcode
         });
         onStepChange(current);
@@ -128,6 +139,15 @@ const UserAccountForm = ({
               <AutoCompleteCitySeach />
             </FormItem>
             <FormItem
+              name='groupName'
+              //label='City'
+              //required={true}
+              //validate={validateRequired}
+            >
+              <AutoCompleteGroupSearch />
+            </FormItem>
+
+            <FormItem
               name='schoolName'
               //label='Schools you want to follow'
               required={false}
@@ -135,7 +155,10 @@ const UserAccountForm = ({
               <MultiSelectSchoolSearch />
             </FormItem>
             <ModalFooter>
-              <SubmitButton> Proceed</SubmitButton>
+              <SubmitButton className='ant-btn btn-primary'>
+                {' '}
+                Proceed
+              </SubmitButton>
             </ModalFooter>
           </Form>
           <pre style={{ flex: 1 }}>

@@ -7,6 +7,7 @@ import { Row, Col, Divider, Card, Input } from 'antd';
 import LeftNav from '../leftnav/LeftNav';
 import PrivateMessageModal from '../groups/modal/CreateGroupModal';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
+import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
 
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
@@ -38,9 +39,7 @@ const DiscoverGroups = ({ group, searchGroup, searchGroupWithFilters }) => {
                   style={{ width: 300, marginBottom: 30 }}
                   enterButton
                 />
-                <div className='filter-wrapper'>
-                  <GroupFilterPanel />
-                </div>{' '}
+                <div className='filter-wrapper'></div>{' '}
                 <div
                   style={{ textAlign: 'center', marginLeft: 80, marginTop: 30 }}
                 >

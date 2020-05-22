@@ -19,7 +19,8 @@ const GroupRulesForm = ({
   group,
   newGroup,
   current,
-  onStepChange
+  onStepChange,
+  history
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
@@ -60,6 +61,7 @@ const GroupRulesForm = ({
   const groupRulesForm = (
     <Formik
       initialValues={{
+        aboutGroup: '',
         groupRules: '',
         description: ''
       }}
@@ -72,6 +74,9 @@ const GroupRulesForm = ({
         actions.resetForm();
         if (newGroup) {
           onStepChange(current + 1);
+          history.push('/dashboard');
+        } else {
+          window.location.reload();
         }
       }}
       validate={values => {}}
@@ -86,13 +91,23 @@ const GroupRulesForm = ({
             }}
           >
             <FormItem
-              name='description'
+              name='aboutGroup'
               label='About Group'
               style={{ marginBottom: 16 }}
             >
               <Input
-                name='description'
+                name='aboutGroup'
                 placeholder='What is this group about?'
+              />
+            </FormItem>
+            <FormItem
+              name='description'
+              label='Additional Details'
+              style={{ marginBottom: 16 }}
+            >
+              <Input
+                name='description'
+                placeholder='More details about this group ...'
               />
             </FormItem>
             <FormItem name='groupRules' label='Group Rules'>
@@ -108,7 +123,10 @@ const GroupRulesForm = ({
             </FormItem>
 
             <ModalFooter>
-              <SubmitButton className='send-post-btn'> Post</SubmitButton>
+              <SubmitButton className='ant-btn btn-primary send-post-btn'>
+                {' '}
+                Post
+              </SubmitButton>
             </ModalFooter>
           </Form>
         </div>

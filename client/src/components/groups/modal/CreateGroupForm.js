@@ -3,8 +3,6 @@ import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { createProfile } from '../../../actions/profile';
-import { searchGroupWithFilters } from '../../../actions/group';
 import { Formik, ErrorMessage } from 'formik';
 import { ModalFooter } from 'reactstrap';
 import {
@@ -14,27 +12,23 @@ import {
   Radio,
   FormItem,
   FormikDebug,
-  AutoComplete,
   Select
 } from 'formik-antd';
-import { Typography, message, Button, Row, Col } from 'antd';
 
 import { addGroup } from '../../../actions/group';
 
-import AutoCompleteCitySeach from '../../common/autocompletecitysearch/AutoCompleteCitySearch';
-
-import MultiSelectUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
+import AutoCompleteSchoolSearch from '../../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
 import MultiSelectSchoolSearch from '../../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
+import GradeSelect from '../../common/gradeselect/GradeSelect';
 const CreateGroupForm = ({
   auth,
   group,
-  schools,
+  school,
   addGroup,
   current,
   onStepChange
 }) => {
-  console.log(current);
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
     console.log(value);
@@ -49,8 +43,9 @@ const CreateGroupForm = ({
     //fetchSchools(event.target.value);
   };
 
-  const [selectedSchool, setSelectedSchool] = useState('');
-  const [isSchoolVisible, setIsSchoolVisible] = useState(false);
+  const [isSchoolVisible, setIsSchoolVisible] = useState(true);
+  const { Option } = Select;
+
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -66,18 +61,13 @@ const CreateGroupForm = ({
     console.log('shool', event);
     if (event.target.value === 'yes') {
       setIsSchoolVisible(true);
-      console.log('selectedSchool', selectedSchool);
     } else {
       setIsSchoolVisible(false);
     }
   };
   const submitProfileForm = (values, actions) => {
+    debugger;
     console.log(values);
-    /*     values.schoolName = schools.selectedSchool.schoolName;
-    values.schoolId = schools.selectedSchool.schoolid;
-    values.schoolCity = schools.selectedSchool.city;
-    values.schoolState = schools.selectedSchool.state;
-    values.schoolZipCode = schools.selectedSchool.zip; */
 
     values.userGroupMembers = [
       {
@@ -86,15 +76,19 @@ const CreateGroupForm = ({
         role: 'admin'
       }
     ];
+    if (values.schoolSelect) {
+      let schoolData = values.schoolSelect.split(',');
 
-    /*    "values": {
-      "groupName": "",
-      "groupType": "private",
-      "isSchoolGroup": "yes",
-      "schoolId": [
-        "320036000871"
-      ]
-    }, */
+      values.schoolName = schoolData[0];
+      values.schoolCity = schoolData[1];
+      values.schoolState = schoolData[2];
+      values.schoolZipCode = schoolData[3];
+
+      //delete schoolData property
+      delete values.schoolSelect;
+    }
+
+    console.log(values);
 
     addGroup(JSON.stringify(values));
     //actions.setSubmitting(false);
@@ -108,7 +102,8 @@ const CreateGroupForm = ({
       initialValues={{
         groupName: '',
         groupType: 'private',
-        isSchoolGroup: 'no'
+        isSchoolGroup: 'yes',
+        grade: ''
       }}
       onSubmit={(values, actions) => {
         submitProfileForm(values, actions);
@@ -128,20 +123,12 @@ const CreateGroupForm = ({
             <FormItem
               name='groupName'
               //label='Group Name'
-              //required={true}
+              required={true}
               validate={validateRequired}
             >
               <Input name='groupName' placeholder='Group Name' />
             </FormItem>
 
-            <FormItem
-              name='usersSelect'
-              //label='Add Users'
-              required={true}
-              validate={validateRequired}
-            >
-              <MultiSelectUserSearch />
-            </FormItem>
             <FormItem
               name='groupDiscovery'
               label='Group Discoverability'
@@ -177,19 +164,32 @@ const CreateGroupForm = ({
                 ]}
               />
             </FormItem>
+
             {isSchoolVisible ? (
-              <FormItem
-                name='schoolName'
-                required={true}
-                validate={validateRequired}
-              >
-                <MultiSelectSchoolSearch />
-              </FormItem>
+              <div>
+                <FormItem
+                  name='schoolData'
+                  required={false}
+                  //validate={validateRequired}
+                >
+                  <AutoCompleteSchoolSearch />
+                </FormItem>
+                <FormItem
+                  name='gradeLabel'
+                  //required={true}
+                  //validate={validateRequired}
+                >
+                  <GradeSelect />
+                </FormItem>
+              </div>
             ) : (
               ''
             )}
             <ModalFooter>
-              <SubmitButton> Create</SubmitButton>
+              <SubmitButton className='ant-btn btn-primary'>
+                {' '}
+                Create
+              </SubmitButton>
             </ModalFooter>
           </Form>
           <pre style={{ flex: 1 }}>
@@ -209,7 +209,7 @@ CreateGroupForm.propTypes = {
 const mapStateToProps = state => ({
   group: state.group,
   auth: state.auth,
-  schools: state.school.results
+  school: state.school.results
 });
 
 export default connect(mapStateToProps, {

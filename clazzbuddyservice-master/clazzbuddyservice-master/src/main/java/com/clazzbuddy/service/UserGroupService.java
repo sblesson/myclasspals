@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.restmodel.GroupChangeRoleAction;
 import com.clazzbuddy.restmodel.UserGroupSearchFilter;
+import com.clazzbuddy.mongocollections.School;
 import com.clazzbuddy.mongocollections.UserGroup;
 import com.clazzbuddy.mongocollections.UserGroupMembers;
 
@@ -26,6 +27,9 @@ public class UserGroupService {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
+	
+	@Autowired
+	SchoolCache schoolCache;
 	
 	
 	@Autowired
@@ -39,6 +43,7 @@ public class UserGroupService {
 		}
 		
 		userGroup.setCreatedDate(new Date().toString());
+		populateSchoolDetails(userGroup);
 		userGroupFromDB = mongoTemplate.insert(userGroup);
 		
 		if (userGroup.getUserGroupMembers() != null) {
@@ -51,15 +56,29 @@ public class UserGroupService {
 					user.setUserGroup(new ArrayList<UserGroup>());
 				}
 				user.getUserGroup().add(userGroup);
-				userService.updateUser(user);
+				mongoTemplate.save(user);
 			}
-	}
+		}
 		
 		
 		return userGroupFromDB;
 	}
+	
+	private void populateSchoolDetails(UserGroup userGroup) throws Exception {
+		
+		if (userGroup.getSchoolId() != null) {
+			School school = schoolCache.getSchoolBySchoolId(userGroup.getSchoolId());
+			if (school == null) {
+				throw new Exception("Unable to find school :" + userGroup.getSchoolId());
+			}
+			userGroup.setSchoolName(school.getSchoolName());
+			userGroup.setSchoolCity(school.getCity());
+			userGroup.setSchoolState(school.getState());
+			userGroup.setSchoolZipCode(school.getZip());
+		}
+	}
 
-	public UserGroup updateUserGroup(UserGroup userGroup) {
+	public UserGroup updateUserGroup(UserGroup userGroup) throws Exception {
 		UserGroup userGroupFromDB = getUserGroupById(userGroup.getId());
 		if (userGroup.getGroupName() != null) {
 			userGroupFromDB.setGroupName(userGroup.getGroupName());
@@ -76,6 +95,7 @@ public class UserGroupService {
 		if (userGroup.getDescription() != null) {
 			userGroupFromDB.setDescription(userGroup.getDescription());
 		}
+		populateSchoolDetails(userGroup);
 		mongoTemplate.save(userGroupFromDB);
 		return userGroupFromDB;
 	}
@@ -116,10 +136,7 @@ public class UserGroupService {
 			userGroupSearch.addCriteria(Criteria.where("schoolId").regex(filter.getSchoolId()));
 
 		}
-		if (filter.getSchoolZipCode() != null) {
-			userGroupSearch.addCriteria(Criteria.where("schoolZipCode").regex(filter.getSchoolZipCode()));
-
-		}
+		
 		if (filter.getSchoolCity() != null) {
 			userGroupSearch.addCriteria(Criteria.where("schoolCity").regex(filter.getSchoolCity()));
 		}
