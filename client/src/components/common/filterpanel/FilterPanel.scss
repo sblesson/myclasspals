@@ -12,6 +12,9 @@
   border-bottom: none !important;
 }
 .filter-actions {
+  margin-top: 8px;
+  font-size: 0.7rem;
+
   cursor: pointer;
   .filter-icon {
     color: var(--bg-gradient1);
@@ -27,7 +30,7 @@
   background: var(--bg-filter-panel);
   min-height: 100px;
   margin-top: 8px;
-  font-size: -8em;
+  font-size: 0.6rem;
 }
 //overwriting default scroll
 

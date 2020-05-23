@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Select } from 'formik-antd';
+import { Select } from 'antd';
 
 import { searchGroupWithFilters } from '../../../actions/group';
 
@@ -8,6 +8,7 @@ const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
   const Option = Select.Option;
 
   const handleGroupSearch = searchTerm => {
+    console.log(searchTerm);
     setTimeout(() => {
       searchGroupWithFilters({
         groupKeyword: searchTerm
@@ -15,21 +16,11 @@ const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
     }, Math.random() * 1000);
   };
 
-  const onGroupNameChange = (value, option) => {
-    console.log(value);
-    console.log(option);
-    /*   if (group && group.searchResult && group.searchResult.length > 0) {
-      //update selected address in the reducer
-      group.searchResult = group.searchResult[option.key];
-    } */
-  };
-
   const children =
     group &&
     group.searchResult &&
     group.searchResult.length > 0 &&
-    group.searchResult.map((item, index) => {
-      console.log(item.id);
+    group.searchResult.map(item => {
       return (
         <Option key={item.id} value={item.groupName}>
           {item.groupName}
@@ -40,12 +31,13 @@ const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
   return (
     <Select
       name='groupSelect'
-      showSearch
+      showSearch={true}
+      allowClear={true}
+      style={{ width: '100%' }}
       placeholder='Type Group Name or School Name'
       onSearch={handleGroupSearch}
-      onChange={onGroupNameChange}
     >
-      {children}{' '}
+      {children}
     </Select>
   );
 };
