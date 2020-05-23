@@ -14,9 +14,18 @@ import './CreateProfile.scss';
 const CreateProfile = ({ auth, history }) => {
   useEffect(() => {
     if (auth && auth.user) {
-      if (auth.user.userGroup && auth.user.userGroup.length > 0) {
+      console.log(auth.user);
+
+      let user = auth.user;
+      if (user.userGroup && user.userGroup.length > 0) {
         history.push('/dashboard');
-      } else if (auth.user.city) {
+      } else if (
+        user.requestedUserGroup &&
+        user.requestedUserGroup.length > 0
+      ) {
+        console.log('hererere');
+        history.push('/groups');
+      } else if (user.city) {
         handleStepChange(current);
       }
     }

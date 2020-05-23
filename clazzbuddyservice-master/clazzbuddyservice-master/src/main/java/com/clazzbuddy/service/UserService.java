@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.externalclients.EmailServiceClient;
@@ -23,21 +27,24 @@ import com.clazzbuddy.restmodel.GroupInvitationAction;
 import com.clazzbuddy.utils.CommonUtils;
 
 @Component
-public class UserService {
+public class UserService implements UserDetailsService{
 
 	@Autowired
 	MongoTemplate mongoTemplate;
 
 	@Autowired
 	UserGroupService userGroupService;
-	
+
 	@Autowired
 	EmailServiceClient emailServiceClient;
-	
+
 	@Autowired
 	SchoolCache schoolCache;
+	
+	@Autowired
+    private PasswordEncoder bcryptEncoder;
 
-	public void createUser(Users user) throws Exception {
+	public Users createUser(Users user) throws Exception {
 		if (user.getUserGroup() != null) {
 			for (UserGroup userGroup : user.getUserGroup()) {
 				UserGroup userGroupFromDB = userGroupService.createUserGroup(userGroup);
@@ -45,7 +52,21 @@ public class UserService {
 			}
 		}
 		user.setCreatedDate(new Date());
+		user.setPassword(bcryptEncoder.encode(user.getPassword()));
 		mongoTemplate.insert(user);
+		return user;
+	}
+	
+	@Override
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		Query userByName = new Query();
+		userByName.addCriteria(Criteria.where("email").is(userName));
+		Users userFromDB = mongoTemplate.findOne(userByName, Users.class);
+		if (userFromDB == null) {
+			throw new UsernameNotFoundException("User not found with username: " + userName);
+		}
+		return new org.springframework.security.core.userdetails.User(userFromDB.getEmail(), userFromDB.getPassword(),
+				new ArrayList<>());
 	}
 
 	public Users updateUser(Users user) throws Exception {
@@ -55,11 +76,11 @@ public class UserService {
 		if (userFromDB == null) {
 			throw new Exception("No user match found");
 		}
-		
+
 		if (user.getName() != null) {
 			userFromDB.setName(user.getName());
 		}
-		
+
 		if (user.getCity() != null) {
 			userFromDB.setCity(user.getCity());
 		}
@@ -71,17 +92,19 @@ public class UserService {
 		}
 		if (user.getSchoolId() != null) {
 			List<School> schools = new ArrayList<School>();
-			for(String id: user.getSchoolId()) {
+			for (String id : user.getSchoolId()) {
 				School school = schoolCache.getSchoolBySchoolId(id);
 				if (school == null) {
 					throw new Exception("school id is incorrect:" + id);
 				}
 				schools.add(school);
 			}
-			userFromDB.setSchools(schools);;
+			userFromDB.setSchools(schools);
+			;
 		}
 		return mongoTemplate.save(userFromDB);
 	}
+
 
 	public Users validateUser(Users user) throws Exception {
 		Query userByNameAndPassword = new Query();
@@ -105,7 +128,7 @@ public class UserService {
 				Query userById = new Query();
 				userById.addCriteria(Criteria.where("_id").is(objID));
 				user = mongoTemplate.findOne(userById, Users.class);
-			} catch(IllegalArgumentException il) {
+			} catch (IllegalArgumentException il) {
 				return null;
 			}
 		}
@@ -127,12 +150,12 @@ public class UserService {
 		}
 		return user;
 	}
-	
+
 	public Users getUserDetailsFromRegistrationId(String id) throws Exception {
 		Query userRegById = new Query();
 		userRegById.addCriteria(Criteria.where("id").is(id));
 		UserRegistration userReg = mongoTemplate.findOne(userRegById, UserRegistration.class);
-		
+
 		if (userReg == null) {
 			throw new Exception("Not a valid Reg id");
 		}
@@ -219,7 +242,7 @@ public class UserService {
 
 		mongoTemplate.save(invitedUser);
 		mongoTemplate.save(userGroup);
-		
+
 		return userGroup;
 	}
 
@@ -326,14 +349,16 @@ public class UserService {
 			mongoTemplate.save(userGroup);
 		}
 	}
-	
+
 	public void deleteUserRegToken(String id) {
-		
+
 		Query userRegById = new Query();
 		userRegById.addCriteria(Criteria.where("id").is(id));
 		UserRegistration userReg = mongoTemplate.findOne(userRegById, UserRegistration.class);
-		
+
 		mongoTemplate.remove(userReg);
 	}
+
+
 
 }

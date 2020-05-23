@@ -19,7 +19,8 @@ const GroupCard = ({
   auth,
   acceptUserGroupInvitation,
   declineUserGroupRequest,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
+  history
 }) => {
   const { Meta } = Card;
 
@@ -30,6 +31,7 @@ const GroupCard = ({
       requestorUserId: auth.user.email,
       origin: 'discovergroup'
     });
+    window.location.pathname = '/group/' + record.id;
   };
 
   const isLoggedInUserJoinedUserGroup = group => {
@@ -130,8 +132,9 @@ const GroupCard = ({
     <Card
       key={index}
       style={{
-        width: 300,
-        marginBottom: 16
+        width: '100%',
+        marginBottom: 16,
+        textAlign: 'center'
       }}
       actions={[
         <div className='member-count'>

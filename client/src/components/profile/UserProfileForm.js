@@ -32,17 +32,26 @@ const UserAccountForm = ({
   history
 }) => {
   useEffect(() => {
-    if (
-      auth &&
-      auth.user &&
-      auth.user.userGroup &&
-      auth.user.userGroup.length > 0
-    ) {
-      history.push('/dashboard');
-    } else if (auth.user.city) {
-      onStepChange(current);
+    if (auth && auth.user) {
+      console.log(auth.user);
+
+      let user = auth.user;
+      if (user.userGroup && user.userGroup.length > 0) {
+        history
+          ? history.push('/dashboard')
+          : (window.location.pathname = '/dashboard');
+      } else if (
+        user.requestedUserGroup &&
+        user.requestedUserGroup.length > 0
+      ) {
+        history
+          ? history.push('/groups')
+          : (window.location.pathname = '/groups');
+      } else if (auth.user.city) {
+        onStepChange(current);
+      }
     }
-  }, [auth.user]);
+  }, [auth]);
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
     console.log(value);

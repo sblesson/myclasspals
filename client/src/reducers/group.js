@@ -120,7 +120,7 @@ export default function(state = initialState, action) {
       };
     case REQUEST_JOIN_USER_GROUP:
       let isRequestUserGroupSuccess = false;
-
+      console.log(payload);
       if (payload && payload.origin === 'discovergroup') {
         //searchResult = payload;
         isRequestUserGroupSuccess = true;
