@@ -1,11 +1,14 @@
 package com.clazzbuddy.mongocollections;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class Users {
 
@@ -175,6 +178,8 @@ public class Users {
 	public void setSchoolId(List<String> schoolId) {
 		this.schoolId = schoolId;
 	}
+
+
 
 	
 }
