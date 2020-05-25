@@ -7,6 +7,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 public class Users {
 
 	@Id
@@ -14,6 +17,7 @@ public class Users {
 	
 	private String name;
 	
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	
 	private Date createdDate;
@@ -175,6 +179,8 @@ public class Users {
 	public void setSchoolId(List<String> schoolId) {
 		this.schoolId = schoolId;
 	}
+
+
 
 	
 }
