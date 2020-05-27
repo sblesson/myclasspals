@@ -45,6 +45,12 @@ public class UserService implements UserDetailsService{
     private PasswordEncoder bcryptEncoder;
 
 	public Users createUser(Users user) throws Exception {
+		Query userByName = new Query();
+		userByName.addCriteria(Criteria.where("email").is(user.getEmail()));
+		Users userFromDB = mongoTemplate.findOne(userByName, Users.class);
+		if (userFromDB != null) {
+			throw new Exception("User already exists");
+		}
 		if (user.getUserGroup() != null) {
 			for (UserGroup userGroup : user.getUserGroup()) {
 				UserGroup userGroupFromDB = userGroupService.createUserGroup(userGroup);
