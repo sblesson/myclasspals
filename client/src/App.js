@@ -1,62 +1,62 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Layout, Menu } from 'antd';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import HeaderNav from './components/layout/Navbar';
-import Landing from './components/layout/Landing';
-import Routes from './components/routing/Routes';
-import OurStory from './components/layout/OurStory';
-import OurMission from './components/layout/OurMission';
-import FAQ from './components/layout/FAQ';
-import PrivacyPolicy from './components/layout/PrivacyPolicy';
-import ContactUs from './components/layout/ContactUs';
-import AboutUs from './components/layout/AboutUs';
-import TermsAndConditions from './components/layout/TermsAndConditions';
-import Guidelines from './components/layout/Guidelines';
-import Help from './components/layout/Help';
+import TopNavbar from './components/topnavbar/TopNavbar';
+import SideNav from './components/layout/SideNav';
 
 // Redux
-import { Provider } from 'react-redux';
 import store from './store';
-import { loadUser } from './actions/auth';
-import setAuthToken from './utils/setAuthToken';
+
+import Routes from './components/routing/Routes';
+
+import FooterContent from './components/layout/Footer';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'semantic-ui-css/semantic.min.css';
 import 'antd/dist/antd.css';
-
 import './App.scss';
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
-
 const App = () => {
+  const [collapse, setCollapse] = useState(true);
+
   useEffect(() => {
-    store.dispatch(loadUser());
+    window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
   }, []);
+
+  const { Header, Sider, Content, Footer } = Layout;
+  const { SubMenu } = Menu;
+
+
 
   return (
     <Provider store={store}>
       <Router>
-        <Fragment>
-          <HeaderNav />
-          <Switch>
-            <Route exact path='/' component={Landing} />
-            <Route exact path='/register' component={Landing} />
-            <Route exact path='/invite/group/:id' component={Landing} />
+        <Layout>
+          <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+            <TopNavbar />
+          </Header>
 
-            <Route exact path='/login' component={Landing} />
-            <Route exact path='/our-story' component={OurStory} />
-            <Route exact path='/our-mission' component={OurMission} />
-            <Route exact path='/faq' component={FAQ} />
-            <Route exact path='/about-us' component={AboutUs} />
-            <Route exact path='/contact-us' component={ContactUs} />
-            <Route exact path='/tandc' component={TermsAndConditions} />
-            <Route exact path='/privacy-policy' component={PrivacyPolicy} />
-            <Route exact path='/guidelines' component={Guidelines} />
-            <Route exact path='/help' component={Help} />
-
-            <Route component={Routes} />
-          </Switch>
-        </Fragment>
+          <Layout>
+            <Sider trigger={null} collapsible collapsed={collapse}>
+              <SideNav />
+            </Sider>
+            <Content
+              style={{
+                margin: '24px 16px',
+                padding: 24,
+                minHeight: 'calc(100vh - 114px)',
+                background: '#fff'
+              }}
+            >
+              <Switch>
+                <Route component={Routes} />
+              </Switch>
+            </Content>
+          </Layout>
+          <Footer style={{ bottom: '0', textAlign: 'center' }}>
+            <FooterContent />
+          </Footer>
+        </Layout>
       </Router>
     </Provider>
   );

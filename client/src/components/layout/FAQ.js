@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
-import Footer from './Footer';
+import React from 'react';
 
 const FAQ = () => {
   return (
-    <Fragment>
+    <div>
       <h1 className='large text-primary'>Frequently asked questions</h1>
 
       <p className='large'>Do I need to enter my child information?</p>
@@ -11,8 +10,7 @@ const FAQ = () => {
       <p className='large'>Privacy protection</p>
       <p className='large'>What happens when school year ends?</p>
       <p className='large'>How do we get help?</p>
-      <Footer />
-    </Fragment>
+    </div>
   );
 };
 

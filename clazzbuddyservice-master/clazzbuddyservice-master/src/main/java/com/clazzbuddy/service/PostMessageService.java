@@ -82,7 +82,7 @@ public class PostMessageService {
 		}
 		if (postSearchQuery.getLastseen() != null) {
 			ObjectId objID = new ObjectId(postSearchQuery.getLastseen());
-			postListQuery.addCriteria(Criteria.where("_id").gt(objID));
+			postListQuery.addCriteria(Criteria.where("_id").lt(objID));
 		}
 		if (postSearchQuery.getIsPrivate() != null) {
 			postListQuery.addCriteria(Criteria.where("isPrivate").is(postSearchQuery.getIsPrivate()));
@@ -92,7 +92,11 @@ public class PostMessageService {
 		postListQuery.addCriteria(Criteria.where("isComment").ne(true));
 
 		postListQuery.with(new Sort(Sort.Direction.DESC, "_id"));
-		postListQuery.limit(30);
+		if (postSearchQuery.getResultSize() > 0) {
+			postListQuery.limit(postSearchQuery.getResultSize());
+		} else {
+			postListQuery.limit(30);
+		}
 		List<Post> posts = mongoTemplate.find(postListQuery, Post.class);
 		return posts;
 

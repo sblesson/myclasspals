@@ -66,9 +66,6 @@ const CreateGroupForm = ({
     }
   };
   const submitProfileForm = (values, actions) => {
-    debugger;
-    console.log(values);
-
     values.userGroupMembers = [
       {
         _id: auth.user._id,

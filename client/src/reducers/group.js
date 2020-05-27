@@ -25,7 +25,7 @@ const initialState = {
   requestedUserGroup: [],
   searchResult: [],
   newGroup: null,
-  currentGroup: null,
+  currentGroup: {},
   isGroupAdmin: false,
   loading: true,
   error: {},
@@ -52,7 +52,6 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case ADD_GROUP:
-      debugger;
       return {
         ...state,
         groups: [payload.userGroup, ...state.groups],
@@ -93,11 +92,13 @@ export default function(state = initialState, action) {
         searchResult: payload.userGroupList
       };
     case GET_GROUP:
+      //Todo check why it is not getting set from return
+      state.currentGroup = payload;
       return {
         ...state,
+        currentGroup: payload,
         isAuthenticated: true,
         loading: false,
-        currentGroup: payload,
         isGroupAdmin: isLoggedInUserGroupAdmin(payload.userGroupMembers)
       };
     case INVITE_TO_GROUP:

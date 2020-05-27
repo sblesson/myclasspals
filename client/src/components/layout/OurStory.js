@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
-import Footer from './Footer';
+import React from 'react';
 
 const OurStory = () => {
   return (
-    <Fragment>
+    <div>
       <h1 className='large text-primary'>Obstacles are the way</h1>
       <p className='large'>
         Founder, Sapna Blesson is a working mom juggling her family and 2 kids.
@@ -26,8 +25,7 @@ const OurStory = () => {
         her mission to connect parents will make deeper connection within
         families in school.{' '}
       </p>
-      <Footer />
-    </Fragment>
+    </div>
   );
 };
 
