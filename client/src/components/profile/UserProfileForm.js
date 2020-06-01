@@ -3,7 +3,7 @@ import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { createProfile } from '../../actions/profile';
+import { updateUser } from '../../actions/auth';
 import { searchGroupWithFilters } from '../../actions/group';
 
 import { Formik, ErrorMessage } from 'formik';
@@ -25,7 +25,7 @@ import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSele
 
 const UserAccountForm = ({
   auth,
-  createProfile,
+  updateUser,
   searchGroupWithFilters,
   current,
   onStepChange,
@@ -91,7 +91,7 @@ const UserAccountForm = ({
         console.log(values);
         let myAddress = JSON.parse(values.citySelect);
 
-        createProfile({
+        updateUser({
           email: auth.user.email,
           name: values.userName,
           city: myAddress.city,
@@ -180,6 +180,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  createProfile,
+  updateUser,
   searchGroupWithFilters
 })(withRouter(UserAccountForm));

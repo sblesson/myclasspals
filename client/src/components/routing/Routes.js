@@ -5,7 +5,7 @@ import Alert from '../layout/Alert';
 import PendingRegistration from '../layout/auth/PendingRegistration';
 
 import CreateProfile from '../profile/CreateProfile';
-import AccountSettings from '../profile/AccountSettings';
+import Account from '../profile/account/Account';
 /* import Profiles from '../profiles/Profiles';
 import Profile from '../profile/Profile'; */
 
@@ -17,7 +17,10 @@ import SingleGroup from '../groups/SingleGroup.js';
 
 import Posts from '../posts/Posts';
 import SinglePost from '../posts/SinglePost';
-import NotFound from '../layout/NotFound';
+import Page401 from '../layout/Page401';
+import Page404 from '../layout/Page404';
+import Page403 from '../layout/Page403';
+import Page500 from '../layout/Page500';
 
 import OurStory from '../layout/OurStory';
 import OurMission from '../layout/OurMission';
@@ -39,12 +42,10 @@ const Routes = () => {
       <Alert />
       <Switch>
         <Route exact path='/login' component={Landing} />
-
         <Route exact path='/invite/group/:id' component={PendingRegistration} />
         <Route exact path='/' component={Landing} />
         <Route exact path='/register' component={Landing} />
         <Route exact path='/invite/group/:id' component={Landing} />
-
         <Route exact path='/login' component={Landing} />
         <Route exact path='/our-story' component={OurStory} />
         <Route exact path='/our-mission' component={OurMission} />
@@ -55,18 +56,14 @@ const Routes = () => {
         <Route exact path='/privacy-policy' component={PrivacyPolicy} />
         <Route exact path='/guidelines' component={Guidelines} />
         <Route exact path='/help' component={Help} />
-
         {/*        <PrivateRoute exact path='/profiles' component={Profiles} />
         <PrivateRoute exact path='/profile/:id' component={Profile} /> */}
-
         <PrivateRoute exact path='/messages' component={Messages} />
         <PrivateRoute exact path='/messages/:id' component={Messages} />
-
         <PrivateRoute exact path='/groups' component={Groups} />
         <PrivateRoute exact path='/discovergroup' component={DiscoverGroup} />
         <PrivateRoute exact path='/group/:id' component={SingleGroup} />
         <PrivateRoute exact path='/group/members/:id' component={SingleGroup} />
-
         <PrivateRoute exact path='/dashboard' component={Posts} />
         <PrivateRoute exact path='/dashboard/:id' component={Posts} />
         <PrivateRoute
@@ -74,10 +71,15 @@ const Routes = () => {
           path='/create-profile/:id'
           component={CreateProfile}
         />
-        <PrivateRoute exact path='/account' component={AccountSettings} />
+        <PrivateRoute exact path='/account' component={Account} />
         <PrivateRoute exact path='/posts' component={Posts} />
         <PrivateRoute exact path='/posts/:id' component={SinglePost} />
-        <Route component={NotFound} />
+        {/*         <Route component={Page404} />
+         */}{' '}
+        <Route exact path='/401' component={Page403} />
+        <Route exact path='/403' component={Page403} />
+        <Route exact path='/404' component={Page404} />
+        <Route exact path='/500' component={Page500} />
       </Switch>
     </section>
   );

@@ -7,9 +7,8 @@ import LeftNav from './components/leftnav/LeftNav';
 
 // Redux
 import store from './store';
-
 import Routes from './components/routing/Routes';
-
+import { setInterceptors } from './utils/axios';
 import FooterContent from './components/layout/Footer';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -19,6 +18,7 @@ import './App.scss';
 const App = () => {
   const { Header, Sider, Content, Footer } = Layout;
   const { SubMenu } = Menu;
+  setInterceptors(store);
 
   return (
     <Provider store={store}>
@@ -38,8 +38,8 @@ const App = () => {
             <LeftNav />
             <Content
               style={{
-                margin: '24px 16px',
-                padding: 24,
+                margin: '10px 16px',
+                padding: '2px 8px',
                 minHeight: 'calc(100vh - 114px)',
                 background: '#fff'
               }}

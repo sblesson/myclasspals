@@ -27,7 +27,8 @@ const CreateGroupForm = ({
   school,
   addGroup,
   current,
-  onStepChange
+  onStepChange,
+  setModal
 }) => {
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {

@@ -4,6 +4,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
+  UPDATE_USER,
   AUTH_ERROR,
   AUTH_SUCCESS,
   LOGIN_SUCCESS,
@@ -21,7 +22,8 @@ import {
   DELETE_USER_REGISTRATION_TOKEN,
   DELETE_USER_REGISTRATION_TOKEN_ERROR,
   CHANGE_PASSWORD_SUCCESS,
-  CHANGE_PASSWORD_ERROR
+  CHANGE_PASSWORD_ERROR,
+  UPDATE_USER_ERROR
 } from './types';
 
 /* // Get all profiles
@@ -114,6 +116,44 @@ export const searchUser = keyword => async dispatch => {
   } catch (err) {
     dispatch({
       type: AUTH_ERROR //todo add error later
+    });
+  }
+};
+
+// Create or update user
+export const updateUser = (formData, edit = false) => async dispatch => {
+  try {
+    console.log(formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const res = await axios.put(
+      'http://localhost:8080/user/updateuser',
+      formData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_USER,
+      payload: res.data
+    });
+
+    dispatch(
+      setAlert(edit ? 'User Account Updated' : 'Profile Created', 'success')
+    );
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: UPDATE_USER_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
