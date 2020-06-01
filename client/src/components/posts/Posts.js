@@ -176,27 +176,17 @@ const Posts = ({
   ) : (
     <Fragment>
       <PostFilters categories={categories} />
-      <div style={{ marginTop: '20px' }}>
-        <img
-          src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
-          alt='Custom banner image for this neighborhood group.'
-          data-testid='groups-page-header-image'
-        ></img>
-      </div>
+   
       <CreateGroupModal />
 
       <div className='feed-container'>
         {group && group.currentGroup && group.currentGroup.groupName ? (
-          <Tabs defaultActiveKey='1' /* tabBarExtraContent={operations} */>
-            <TabPane tab={group.currentGroup.groupName} key='1'>
-              <div id='main' className='feed-wrapper'>
-                <PostModal />
-                {posts && posts.length > 0 && (
-                  <WindowScroller>{infiniteLoader}</WindowScroller>
-                )}
-              </div>
-            </TabPane>
-          </Tabs>
+          <div id='main' className='feed-wrapper'>
+            <PostModal />
+            {posts && posts.length > 0 && (
+              <WindowScroller>{infiniteLoader}</WindowScroller>
+            )}
+          </div>
         ) : (
           <Fragment>
             <p>You have not yet setup a profile, please add some info</p>
