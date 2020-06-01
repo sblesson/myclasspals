@@ -79,7 +79,7 @@ const UserAccountForm = ({
   const yourInfo = (
     <Formik
       initialValues={{
-        email: '',
+        email: auth.user.email,
         name: '',
         city: '',
         state: '',
@@ -147,15 +147,6 @@ const UserAccountForm = ({
             >
               <AutoCompleteCitySeach />
             </FormItem>
-            <FormItem
-              name='groupName'
-              //label='City'
-              //required={true}
-              //validate={validateRequired}
-            >
-              <AutoCompleteGroupSearch />
-            </FormItem>
-
             <FormItem
               name='schoolName'
               //label='Schools you want to follow'

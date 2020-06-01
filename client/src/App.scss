@@ -50,7 +50,7 @@ img {
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
-  margin-top: 1rem;
+  margin-top: 5rem;
   margin-bottom: 3rem;
 }
 
@@ -954,4 +954,14 @@ thead {
 ///////////
 .filter {
   background: url('/assets/images/filter.svg');
+}
+
+.layout-header-navbar {
+  height: 30px;
+  width: 100%;
+  background-image: linear-gradient(
+    90deg,
+    var(--bg-gradient1),
+    var(--bg-gradient2)
+  );
 }

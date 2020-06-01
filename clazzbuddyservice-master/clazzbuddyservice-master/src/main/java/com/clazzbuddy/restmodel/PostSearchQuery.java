@@ -19,6 +19,8 @@ public class PostSearchQuery {
 	private Date dateFilterLessThan;
 
 	private String lastseen;
+	
+	private int resultSize;
 
 	public String getKeyword() {
 		return keyword;
@@ -83,6 +85,14 @@ public class PostSearchQuery {
 
 	public void setIsPrivate(Boolean isPrivate) {
 		this.isPrivate = isPrivate;
+	}
+
+	public int getResultSize() {
+		return resultSize;
+	}
+
+	public void setResultSize(int resultSize) {
+		this.resultSize = resultSize;
 	}
 
 }

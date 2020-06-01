@@ -1,14 +1,7 @@
-import React, { Fragment } from 'react';
-import Footer from './Footer';
+import React from 'react';
 
 const Guidelines = () => {
-  return (
-    <Fragment>
-      <h1 className='large text-primary'>Guidelines</h1>
-
-      <Footer />
-    </Fragment>
-  );
+  return <h1 className='large text-primary'>Guidelines</h1>;
 };
 
 export default Guidelines;

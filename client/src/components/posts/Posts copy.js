@@ -84,11 +84,7 @@ const Posts = ({
       // 1 means loading
       loadedRowsMap[i] = 1;
     }
-    if (posts.length > 18) {
-      message.warning('Virtualized List loaded all');
-      loading = false;
-      return;
-    }
+
     console.log(group.currentGroup);
     console.log(posts[stopIndex]._id);
     console.log(loading);
@@ -96,7 +92,7 @@ const Posts = ({
     searchPost({
       groupId: group.currentGroup.id,
       lastseen: posts[startIndex]._id
-      /* resultSize: 1 */
+      //resultSize: 1
     });
   };
 
@@ -104,7 +100,7 @@ const Posts = ({
 
   const renderItem = ({ index, key, style }) => {
     const item = posts[index];
-    return <PostItem key={index} post={item} />;
+    return <PostItem key={item._id} post={item} />;
   };
 
   const vlist = ({
@@ -120,7 +116,7 @@ const Posts = ({
       height={height}
       isScrolling={isScrolling}
       onScroll={onChildScroll}
-      overscanRowCount={5}
+      overscanRowCount={2}
       rowCount={posts.length}
       rowHeight={73}
       rowRenderer={renderItem}

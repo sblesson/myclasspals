@@ -102,6 +102,8 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case GET_POSTS:
+      //check why we need it
+      state.posts = payload;
       return {
         ...state,
         posts: payload,
@@ -114,11 +116,14 @@ export default function(state = initialState, action) {
         loading: false
       };
     case SEARCH_POST:
+      state.posts = state.posts.concat(payload);
+
       return {
         ...state,
-        posts: payload,
+        //posts: [payload, ...state.posts],
         loading: false
       };
+
     case GET_POST_CATEGORIES:
       return {
         ...state,

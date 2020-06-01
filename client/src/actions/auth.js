@@ -5,6 +5,7 @@ import {
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
+  AUTH_SUCCESS,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
@@ -22,7 +23,6 @@ import {
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_ERROR
 } from './types';
-import setAuthToken from '../utils/setAuthToken';
 
 /* // Get all profiles
 export const getUserGroup = userId => async dispatch => {
@@ -69,20 +69,15 @@ export const getUserGroup = userId => async dispatch => {
 }
  */
 // Load User
-export const loadUser = () => async dispatch => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
-
+export const loadUser = email => async dispatch => {
   try {
-    const res = await axios.get('/api/auth');
-    const userGroupRes = await axios.get(
-      'http://localhost:8080/user/getuserdetails?user=' + res.data._id
+    const response = await axios.get(
+      'http://localhost:8080/user/getuserdetails?user=' + email
     );
 
     dispatch({
       type: USER_LOADED,
-      payload: userGroupRes.data
+      payload: response.data
     });
   } catch (err) {
     dispatch({
@@ -93,8 +88,6 @@ export const loadUser = () => async dispatch => {
 
 export const getUser = userId => async dispatch => {
   try {
-    const res = await axios.get('/api/auth');
-
     const userResp = await axios.get(
       'http://localhost:8080/user/getuserdetails?user=' + userId
     );
@@ -128,7 +121,7 @@ export const searchUser = keyword => async dispatch => {
 // Load User
 const sendEmailConfirmation = (body, config) => async dispatch => {
   //SET admin password
-  try {
+  /*   try {
     const res = await axios.get(
       'http://localhost:5000/api/sendMail',
       body,
@@ -143,7 +136,7 @@ const sendEmailConfirmation = (body, config) => async dispatch => {
     dispatch({
       type: EMAIL_SEND_ERROR
     });
-  }
+  } */
 };
 
 export const getuserbyregistrationid = (token, history) => async dispatch => {
@@ -206,15 +199,33 @@ export const register = ({ name, email, password }) => async dispatch => {
   const body = JSON.stringify({ name, email, password });
 
   try {
-    const res = await axios.post('/api/users', body, config);
-
+    const res = await axios.post(
+      'http://localhost:8080/user/register',
+      body,
+      config
+    );
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
     });
+    console.log(res);
 
-    const emailRes = await axios.post('/api/sendMail', body, config);
-    dispatch(loadUser());
+    const authRes = await axios.post(
+      'http://localhost:8080/user/authenticate',
+      body,
+      config
+    );
+    console.log(authRes);
+    dispatch({
+      type: AUTH_SUCCESS,
+      payload: authRes.data
+    });
+
+    const emailRes = await axios.post(
+      'http://localhost:5000/api/sendMail',
+      body,
+      config
+    );
   } catch (err) {
     const errors =
       err && err.response && err.response.data && err.response.data.errors
@@ -255,7 +266,7 @@ export const registerPendingInvitedUser = ({
     });
 
     const emailRes = await axios.post('/api/sendMail', body, config);
-    dispatch(loadUser());
+    dispatch(loadUser(email));
   } catch (err) {
     /*   const errors = err.response.data.errorCode;
 
@@ -310,20 +321,25 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post('/api/auth', body, config);
+    const res = await axios.post(
+      'http://localhost:8080/user/authenticate',
+      body,
+      config
+    );
 
     dispatch({
-      type: LOGIN_SUCCESS,
+      type: AUTH_SUCCESS,
       payload: res.data
     });
 
-    dispatch(loadUser());
+    dispatch(loadUser(email));
   } catch (err) {
     const errors = err.response.data.errors;
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
+    dispatch(setAlert('Token Invalid', 'error'));
 
     dispatch({
       type: LOGIN_FAIL
