@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import { Row, Col, Div, Divider, Card, Input, Empty } from 'antd';
 
-import LeftNav from '../leftnav/LeftNav';
 import PrivateMessageModal from '../groups/modal/CreateGroupModal';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
 import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';

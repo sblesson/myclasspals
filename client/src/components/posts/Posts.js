@@ -175,44 +175,36 @@ const Posts = ({
     <Spinner />
   ) : (
     <Fragment>
-      <div className='row'>
-        <div className='col-xs-1 col-sm-3 col-md-3 col-lg-3'>
-          <LeftNav screen='dashboard' />
-        </div>
-        <div className='col-xs-6 col-sm-6 col-md-8 col-lg-6'>
-          <PostFilters categories={categories} />
-          <div style={{ marginTop: '20px' }}>
-            <img
-              src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
-              alt='Custom banner image for this neighborhood group.'
-              data-testid='groups-page-header-image'
-            ></img>
-          </div>
-          <div className='feed-container'>
-            {group && group.currentGroup && group.currentGroup.groupName ? (
-              <Tabs defaultActiveKey='1' /* tabBarExtraContent={operations} */>
-                <TabPane tab={group.currentGroup.groupName} key='1'>
-                  <div id='main' className='feed-wrapper'>
-                    <PostModal />
-                    {posts && posts.length > 0 && (
-                      <WindowScroller>{infiniteLoader}</WindowScroller>
-                    )}
-                  </div>
-                </TabPane>
-              </Tabs>
-            ) : (
-              <Fragment>
-                <p>You have not yet setup a profile, please add some info</p>
-                <Link to='/create-profile/1' className='btn btn-primary my-1'>
-                  Create Profile
-                </Link>
-              </Fragment>
-            )}
-          </div>
-        </div>
-        <div className='col-xs-2 col-sm-2 col-md-2 col-lg-2'>
-          <CreateGroupModal />
-        </div>
+      <PostFilters categories={categories} />
+      <div style={{ marginTop: '20px' }}>
+        <img
+          src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
+          alt='Custom banner image for this neighborhood group.'
+          data-testid='groups-page-header-image'
+        ></img>
+      </div>
+      <CreateGroupModal />
+
+      <div className='feed-container'>
+        {group && group.currentGroup && group.currentGroup.groupName ? (
+          <Tabs defaultActiveKey='1' /* tabBarExtraContent={operations} */>
+            <TabPane tab={group.currentGroup.groupName} key='1'>
+              <div id='main' className='feed-wrapper'>
+                <PostModal />
+                {posts && posts.length > 0 && (
+                  <WindowScroller>{infiniteLoader}</WindowScroller>
+                )}
+              </div>
+            </TabPane>
+          </Tabs>
+        ) : (
+          <Fragment>
+            <p>You have not yet setup a profile, please add some info</p>
+            <Link to='/create-profile/1' className='btn btn-primary my-1'>
+              Create Profile
+            </Link>
+          </Fragment>
+        )}
       </div>
     </Fragment>
   );

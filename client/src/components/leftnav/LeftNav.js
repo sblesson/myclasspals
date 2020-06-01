@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
-import { Menu } from 'antd';
+import { Menu, Layout } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 
 import { getLeftNav } from '../../actions/leftnav';
@@ -17,6 +17,14 @@ const LeftNav = ({
   auth
 }) => {
   const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
+  const [collapse, setCollapse] = useState(true);
+
+  useEffect(() => {
+    window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
+  }, []);
+  const { Sider } = Layout;
+
+  //discovergroup
 
   useEffect(() => {
     if (screen !== 'dashboard') {
@@ -49,7 +57,6 @@ const LeftNav = ({
             id: group.id,
             title: group.groupName,
             value: group.id,
-            icon: 'fas fa-users',
             url: '/dashboard/' + group.id
           }));
         }
@@ -65,26 +72,39 @@ const LeftNav = ({
   return loading & (screen !== 'dashboard') ? (
     <Spinner />
   ) : (
-    <div className='leftnav-sidebar'>
-      <Menu
-        selectedKeys={selectedMenuItem}
-        defaultSelectedKeys={selectedMenuItem}
-        onClick={e => {
-          setSelectedNavItem([e.key]);
-        }}
-      >
-        {sideNavMenu &&
-          sideNavMenu.length > 0 &&
-          sideNavMenu.map((sideNavItem, index) => (
-            <Menu.Item key={index} icon={sideNavItem.icon}>
-              {sideNavItem.title}
-              <Link className='btn btn-light my-1' to={sideNavItem.url}>
-                {sideNavItem.title}
-              </Link>
-            </Menu.Item>
-          ))}
-      </Menu>
-    </div>
+    <Fragment>
+      {auth && auth.isAuthenticated ? (
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapse}
+          style={{ marginTop: '20px' }}
+        >
+          <Menu
+            theme='light'
+            mode='inline'
+            selectedKeys={selectedMenuItem}
+            defaultSelectedKeys={selectedMenuItem}
+            onClick={e => {
+              setSelectedNavItem([e.key]);
+            }}
+          >
+            {sideNavMenu &&
+              sideNavMenu.length > 0 &&
+              sideNavMenu.map((sideNavItem, index) => (
+                <Menu.Item key={index} icon={sideNavItem.icon}>
+                  {sideNavItem.title}
+                  <Link className='btn btn-light my-1' to={sideNavItem.url}>
+                    {sideNavItem.title}
+                  </Link>
+                </Menu.Item>
+              ))}
+          </Menu>
+        </Sider>
+      ) : (
+        ''
+      )}
+    </Fragment>
   );
 };
 

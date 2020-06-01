@@ -965,3 +965,16 @@ thead {
     var(--bg-gradient2)
   );
 }
+
+.ant-menu-vertical .ant-menu-item::after,
+.ant-menu-vertical-left .ant-menu-item::after,
+.ant-menu-vertical-right .ant-menu-item::after,
+.ant-menu-inline .ant-menu-item::after {
+  border-right: 3px solid var(--bg-primary-btn);
+}
+.ant-menu-item-selected {
+  color: var(--primary-color);
+}
+.ant-layout-sider {
+  background: #fff;
+}

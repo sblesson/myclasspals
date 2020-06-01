@@ -8,7 +8,6 @@ import GroupFilters from '../common/filterpanel/FilterPanel';
 import GroupCard from './GroupCard';
 
 import PrivateMessageModal from './modal/CreateGroupModal';
-import LeftNav from '../leftnav/LeftNav';
 import { getAllGroups } from '../../actions/group';
 import { Tabs, Table, Tag, Button, Input } from 'antd';
 import { Menu, Dropdown, message, Card } from 'antd';
@@ -41,56 +40,47 @@ const Groups = ({ getAllGroups, group, auth }) => {
         <Spinner />
       ) : (
         <Fragment>
-          <div className='row'>
-            <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
-              <LeftNav screen='groups' />
-            </div>
-
-            <div className='col-xs-9 col-sm-9 col-md-9 col-lg-9'>
-              <GroupFilters />
-              {group !== null ? (
-                <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
-                  <TabPane tab='My Groups' key='1'>
-                    {group.userGroup && group.userGroup.length > 0
-                      ? group.userGroup.map((group, index) => (
-                          <GroupCard
-                            currentGroup={group}
-                            key={index}
-                            type='mygroups'
-                          />
-                        ))
-                      : 'Current user is not part of any groups.'}
-                  </TabPane>
-                  <TabPane tab='Pending Invitations' key='2'>
-                    {group.pendingInvitedUserGroups &&
-                    group.pendingInvitedUserGroups.length > 0
-                      ? group.pendingInvitedUserGroups.map((group, index) => (
-                          <GroupCard
-                            currentGroup={group}
-                            key={index}
-                            type='pendingInvitedUserGroups'
-                          />
-                        ))
-                      : 'There are no pending group invitation for current user.'}
-                  </TabPane>
-                  <TabPane tab='Pending Requests' key='3'>
-                    {group.requestedUserGroup &&
-                    group.requestedUserGroup.length > 0
-                      ? group.requestedUserGroup.map((group, index) => (
-                          <GroupCard
-                            currentGroup={group}
-                            index={index}
-                            type='requestedUserGroup'
-                          />
-                        ))
-                      : 'There are no group requests initiated by the current user.'}
-                  </TabPane>
-                </Tabs>
-              ) : (
-                'Group is empty'
-              )}
-            </div>
-          </div>
+          <GroupFilters />
+          {group !== null ? (
+            <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+              <TabPane tab='My Groups' key='1'>
+                {group.userGroup && group.userGroup.length > 0
+                  ? group.userGroup.map((group, index) => (
+                      <GroupCard
+                        currentGroup={group}
+                        key={index}
+                        type='mygroups'
+                      />
+                    ))
+                  : 'Current user is not part of any groups.'}
+              </TabPane>
+              <TabPane tab='Pending Invitations' key='2'>
+                {group.pendingInvitedUserGroups &&
+                group.pendingInvitedUserGroups.length > 0
+                  ? group.pendingInvitedUserGroups.map((group, index) => (
+                      <GroupCard
+                        currentGroup={group}
+                        key={index}
+                        type='pendingInvitedUserGroups'
+                      />
+                    ))
+                  : 'There are no pending group invitation for current user.'}
+              </TabPane>
+              <TabPane tab='Pending Requests' key='3'>
+                {group.requestedUserGroup && group.requestedUserGroup.length > 0
+                  ? group.requestedUserGroup.map((group, index) => (
+                      <GroupCard
+                        currentGroup={group}
+                        index={index}
+                        type='requestedUserGroup'
+                      />
+                    ))
+                  : 'There are no group requests initiated by the current user.'}
+              </TabPane>
+            </Tabs>
+          ) : (
+            'Group is empty'
+          )}
         </Fragment>
       )}
     </Fragment>

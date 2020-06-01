@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import TopNavbar from './components/topnavbar/TopNavbar';
-import SideNav from './components/layout/SideNav';
+import LeftNav from './components/leftnav/LeftNav';
 
 // Redux
 import store from './store';
@@ -17,29 +17,25 @@ import 'antd/dist/antd.css';
 import './App.scss';
 
 const App = () => {
-  const [collapse, setCollapse] = useState(true);
-
-  useEffect(() => {
-    window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
-  }, []);
-
   const { Header, Sider, Content, Footer } = Layout;
   const { SubMenu } = Menu;
-
-
 
   return (
     <Provider store={store}>
       <Router>
         <Layout>
-          <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+          <Header
+            style={{
+              position: 'fixed',
+              zIndex: 1,
+              width: '100%'
+            }}
+          >
             <TopNavbar />
           </Header>
 
-          <Layout>
-            <Sider trigger={null} collapsible collapsed={collapse}>
-              <SideNav />
-            </Sider>
+          <Layout style={{ marginTop: '40px' }}>
+            <LeftNav />
             <Content
               style={{
                 margin: '24px 16px',

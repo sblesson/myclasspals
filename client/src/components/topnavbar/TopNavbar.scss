@@ -2,18 +2,49 @@
 
 .menuBar {
   padding: 0 20px;
-  border-bottom: solid 1px #e8e8e8;
   overflow: auto;
-  box-shadow: 0 0 30px #f3f1f1;
+
+  .ant-menu-horizontal {
+    line-height: 15px !important;
+    & > .ant-menu-item > a {
+      color: var(--primary-color) !important;
+    }
+  }
+
+  .ant-menu-horizontal > .ant-menu-item:hover,
+  .ant-menu-horizontal > .ant-menu-submenu:hover,
+  .ant-menu-horizontal > .ant-menu-item-active,
+  .ant-menu-horizontal > .ant-menu-submenu-active,
+  .ant-menu-horizontal > .ant-menu-item-open,
+  .ant-menu-horizontal > .ant-menu-submenu-open,
+  .ant-menu-horizontal > .ant-menu-item-selected,
+  .ant-menu-horizontal > .ant-menu-submenu-selected {
+    color: var(--primary-color) !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+  }
+  .ant-menu {
+    background: transparent !important;
+  }
+}
+.ant-layout-header {
+  height: 36px !important;
+  /*   background-image: linear-gradient(
+    90deg,
+    var(--bg-gradient1),
+    var(--bg-gradient2)
+  ) !important; */
+  background: #fff !important;
 }
 .logo {
   width: 150px;
+  line-height: 30px;
   float: left;
 }
 .logo a {
   display: inline-block;
+
   font-size: 20px;
-  padding: 19px 20px;
+  padding: 2px 20px;
   text-transform: capitalize;
 }
 .menuCon {
@@ -51,7 +82,7 @@
   display: block;
   width: 20px;
   height: 2px;
-  background: #1890ff;
+
   position: relative;
 }
 .barsBtn:after,
@@ -63,6 +94,7 @@
   left: 0;
   height: 2px;
   background: var(--bg-primary-btn);
+  color: #fff;
 }
 .barsBtn:after {
   top: auto;

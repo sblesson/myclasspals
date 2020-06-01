@@ -6,7 +6,6 @@ import { Drawer, Button } from 'antd';
 import './TopNavbar.scss';
 
 const TopNavbar = ({ auth: { isAuthenticated, loading, user } }) => {
-  const [current, setCurrent] = useState('mail');
   const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {
@@ -27,7 +26,7 @@ const TopNavbar = ({ auth: { isAuthenticated, loading, user } }) => {
         <div className='rightMenu'>
           {isAuthenticated ? <UserMenu /> : <GuestMenu />}
         </div>
-        <Button className='barsMenu' type='primary' onClick={showDrawer}>
+        {/*     <Button className='barsMenu' type='primary' onClick={showDrawer}>
           <span className='barsBtn'></span>
         </Button>
         <Drawer
@@ -38,7 +37,7 @@ const TopNavbar = ({ auth: { isAuthenticated, loading, user } }) => {
           visible={visible}
         >
           {isAuthenticated ? <UserMenu /> : <GuestMenu />}
-        </Drawer>
+        </Drawer> */}
       </div>
     </nav>
   );
