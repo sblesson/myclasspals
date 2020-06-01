@@ -20,23 +20,6 @@ import {
 } from './types';
 
 // Get posts
-export const getPosts = () => async dispatch => {
-  try {
-    const res = await axios.get('/api/posts');
-
-    dispatch({
-      type: GET_POSTS,
-      payload: res.data
-    });
-  } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-
-// Get posts
 export const getPostCategories = () => async dispatch => {
   try {
     dispatch({
@@ -173,6 +156,7 @@ export const searchPost = formData => async dispatch => {
       formData,
       config
     );
+    console.log(res);
     dispatch({
       type: SEARCH_POST,
       payload: res.data.post

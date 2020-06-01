@@ -44,12 +44,7 @@ const AccountSettings = ({
 
   return (
     <Fragment>
-      <div className='row'>
-        <LeftNav screen='profile' />
-        <div id='main'>
-          <Account />
-        </div>
-      </div>
+      <Account />
     </Fragment>
   );
 };

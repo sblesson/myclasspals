@@ -111,7 +111,10 @@ export const getGroupDetails = groupId => async dispatch => {
 
     dispatch({
       type: GET_GROUP,
-      payload: response.data.userGroupList[0]
+      payload:
+        response && response.data && response.data.userGroupList.length > 0
+          ? response.data.userGroupList[0]
+          : null
     });
   } catch (err) {
     dispatch({

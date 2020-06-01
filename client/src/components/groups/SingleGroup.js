@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
 import Spinner from '../layout/Spinner';
-import LeftNav from '../leftnav/LeftNav';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import UserCard from './UserCard';
@@ -253,85 +252,77 @@ const SingleGroup = ({
         <Spinner />
       ) : (
         <Fragment>
-          <div className='row'>
-            <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
-              <LeftNav screen='group' id={match.params.id} />
-            </div>
-
-            <div className='col-xs-6 col-sm-6 col-md-9 col-lg-9'>
-              <div>
-                <img
-                  src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
-                  alt='Custom banner image for this neighborhood group.'
-                  data-testid='groups-page-header-image'
-                ></img>
-              </div>
-              {group !== null && group.currentGroup ? (
-                <Tabs
-                  defaultActiveKey='1'
-                  tabBarExtraContent={isUserInPendingRequestedInvitations(
-                    group.currentGroup
-                  )}
-                >
-                  <TabPane tab='Posts' key='posts'>
-                    {group.currentGroup.userGroupMembers &&
-                    group.currentGroup.userGroupMembers.length > 0
-                      ? 'create  new post'
-                      : 'There are no post for this group'}
-                  </TabPane>
-                  <TabPane tab='Members' key='members'>
-                    {group.currentGroup.userGroupMembers &&
-                    group.currentGroup.userGroupMembers.length > 0 ? (
-                      /*       <UserCard />
+          <div>
+            <img
+              src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
+              alt='Custom banner image for this neighborhood group.'
+              data-testid='groups-page-header-image'
+            ></img>
+          </div>
+          {group !== null && group.currentGroup ? (
+            <Tabs
+              defaultActiveKey='1'
+              tabBarExtraContent={isUserInPendingRequestedInvitations(
+                group.currentGroup
+              )}
+            >
+              <TabPane tab='Posts' key='posts'>
+                {group.currentGroup.userGroupMembers &&
+                group.currentGroup.userGroupMembers.length > 0
+                  ? 'create  new post'
+                  : 'There are no post for this group'}
+              </TabPane>
+              <TabPane tab='Members' key='members'>
+                {group.currentGroup.userGroupMembers &&
+                group.currentGroup.userGroupMembers.length > 0 ? (
+                  /*       <UserCard />
                       <GroupCard
                       currentGroup={group}
                       index={index}
                       type='requestedUserGroup'
                     /> */
-                      <Table
-                        columns={columns}
-                        dataSource={group.currentGroup.userGroupMembers}
-                        rowKey='_id'
-                      />
-                    ) : (
-                      'Current group member list is empty'
-                    )}
-                  </TabPane>
-                  <TabPane tab='Pending Invitations' key='request'>
-                    {group.currentGroup.requestedInvitations &&
-                    group.currentGroup.requestedInvitations.length > 0 ? (
-                      <Table
-                        columns={requestToJoinColumn}
-                        dataSource={group.currentGroup.requestedInvitations}
-                        rowKey='invitedUserId'
-                      />
-                    ) : (
-                      'There are no pending invitations send from this group'
-                    )}
-                  </TabPane>
+                  <Table
+                    columns={columns}
+                    dataSource={group.currentGroup.userGroupMembers}
+                    rowKey='_id'
+                  />
+                ) : (
+                  'Current group member list is empty'
+                )}
+              </TabPane>
+              <TabPane tab='Pending Invitations' key='request'>
+                {group.currentGroup.requestedInvitations &&
+                group.currentGroup.requestedInvitations.length > 0 ? (
+                  <Table
+                    columns={requestToJoinColumn}
+                    dataSource={group.currentGroup.requestedInvitations}
+                    rowKey='invitedUserId'
+                  />
+                ) : (
+                  'There are no pending invitations send from this group'
+                )}
+              </TabPane>
 
-                  {group.isGroupAdmin ? (
-                    <TabPane tab='Pending Approvals' key='approvals'>
-                      {group.currentGroup.pendingInvitations &&
-                      group.currentGroup.pendingInvitations.length > 0 ? (
-                        <Table
-                          columns={pendingInvitationsColumns}
-                          dataSource={group.currentGroup.pendingInvitations}
-                          rowKey='requestorUserId'
-                        />
-                      ) : (
-                        ''
-                      )}
-                    </TabPane>
+              {group.isGroupAdmin ? (
+                <TabPane tab='Pending Approvals' key='approvals'>
+                  {group.currentGroup.pendingInvitations &&
+                  group.currentGroup.pendingInvitations.length > 0 ? (
+                    <Table
+                      columns={pendingInvitationsColumns}
+                      dataSource={group.currentGroup.pendingInvitations}
+                      rowKey='requestorUserId'
+                    />
                   ) : (
                     ''
                   )}
-                </Tabs>
+                </TabPane>
               ) : (
-                'Group is empty'
+                ''
               )}
-            </div>
-          </div>
+            </Tabs>
+          ) : (
+            'Group is empty'
+          )}
         </Fragment>
       )}
     </Fragment>

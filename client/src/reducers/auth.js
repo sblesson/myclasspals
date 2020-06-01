@@ -3,6 +3,7 @@ import {
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
+  AUTH_SUCCESS,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
@@ -15,6 +16,8 @@ import {
   GET_USER_BY_REGISTRATION_ID,
   CHANGE_PASSWORD_SUCCESS
 } from '../actions/types';
+
+import setAuthToken from '../utils/setAuthToken';
 
 const initialState = {
   token: localStorage.getItem('token'),
@@ -75,7 +78,9 @@ export default function(state = initialState, action) {
       };
 
     case USER_LOADED:
-      localStorage.setItem('user', JSON.stringify(payload.user));
+      console.log('USER_LOADED');
+      console.log(payload);
+
       return {
         ...state,
         isAuthenticated: true,
@@ -83,9 +88,23 @@ export default function(state = initialState, action) {
         user: payload.user
       };
     case REGISTER_SUCCESS:
-    case LOGIN_SUCCESS:
-      localStorage.setItem('token', payload.token);
-      localStorage.setItem('isAuthenticated', payload.isAuthenticated);
+      console.log('REGISTER_SUCCESS');
+
+      console.log(payload);
+      localStorage.setItem('user', JSON.stringify(payload.user));
+
+      return {
+        ...state,
+        isAuthenticated: false,
+        loading: false,
+        user: payload.user
+      };
+    case AUTH_SUCCESS:
+      if (payload.token) {
+        localStorage.setItem('token', payload.token);
+        localStorage.setItem('isAuthenticated', true);
+        setAuthToken(payload.token);
+      }
 
       return {
         ...state,
@@ -101,9 +120,9 @@ export default function(state = initialState, action) {
         loading: false
       };
 
+    case LOGIN_FAIL:
     case REGISTER_FAIL:
     case AUTH_ERROR:
-    case LOGIN_FAIL:
     case LOGOUT:
     case ACCOUNT_DELETED:
       localStorage.removeItem('token');

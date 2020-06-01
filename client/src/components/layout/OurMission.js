@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
-import Footer from './Footer';
+import React from 'react';
 
 const OurMission = () => {
   return (
-    <Fragment>
+    <div>
       <h1 className='large text-primary'>Our Mission</h1>
       <h1 className='large'>
         Connect parents and guardians. Buid stronger communities.
@@ -14,8 +13,7 @@ const OurMission = () => {
       <p className='large'>Unite</p>
       <p className='large'>Empower</p>
       <p className='large'>Brave</p>
-      <Footer />
-    </Fragment>
+    </div>
   );
 };
 

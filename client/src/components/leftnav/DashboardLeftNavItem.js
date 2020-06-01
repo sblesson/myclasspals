@@ -23,7 +23,6 @@ const DashboardLeftNavItem = ({
   const [selectedNavItem, setSelectedNavItem] = React.useState(null);
 
   const { title, icon, url, items, Icon, onClick: onClickProp } = item;
-
   useEffect(() => { 
     if(group && group.currentGroup && group.currentGroup.groupName){
       setSelectedNavItem(group.currentGroup.groupName);

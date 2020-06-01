@@ -1,14 +1,7 @@
-import React, { Fragment } from 'react';
-import Footer from './Footer';
+import React from 'react';
 
 const TermsAndConditions = () => {
-  return (
-    <Fragment>
-      <h1 className='large text-primary'>Terms And Conditions</h1>
-
-      <Footer />
-    </Fragment>
-  );
+  return <h1 className='large text-primary'>Terms And Conditions</h1>;
 };
 
 export default TermsAndConditions;

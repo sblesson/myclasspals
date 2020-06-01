@@ -72,9 +72,9 @@ const GroupRulesForm = ({
         updateGroup(JSON.stringify(values));
         actions.setSubmitting(false);
         actions.resetForm();
+        debugger;
         if (newGroup) {
-          onStepChange(current + 1);
-          history.push('/dashboard');
+          window.location.pathname = '/group/' + group.newGroup.id;
         } else {
           window.location.reload();
         }
