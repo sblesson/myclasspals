@@ -5,8 +5,7 @@ import {
   UPDATE_PROFILE,
   GET_PROFILES,
   ADD_SCHOOL,
-  DELETE_SCHOOL,
-  CREATE_PROFILE
+  DELETE_SCHOOL
 } from '../actions/types';
 
 const initialState = {
@@ -27,7 +26,6 @@ export default function(state = initialState, action) {
         profile: payload.user,
         loading: false
       };
-    case CREATE_PROFILE:
     case UPDATE_PROFILE:
       console.log(payload);
       return {

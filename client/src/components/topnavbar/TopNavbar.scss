@@ -2,7 +2,7 @@
 
 .menuBar {
   padding: 0 20px;
-  overflow: auto;
+  overflow: hidden;
 
   .ant-menu-horizontal {
     line-height: 15px !important;
@@ -43,8 +43,11 @@
 .logo a {
   display: inline-block;
 
-  font-size: 20px;
-  padding: 2px 20px;
+  font-size: 12px;
+  font-weight: 400;
+  //padding: 2px 20px;
+  padding: 10px 15px;
+
   text-transform: capitalize;
 }
 .menuCon {
@@ -56,10 +59,15 @@
 }
 .menuCon .ant-menu-submenu-title {
   padding: 10px 20px;
+  span {
+    color: var(--primary-color) !important;
+  }
 }
 .menuCon .ant-menu-item a,
 .menuCon .ant-menu-submenu-title a {
   padding: 10px 15px;
+  font-size: 12px;
+  font-weight: 400;
 }
 .menuCon .ant-menu-horizontal {
   border-bottom: none;

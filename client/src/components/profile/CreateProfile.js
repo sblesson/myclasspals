@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import _ from 'lodash';
-import { Steps } from 'antd';
+import { Steps, Row, Col } from 'antd';
 
 import UserProfileForm from './UserProfileForm';
-import DiscoverGroup from './DiscoverGroup';
+import DiscoverGroup from '../groups/DiscoverGroup';
 
 import './CreateProfile.scss';
 
@@ -55,19 +55,23 @@ const CreateProfile = ({ auth, history }) => {
     <Redirect to='/dashboard' />
   ) : (
     <Fragment>
-      <div className='create-profile-component-content'>
-        <Steps
-          current={current}
-          size='small'
-          className='profile-step'
-          /* onChange={handleStepChange} */
-        >
-          {steps.map(item => (
-            <Step key={item.title} title={item.title} />
-          ))}
-        </Steps>
-        <div className='steps-content'>{steps[current].content}</div>
-      </div>
+      <Row justify='space-around' align='middle'>
+        <Col>
+          <div className='create-profile-component-content'>
+            <Steps
+              current={current}
+              size='small'
+              className='profile-step'
+              /* onChange={handleStepChange} */
+            >
+              {steps.map(item => (
+                <Step key={item.title} title={item.title} />
+              ))}
+            </Steps>
+            <div className='steps-content'>{steps[current].content}</div>
+          </div>
+        </Col>
+      </Row>
     </Fragment>
   );
 };

@@ -20,7 +20,8 @@ const GroupRulesForm = ({
   newGroup,
   current,
   onStepChange,
-  history
+  history,
+  setModal
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
@@ -72,8 +73,10 @@ const GroupRulesForm = ({
         updateGroup(JSON.stringify(values));
         actions.setSubmitting(false);
         actions.resetForm();
-        debugger;
+        setModal(false);
+
         if (newGroup) {
+          console.log('I am here');
           window.location.pathname = '/group/' + group.newGroup.id;
         } else {
           window.location.reload();

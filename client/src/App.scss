@@ -28,6 +28,14 @@ body {
 .modal-body {
   font-size: 0.8rem;
 }
+.form-info-text {
+  font-size: 0.875rem !important;
+  padding-left: 7px;
+}
+.form-title-text {
+  color: #444 !important;
+  padding-left: 7px;
+}
 
 a {
   color: var(--primary-color);
@@ -980,4 +988,21 @@ thead {
 }
 .ant-layout {
   background: #fff;
+  //padding: 0 !important;
+}
+.ant-form-item {
+  margin-bottom: 14px;
+  .ant-form-item-label {
+    padding: 0 1px;
+
+    & > label {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 19px;
+      color: #767676;
+      display: inline-block;
+      margin: 1px;
+      height: 100%;
+    }
+  }
 }

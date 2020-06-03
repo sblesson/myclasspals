@@ -3,7 +3,7 @@ import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { createProfile } from '../../actions/profile';
+import { updateUser } from '../../actions/auth';
 import { searchGroupWithFilters } from '../../actions/group';
 
 import { Formik, ErrorMessage } from 'formik';
@@ -25,7 +25,7 @@ import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSele
 
 const UserAccountForm = ({
   auth,
-  createProfile,
+  updateUser,
   searchGroupWithFilters,
   current,
   onStepChange,
@@ -68,11 +68,13 @@ const UserAccountForm = ({
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 16 },
+      md: { span: 20 }
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
+      sm: { span: 16 },
+      md: { span: 20 }
     }
   };
 
@@ -91,7 +93,7 @@ const UserAccountForm = ({
         console.log(values);
         let myAddress = JSON.parse(values.citySelect);
 
-        createProfile({
+        updateUser({
           email: auth.user.email,
           name: values.userName,
           city: myAddress.city,
@@ -130,7 +132,7 @@ const UserAccountForm = ({
             {auth !== null && auth.user && auth.user.name === null ? (
               <FormItem
                 name='userName'
-                //label='Name'
+                label='Name'
                 //required={true}
                 //validate={validateRequired}
               >
@@ -141,7 +143,7 @@ const UserAccountForm = ({
             )}
             <FormItem
               name='city'
-              //label='City'
+              label='City'
               //required={true}
               //validate={validateRequired}
             >
@@ -149,17 +151,17 @@ const UserAccountForm = ({
             </FormItem>
             <FormItem
               name='schoolName'
-              //label='Schools you want to follow'
-              required={false}
+              label='Schools you want to follow'
+              //required={false}
             >
               <MultiSelectSchoolSearch />
             </FormItem>
-            <ModalFooter>
-              <SubmitButton className='ant-btn btn-primary'>
+            <FormItem name='submit'>
+              <SubmitButton block className='ant-btn btn-primary'>
                 {' '}
-                Proceed
-              </SubmitButton>
-            </ModalFooter>
+                Proceed{' '}
+              </SubmitButton>{' '}
+            </FormItem>
           </Form>
           <pre style={{ flex: 1 }}>
             <FormikDebug />
@@ -180,6 +182,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  createProfile,
+  updateUser,
   searchGroupWithFilters
 })(withRouter(UserAccountForm));

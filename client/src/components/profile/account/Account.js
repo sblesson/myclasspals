@@ -1,64 +1,34 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { auth } from '../../../actions/auth';
 
 import EditAccountModal from './modal/EditAccountModal';
-import DeleteAccountModal from './modal/DeleteAccountModal';
 
 import './Account.scss';
 const Account = ({ auth }) => {
-  const userData = {
-    id: 1,
-    name: 'Leanne Graham',
-    username: 'Bret',
-    email: 'Sincere@april.biz',
-    address: {
-      street: 'Kulas Light',
-      suite: 'Apt. 556',
-      city: 'Gwenborough',
-      state: 'California',
-      zipcode: '92998-3874',
-      geo: {
-        lat: '-37.3159',
-        lng: '81.1496'
-      }
-    },
-    phone: '1-770-736-8031 x56442',
-    website: 'hildegard.org',
-    company: {
-      name: 'Romaguera-Crona',
-      catchPhrase: 'Multi-layered client-server neural-net',
-      bs: 'harness real-time e-markets'
-    }
-  };
-
   const userDetails = (
     <div className='profile-content-details' key={auth.user._id}>
       <EditAccountModal />
-      <DeleteAccountModal />
 
       <div className='user-info-item'>
         <div className='user-info-content'>{auth.user.name} </div>
       </div>
+      {auth.user.phone && (
+        <div className='user-info-item'>
+          <i className='fas fa-mobile'></i>
+          <div className='user-info-content'>{auth.user.phone} </div>
+        </div>
+      )}
+
       <div className='user-info-item'>
-        <div className='user-info-content'>{userData.name} </div>
-      </div>
-      <div className='user-info-item'>
-        <i className='fas fa-mobile'></i>
-        <div className='user-info-content'>{userData.phone} </div>
-      </div>
-      <div className='user-info-item'>
-        <i class='fas fa-at'></i>
-        <div className='user-info-content'>{userData.email} </div>
+        <i className='fas fa-at'></i>
+        <div className='user-info-content'>{auth.user.email} </div>
       </div>
 
       <div className='user-info-item'>
         <i className='fas fa-map-marker big'></i>
         <div className='user-info-content'>
-          {userData.address.street}, {userData.address.suite}
-          {userData.address.city}, {userData.address.state}{' '}
-          {userData.address.zipcode}
+          {auth.user.city}, {auth.user.state} {auth.user.zipcode}
         </div>
       </div>
     </div>
@@ -66,12 +36,14 @@ const Account = ({ auth }) => {
 
   return (
     <Fragment>
-      <div className='profile-component-container'>
-        <div className='profile-component-header'>
-          <h4 className='profile-component-title'>My Account</h4>
+      {auth && auth.user && (
+        <div className='profile-component-container'>
+          <div className='profile-component-header'>
+            <h4 className='profile-component-title'>My Account</h4>
+          </div>
+          <div className='profile-component-content'> {userDetails}</div>
         </div>
-        <div className='profile-component-content'> {userDetails}</div>
-      </div>
+      )}
     </Fragment>
   );
 };

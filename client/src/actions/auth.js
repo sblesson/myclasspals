@@ -4,6 +4,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
+  UPDATE_USER,
   AUTH_ERROR,
   AUTH_SUCCESS,
   LOGIN_SUCCESS,
@@ -21,7 +22,8 @@ import {
   DELETE_USER_REGISTRATION_TOKEN,
   DELETE_USER_REGISTRATION_TOKEN_ERROR,
   CHANGE_PASSWORD_SUCCESS,
-  CHANGE_PASSWORD_ERROR
+  CHANGE_PASSWORD_ERROR,
+  UPDATE_USER_ERROR
 } from './types';
 
 /* // Get all profiles
@@ -118,6 +120,44 @@ export const searchUser = keyword => async dispatch => {
   }
 };
 
+// Create or update user
+export const updateUser = (formData, edit = false) => async dispatch => {
+  try {
+    console.log(formData);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const res = await axios.put(
+      'http://localhost:8080/user/updateuser',
+      formData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_USER,
+      payload: res.data
+    });
+
+    dispatch(
+      setAlert(edit ? 'User Account Updated' : 'Profile Created', 'success')
+    );
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: UPDATE_USER_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
 // Load User
 const sendEmailConfirmation = (body, config) => async dispatch => {
   //SET admin password
@@ -189,14 +229,14 @@ export const deleteUserRegistrationToken = token => async dispatch => {
 };
 
 // Register User
-export const register = ({ name, email, password }) => async dispatch => {
+export const register = formData => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  const body = JSON.stringify({ name, email, password });
+  const body = JSON.stringify(formData);
 
   try {
     const res = await axios.post(
@@ -311,14 +351,14 @@ export const changePassword = ({ password }) => async dispatch => {
 };
 
 // Login User
-export const login = (email, password) => async dispatch => {
+export const login = formData => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  const body = JSON.stringify({ email, password });
+  const body = JSON.stringify(formData);
 
   try {
     const res = await axios.post(
@@ -332,7 +372,7 @@ export const login = (email, password) => async dispatch => {
       payload: res.data
     });
 
-    dispatch(loadUser(email));
+    dispatch(loadUser(formData.email));
   } catch (err) {
     const errors = err.response.data.errors;
 

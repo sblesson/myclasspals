@@ -8,8 +8,7 @@ import {
   UPDATE_PROFILE,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
-  GET_SCHOOL_DETAILS,
-  CREATE_PROFILE
+  GET_SCHOOL_DETAILS
 } from './types';
 
 // Get all profiles
@@ -68,7 +67,7 @@ export const getSchoolDetails = searchTerm => async dispatch => {
 };
 
 // Create or update profile
-export const createProfile = (
+export const updateProfile = (
   formData,
   history,
   edit = false
@@ -88,7 +87,7 @@ export const createProfile = (
     );
 
     dispatch({
-      type: CREATE_PROFILE,
+      type: UPDATE_PROFILE,
       payload: res.data
     });
 

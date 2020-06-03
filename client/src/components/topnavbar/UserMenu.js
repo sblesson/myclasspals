@@ -9,8 +9,10 @@ import { logout } from '../../actions/auth';
 const SubMenu = Menu.SubMenu;
 
 const UserMenu = ({ logout }) => {
+  let selectedKey = window.location.pathname.split('/')[1];
+  selectedKey = selectedKey ? selectedKey : 'dashboard';
   return (
-    <Menu mode='horizontal'>
+    <Menu mode='horizontal' defaultSelectedKeys={[selectedKey]}>
       <Menu.Item key='dashboard'>
         <Link to='/dashboard'>{'Home'}</Link>
       </Menu.Item>
