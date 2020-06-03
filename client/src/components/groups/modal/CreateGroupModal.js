@@ -55,7 +55,11 @@ const CreateGroupModal = ({
     {
       title: 'Create Group',
       content: (
-        <CreateGroupForm onStepChange={handleStepChange} current={current} />
+        <CreateGroupForm
+          onStepChange={handleStepChange}
+          current={current}
+          setModal={setModal}
+        />
       )
     },
     {
@@ -65,6 +69,7 @@ const CreateGroupModal = ({
           onStepChange={handleStepChange}
           current={current}
           isNewGroup={true}
+          setModal={setModal}
         />
       )
     },
@@ -75,6 +80,7 @@ const CreateGroupModal = ({
           onStepChange={handleStepChange}
           current={current}
           newGroup={true}
+          setModal={setModal}
         />
       )
     }

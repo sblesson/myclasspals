@@ -1,147 +1,137 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-
-import { Link, withRouter } from 'react-router-dom';
-import { Search, Input, Grid, Header, Segment, Label } from 'semantic-ui-react';
-import _ from 'lodash';
-
-import {
-  Col,
-  Row,
-  Button,
-  Form,
-  FormGroup,
-  FormText,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from 'reactstrap';
-
+import React, { useEffect, useState, Fragment } from 'react';
+import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './AccountModal.scss';
+import { connect } from 'react-redux';
+import _ from 'lodash';
+import { updateUser } from '../../../../actions/auth';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-const EditAccountModal = () => {
-  const [formData, setFormData] = useState({
-    schoolName: '',
-    schoolCity: '',
-    schoolState: '',
-    schoolZip: '',
-    grade: '',
-    classRoom: '',
-    childName: ''
-  });
+import { Formik, ErrorMessage } from 'formik';
+import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
+
+import AutoCompleteCitySeach from '../../../common/autocompletecitysearch/AutoCompleteCitySearch';
+
+const EditAccountModal = ({ auth, updateUser }) => {
   const [modal, setModal] = useState(false);
-
-  const onChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleResultSelect = (e, { result }) => {
-    setFormData({ ...formData, ['schoolName']: result.title });
-  };
-
-  const onCool = e => {
-    console.log('this is cool');
-  };
   const toggle = () => setModal(!modal);
 
+  //const [formData, setFormData] = useState({ user });
+  const validateRequired = value => {
+    console.log(value);
+    return value ? undefined : 'required';
+  };
+  const [componentSize, setComponentSize] = useState('small');
+  const inputOnChange = event => {
+    if (!event.target.value) {
+      return;
+    }
+    console.log(event.target);
+    //fetchSchools(event.target.value);
+  };
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 }
+    }
+  };
+
+  const yourInfo = (
+    <Formik
+      initialValues={{
+        email: auth.user.email,
+        name: '',
+        city: '',
+        state: '',
+        zipcode: ''
+      }}
+      onSubmit={values => {
+        let myAddress = JSON.parse(values.citySelect);
+
+        updateUser(
+          {
+            email: auth.user.email,
+            name: values.userName,
+            city: myAddress.city,
+            state: myAddress.state,
+            zipcode: myAddress.postalcode
+          },
+          true
+        );
+        setModal(false);
+      }}
+      validator={() => ({})}
+      //validate={values => {}}
+      render={() => (
+        <div style={{ flex: 1, padding: 10 }}>
+          <Form
+            className='form-wrapper'
+            {...formItemLayout}
+            layout='vertical'
+            initialValues={{
+              size: componentSize
+            }}
+          >
+            {auth !== null && auth.user ? (
+              <FormItem name='userName'>
+                <Input name='userName' placeholder={auth.user.name} />
+              </FormItem>
+            ) : (
+              ''
+            )}
+            <FormItem name='city'>
+              <AutoCompleteCitySeach />
+            </FormItem>
+            <ModalFooter>
+              <SubmitButton className='ant-btn btn-primary'>
+                {' '}
+                Update
+              </SubmitButton>
+            </ModalFooter>
+          </Form>
+
+          {/*      <pre style={{ flex: 1 }}>
+            <FormikDebug />
+          </pre> */}
+        </div>
+      )}
+    />
+  );
+
   return (
-    <div>
+    <Fragment>
+      {' '}
       <div className='account-info-action-container' onClick={toggle}>
-        <div className='account-info-edit-button-right'>
+        <div
+          style={{
+            float: 'right',
+            fontSize: '12px',
+            cursor: 'pointer',
+            marginTop: '12px',
+            marginRight: '10px'
+          }}
+        >
           <span>Edit</span>
         </div>
       </div>
       <Modal isOpen={modal} fade={false} toggle={toggle}>
-        <ModalHeader toggle={toggle}>
-          {"Connect to your child's class community"}
-        </ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup className='account-form'>
-              <Input
-                placeholder='Your name'
-                name='username'
-                onChange={e => onChange(e)}
-                required
-              />
-            </FormGroup>
-            <FormGroup className='account-form'>
-              <Input
-                className='account-form-text-input'
-                type='text'
-                name='email'
-                //value={grade}
-                placeholder='Email'
-                onChange={e => onChange(e)}
-              />
-            </FormGroup>
-            <FormGroup className='account-form'>
-              <Input
-                className='account-form-text-input'
-                type='text'
-                name='street'
-                //value={classRoom}
-                placeholder='Street'
-                onChange={e => onChange(e)}
-              />
-            </FormGroup>
-            {/*         <article>
-            <p>
-              <i className='fas fa-user' /> Edit your profile
-            </p>
-            <small>* = required field</small>
-            <form className='form' onSubmit={e => onSubmit(e)}>
-              <div className='form-group'>
-                <input
-                  type='text'
-                  placeholder='username'
-                  name='username'
-                  value={username}
-                  onChange={e => onChange(e)}
-                />
-              </div>
-              <div className='form-group'>
-                <input
-                  type='text'
-                  placeholder='Location'
-                  name='location'
-                  value={location}
-                  onChange={e => onChange(e)}
-                />
-                <small className='form-text'>
-                  City & state suggested (eg. Boston, MA)
-                </small>
-              </div>
-              <input
-                type='submit'
-                value='Save'
-                className='btn btn-primary my-1'
-              />
-            </form>
-          </article> */}
-
-            {/*         <div className='my-2'>
-            <button className='btn btn-danger' onClick={() => deleteAccount()}>
-              <i className='fas fa-user-minus' /> Delete My Account
-            </button>
-          </div> */}
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color='primary'
-            onClick={e => {
-              e.preventDefault();
-              //addSchool(formData, history);
-            }}
-          >
-            Save
-          </Button>
-        </ModalFooter>
+        <ModalHeader toggle={toggle}>Edit My Account</ModalHeader>
+        <ModalBody>{yourInfo}</ModalBody>
       </Modal>
-    </div>
+    </Fragment>
   );
 };
 
-export default EditAccountModal;
+EditAccountModal.propTypes = {
+  //profileData: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, {
+  updateUser
+})(withRouter(EditAccountModal));

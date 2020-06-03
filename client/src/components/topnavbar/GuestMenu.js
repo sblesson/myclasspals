@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 
 const GuestMenu = () => {
   return (
-    <Menu mode='horizontal'>
+    <Menu mode='horizontal' defaultSelectedKeys={['register']}>
       <Menu.Item key='register'>
         <Link to='/register'>{'Sign Up'}</Link>
       </Menu.Item>

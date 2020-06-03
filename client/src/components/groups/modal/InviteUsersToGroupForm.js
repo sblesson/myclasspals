@@ -29,7 +29,8 @@ const InviteUsersToGroupForm = ({
   group,
   current,
   onStepChange,
-  isNewGroup
+  isNewGroup,
+  setModal
 }) => {
   console.log(current);
 
@@ -38,9 +39,6 @@ const InviteUsersToGroupForm = ({
     setComponentSize(size);
   };
 
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
   const onChange = e => {
     //setFormData({ ...formData, [e.target.name]: e.target.value });
   };

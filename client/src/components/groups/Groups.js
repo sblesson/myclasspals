@@ -71,6 +71,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
                   ? group.requestedUserGroup.map((group, index) => (
                       <GroupCard
                         currentGroup={group}
+                        key={index}
                         index={index}
                         type='requestedUserGroup'
                       />

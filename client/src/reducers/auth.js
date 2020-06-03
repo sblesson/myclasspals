@@ -12,12 +12,13 @@ import {
   GET_USER_GROUP,
   GET_USER_GROUP_ERROR,
   GET_USER,
+  UPDATE_USER,
   SEARCH_USER,
   GET_USER_BY_REGISTRATION_ID,
   CHANGE_PASSWORD_SUCCESS
 } from '../actions/types';
 
-import setAuthToken from '../utils/setAuthToken';
+import { setAuthToken } from '../utils/axios';
 
 const initialState = {
   token: localStorage.getItem('token'),
@@ -47,6 +48,13 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         searchUserResult: payload.users
+      };
+    case UPDATE_USER:
+      console.log(payload);
+      return {
+        ...state,
+        user: payload.user,
+        loading: false
       };
 
     case GET_USER_BY_REGISTRATION_ID:
@@ -91,7 +99,9 @@ export default function(state = initialState, action) {
       console.log('REGISTER_SUCCESS');
 
       console.log(payload);
-      localStorage.setItem('user', JSON.stringify(payload.user));
+      if (payload.user) {
+        localStorage.setItem('user', JSON.stringify(payload.user));
+      }
 
       return {
         ...state,

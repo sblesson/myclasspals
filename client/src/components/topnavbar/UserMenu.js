@@ -10,7 +10,7 @@ const SubMenu = Menu.SubMenu;
 
 const UserMenu = ({ logout }) => {
   return (
-    <Menu mode='horizontal'>
+    <Menu mode='horizontal' defaultSelectedKeys={['dashboard']}>
       <Menu.Item key='dashboard'>
         <Link to='/dashboard'>{'Home'}</Link>
       </Menu.Item>

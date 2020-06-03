@@ -5,53 +5,42 @@ import Spinner from '../layout/Spinner';
 import { Menu, Layout } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 
-import { getLeftNav } from '../../actions/leftnav';
-
 import './LeftNav.scss';
 
-const LeftNav = ({
-  screen = 'dashboard',
-  id,
-  getLeftNav,
-  leftnav: { leftnav, loading },
-  auth
-}) => {
+const LeftNav = ({ screen = 'dashboard', id, auth }) => {
+  const { Sider } = Layout;
+
   const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
   const [collapse, setCollapse] = useState(true);
+  var currentPath = window.location.pathname;
+  screen = currentPath.split('/')[1];
 
   useEffect(() => {
     window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
   }, []);
-  const { Sider } = Layout;
-
-  //discovergroup
-
-  useEffect(() => {
-    if (screen !== 'dashboard') {
-      getLeftNav(screen, id);
-    }
-  }, [getLeftNav]);
 
   const getNavByScreen = screen => {
+    debugger;
     switch (screen) {
       case 'dashboard': {
         let user = null;
         let userGroup = null;
         let myGroups = [];
-        //first time groupId is not passed in url param.
-        //So get groupId from user group first item
-        try {
-          user = JSON.parse(auth.user);
-        } catch (e) {
-          // You can read e for more info
-          // Let's assume the error is that we already have parsed the auth.user
-          // So just return that
-          user = auth.user;
+        if (auth && auth.user) {
+          //first time groupId is not passed in url param.
+          //So get groupId from user group first item
+          try {
+            user = JSON.parse(auth.user);
+          } catch (e) {
+            // You can read e for more info
+            // Let's assume the error is that we already have parsed the auth.user
+            // So just return that
+            user = auth.user;
+          }
+          if (user && user.userGroup && user.userGroup.length > 0) {
+            userGroup = user.userGroup;
+          }
         }
-        if (user && user.userGroup && user.userGroup.length > 0) {
-          userGroup = user.userGroup;
-        }
-
         if (userGroup && userGroup.length > 0) {
           myGroups = userGroup.map(group => ({
             id: group.id,
@@ -63,17 +52,69 @@ const LeftNav = ({
 
         return myGroups;
       }
+      case 'messages': {
+        return null;
+      }
+
+      case 'account':
+        console.log('yaya');
+        return [
+          {
+            name: 'account',
+            title: 'Account Settings',
+            icon: 'fas fa-user-cog',
+            url: '/account'
+          }
+        ];
+
+      case 'groups':
+      case 'discovergroup':
+        return [
+          {
+            name: 'my_groups',
+            title: 'My Groups',
+            icon: 'fas fa-users',
+            url: '/groups'
+          },
+          {
+            name: 'search_group',
+            title: 'Discover Groups',
+            icon: 'fas fa-search',
+            url: '/discovergroup/'
+          }
+        ];
+      case 'group':
+        return [
+          {
+            name: 'members',
+            title: 'Membership',
+            icon: 'fas fa-user-edit',
+            url: '/group/members/' + id
+          },
+          {
+            name: 'group_rules',
+            title: 'Group Rules',
+            icon: 'fas fa-user-cog',
+            url: '/group/group_rules/' + id
+          },
+          {
+            name: 'about_group',
+            title: 'About',
+            //icon: 'fas fa-user-edit',
+            url: '/group/about/' + id
+          }
+        ];
       default:
-        return leftnav;
+        return [];
     }
   };
-  const sideNavMenu = getNavByScreen(screen);
 
-  return loading & (screen !== 'dashboard') ? (
-    <Spinner />
-  ) : (
+  const sideNavMenu = getNavByScreen(screen);
+  console.log(sideNavMenu);
+
+  return (
     <Fragment>
-      {auth && auth.isAuthenticated ? (
+      {auth && auth.isAuthenticated && screen !== 'messages' ? (
         <Sider
           trigger={null}
           collapsible
@@ -108,18 +149,12 @@ const LeftNav = ({
   );
 };
 
-LeftNav.propTypes = {
-  getLeftNav: PropTypes.func.isRequired,
-  leftnav: PropTypes.object.isRequired
-};
-
 const mapStateToProps = state => {
   return {
-    leftnav: state.leftnav,
     categories: state.post.categories,
     auth: state.auth,
     group: state.group
   };
 };
 
-export default connect(mapStateToProps, { getLeftNav })(withRouter(LeftNav));
+export default connect(mapStateToProps, {})(withRouter(LeftNav));
