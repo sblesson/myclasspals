@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import './LeftNav.scss';
 
-const LeftNav = ({ screen = 'dashboard', id, auth }) => {
+const LeftNav = ({ screen = '', id, auth }) => {
   const { Sider } = Layout;
 
   const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
@@ -20,7 +20,6 @@ const LeftNav = ({ screen = 'dashboard', id, auth }) => {
   }, []);
 
   const getNavByScreen = screen => {
-    debugger;
     switch (screen) {
       case 'dashboard': {
         let user = null;
@@ -104,6 +103,9 @@ const LeftNav = ({ screen = 'dashboard', id, auth }) => {
             url: '/group/about/' + id
           }
         ];
+      case 'create-profile':
+        return [];
+
       default:
         return [];
     }
