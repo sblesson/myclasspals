@@ -25,13 +25,18 @@ const GroupCard = ({
   const { Meta } = Card;
 
   const requestToJoinUserGroupClickHandler = record => {
-    requestToJoinUserGroup({
-      groupId: record.id,
-      role: 'member',
-      requestorUserId: auth.user.email,
-      origin: 'discovergroup'
-    });
-    window.location.pathname = '/group/' + record.id;
+    requestToJoinUserGroup(
+      {
+        groupId: record.id,
+        role: 'member',
+        requestorUserId: auth.user.email,
+        origin: 'discovergroup'
+      },
+      res => {
+        console.log(res);
+        window.location.pathname = '/group/' + record.id;
+      }
+    );
   };
 
   const isLoggedInUserJoinedUserGroup = group => {

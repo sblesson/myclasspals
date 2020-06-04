@@ -14,7 +14,7 @@ This is a MERN stack application from the "MERN Stack Front To Back" course on [
 # add uri of your mongodb connection for example
 
  "mongoURI": "mongodb://localhost/dev-social",
- 
+
 ```
 
 ```bash
@@ -54,8 +54,14 @@ Create docker container
 Go to java server base dir
 mvn clean install
 
-
 docker build -tag clazzvilla .
 
 Run docker container
 docker run -d -p 3000:3000 -p 5000:5000 -p 8080:8080 clazzvilla:1.0
+
+For running automation test, I am using Selenium SIDE Runner
+npm install -g selenium-side-runner
+
+selenium-side-runner -c "browserName=chrome platform=MAC"
+
+selenium-side-runner --server http://localhost:4444/wd/hub

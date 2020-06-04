@@ -54,7 +54,7 @@ export const addGroup = formData => async dispatch => {
 };
 
 // Update group
-export const updateGroup = formData => async dispatch => {
+export const updateGroup = (formData, callback) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -62,17 +62,14 @@ export const updateGroup = formData => async dispatch => {
   };
 
   try {
-    const res = await axios.put(
-      'http://localhost:8080/usergroup/updategroup',
-      formData,
-      config
-    );
+    const res = await axios
+      .put('http://localhost:8080/usergroup/updategroup', formData, config)
+      .then(() => callback());
 
     dispatch({
       type: UPDATE_GROUP,
       payload: res.data
     });
-
     dispatch(setAlert('Group Updated', 'success'));
   } catch (err) {
     dispatch({
@@ -241,7 +238,10 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
 };
 
 //User sends request to join user group
-export const requestToJoinUserGroup = requestData => async dispatch => {
+export const requestToJoinUserGroup = (
+  requestData,
+  callback
+) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -249,11 +249,10 @@ export const requestToJoinUserGroup = requestData => async dispatch => {
   };
 
   try {
-    const res = await axios.post(
-      'http://localhost:8080/user/requestusergroup',
-      requestData,
-      config
-    );
+    const res = await axios
+      .post('http://localhost:8080/user/requestusergroup', requestData, config)
+      .then(res => callback(res));
+
     res.data.origin = requestData.origin;
 
     dispatch({

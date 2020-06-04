@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import PrivateMessageModal from './modal/CreateGroupModal';
-import { Input } from 'antd';
+import { Input, Card, Empty } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
+import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
 
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
@@ -16,7 +17,8 @@ const DiscoverGroups = ({
   group,
   searchGroup,
   searchGroupWithFilters,
-  newRegistration
+  newRegistration,
+  history
 }) => {
   const { Search } = Input;
 
@@ -26,37 +28,33 @@ const DiscoverGroups = ({
         <Spinner />
       ) : (
         <Fragment>
-          <div className='row'>
-            <div className='col-xs-3 col-sm-3 col-md-6 col-lg-6'>
-              {newRegistration ? '' : <div style={{ marginBottom: 50 }} />}
-              <Search
-                placeholder='Search group'
-                onSearch={value => searchGroup(value)}
-                style={{ width: 300, marginBottom: 30 }}
-                enterButton
-              />
-              <GroupFilterPanel />
-
-              {group !== null &&
-              group.searchResult &&
-              group.searchResult.length > 0
-                ? group.searchResult.map((group, index) => (
-                    <GroupCard
-                      currentGroup={group}
-                      key={index}
-                      type='discover'
-                    />
-                  ))
-                : ''}
-            </div>
-            {newRegistration ? (
-              ''
-            ) : (
-              <div className='col-xs-3 col-sm-3 col-md-3 col-lg-3'>
-                <PrivateMessageModal />
-              </div>
-            )}
+          <div
+            style={{
+              color: '#333',
+              textAlign: 'right',
+              fontWeight: 'normal',
+              marginBottom: 10
+            }}
+          >
+            <PrivateMessageModal />
           </div>
+          <Card style={{ marginBottom: 30 }}>
+            <AutoCompleteGroupSearch />
+            <div className='filter-wrapper'>
+              <GroupFilterPanel />
+            </div>{' '}
+          </Card>
+          <Card>
+            {group !== null &&
+            group.searchResult &&
+            group.searchResult.length > 0 ? (
+              group.searchResult.map((group, index) => (
+                <GroupCard currentGroup={group} key={index} type='discover' />
+              ))
+            ) : (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            )}
+          </Card>
         </Fragment>
       )}
     </Fragment>

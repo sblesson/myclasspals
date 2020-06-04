@@ -1,79 +1,114 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
+import { Formik, ErrorMessage } from 'formik';
+import { Typography, Text } from 'antd';
+import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import { setAlert } from '../../../actions/alert';
 import { register } from '../../../actions/auth';
 import PropTypes from 'prop-types';
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    password2: ''
-  });
-
-  const { email, password, password2 } = formData;
-
-  const onChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const onSubmit = async e => {
-    e.preventDefault();
-    if (password !== password2) {
-      setAlert('Passwords do not match', 'danger');
-    } else {
-      register({ email, password });
-    }
-  };
+  const [componentSize, setComponentSize] = useState('small');
+  const { Title, Text } = Typography;
 
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
   }
+  const validateRequired = value => {
+    console.log(value);
+    return value ? undefined : 'required';
+  };
+
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+      md: { span: 20 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+      md: { span: 20 }
+    }
+  };
+
+  const yourInfo = (
+    <Formik
+      initialValues={{
+        email: '',
+        password: '',
+        password2: ''
+      }}
+      onSubmit={values => {
+        if (values.password !== values.password2) {
+          setAlert('Passwords do not match', 'danger');
+        } else {
+          register({ email: values.email, password: values.password });
+        }
+      }}
+      validator={() => ({})}
+      //validate={values => {}}
+      children={() => (
+        <div style={{ flex: 1, padding: 5 }}>
+          <Form
+            className='form-wrapper'
+            {...formItemLayout}
+            layout='vertical'
+            initialValues={{
+              size: componentSize
+            }}
+          >
+            <FormItem
+              name='email'
+              label='Email'
+              required={true}
+              validate={validateRequired}
+            >
+              <Input name='email' placeholder='your@email.com' />
+            </FormItem>
+            <FormItem
+              name='password'
+              label='Password'
+              required={true}
+              validate={validateRequired}
+            >
+              <Input name='password' type='password' placeholder='Password' />
+            </FormItem>
+            <FormItem
+              name='password2'
+              label='Confirm Password'
+              required={true}
+              validate={validateRequired}
+            >
+              <Input
+                name='password2'
+                type='password'
+                placeholder='Confirm Password'
+              />
+            </FormItem>
+            <FormItem name='submit'>
+              <SubmitButton block className='ant-btn btn-primary'>
+                {' '}
+                Sign Up
+              </SubmitButton>{' '}
+            </FormItem>
+          </Form>
+        </div>
+      )}
+    />
+  );
 
   return (
-    <Fragment>
-      <p className='lead'>
-        <i className='fas fa-user' /> Create Your Account
-      </p>
-      <form className='form' onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='email'
-            placeholder='Email Address'
-            name='email'
-            value={email}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Password'
-            name='password'
-            value={password}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Confirm Password'
-            name='password2'
-            value={password2}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <input
-          type='submit'
-          className='btn btn-primary'
-          value='Register'
-          style={{ width: '100%' }}
-        />
-      </form>
-      <p className='my-1'>
+    <div>
+      <Title className='form-title-text' level={4}>
+        Create Your Account
+      </Title>
+      {yourInfo}
+      <Text className='form-info-text'>
         Already have an account? <Link to='/login'>Sign In</Link>
-      </p>
-    </Fragment>
+      </Text>
+    </div>
   );
 };
 

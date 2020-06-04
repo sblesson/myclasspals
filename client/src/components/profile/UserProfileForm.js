@@ -68,11 +68,13 @@ const UserAccountForm = ({
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 16 },
+      md: { span: 20 }
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
+      sm: { span: 16 },
+      md: { span: 20 }
     }
   };
 
@@ -130,7 +132,7 @@ const UserAccountForm = ({
             {auth !== null && auth.user && auth.user.name === null ? (
               <FormItem
                 name='userName'
-                //label='Name'
+                label='Name'
                 //required={true}
                 //validate={validateRequired}
               >
@@ -141,7 +143,7 @@ const UserAccountForm = ({
             )}
             <FormItem
               name='city'
-              //label='City'
+              label='City'
               //required={true}
               //validate={validateRequired}
             >
@@ -149,17 +151,17 @@ const UserAccountForm = ({
             </FormItem>
             <FormItem
               name='schoolName'
-              //label='Schools you want to follow'
-              required={false}
+              label='Schools you want to follow'
+              //required={false}
             >
               <MultiSelectSchoolSearch />
             </FormItem>
-            <ModalFooter>
-              <SubmitButton className='ant-btn btn-primary'>
+            <FormItem name='submit'>
+              <SubmitButton block className='ant-btn btn-primary'>
                 {' '}
-                Proceed
-              </SubmitButton>
-            </ModalFooter>
+                Proceed{' '}
+              </SubmitButton>{' '}
+            </FormItem>
           </Form>
           <pre style={{ flex: 1 }}>
             <FormikDebug />

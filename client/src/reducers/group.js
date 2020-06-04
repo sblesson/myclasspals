@@ -29,6 +29,7 @@ const initialState = {
   isGroupAdmin: false,
   loading: true,
   error: {},
+  redirect: false,
   isRequestUserGroupSuccess: false
 };
 

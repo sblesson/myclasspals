@@ -22,11 +22,11 @@ const Landing = ({ isAuthenticated, location, match }) => {
   }
 
   return (
-    <div className='row'>
+    <div className='row' style={{ marginTop: '20px' }}>
       <div className='col col-8'>
         {' '}
         <section>
-          <div style={{ marginTop: '20px' }}>
+          <div>
             <img
               src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
               alt='Custom banner image for this neighborhood group.'
