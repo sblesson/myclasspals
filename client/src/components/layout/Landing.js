@@ -47,9 +47,7 @@ const Landing = ({ isAuthenticated, location, match }) => {
           </div>
         </section>
       </div>
-      <div className='col col-4' sty>
-        {loginComponent}
-      </div>
+      <div className='col col-4'>{loginComponent}</div>
     </div>
   );
 };

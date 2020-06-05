@@ -17,7 +17,8 @@ const DiscoverGroups = ({
   group,
   searchGroup,
   searchGroupWithFilters,
-  newRegistration
+  newRegistration,
+  history
 }) => {
   const { Search } = Input;
 

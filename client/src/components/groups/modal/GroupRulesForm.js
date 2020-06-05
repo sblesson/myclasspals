@@ -67,20 +67,13 @@ const GroupRulesForm = ({
         description: ''
       }}
       onSubmit={(values, actions) => {
-        console.log(JSON.stringify(values));
         values.id = group.newGroup.id;
-
-        updateGroup(JSON.stringify(values));
-        actions.setSubmitting(false);
-        actions.resetForm();
-        setModal(false);
-
-        if (newGroup) {
-          console.log('I am here');
-          window.location.pathname = '/group/' + group.newGroup.id;
-        } else {
-          window.location.reload();
-        }
+        updateGroup(values, () => {
+          actions.setSubmitting(false);
+          actions.resetForm();
+          setModal(false);
+          history.push('/group/' + group.newGroup.id);
+        });
       }}
       validate={values => {}}
       render={() => (
