@@ -28,7 +28,12 @@ const SingleGroup = ({
   auth
 }) => {
   useEffect(() => {
+    console.log(match);
     getGroupDetails(match.params.id);
+    debugger;
+    if (match.path && match.path.indexOf('/about') !== -1) {
+      console.log('abouted');
+    }
   }, [getGroupDetails, match.params.id]);
 
   const isNewUserInvitedToGroup = false;

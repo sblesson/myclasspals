@@ -35,7 +35,8 @@ const initialState = {
 
 const isLoggedInUserGroupAdmin = userGroupMembers => {
   let memberAdmin = null;
-  const userId = JSON.parse(localStorage.getItem('user'))._id;
+
+  const userId = localStorage.getItem('userId');
 
   if (userGroupMembers && userGroupMembers.length > 0) {
     memberAdmin = userGroupMembers.filter(item => {
@@ -123,10 +124,10 @@ export default function(state = initialState, action) {
     case REQUEST_JOIN_USER_GROUP:
       let isRequestUserGroupSuccess = false;
       console.log(payload);
+      debugger;
       if (payload && payload.origin === 'discovergroup') {
         //searchResult = payload;
         isRequestUserGroupSuccess = true;
-
         return {
           ...state,
 

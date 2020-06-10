@@ -120,7 +120,7 @@ const CreateGroupForm = ({
           >
             <FormItem
               name='groupName'
-              //label='Group Name'
+              label='Group Name'
               required={true}
               validate={validateRequired}
             >
@@ -168,12 +168,14 @@ const CreateGroupForm = ({
                 <FormItem
                   name='schoolData'
                   required={false}
+                  label='Select School'
                   //validate={validateRequired}
                 >
                   <AutoCompleteSchoolSearch />
                 </FormItem>
                 <FormItem
                   name='gradeLabel'
+                  label='Select Grade'
                   //required={true}
                   //validate={validateRequired}
                 >

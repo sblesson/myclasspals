@@ -91,19 +91,22 @@ const UserAccountForm = ({
       onSubmit={values => {
         console.log(auth.user.email);
         console.log(values);
-        let myAddress = JSON.parse(values.citySelect);
+        let myAddress =
+          values && values.citySelect ? JSON.parse(values.citySelect) : null;
+        if (myAddress !== null) {
+          updateUser({
+            email: auth.user.email,
+            name: values.userName,
+            city: myAddress.city,
+            state: myAddress.state,
+            zipcode: myAddress.postalcode,
+            schoolId: values.schoolId
+          });
+          searchGroupWithFilters({
+            zipcode: myAddress.postalcode
+          });
+        }
 
-        updateUser({
-          email: auth.user.email,
-          name: values.userName,
-          city: myAddress.city,
-          state: myAddress.state,
-          zipcode: myAddress.postalcode,
-          schoolId: values.schoolId
-        });
-        searchGroupWithFilters({
-          zipcode: myAddress.postalcode
-        });
         onStepChange(current);
         /*      let myAddress = JSON.parse(values.selectedCity);
         let mySchools = JSON.parse(values.schools);

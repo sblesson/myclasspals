@@ -15,7 +15,8 @@ import {
   UPDATE_USER,
   SEARCH_USER,
   GET_USER_BY_REGISTRATION_ID,
-  CHANGE_PASSWORD_SUCCESS
+  CHANGE_PASSWORD_SUCCESS,
+  UPDATE_USER_GLOBAL
 } from '../actions/types';
 
 import { setAuthToken } from '../utils/axios';
@@ -24,13 +25,21 @@ const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   loading: true,
-  user: localStorage.getItem('user'),
+  user: { email: localStorage.getItem('userEmail') },
   profileUser: null,
   searchUserResult: [],
   senderEmail: null,
   invalidRegistrationToken: false
 };
 
+const updateUserLocalObject = user => {
+  debugger;
+  console.log(user);
+  if (user) {
+    localStorage.setItem('userEmail', user.email);
+    localStorage.setItem('userId', user._id);
+  }
+};
 export default function(state = initialState, action) {
   const { type, payload } = action;
 
@@ -95,18 +104,26 @@ export default function(state = initialState, action) {
         loading: false,
         user: payload.user
       };
-    case REGISTER_SUCCESS:
-      console.log('REGISTER_SUCCESS');
 
-      console.log(payload);
+    case REGISTER_SUCCESS:
+      debugger;
       if (payload.user) {
-        localStorage.setItem('user', JSON.stringify(payload.user));
+        updateUserLocalObject(payload.user);
       }
 
       return {
         ...state,
         isAuthenticated: false,
         loading: false,
+        user: payload.user
+      };
+    case UPDATE_USER_GLOBAL:
+      if (payload.user) {
+        updateUserLocalObject(payload.user);
+      }
+
+      return {
+        ...state,
         user: payload.user
       };
     case AUTH_SUCCESS:
@@ -137,7 +154,7 @@ export default function(state = initialState, action) {
     case ACCOUNT_DELETED:
       localStorage.removeItem('token');
       localStorage.setItem('isAuthenticated', false);
-      localStorage.setItem('user', null);
+      updateUserLocalObject(null);
 
       return {
         ...state,

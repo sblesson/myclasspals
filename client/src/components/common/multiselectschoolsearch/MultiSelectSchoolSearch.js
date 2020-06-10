@@ -44,7 +44,7 @@ const MultiSelectSchoolSearch = ({ fetchSchool, school }) => {
   return (
     <Select
       name='schoolId'
-      placeholder='Select Schools'
+      placeholder='Type School names'
       mode='multiple'
       onSearch={onSearchSchool}
       onChange={onSchoolChange}
