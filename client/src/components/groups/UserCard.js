@@ -143,7 +143,7 @@ const UserCard = ({
         groupActionMenu(currentGroup)
       ]}
     >
-      <Link to={`/group/${currentGroup.id}`}>
+      <Link to={`/dashboard/${currentGroup.id}`}>
         <Meta
           avatar={<i className='fas fa-users icon-group'></i>}
           title={currentGroup.groupName}

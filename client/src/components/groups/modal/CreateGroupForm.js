@@ -18,7 +18,6 @@ import {
 import { addGroup } from '../../../actions/group';
 
 import AutoCompleteSchoolSearch from '../../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
-import MultiSelectSchoolSearch from '../../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
 import GradeSelect from '../../common/gradeselect/GradeSelect';
 const CreateGroupForm = ({
@@ -192,9 +191,9 @@ const CreateGroupForm = ({
               </SubmitButton>
             </ModalFooter>
           </Form>
-          <pre style={{ flex: 1 }}>
+          {/*    <pre style={{ flex: 1 }}>
             <FormikDebug />
-          </pre>
+          </pre> */}
         </div>
       )}
     />

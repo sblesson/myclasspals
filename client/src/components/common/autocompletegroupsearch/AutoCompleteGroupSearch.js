@@ -31,6 +31,7 @@ const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
   return (
     <Select
       name='groupSelect'
+      showArrow={false}
       showSearch={true}
       allowClear={true}
       style={{ width: '100%' }}

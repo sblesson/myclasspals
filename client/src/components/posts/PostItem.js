@@ -9,6 +9,11 @@ import { Avatar, Card } from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import { Menu, List, Button, Image } from 'semantic-ui-react';
 
+import {
+  EditOutlined,
+  EllipsisOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
 import { addLike, removeLike, deletePost } from '../../actions/post';
 import './PostItem.scss';
 
@@ -33,6 +38,8 @@ const PostItem = ({
   showAllComments,
   isSinglePost
 }) => {
+  const { Meta } = Card;
+
   const [isLiked, setLike] = useState(false);
 
   const toggleLike = _id => {
@@ -50,8 +57,111 @@ const PostItem = ({
   };
 
   return (
-    <div className='feed'>
-      <List.Item>
+    <div>
+      <Card
+        style={{ marginTop: '1em' }}
+        title={
+          <Link to={`/profile/${_id}`}>
+            <Meta
+              avatar={
+                <Avatar
+                  style={{
+                    backgroundColor: '#00a2ae',
+                    verticalAlign: 'middle'
+                  }}
+                  shape='circle'
+                  size='64'
+                >
+                  {firstLetterUserName(userName)}
+                </Avatar>
+              }
+              title={<span className='feed-author-title'>{userName}</span>}
+              description={
+                <div className='feed-author-time'>
+                  <Moment fromNow ago>
+                    {postedDate}
+                  </Moment>
+                </div>
+              }
+            />
+          </Link>
+        }
+        extra={<EllipsisOutlined onClick={() => deletePost(_id)} />}
+      >
+        <Link className='feed-title' to={`/posts/${_id}`}>
+          <Meta
+            title={
+              <Ellipsis length={100} tooltip>
+                {subject}
+              </Ellipsis>
+            }
+          />
+        </Link>
+
+        {message}
+
+        {showActions && (
+          <Fragment>
+            <Menu>
+              <Menu.Item name='thank' onClick={() => toggleLike(_id)}>
+                <i className='far fa-smile'></i>&nbsp;&nbsp; Thank
+              </Menu.Item>
+              <Menu.Item name='Comment' onClick={() => toggleLike(_id)}>
+                <i className='far fa-comment-alt'></i>&nbsp;&nbsp;Comment
+              </Menu.Item>
+
+              <Menu.Menu position='right'>
+                {likes && likes.length > 0 && (
+                  <Menu.Item name='thanked'>
+                    <i className='far fa-smile'></i> &nbsp;&nbsp;{likes.length}
+                  </Menu.Item>
+                )}
+                {comments && comments.length > 0 && (
+                  <Menu.Item name='commented'>
+                    <i className='far fa-comment-alt'></i>&nbsp;&nbsp;
+                    {comments.length}
+                  </Menu.Item>
+                )}
+              </Menu.Menu>
+            </Menu>
+            <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
+            {showAllComments === true ? (
+              <List divided relaxed>
+                {comments && comments.length > 0 ? (
+                  comments.map(comment => (
+                    <CommentItem
+                      key={comment._id}
+                      comment={comment}
+                      postId={_id}
+                      isSinglePost={isSinglePost}
+                    />
+                  ))
+                ) : (
+                  <hr />
+                )}
+              </List>
+            ) : (
+              <List divided relaxed>
+                {comments && comments.length > 0 ? (
+                  comments
+                    .slice(-3)
+                    .reverse()
+                    .map(comment => (
+                      <CommentItem
+                        key={comment._id}
+                        comment={comment}
+                        postId={_id}
+                      />
+                    ))
+                ) : (
+                  <hr />
+                )}
+              </List>
+            )}
+          </Fragment>
+        )}
+      </Card>
+      {/* <List.Item>
         <List.Content floated='right'>
           {!auth.loading && user === auth.user._id && (
             <Button
@@ -161,7 +271,7 @@ const PostItem = ({
             </List>
           )}
         </Fragment>
-      )}
+      )} */}
     </div>
   );
 };

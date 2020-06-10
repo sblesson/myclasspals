@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { inviteToJoinUserGroup } from '../../../actions/group';
 import { Formik } from 'formik';
 import MultiSelectUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
+import { message, Button, Row, Col } from 'antd';
 
 import {
   SubmitButton,
@@ -19,7 +20,6 @@ import {
   Form,
   FormItem
 } from 'formik-antd';
-import { message, Button, Row, Col } from 'antd';
 
 import './CreateGroupModal.scss';
 
@@ -32,6 +32,7 @@ const InviteUsersToGroupForm = ({
   isNewGroup,
   setModal
 }) => {
+  debugger;
   console.log(current);
 
   const [componentSize, setComponentSize] = useState('small');
@@ -53,8 +54,31 @@ const InviteUsersToGroupForm = ({
     return value ? undefined : 'required';
   };
 
+  const goToNextStep = (event, current) => {
+    console.log(event);
+    console.log(current);
+
+    onStepChange(current + 1);
+  };
+
   return (
     <div>
+      {isNewGroup ? (
+        <div>
+          {' '}
+          <Button
+            type='link'
+            style={{ float: 'right' }}
+            onClick={e => goToNextStep(e, current)}
+          >
+            Skip
+          </Button>
+          <br />
+        </div>
+      ) : (
+        ''
+      )}
+
       <Formik
         initialValues={{
           invitedUsers: '',
@@ -75,20 +99,20 @@ const InviteUsersToGroupForm = ({
             onStepChange(current + 1);
           }
         }}
-        validate={values => {
+        /*       validate={values => {
           if (!values.invitedUsers) {
             return { invitedUsers: 'required' };
           }
           return {};
-        }}
+        }} */
         render={() => (
           <Form>
             <FormItem
               name='usersSelect'
               style={{ marginTop: 40 }}
               //label='Add Users'
-              required={true}
-              validate={validateRequired}
+              required={false}
+              //validate={validateRequired}
             >
               <MultiSelectUserSearch />
             </FormItem>
@@ -100,7 +124,7 @@ const InviteUsersToGroupForm = ({
               rows='5'
               placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
               onChange={e => onChange(e)}
-              required
+              required={false}
             />
             <ModalFooter>
               <SubmitButton className='ant-btn btn-primary'>

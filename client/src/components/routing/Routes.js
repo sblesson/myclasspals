@@ -39,7 +39,7 @@ import PrivateRoute from '../routing/PrivateRoute';
 
 const Routes = () => {
   return (
-    <section /*  className='container' */>
+    <section>
       <Alert />
       <Switch>
         <Route exact path='/login' component={Landing} />
