@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Button } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -8,6 +9,7 @@ import { updateGroup } from '../../../actions/group';
 
 import { ModalFooter } from 'reactstrap';
 import { Formik, ErrorMessage } from 'formik';
+
 import { SubmitButton, Input, FormikDebug, Form, FormItem } from 'formik-antd';
 
 import './CreateGroupModal.scss';
@@ -16,7 +18,7 @@ const GroupRulesForm = ({
   updateGroup,
   auth,
   group,
-  newGroup,
+  isNewGroup,
   current,
   onStepChange,
   history,
@@ -58,6 +60,12 @@ const GroupRulesForm = ({
     }
   };
 
+  const closeModalAndredirectToGroupPage = () => {
+    onStepChange(current + 1);
+    toggle();
+    history.push('/group/' + group.newGroup.id);
+  };
+
   const groupRulesForm = (
     <Formik
       initialValues={{
@@ -70,13 +78,28 @@ const GroupRulesForm = ({
         updateGroup(values, () => {
           actions.setSubmitting(false);
           actions.resetForm();
-          toggle();
-          history.push('/group/' + group.newGroup.id);
+          closeModalAndredirectToGroupPage();
         });
       }}
       validate={values => {}}
       render={() => (
         <div style={{ flex: 1, padding: 15 }}>
+          {isNewGroup ? (
+            <div>
+              {' '}
+              <Button
+                type='link'
+                style={{ float: 'right' }}
+                onClick={e => closeModalAndredirectToGroupPage(e)}
+              >
+                Skip
+              </Button>
+              <br />
+            </div>
+          ) : (
+            ''
+          )}
+
           <Form
             className='form-wrapper'
             {...formItemLayout}
