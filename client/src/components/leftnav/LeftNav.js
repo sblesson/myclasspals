@@ -15,6 +15,12 @@ const LeftNav = ({ screen = '', id, auth }) => {
   var currentPath = window.location.pathname;
   screen = currentPath.split('/')[1];
 
+  if (!id) {
+    let pathArr = window.location.pathname.split('/');
+    if (pathArr.length >= 2) {
+      id = pathArr[2];
+    }
+  }
   useEffect(() => {
     window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
   }, []);
@@ -88,19 +94,14 @@ const LeftNav = ({ screen = '', id, auth }) => {
             name: 'members',
             title: 'Membership',
             icon: 'fas fa-user-edit',
-            url: '/group/members/' + id
+            url: '/group/' + id + '/members'
           },
-          {
-            name: 'group_rules',
-            title: 'Group Rules',
-            icon: 'fas fa-user-cog',
-            url: '/group/group_rules/' + id
-          },
+
           {
             name: 'about_group',
             title: 'About',
             //icon: 'fas fa-user-edit',
-            url: '/group/about/' + id
+            url: '/group/' + id + '/about'
           }
         ];
       case 'create-profile':

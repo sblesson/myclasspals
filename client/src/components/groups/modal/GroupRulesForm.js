@@ -8,7 +8,6 @@ import { updateGroup } from '../../../actions/group';
 
 import { ModalFooter } from 'reactstrap';
 import { Formik, ErrorMessage } from 'formik';
-
 import { SubmitButton, Input, FormikDebug, Form, FormItem } from 'formik-antd';
 
 import './CreateGroupModal.scss';
@@ -21,7 +20,7 @@ const GroupRulesForm = ({
   current,
   onStepChange,
   history,
-  setModal
+  toggle
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
@@ -71,7 +70,7 @@ const GroupRulesForm = ({
         updateGroup(values, () => {
           actions.setSubmitting(false);
           actions.resetForm();
-          setModal(false);
+          toggle();
           history.push('/group/' + group.newGroup.id);
         });
       }}

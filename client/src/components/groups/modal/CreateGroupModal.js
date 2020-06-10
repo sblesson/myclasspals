@@ -54,6 +54,7 @@ const CreateGroupModal = ({
   const steps = [
     {
       title: 'Create Group',
+      subTitle: '(step 1 of 3)',
       content: (
         <CreateGroupForm
           onStepChange={handleStepChange}
@@ -64,6 +65,7 @@ const CreateGroupModal = ({
     },
     {
       title: 'Invite New Members',
+      subTitle: '(step 2 of 3)',
       content: (
         <InviteUsersToGroupForm
           onStepChange={handleStepChange}
@@ -75,12 +77,14 @@ const CreateGroupModal = ({
     },
     {
       title: 'About Group',
+      subTitle: '(step 3 of 3)',
       content: (
         <GroupRulesForm
           onStepChange={handleStepChange}
           current={current}
           newGroup={true}
           setModal={setModal}
+          toggle={toggle}
         />
       )
     }
@@ -102,16 +106,23 @@ const CreateGroupModal = ({
         fade={false}
         toggle={toggle}
       >
-        <div className='create-group-modal-wrapper'>
+        <ModalHeader toggle={toggle}>
+          {' '}
           <Steps current={current} size='small' className='group-step'>
             {steps.map(item => (
-              <Step key={item.title} title={item.title} />
+              <Step
+                key={item.title}
+                title={item.title}
+                subTitle={item.subTitle}
+              />
             ))}
-          </Steps>
+          </Steps>{' '}
+        </ModalHeader>
+        <ModalBody>
           {current <= steps.length - 1 && (
             <div className='steps-content'>{steps[current].content}</div>
           )}
-        </div>
+        </ModalBody>
       </Modal>
     </div>
   );

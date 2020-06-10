@@ -7,13 +7,14 @@ import PendingRegistration from '../layout/auth/PendingRegistration';
 import CreateProfile from '../profile/CreateProfile';
 import Account from '../profile/account/Account';
 /* import Profiles from '../profiles/Profiles';
-import Profile from '../profile/Profile'; */
+ */
+import Profile from '../profile/Profile';
+import Messages from '../messages/Messages';
 
-import Messages from '../messages/Messages.js';
-
-import Groups from '../groups/Groups.js';
-import DiscoverGroup from '../groups/DiscoverGroup.js';
-import SingleGroup from '../groups/SingleGroup.js';
+import Groups from '../groups/Groups';
+import DiscoverGroup from '../groups/DiscoverGroup';
+import SingleGroup from '../groups/SingleGroup';
+import AboutGroup from '../groups/AboutGroup';
 
 import Posts from '../posts/Posts';
 import SinglePost from '../posts/SinglePost';
@@ -42,10 +43,10 @@ const Routes = () => {
       <Alert />
       <Switch>
         <Route exact path='/login' component={Landing} />
-        <Route exact path='/invite/group/:id' component={PendingRegistration} />
+        <Route exact path='/invite/:id/group' component={PendingRegistration} />
         <Route exact path='/' component={Landing} />
         <Route exact path='/register' component={Landing} />
-        <Route exact path='/invite/group/:id' component={Landing} />
+        {/*<Route exact path='/invite/:id/group' component={Landing} />*/}
         <Route exact path='/login' component={Landing} />
         <Route exact path='/our-story' component={OurStory} />
         <Route exact path='/our-mission' component={OurMission} />
@@ -57,13 +58,16 @@ const Routes = () => {
         <Route exact path='/guidelines' component={Guidelines} />
         <Route exact path='/help' component={Help} />
         {/*        <PrivateRoute exact path='/profiles' component={Profiles} />
-        <PrivateRoute exact path='/profile/:id' component={Profile} /> */}
+         */}
+        <PrivateRoute exact path='/profile/:id' component={Profile} />
         <PrivateRoute exact path='/messages' component={Messages} />
         <PrivateRoute exact path='/messages/:id' component={Messages} />
         <PrivateRoute exact path='/groups' component={Groups} />
         <PrivateRoute exact path='/discovergroup' component={DiscoverGroup} />
         <PrivateRoute exact path='/group/:id' component={SingleGroup} />
-        <PrivateRoute exact path='/group/members/:id' component={SingleGroup} />
+        <PrivateRoute exact path='/group/:id/members' component={SingleGroup} />
+        <PrivateRoute exact path='/group/:id/about' component={SingleGroup} />
+        <PrivateRoute exact path='/group/:id/about' component={AboutGroup} />
         <PrivateRoute exact path='/dashboard' component={Posts} />
         <PrivateRoute exact path='/dashboard/:id' component={Posts} />
         <PrivateRoute

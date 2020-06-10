@@ -1,35 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Menu, message, Tag, Button, Dropdown } from 'antd';
 
 import { DownOutlined } from '@ant-design/icons';
+
 import {
-  getAllGroups,
+  getGroupDetails,
   acceptUserGroupInvitation,
   declineUserGroupRequest,
   requestToJoinUserGroup
 } from '../../actions/group';
 
-const UserCard = ({
-  currentGroup,
+const AboutGroup = ({
   index,
   type,
   auth,
+  group,
   acceptUserGroupInvitation,
   declineUserGroupRequest,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
+  getGroupDetails,
+  match,
+  history
 }) => {
+  useEffect(() => {
+    getGroupDetails(match.params.id);
+  }, [getGroupDetails, match.params.id]);
+
   const { Meta } = Card;
 
   const requestToJoinUserGroupClickHandler = record => {
-    requestToJoinUserGroup({
-      groupId: record.id,
-      role: 'member',
-      requestorUserId: auth.user.email,
-      origin: 'discovergroup'
-    });
+    requestToJoinUserGroup(
+      {
+        groupId: record.id,
+        role: 'member',
+        requestorUserId: auth.user.email,
+        origin: 'discovergroup'
+      },
+      groupId => {
+        window.location.pathname = '/group/' + groupId;
+      }
+    );
   };
 
   const isLoggedInUserJoinedUserGroup = group => {
@@ -47,6 +60,19 @@ const UserCard = ({
       isUserJoinedGroup = true;
     }
     return isUserJoinedGroup;
+  };
+
+  const isCurrentGroupRequestedGroup = (currentGroup, group) => {
+    let isGroupRequested = false;
+    let requestedGroupArr = group.requestedUserGroup.filter(
+      item => item.groupId === currentGroup.groupId
+    );
+
+    if (requestedGroupArr && requestedGroupArr.length > 0) {
+      //current user is already part of group
+      isGroupRequested = true;
+    }
+    return isGroupRequested;
   };
   const onClick = ({ key }) => {
     message.info(`Click on item ${key}`);
@@ -67,24 +93,30 @@ const UserCard = ({
     });
   };
 
-  const groupActionMenu = group => {
+  const groupActionMenu = (currentGroup, group) => {
     switch (type) {
       case 'discover': {
         //if user part of user group
-        let isMemberUserGroup = isLoggedInUserJoinedUserGroup(group);
-
-        if (!isMemberUserGroup && !group.isRequestUserGroupSuccess) {
+        let isMemberUserGroup = isLoggedInUserJoinedUserGroup(currentGroup);
+        let isGroupRequested = isCurrentGroupRequestedGroup(
+          currentGroup,
+          group
+        );
+        if (
+          !isMemberUserGroup &&
+          !group.currentGroup.isRequestUserGroupSuccess
+        ) {
           return (
             <Button
               type='link'
               style={{ marginRight: 16 }}
-              onClick={() => requestToJoinUserGroupClickHandler(group)}
+              onClick={() => requestToJoinUserGroupClickHandler(currentGroup)}
             >
               {' '}
               Join
             </Button>
           );
-        } else if (isMemberUserGroup) {
+        } else if (isMemberUserGroup & currentGroup.isRequestUserGroupSuccess) {
           return <Tag color={'green'}>{'Joined'}</Tag>;
         }
       }
@@ -130,55 +162,68 @@ const UserCard = ({
     <Card
       key={index}
       style={{
-        width: 300,
-        marginBottom: 16
+        width: '100%',
+        marginBottom: 16,
+        textAlign: 'center'
       }}
       actions={[
         <div className='member-count'>
-          {currentGroup.userGroupMembers.length === 1
-            ? currentGroup.userGroupMembers.length + ' member'
-            : currentGroup.userGroupMembers.length + ' members'}{' '}
+          {group.currentGroup.userGroupMembers.length === 1
+            ? group.currentGroup.userGroupMembers.length + ' member'
+            : group.currentGroup.userGroupMembers.length + ' members'}{' '}
         </div>,
         null,
-        groupActionMenu(currentGroup)
+        groupActionMenu(group.currentGroup, group)
       ]}
     >
-      <Link to={`/group/${currentGroup.id}`}>
+      <Link to={`/group/${group.currentGroup.id}`}>
         <Meta
           avatar={<i className='fas fa-users icon-group'></i>}
-          title={currentGroup.groupName}
-          description={currentGroup.description}
+          title={group.currentGroup.groupName}
+          description={group.currentGroup.description}
         >
           {' '}
         </Meta>
       </Link>
-      {currentGroup.role ? (
+      {group.currentGroup.role ? (
         <Tag
-          color={currentGroup.role === 'admin' ? 'geekblue' : 'green'}
-          key={currentGroup.role}
+          color={group.currentGroup.role === 'admin' ? 'geekblue' : 'green'}
+          key={group.currentGroup.role}
         >
-          {currentGroup.role ? currentGroup.role.toUpperCase() : null}
+          {group.currentGroup.role
+            ? group.currentGroup.role.toUpperCase()
+            : null}
         </Tag>
       ) : (
         ''
       )}
 
-      {currentGroup.privacy ? <div>{currentGroup.privacy}</div> : ''}
-      {currentGroup.createdDate ? <div>{currentGroup.createdDate}</div> : ''}
+      {group.currentGroup.privacy ? (
+        <div>{group.currentGroup.privacy}</div>
+      ) : (
+        ''
+      )}
+      {group.currentGroup.createdDate ? (
+        <div>{group.currentGroup.createdDate}</div>
+      ) : (
+        ''
+      )}
     </Card>
   );
 };
 
-UserCard.propTypes = {
+AboutGroup.propTypes = {
   currentGroup: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state, ownProps) => ({
+  auth: state.auth,
+  group: state.group
 });
 
 export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
   declineUserGroupRequest,
-  requestToJoinUserGroup
-})(UserCard);
+  requestToJoinUserGroup,
+  getGroupDetails
+})(AboutGroup);
