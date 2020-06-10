@@ -41,12 +41,14 @@ const CreateProfile = ({ auth, history }) => {
   const steps = [
     {
       title: 'Enter your profile',
+      subTitle: '(step 1 of 2)',
       content: (
         <UserProfileForm onStepChange={handleStepChange} current={current} />
       )
     },
     {
       title: 'Manage your group',
+      subTitle: '(step 2 of 2)',
       content: <DiscoverGroup newRegistration={true} />
     }
   ];
@@ -65,7 +67,11 @@ const CreateProfile = ({ auth, history }) => {
               /* onChange={handleStepChange} */
             >
               {steps.map(item => (
-                <Step key={item.title} title={item.title} />
+                <Step
+                  key={item.title}
+                  title={item.title}
+                  subTitle={item.subTitle}
+                />
               ))}
             </Steps>
             <div className='steps-content'>{steps[current].content}</div>

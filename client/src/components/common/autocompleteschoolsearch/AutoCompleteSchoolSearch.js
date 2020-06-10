@@ -39,7 +39,7 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
     <Select
       name='schoolSelect'
       showSearch={true}
-      placeholder='Select School'
+      placeholder='Type School Name'
       onSearch={handleSchoolSearch}
       allowClear={true}
     >

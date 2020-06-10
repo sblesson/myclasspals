@@ -28,11 +28,8 @@ const Messages = ({
     if (auth && auth.user && auth.user.email) {
       searchPost({ userId: auth.user.email, isPrivate: true });
     } else {
-      let user = localStorage.getItem('user');
-      if (user) {
-        const userEmail = JSON.parse(localStorage.getItem('user')).email;
-        searchPost({ userId: userEmail, isPrivate: true });
-      }
+      const email = localStorage.getItem('userEmail');
+      searchPost({ userId: email, isPrivate: true });
     }
   }, [searchPost, auth.user._id]);
 

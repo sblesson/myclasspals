@@ -24,6 +24,8 @@ import {
   SEARCH_ALL_GROUP_ERROR
 } from './types';
 
+import { updateUserGlobal } from './auth';
+
 // Add post
 export const addGroup = formData => async dispatch => {
   const config = {
@@ -62,15 +64,16 @@ export const updateGroup = (formData, callback) => async dispatch => {
   };
 
   try {
-    const res = await axios
+    await axios
       .put('http://localhost:8080/usergroup/updategroup', formData, config)
-      .then(() => callback());
-
-    dispatch({
-      type: UPDATE_GROUP,
-      payload: res.data
-    });
-    dispatch(setAlert('Group Updated', 'success'));
+      .then(res => {
+        dispatch({
+          type: UPDATE_GROUP,
+          payload: res.data
+        });
+        dispatch(setAlert('Group Updated', 'success'));
+        callback();
+      });
   } catch (err) {
     dispatch({
       type: GROUP_ERROR
@@ -82,7 +85,7 @@ export const updateGroup = (formData, callback) => async dispatch => {
 // Get all userGroups
 export const getAllGroups = userId => async dispatch => {
   try {
-    const userId = JSON.parse(localStorage.getItem('user'))._id;
+    const userId = localStorage.getItem('userId');
 
     const response = await axios.get(
       'http://localhost:8080/user/getuserdetails?user=' + userId
@@ -251,16 +254,22 @@ export const requestToJoinUserGroup = (
   try {
     const res = await axios
       .post('http://localhost:8080/user/requestusergroup', requestData, config)
-      .then(res => callback(res));
+      .then(res => {
+        console.log(res);
 
-    res.data.origin = requestData.origin;
+        res.data.origin = requestData.origin;
 
-    dispatch({
-      type: REQUEST_JOIN_USER_GROUP,
-      payload: res.data
-    });
+        dispatch({
+          type: REQUEST_JOIN_USER_GROUP,
+          payload: res.data
+        });
 
-    dispatch(setAlert('User added to group', 'success'));
+        //globally update user object
+        updateUserGlobal(res.data.user);
+
+        dispatch(setAlert('User added to group', 'success'));
+        callback(requestData.groupId);
+      });
   } catch (err) {
     dispatch({
       type: REQUEST_JOIN_USER_GROUP_ERROR

@@ -23,69 +23,42 @@ import {
   DELETE_USER_REGISTRATION_TOKEN_ERROR,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_ERROR,
-  UPDATE_USER_ERROR
+  UPDATE_USER_ERROR,
+  UPDATE_USER_GLOBAL
 } from './types';
+import { setAuthToken } from '../utils/axios';
 
-/* // Get all profiles
-export const getUserGroup = userId => async dispatch => {
-  try {
-    const userId = JSON.parse(localStorage.getItem('user'))._id;
-    console.log(userId);
-    //todo change profile api to get minimum response
-    const userGroupRes = await axios.get(
-      'http://localhost:8080/user/getuserdetails?user=' + userId
-    );
-    console.log();
-    dispatch({
-      type: GET_USER_GROUP,
-      payload: userGroupRes.data.user
-    });
-  } catch (err) {
-    dispatch({
-      type: GET_USER_GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-}; */
-
-/* export const getUserGroups = () => async dispatch => {
-
-  try {
-    const res = await axios.get('/api/auth');
-    console.log(res);
-
-    const userGroupRes = await axios.get(
-      'http://localhost:8080/user/getprofile?user=' + res.data._id
-    );
-
-    console.log(userGroupRes);
-
-    dispatch({
-      type: USER_LOADED,
-      payload: userGroupRes.data
-    });
-  } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    });
-}
- */
 // Load User
 export const loadUser = email => async dispatch => {
-  try {
-    const response = await axios.get(
-      'http://localhost:8080/user/getuserdetails?user=' + email
-    );
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
 
-    dispatch({
-      type: USER_LOADED,
-      payload: response.data
-    });
-  } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    });
+    if (!email) {
+      email = localStorage.getItem('userEmail');
+    }
   }
+  if (email) {
+    try {
+      const response = await axios.get(
+        'http://localhost:8080/user/getuserdetails?user=' + email
+      );
+
+      dispatch({
+        type: USER_LOADED,
+        payload: response.data
+      });
+    } catch (err) {
+      dispatch({
+        type: AUTH_ERROR
+      });
+    }
+  }
+};
+export const updateUserGlobal = userObj => dispatch => {
+  dispatch({
+    type: UPDATE_USER_GLOBAL,
+    payload: userObj
+  });
 };
 
 export const getUser = userId => async dispatch => {
@@ -156,27 +129,6 @@ export const updateUser = (formData, edit = false) => async dispatch => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
-};
-
-// Load User
-const sendEmailConfirmation = (body, config) => async dispatch => {
-  //SET admin password
-  /*   try {
-    const res = await axios.get(
-      'http://localhost:5000/api/sendMail',
-      body,
-      config
-    );
-
-    dispatch({
-      type: SEND_USER_EMAIL,
-      payload: res
-    });
-  } catch (err) {
-    dispatch({
-      type: EMAIL_SEND_ERROR
-    });
-  } */
 };
 
 export const getuserbyregistrationid = (token, history) => async dispatch => {
@@ -260,12 +212,6 @@ export const register = formData => async dispatch => {
       type: AUTH_SUCCESS,
       payload: authRes.data
     });
-
-    const emailRes = await axios.post(
-      'http://localhost:5000/api/sendMail',
-      body,
-      config
-    );
   } catch (err) {
     const errors =
       err && err.response && err.response.data && err.response.data.errors
@@ -305,7 +251,7 @@ export const registerPendingInvitedUser = ({
       payload: res.data
     });
 
-    const emailRes = await axios.post('/api/sendMail', body, config);
+    //const emailRes = await axios.post('/api/sendMail', body, config);
     dispatch(loadUser(email));
   } catch (err) {
     /*   const errors = err.response.data.errorCode;
