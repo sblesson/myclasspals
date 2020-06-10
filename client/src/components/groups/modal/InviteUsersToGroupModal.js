@@ -8,29 +8,11 @@ import { connect } from 'react-redux';
 import { inviteToJoinUserGroup } from '../../../actions/group';
 import InviteUsersToGroupForm from './InviteUsersToGroupForm';
 
-import { Formik } from 'formik';
-
-import {
-  SubmitButton,
-  Input,
-  Checkbox,
-  Radio,
-  ResetButton,
-  FormikDebug,
-  Form,
-  FormItem
-} from 'formik-antd';
 import { message, Button, Row, Col } from 'antd';
 
 import './CreateGroupModal.scss';
 
-const InviteUsersToGroupModal = ({
-  inviteToJoinUserGroup,
-  auth,
-  group,
-  current,
-  onStepChange
-}) => {
+const InviteUsersToGroupModal = ({ current }) => {
   console.log(current);
 
   const [componentSize, setComponentSize] = useState('small');

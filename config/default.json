@@ -1,8 +1,0 @@
-{
-  "mongoURI": "mongodb://clazz:buddy@localhost/clazzbuddy?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken",
-  "githubClientId": "",
-  "githubSecret": "",
-  "adminEmail": "sapnablesson@gmail.com",
-  "adminEmailPass": "$Camry2006"
-}

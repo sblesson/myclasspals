@@ -3,39 +3,27 @@ import { UsergroupAddOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Steps } from 'antd';
 
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 import CreateGroupForm from './CreateGroupForm';
 import InviteUsersToGroupForm from './InviteUsersToGroupForm';
 import GroupRulesForm from './GroupRulesForm';
 
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import {
-  addGroup,
-  inviteToJoinUserGroup,
-  updateGroup
-} from '../../../actions/group';
 
-import { message, Button, Row, Col } from 'antd';
+import { Button } from 'antd';
 
 import './CreateGroupModal.scss';
 
-const CreateGroupModal = ({
-  sendPrivateMessage,
-  schools,
-  history,
-  addGroup,
-  inviteToJoinUserGroup,
-  updateGroup,
-  auth,
-  group
-}) => {
+const CreateGroupModal = () => {
   const { Step } = Steps;
   const [current, setCurrentStep] = useState(0);
 
   const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
+  const toggle = () => {
+    setModal(!modal);
+    setCurrentStep(0);
+  };
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -82,7 +70,7 @@ const CreateGroupModal = ({
         <GroupRulesForm
           onStepChange={handleStepChange}
           current={current}
-          newGroup={true}
+          isNewGroup={true}
           setModal={setModal}
           toggle={toggle}
         />
@@ -128,12 +116,4 @@ const CreateGroupModal = ({
   );
 };
 
-const mapDispatchToProps = state => ({
-  hideModal: state.hideModal,
-  auth: state.auth,
-  group: state.group
-});
-
-export default connect(mapDispatchToProps, {
-  mapDispatchToProps
-})(withRouter(CreateGroupModal));
+export default withRouter(CreateGroupModal);
