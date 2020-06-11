@@ -7,21 +7,9 @@ import { updateUser } from '../../actions/auth';
 import { searchGroupWithFilters } from '../../actions/group';
 
 import { Formik, ErrorMessage } from 'formik';
-import { ModalFooter } from 'reactstrap';
-import {
-  SubmitButton,
-  Input,
-  Form,
-  FormItem,
-  FormikDebug,
-  AutoComplete,
-  Select
-} from 'formik-antd';
+import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 
 import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
-import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
-
-import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
 
 const UserAccountForm = ({
   auth,
@@ -67,14 +55,14 @@ const UserAccountForm = ({
   };
   const formItemLayout = {
     labelCol: {
-      xs: { span: 24 },
+      xs: { span: 16 },
       sm: { span: 16 },
-      md: { span: 20 }
+      md: { span: 16 }
     },
     wrapperCol: {
-      xs: { span: 24 },
+      xs: { span: 16 },
       sm: { span: 16 },
-      md: { span: 20 }
+      md: { span: 16 }
     }
   };
 
@@ -85,8 +73,7 @@ const UserAccountForm = ({
         name: '',
         city: '',
         state: '',
-        zipcode: '',
-        schoolId: []
+        zipcode: ''
       }}
       onSubmit={values => {
         console.log(auth.user.email);
@@ -108,17 +95,6 @@ const UserAccountForm = ({
         }
 
         onStepChange(current);
-        /*      let myAddress = JSON.parse(values.selectedCity);
-        let mySchools = JSON.parse(values.schools);
-        console.log(myAddress);
-        console.log(JSON.parse(values.schoools));
-        createProfile({
-          name: values.userName,
-          city: myAddress.city,
-          state: myAddress.state,
-          zipcode: myAddress.postalCode,
-          schools: mySchools
-        }); */
       }}
       validator={() => ({})}
       //validate={values => {}}
@@ -147,17 +123,10 @@ const UserAccountForm = ({
             <FormItem
               name='city'
               label='City'
-              //required={true}
-              //validate={validateRequired}
+              required={true}
+              validate={validateRequired}
             >
               <AutoCompleteCitySeach />
-            </FormItem>
-            <FormItem
-              name='schoolName'
-              label='Schools you want to follow'
-              //required={false}
-            >
-              <MultiSelectSchoolSearch />
             </FormItem>
             <FormItem name='submit'>
               <SubmitButton block className='ant-btn btn-primary'>
@@ -166,9 +135,9 @@ const UserAccountForm = ({
               </SubmitButton>{' '}
             </FormItem>
           </Form>
-          <pre style={{ flex: 1 }}>
+          {/*         <pre style={{ flex: 1 }}>
             <FormikDebug />
-          </pre>
+          </pre> */}
         </div>
       )}
     />

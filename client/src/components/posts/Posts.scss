@@ -2,12 +2,19 @@
 @import '../../styles/abstracts/variables';
 
 .post-container {
+  @include respond(phone) {
+    font-size: 56.25%;
+    width: 70%;
+  }
+  @include respond(tab-port) {
+    width: 70%;
+  }
   @include respond(tab-land) {
     font-size: 56.25%;
-    width: 600px;
+    width: 70%;
   }
-  @include respond(phone) {
-    width: 200px;
+  @include respond(big-desktop) {
+    width: 70%;
   }
 
   background-color: white;
@@ -30,10 +37,4 @@
 .post-form .post-form-header {
   background: var(--primary-color);
   padding: 0.5rem;
-}
-
-.feed-container {
-  .feed-wrapper {
-    width: 100%;
-  }
 }

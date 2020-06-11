@@ -21,8 +21,6 @@ const DiscoverGroups = ({
   history
 }) => {
   const { Search } = Input;
-  console.log('inside discover');
-  console.log(history);
 
   return (
     <Fragment>

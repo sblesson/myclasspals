@@ -3,8 +3,13 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Menu, message, Tag, Button, Dropdown } from 'antd';
+import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 
-import { DownOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  EllipsisOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
 
 import {
   getAllGroups,
@@ -116,7 +121,7 @@ const GroupCard = ({
         return (
           <Dropdown overlay={menu} placement='bottomCenter'>
             <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-              <DownOutlined />
+              <EllipsisOutlined />
             </a>
           </Dropdown>
         );
@@ -156,26 +161,36 @@ const GroupCard = ({
       style={{
         width: '100%',
         marginBottom: 16,
-        textAlign: 'center'
+        textAlign: 'left'
       }}
+      title={
+        <Meta
+          avatar={
+            currentGroup.isSchoolGroup === 'no' ? (
+              <i className='fas fa-users icon-group'></i>
+            ) : (
+              <i class='fas fa-school icon-group' title='school group'></i>
+            )
+          }
+          title={currentGroup.groupName}
+        >
+          {' '}
+        </Meta>
+      }
+      extra={<InviteUsersToGroupModal />}
       actions={[
         <div className='member-count'>
           {currentGroup.userGroupMembers.length === 1
             ? currentGroup.userGroupMembers.length + ' member'
             : currentGroup.userGroupMembers.length + ' members'}{' '}
         </div>,
-        null,
+        <SettingOutlined />,
+
         groupActionMenu(currentGroup, group)
       ]}
     >
-      <Link to={`/group/${currentGroup.id}`}>
-        <Meta
-          avatar={<i className='fas fa-users icon-group'></i>}
-          title={currentGroup.groupName}
-          description={currentGroup.description}
-        >
-          {' '}
-        </Meta>
+      <Link to={`/dashboard/${currentGroup.id}`}>
+        <Meta description={currentGroup.description}> </Meta>
       </Link>
       {currentGroup.role ? (
         <Tag
@@ -189,7 +204,6 @@ const GroupCard = ({
       )}
 
       {currentGroup.privacy ? <div>{currentGroup.privacy}</div> : ''}
-      {currentGroup.createdDate ? <div>{currentGroup.createdDate}</div> : ''}
     </Card>
   );
 };

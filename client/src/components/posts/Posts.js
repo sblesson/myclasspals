@@ -14,7 +14,9 @@ import PostItem from './PostItem';
 import PostModal from './modal/PostModal';
 import LeftNav from '../leftnav/LeftNav';
 
+import GroupCard from '../groups/GroupCard';
 import CreateGroupModal from '../groups/modal/CreateGroupModal';
+
 import { searchPost } from '../../actions/post';
 import { getGroupDetails } from '../../actions/group';
 import PostFilters from '../common/filterpanel/FilterPanel';
@@ -64,7 +66,7 @@ const Posts = ({
         group.currentGroup = user.pendingInvitedUserGroups[0];
         groupId = user.pendingInvitedUserGroups[0].id;
 
-        history.push(`/group/${groupId}`);
+        history.push(`/dashboard/${groupId}`);
       } else {
         //New user login for first time, not part of any groups, redirect to create profile and help user discover group
         history.push(`/create-profile/1`);
@@ -174,18 +176,17 @@ const Posts = ({
   return loading ? (
     <Spinner />
   ) : (
-    <Fragment>
+    <div className='post-container'>
       <PostFilters categories={categories} />
-   
-      <CreateGroupModal />
 
-      <div className='feed-container'>
+      <div>
         {group && group.currentGroup && group.currentGroup.groupName ? (
-          <div id='main' className='feed-wrapper'>
+          <div /* id='main' className='feed-wrapper' */>
+            <GroupCard currentGroup={group.currentGroup} type='mygroups' />
             <PostModal />
-            {posts && posts.length > 0 && (
-              <WindowScroller>{infiniteLoader}</WindowScroller>
-            )}
+            {posts &&
+              posts.length > 0 &&
+              posts.map(item => <PostItem key={item._id} post={item} />)}
           </div>
         ) : (
           <Fragment>
@@ -196,7 +197,7 @@ const Posts = ({
           </Fragment>
         )}
       </div>
-    </Fragment>
+    </div>
   );
 };
 
