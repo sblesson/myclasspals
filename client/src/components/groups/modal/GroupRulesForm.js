@@ -63,7 +63,7 @@ const GroupRulesForm = ({
   const closeModalAndredirectToGroupPage = () => {
     onStepChange(current + 1);
     toggle();
-    history.push('/group/' + group.newGroup.id);
+    history.push('/dashboard/' + group.newGroup.id);
   };
 
   const groupRulesForm = (

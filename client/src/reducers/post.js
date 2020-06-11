@@ -17,17 +17,7 @@ import {
   GET_POST_CATEGORIES_ERROR
 } from '../actions/types';
 
-const initialState = {
-  posts: [],
-  categories: [],
-  currentPost: null,
-  loading: true,
-  error: {}
-};
-
 const categories = [
-  'divider',
-
   {
     category_id: 0,
     title: 'General',
@@ -96,6 +86,13 @@ const categories = [
     url: '/urgent/'
   }
 ];
+const initialState = {
+  posts: [],
+  categories: categories,
+  currentPost: null,
+  loading: true,
+  error: {}
+};
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
@@ -116,10 +113,13 @@ export default function(state = initialState, action) {
         loading: false
       };
     case SEARCH_POST:
-      state.posts = state.posts.concat(payload);
+      console.log(state);
+      //state.posts = state.posts.concat(payload);
 
       return {
         ...state,
+        posts: payload,
+
         //posts: [payload, ...state.posts],
         loading: false
       };

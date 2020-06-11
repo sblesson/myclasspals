@@ -41,12 +41,6 @@ const CommentForm = ({
           name='message'
           className='comment-text'
           placeholder='Write a comment...'
-          style={{
-            borderRadius: '40px',
-            height: '35px',
-            padding: '8px',
-            overflow: 'hidden'
-          }}
           value={text}
           onChange={e => setText(e.target.value)}
           onKeyDown={e => setText(e.target.value)}

@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Menu, message, Tag, Button, Dropdown } from 'antd';
 
-import { DownOutlined } from '@ant-design/icons';
+import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import {
-  getAllGroups,
   acceptUserGroupInvitation,
   declineUserGroupRequest,
   requestToJoinUserGroup
@@ -14,6 +13,8 @@ import {
 
 const UserCard = ({
   currentGroup,
+  user,
+  key,
   index,
   type,
   auth,
@@ -67,65 +68,6 @@ const UserCard = ({
     });
   };
 
-  const groupActionMenu = group => {
-    switch (type) {
-      case 'discover': {
-        //if user part of user group
-        let isMemberUserGroup = isLoggedInUserJoinedUserGroup(group);
-
-        if (!isMemberUserGroup && !group.isRequestUserGroupSuccess) {
-          return (
-            <Button
-              type='link'
-              style={{ marginRight: 16 }}
-              onClick={() => requestToJoinUserGroupClickHandler(group)}
-            >
-              {' '}
-              Join
-            </Button>
-          );
-        } else if (isMemberUserGroup) {
-          return <Tag color={'green'}>{'Joined'}</Tag>;
-        }
-      }
-      case 'mygroups': {
-        return (
-          <Dropdown overlay={menu} placement='bottomCenter'>
-            <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-              <DownOutlined />
-            </a>
-          </Dropdown>
-        );
-      }
-
-      case 'pendingInvitedUserGroups': {
-        return (
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => acceptPendingInviteActionClick(group)}
-          >
-            Join
-          </Button>
-        );
-      }
-
-      case 'requestedUserGroup': {
-        return (
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => declineUserGroupRequest(group)}
-          >
-            Withdraw
-          </Button>
-        );
-      }
-      default:
-        return;
-    }
-  };
-
   return (
     <Card
       key={index}
@@ -133,44 +75,33 @@ const UserCard = ({
         width: 300,
         marginBottom: 16
       }}
-      actions={[
-        <div className='member-count'>
-          {currentGroup.userGroupMembers.length === 1
-            ? currentGroup.userGroupMembers.length + ' member'
-            : currentGroup.userGroupMembers.length + ' members'}{' '}
-        </div>,
-        null,
-        groupActionMenu(currentGroup)
-      ]}
+      actions={[]}
     >
-      <Link to={`/group/${currentGroup.id}`}>
+      <Link to={`/profile/${user._id}`}>
         <Meta
-          avatar={<i className='fas fa-users icon-group'></i>}
-          title={currentGroup.groupName}
-          description={currentGroup.description}
+          avatar={
+            user.role ? (
+              <Tag
+                color={user.role === 'admin' ? 'geekblue' : 'green'}
+                key={user.role}
+              >
+                {user.role ? user.role.toUpperCase() : null}
+              </Tag>
+            ) : (
+              ''
+            )
+          }
+          title={user.name}
         >
           {' '}
         </Meta>
       </Link>
-      {currentGroup.role ? (
-        <Tag
-          color={currentGroup.role === 'admin' ? 'geekblue' : 'green'}
-          key={currentGroup.role}
-        >
-          {currentGroup.role ? currentGroup.role.toUpperCase() : null}
-        </Tag>
-      ) : (
-        ''
-      )}
-
-      {currentGroup.privacy ? <div>{currentGroup.privacy}</div> : ''}
-      {currentGroup.createdDate ? <div>{currentGroup.createdDate}</div> : ''}
     </Card>
   );
 };
 
 UserCard.propTypes = {
-  currentGroup: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
