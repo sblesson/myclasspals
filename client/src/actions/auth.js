@@ -26,10 +26,11 @@ import {
   UPDATE_USER_ERROR,
   UPDATE_USER_GLOBAL
 } from './types';
+import { updateUserGroup } from './group';
 import { setAuthToken } from '../utils/axios';
 
 // Load User
-export const loadUser = email => async dispatch => {
+export const loadUser = (email, myCancelToken) => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
 
@@ -40,7 +41,10 @@ export const loadUser = email => async dispatch => {
   if (email) {
     try {
       const response = await axios.get(
-        'http://localhost:8080/user/getuserdetails?user=' + email
+        'http://localhost:8080/user/getuserdetails?user=' + email,
+        {
+          cancelToken: myCancelToken
+        }
       );
 
       dispatch({
@@ -61,15 +65,20 @@ export const updateUserGlobal = userObj => dispatch => {
   });
 };
 
-export const getUser = userId => async dispatch => {
+export const getUser = (userId, signal) => async dispatch => {
   try {
     const userResp = await axios.get(
-      'http://localhost:8080/user/getuserdetails?user=' + userId
+      'http://localhost:8080/user/getuserdetails?user=' + userId,
+      {
+        cancelToken: signal
+      }
     );
     dispatch({
       type: GET_USER,
       payload: userResp.data
     });
+
+    updateUserGroup(userResp.data.user.userGroup);
   } catch (err) {
     dispatch({
       type: AUTH_ERROR
@@ -181,7 +190,7 @@ export const deleteUserRegistrationToken = token => async dispatch => {
 };
 
 // Register User
-export const register = formData => async dispatch => {
+export const register = (formData, myCancelToken) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -194,7 +203,10 @@ export const register = formData => async dispatch => {
     const res = await axios.post(
       'http://localhost:8080/user/register',
       body,
-      config
+      config,
+      {
+        cancelToken: myCancelToken
+      }
     );
     dispatch({
       type: REGISTER_SUCCESS,
@@ -297,7 +309,7 @@ export const changePassword = ({ password }) => async dispatch => {
 };
 
 // Login User
-export const login = formData => async dispatch => {
+export const login = (formData, myCancelToken) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -318,9 +330,10 @@ export const login = formData => async dispatch => {
       payload: res.data
     });
 
-    dispatch(loadUser(formData.email));
+    dispatch(loadUser(formData.email, myCancelToken));
   } catch (err) {
-    const errors = err.response.data.errors;
+    const errors =
+      err && err.response && err.response.data && err.response.data.errors;
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deleteAccount } from '../../../actions/profile';
+import { deletePost } from '../../../actions/post';
 import { Modal } from 'antd';
 
 import _ from 'lodash';
 
-const DeleteAccountModal = ({ deletePost, postId, postType }) => {
+const DeletePostModal = ({ deletePost, postId, postType }) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
   const [visible, setModalVisibility] = useState(false);
@@ -21,7 +21,7 @@ const DeleteAccountModal = ({ deletePost, postId, postType }) => {
     setModalVisibility(!visible);
   };
   const handleDelete = () => {
-    deleteAccount();
+    deletePost(postId);
     hideModal();
   };
   return (
@@ -43,13 +43,12 @@ const DeleteAccountModal = ({ deletePost, postId, postType }) => {
         destroyOnClose={true}
       >
         <div>
-          "Are you sure you want to delete this account? You won't be able to
-          access this account after this action. Remember, this action CANNOT be
-          undone!"
+          'Deleting this {postType} will removes it forever. Are you sure you
+          want to delete?'
         </div>
       </Modal>
     </div>
   );
 };
 
-export default connect(null, { deleteAccount })(DeleteAccountModal);
+export default connect(null, { deletePost })(DeletePostModal);

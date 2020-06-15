@@ -9,11 +9,11 @@ import LeftNav from './components/leftnav/LeftNav';
 import store from './store';
 import Routes from './components/routing/Routes';
 import { setInterceptors } from './utils/axios';
-import FooterContent from './components/layout/Footer';
+import FooterContent from './layout/Footer';
 import { loadUser } from './actions/auth';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import 'semantic-ui-css/semantic.min.css';
+/* import 'semantic-ui-css/semantic.min.css'; */
 import 'antd/dist/antd.css';
 import './App.scss';
 

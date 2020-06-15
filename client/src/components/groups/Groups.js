@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Spinner from '../layout/Spinner';
+import Spinner from '../../layout/Spinner';
 import moment from 'moment';
 import GroupFilters from '../common/filterpanel/FilterPanel';
 import GroupCard from './GroupCard';

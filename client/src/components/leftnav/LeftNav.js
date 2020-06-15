@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Spinner from '../layout/Spinner';
+import Spinner from '../../layout/Spinner';
 import { Menu, Layout } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 
 import './LeftNav.scss';
 
-const LeftNav = ({ screen = '', id, auth }) => {
+const LeftNav = ({ screen = '', id, auth, group }) => {
   const { Sider } = Layout;
 
   const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
@@ -26,8 +26,11 @@ const LeftNav = ({ screen = '', id, auth }) => {
   }, []);
 
   const getNavByScreen = screen => {
+    debugger;
+    console.log('inside left nav', auth, group);
     switch (screen) {
       case 'dashboard': {
+        console.log('inside left nav', auth, group);
         let user = null;
         let userGroup = null;
         let myGroups = [];

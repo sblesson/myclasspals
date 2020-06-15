@@ -15,7 +15,8 @@ import {
   APPROVE_GROUP_REQUEST,
   APPROVE_GROUP_REQUEST_ERROR,
   CHANGE_GROUP_USER_ROLE,
-  SEARCH_GROUP_WITH_FILTERS
+  SEARCH_GROUP_WITH_FILTERS,
+  UPDATE_USER_GROUP
 } from '../actions/types';
 
 const initialState = {
@@ -69,7 +70,13 @@ export default function(state = initialState, action) {
         newGroup: payload.userGroup,
         loading: false
       };
-
+    case UPDATE_USER_GROUP:
+      debugger;
+      return {
+        ...state,
+        userGroup: [payload, ...state.userGroup],
+        loading: false
+      };
     case GET_ALL_GROUPS:
       return {
         ...state,

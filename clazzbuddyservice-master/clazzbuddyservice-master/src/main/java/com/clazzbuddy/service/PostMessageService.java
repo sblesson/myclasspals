@@ -47,6 +47,22 @@ public class PostMessageService {
 		return mongoTemplate.save(parentPost);
 	}
 
+	public void deletePost(String postId) {
+		ObjectId objID = new ObjectId(postId);
+		Query postById = new Query();
+		postById.addCriteria(Criteria.where("_id").is(objID));
+		Post post = mongoTemplate.findOne(postById, Post.class);
+		if (post == null) {
+			return;
+		}
+		if (post.getComments() != null) {
+			for (Post comment: post.getComments()) {
+				mongoTemplate.remove(comment);
+			}
+		}
+		mongoTemplate.remove(post);
+	}
+	
 	public Post getPost(String postId) {
 		ObjectId objID = new ObjectId(postId);
 		Query postById = new Query();

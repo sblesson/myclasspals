@@ -1,34 +1,6 @@
 @import '../../styles/abstracts/mixins';
 @import '../../styles/abstracts/variables';
 
-.post-container {
-  @include respond(phone) {
-    font-size: 56.25%;
-    width: 70%;
-  }
-  @include respond(tab-port) {
-    width: 70%;
-  }
-  @include respond(tab-land) {
-    font-size: 56.25%;
-    width: 70%;
-  }
-  @include respond(big-desktop) {
-    width: 70%;
-  }
-
-  background-color: white;
-  /*   border: 0.5px #dfe1e4 solid;
- */
-  border-radius: 3px;
-  margin-bottom: 8px;
-  margin-left: 20px;
-  .ui.segment {
-    //min-height: 400px;
-    box-shadow: none;
-    border: none;
-  }
-}
 .new-post {
   margin-left: 10px;
 }

@@ -3,43 +3,41 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import { Avatar, Card } from 'antd';
+import { Avatar, Button, Dropdown, Menu, List } from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
 import { deleteComment, deleteSinglePostComment } from '../../actions/post';
-import { Image, List, Button } from 'semantic-ui-react';
-
+import DeleteCommentModal from './modal/DeletePostModal';
+import { EllipsisOutlined } from '@ant-design/icons';
 const CommentItem = ({
   postId,
   comment: { _id, message, userName, avatar, user, postedDate },
   auth,
   deleteComment,
   isSinglePost,
-  deleteSinglePostComment
+  deleteSinglePostCommenš
 }) => {
   const firstLetterUserName = userName => {
     if (typeof userName !== 'string') return '';
     return userName.charAt(0).toUpperCase();
   };
+  const menu = (
+    <Menu>
+      <Menu.Item key='deletepost'>
+        {' '}
+        <DeleteCommentModal postId={_id} postType='comment' />
+      </Menu.Item>
+      <Menu.Item key='editpost'>Edit</Menu.Item>
+    </Menu>
+  );
   return (
     <List.Item className='feed-comment'>
       <List.Content floated='right'>
-        {!auth.loading && user === auth.user._id && (
-          <Button
-            onClick={() => {
-              if (isSinglePost) {
-                deleteSinglePostComment(postId, _id);
-              } else {
-                //deleting from dashboard
-                deleteComment(postId, _id);
-              }
-            }}
-            type='button'
-            content='Delete'
-            color='pink'
-            size='tiny'
-          ></Button>
-        )}
+        <Dropdown overlay={menu} placement='bottomCenter'>
+          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+            <EllipsisOutlined />
+          </a>
+        </Dropdown>{' '}
       </List.Content>
       <Link to={`/profile/${_id}`}>
         <Avatar

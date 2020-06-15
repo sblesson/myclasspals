@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
 import { updateGroup } from '../../../actions/group';
 
-import { ModalFooter } from 'reactstrap';
 import { Formik, ErrorMessage } from 'formik';
 
 import { SubmitButton, Input, FormikDebug, Form, FormItem } from 'formik-antd';
@@ -31,10 +30,6 @@ const GroupRulesForm = ({
 
   const onChange = e => {
     console.log(e.target.name, e.target.value);
-  };
-
-  const validateRequired = value => {
-    return value ? undefined : 'required';
   };
 
   const formItemLayout = {
@@ -70,8 +65,7 @@ const GroupRulesForm = ({
     <Formik
       initialValues={{
         aboutGroup: '',
-        groupRules: '',
-        description: ''
+        groupRules: ''
       }}
       onSubmit={(values, actions) => {
         values.id = group.newGroup.id;
@@ -112,40 +106,28 @@ const GroupRulesForm = ({
               name='aboutGroup'
               label='About Group'
               style={{ marginBottom: 16 }}
+              required={false}
             >
               <Input
                 name='aboutGroup'
                 placeholder='What is this group about?'
               />
             </FormItem>
-            <FormItem
-              name='description'
-              label='Additional Details'
-              style={{ marginBottom: 16 }}
-            >
-              <Input
-                name='description'
-                placeholder='More details about this group ...'
-              />
-            </FormItem>
-            <FormItem name='groupRules' label='Group Rules'>
+
+            <FormItem name='groupRules' label='Group Rules' required={false}>
               <Input.TextArea
                 className='post-form-text-input post-form-textarea'
                 name='groupRules'
                 cols='50'
                 rows='10'
                 placeholder='Start with the right tone by sharing your purpose and rules for your group?'
-                onChange={e => onChange(e)}
-                required
               />{' '}
             </FormItem>
 
-            <ModalFooter>
-              <SubmitButton className='ant-btn btn-primary send-post-btn'>
-                {' '}
-                Post
-              </SubmitButton>
-            </ModalFooter>
+            <SubmitButton className='ant-btn btn-primary send-post-btn'>
+              {' '}
+              Post
+            </SubmitButton>
           </Form>
         </div>
       )}

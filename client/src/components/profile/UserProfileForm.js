@@ -11,6 +11,8 @@ import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 
 import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
 
+import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
+
 const UserAccountForm = ({
   auth,
   updateUser,
@@ -112,7 +114,7 @@ const UserAccountForm = ({
               <FormItem
                 name='userName'
                 label='Name'
-                //required={true}
+                required={false}
                 //validate={validateRequired}
               >
                 <Input name='userName' placeholder='What should we call you?' />
@@ -124,15 +126,22 @@ const UserAccountForm = ({
               name='city'
               label='City'
               required={true}
-              validate={validateRequired}
+              //validate={validateRequired}
             >
               <AutoCompleteCitySeach />
             </FormItem>
+            <FormItem
+              name='schoolName'
+              label='Schools you want to follow'
+              required={false}
+            >
+              <MultiSelectSchoolSearch />
+            </FormItem>
             <FormItem name='submit'>
-              <SubmitButton block className='ant-btn btn-primary'>
+              <SubmitButton className='ant-btn btn-primary'>
                 {' '}
                 Proceed{' '}
-              </SubmitButton>{' '}
+              </SubmitButton>
             </FormItem>
           </Form>
           {/*         <pre style={{ flex: 1 }}>

@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Spinner from '../layout/Spinner';
+import Spinner from '../../layout/Spinner';
 import { searchPost, getPost, addMessageReply } from '../../actions/post';
 import { FormOutlined } from '@ant-design/icons';
 import PrivateMessageModal from './modal/PrivateMessageModal';
