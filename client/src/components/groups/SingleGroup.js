@@ -4,10 +4,15 @@ import { Tabs, Table, Tag, Button, Menu, Dropdown, message } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { List } from 'semantic-ui-react';
-import Spinner from '../layout/Spinner';
+import Spinner from '../../layout/Spinner';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
+import GroupCard from './GroupCard';
 import UserCard from './UserCard';
+
+import PostItem from '../posts/PostItem';
+import PostModal from '../posts/modal/PostModal';
+import Posts from '../posts/Posts';
 
 import {
   getGroupDetails,
@@ -25,16 +30,47 @@ const SingleGroup = ({
   approveUserGroupRequest,
   acceptUserGroupInvitation,
   match,
-  auth
+  auth,
+  history
 }) => {
   useEffect(() => {
-    console.log(match);
-    getGroupDetails(match.params.id);
-    debugger;
-    if (match.path && match.path.indexOf('/about') !== -1) {
-      console.log('abouted');
+    let user = null;
+    let groupId = null;
+
+    if (match && match.params && match.params.id) {
+      groupId = match.params.id;
+      //user clicked on another group from dashboard leftnav groups menu,
+      //get groupId from params
+      getGroupDetails(groupId);
+    } else if (auth.user) {
+      try {
+        user = JSON.parse(auth.user);
+      } catch (e) {
+        // You can read e for more info
+        // Let's assume the error is that we already have parsed the auth.user so just return that
+        user = auth.user;
+      }
+      if (user && user.userGroup && user.userGroup.length > 0) {
+        //first time groupId is not passed in url param.
+        //So get groupId from user group first item
+        groupId = user.userGroup[0].id;
+        getGroupDetails(groupId);
+      } else if (
+        user &&
+        user.pendingInvitedUserGroups &&
+        user.pendingInvitedUserGroups.length > 0
+      ) {
+        //New user who got invitation from another group, redirect to groups page
+        group.currentGroup = user.pendingInvitedUserGroups[0];
+        groupId = user.pendingInvitedUserGroups[0].id;
+
+        history.push(`/dashboard/${groupId}`);
+      } else {
+        //New user login for first time, not part of any groups, redirect to create profile and help user discover group
+        history.push(`/create-profile/1`);
+      }
     }
-  }, [getGroupDetails, match.params.id]);
+  }, [getGroupDetails, auth.user, match]);
 
   const isNewUserInvitedToGroup = false;
 
@@ -258,11 +294,7 @@ const SingleGroup = ({
       ) : (
         <Fragment>
           <div>
-            <img
-              src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
-              alt='Custom banner image for this neighborhood group.'
-              data-testid='groups-page-header-image'
-            ></img>
+            <GroupCard currentGroup={group.currentGroup} type='mygroups' />
           </div>
           {group !== null && group.currentGroup ? (
             <Tabs
@@ -272,30 +304,21 @@ const SingleGroup = ({
               )}
             >
               <TabPane tab='Posts' key='posts'>
-                {group.currentGroup.userGroupMembers &&
-                group.currentGroup.userGroupMembers.length > 0
-                  ? 'create  new post'
-                  : 'There are no post for this group'}
+                <PostModal />
+                <Posts groupId={group.currentGroup.id} />
               </TabPane>
               <TabPane tab='Members' key='members'>
                 {group.currentGroup.userGroupMembers &&
-                group.currentGroup.userGroupMembers.length > 0 ? (
-                  /*       <UserCard />
-                      <GroupCard
-                      currentGroup={group}
-                      index={index}
-                      type='requestedUserGroup'
-                    /> */
-                  <Table
-                    columns={columns}
-                    dataSource={group.currentGroup.userGroupMembers}
-                    rowKey='_id'
-                  />
-                ) : (
-                  'Current group member list is empty'
-                )}
+                  group.currentGroup.userGroupMembers.length > 0 &&
+                  group.currentGroup.userGroupMembers.map((item, index) => (
+                    <UserCard
+                      key={index}
+                      currentGroup={group.currentGroup}
+                      user={item}
+                    />
+                  ))}
               </TabPane>
-              <TabPane tab='Pending Invitations' key='request'>
+              <TabPane tab='Invitations' key='request'>
                 {group.currentGroup.requestedInvitations &&
                 group.currentGroup.requestedInvitations.length > 0 ? (
                   <Table
@@ -309,7 +332,7 @@ const SingleGroup = ({
               </TabPane>
 
               {group.isGroupAdmin ? (
-                <TabPane tab='Pending Approvals' key='approvals'>
+                <TabPane tab='Requests' key='approvals'>
                   {group.currentGroup.pendingInvitations &&
                   group.currentGroup.pendingInvitations.length > 0 ? (
                     <Table

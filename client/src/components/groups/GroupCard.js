@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Menu, message, Tag, Button, Dropdown } from 'antd';
-import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 
 import {
   EditOutlined,
@@ -169,7 +168,7 @@ const GroupCard = ({
             currentGroup.isSchoolGroup === 'no' ? (
               <i className='fas fa-users icon-group'></i>
             ) : (
-              <i class='fas fa-school icon-group' title='school group'></i>
+              <i className='fas fa-school icon-group' title='school group'></i>
             )
           }
           title={currentGroup.groupName}
@@ -177,13 +176,15 @@ const GroupCard = ({
           {' '}
         </Meta>
       }
-      extra={<InviteUsersToGroupModal />}
       actions={[
-        <div className='member-count'>
-          {currentGroup.userGroupMembers.length === 1
+        /*      <div className='member-count'>
+          {currentGroup.userGroupMembers &&
+          currentGroup.userGroupMembers.length > 0 &&
+          currentGroup.userGroupMembers.length === 1
             ? currentGroup.userGroupMembers.length + ' member'
             : currentGroup.userGroupMembers.length + ' members'}{' '}
-        </div>,
+        </div>, */
+        null,
         <SettingOutlined />,
 
         groupActionMenu(currentGroup, group)

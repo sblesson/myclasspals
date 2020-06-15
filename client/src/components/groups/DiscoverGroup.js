@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Spinner from '../layout/Spinner';
+import Spinner from '../../layout/Spinner';
 import PrivateMessageModal from './modal/CreateGroupModal';
 import { Input, Card, Empty } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';

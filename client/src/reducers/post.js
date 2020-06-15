@@ -113,10 +113,13 @@ export default function(state = initialState, action) {
         loading: false
       };
     case SEARCH_POST:
-      state.posts = state.posts.concat(payload);
+      console.log(state);
+      //state.posts = state.posts.concat(payload);
 
       return {
         ...state,
+        posts: payload,
+
         //posts: [payload, ...state.posts],
         loading: false
       };
