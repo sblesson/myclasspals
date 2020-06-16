@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { updateUser } from '../../../../actions/auth';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal } from 'antd';
 
 import { Formik, ErrorMessage } from 'formik';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
@@ -12,9 +12,18 @@ import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import AutoCompleteCitySeach from '../../../common/autocompletecitysearch/AutoCompleteCitySearch';
 
 const EditAccountModal = ({ auth, updateUser }) => {
-  const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
+  const [visible, setModalVisibility] = useState(false);
 
+  const showModal = () => {
+    setModalVisibility(true);
+  };
+
+  const hideModal = () => {
+    setModalVisibility(false);
+  };
+  const toggleModal = () => {
+    setModalVisibility(!visible);
+  };
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
     console.log(value);
@@ -61,7 +70,7 @@ const EditAccountModal = ({ auth, updateUser }) => {
           },
           true
         );
-        setModal(false);
+        setModalVisibility(false);
       }}
       validator={() => ({})}
       //validate={values => {}}
@@ -85,12 +94,7 @@ const EditAccountModal = ({ auth, updateUser }) => {
             <FormItem name='city'>
               <AutoCompleteCitySeach />
             </FormItem>
-            <ModalFooter>
-              <SubmitButton className='ant-btn btn-primary'>
-                {' '}
-                Update
-              </SubmitButton>
-            </ModalFooter>
+            <SubmitButton className='ant-btn btn-primary'> Update</SubmitButton>
           </Form>
 
           {/*      <pre style={{ flex: 1 }}>
@@ -104,7 +108,7 @@ const EditAccountModal = ({ auth, updateUser }) => {
   return (
     <Fragment>
       {' '}
-      <div className='account-info-action-container' onClick={toggle}>
+      <div className='account-info-action-container' onClick={toggleModal}>
         <div
           style={{
             float: 'right',
@@ -117,9 +121,19 @@ const EditAccountModal = ({ auth, updateUser }) => {
           <span>Edit</span>
         </div>
       </div>
-      <Modal isOpen={modal} fade={false} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Edit My Account</ModalHeader>
-        <ModalBody>{yourInfo}</ModalBody>
+      <Modal
+        title={'Edit My Account'}
+        centered
+        visible={visible}
+        onOk={hideModal}
+        okText='Post'
+        onCancel={toggleModal} //pass close logic here
+        destroyOnClose={true}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        destroyOnClose={true}
+        footer={null}
+      >
+        {yourInfo}
       </Modal>
     </Fragment>
   );

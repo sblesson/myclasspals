@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import './LeftNav.scss';
 
-const LeftNav = ({ screen = '', id, auth }) => {
+const LeftNav = ({ screen = '', id, auth, group }) => {
   const { Sider } = Layout;
 
   const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
@@ -26,8 +26,11 @@ const LeftNav = ({ screen = '', id, auth }) => {
   }, []);
 
   const getNavByScreen = screen => {
+    debugger;
+    console.log('inside left nav', auth, group);
     switch (screen) {
       case 'dashboard': {
+        console.log('inside left nav', auth, group);
         let user = null;
         let userGroup = null;
         let myGroups = [];

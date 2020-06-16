@@ -16,79 +16,11 @@ import {
   SEND_PRIVATE_MESSAGE,
   GET_POST_CATEGORIES_ERROR
 } from '../actions/types';
+import CATEGORIES from '../const/CATEGORIES';
 
-const categories = [
-  {
-    category_id: 0,
-    title: 'General',
-    url: '/general/'
-  },
-  {
-    category_id: 1,
-    title: 'Recommendations',
-    url: '/recommendations/'
-  },
-  {
-    category_id: 2,
-    title: 'Lost & Found',
-    url: '/lostfound/'
-  },
-  {
-    category_id: 3,
-    title: 'Reminder',
-    url: '/reminder/'
-  },
-  {
-    category_id: 4,
-    title: 'Carpool',
-    url: '/carpool/'
-  },
-  {
-    category_id: 5,
-    title: 'About Homework',
-    url: '/homework/'
-  },
-  {
-    category_id: 6,
-    title: 'Needed Help',
-    url: '/needhelp/'
-  },
-  {
-    category_id: 7,
-    title: 'Aftercare',
-    url: '/aftercare/'
-  },
-  'divider',
-
-  {
-    category_id: 8,
-    title: 'Birthday',
-    url: '/birthday/'
-  },
-  {
-    category_id: 9,
-    title: 'Playdate',
-    url: '/playdate/'
-  },
-  {
-    category_id: 10,
-    title: 'Fieldtrips or Camps',
-    url: '/fieldtrips/'
-  },
-  {
-    category_id: 11,
-    title: 'Volunteering',
-    url: '/volunteering/'
-  },
-  {
-    category_id: 12,
-    title: 'Urgent',
-    url: '/urgent/'
-  }
-];
 const initialState = {
   posts: [],
-  categories: categories,
+  categories: CATEGORIES,
   currentPost: null,
   loading: true,
   error: {}
@@ -127,7 +59,7 @@ export default function(state = initialState, action) {
     case GET_POST_CATEGORIES:
       return {
         ...state,
-        categories: categories,
+        categories: CATEGORIES,
         loading: false
       };
     case GET_POST:

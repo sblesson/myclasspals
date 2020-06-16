@@ -1,43 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deleteAccount } from '../../../../actions/profile';
+import { deleteAccount } from '../../../actions/profile';
+import { Modal } from 'antd';
 
 import _ from 'lodash';
 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+const DeleteAccountModal = ({ deletePost, postId, postType }) => {
+  const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
-import './AccountModal.scss';
+  const [visible, setModalVisibility] = useState(false);
 
-const DeleteAccountModal = ({ deleteAccount }) => {
-  const [modal, setModal] = useState(false);
+  const showModal = () => {
+    setModalVisibility(true);
+  };
 
-  const toggle = () => setModal(!modal);
-
+  const hideModal = () => {
+    setModalVisibility(false);
+  };
+  const toggleModal = () => {
+    setModalVisibility(!visible);
+  };
+  const handleDelete = () => {
+    deleteAccount();
+    hideModal();
+  };
   return (
     <div>
-      <div className='account-info-action-container' onClick={toggle}>
+      <div className='account-info-action-container' onClick={toggleModal}>
         <div className='account-info-delete-button-right'>
           <span>Delete</span>
         </div>
       </div>
-      <Modal isOpen={modal} fade={false} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{"Please don't delete me!"}</ModalHeader>
-        <ModalBody>
-          {
-            "Are you sure you want to delete this account? You won't be able to access this account after this action. Remember, this action  CANNOT be undone!"
-          }
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color='danger'
-            onClick={e => {
-              e.preventDefault();
-              deleteAccount();
-            }}
-          >
-            Delete
-          </Button>
-        </ModalFooter>
+      <Modal
+        title={headerTitle}
+        centered
+        visible={visible}
+        onOk={handleDelete}
+        okText='Delete'
+        onCancel={toggleModal} //pass close logic here
+        destroyOnClose={true}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        destroyOnClose={true}
+      >
+        <div>
+          "Are you sure you want to delete this account? You won't be able to
+          access this account after this action. Remember, this action CANNOT be
+          undone!"
+        </div>
       </Modal>
     </div>
   );

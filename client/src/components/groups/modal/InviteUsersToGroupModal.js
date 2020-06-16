@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-//import { useForm, Controller } from 'react-hook-form';
+import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inviteToJoinUserGroup } from '../../../actions/group';
@@ -14,21 +13,22 @@ import './CreateGroupModal.scss';
 
 const InviteUsersToGroupModal = ({ current }) => {
   console.log(current);
+  const [visible, setModalVisibility] = useState(false);
+
+  const showModal = () => {
+    setModalVisibility(true);
+  };
+
+  const hideModal = () => {
+    setModalVisibility(false);
+  };
+  const toggleModal = () => {
+    setModalVisibility(!visible);
+  };
 
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
-  };
-
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
-  const onChange = e => {
-    //setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleChange = value => {
-    console.log(`selected ${value}`);
   };
 
   const onCreateGroupSubmit = data => {};
@@ -39,7 +39,7 @@ const InviteUsersToGroupModal = ({ current }) => {
 
   return (
     <div>
-      <div onClick={toggle}>
+      <div onClick={toggleModal}>
         <Button
           className='ant-btn btn-primary pinkBtn'
           icon={<UsergroupAddOutlined />}
@@ -48,10 +48,16 @@ const InviteUsersToGroupModal = ({ current }) => {
         </Button>
       </div>
       <Modal
+        centered
         className='create-group-modal'
-        isOpen={modal}
-        fade={false}
-        toggle={toggle}
+        visible={visible}
+        onOk={hideModal}
+        okText='Post'
+        onCancel={toggleModal} //pass close logic here
+        destroyOnClose={true}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        destroyOnClose={true}
+        footer={null}
       >
         <InviteUsersToGroupForm />
       </Modal>

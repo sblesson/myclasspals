@@ -1,9 +1,11 @@
 package com.clazzbuddy.restservice;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,6 +88,25 @@ public class PostMessagesController {
 		
 		try {
 			result.setPost(postService.addComment(postid, post));
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("Error :", e);
+		}
+		
+		return result;
+		
+		
+		
+	}
+	
+	@DeleteMapping(value="/deletepost/{postid}", produces={"application/json"})
+	public CommonResult deletePost(@PathVariable("postid") String postid) {
+		PostResult result = new PostResult();
+		
+		try {
+			postService.deletePost(postid);
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

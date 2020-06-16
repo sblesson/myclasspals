@@ -1,37 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import { Upload, Button } from 'antd';
+import React, { useState } from 'react';
+import { Upload, Button, Modal } from 'antd';
 import { UploadOutlined, StarOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
-import { Form } from 'semantic-ui-react';
-import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Formik, ErrorMessage, useFormik } from 'formik';
+
+import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
-import { FormOutlined } from '@ant-design/icons';
+import MultiSelectUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
 
-import { Formik, ErrorMessage } from 'formik';
-import AutoCompleteUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
 import './PrivateMessageModal.scss';
 
 const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
-  const [formData, setFormData] = useState({
-    endUserId: '',
-    subject: '',
-    message: '',
-    isPrivate: true
-  });
+  const [componentSize, setComponentSize] = useState('small');
 
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
-  const onChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const [visible, setModalVisibility] = useState(false);
+  const [headerTitle, setHeaderTitle] = useState('New Message');
+  const showModal = () => {
+    setModalVisibility(true);
+  };
+  const hideModal = () => {
+    setModalVisibility(false);
+  };
+  const toggleModal = () => {
+    setModalVisibility(!visible);
+  };
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 }
+    }
+  };
+  const validateRequired = value => {
+    console.log(value);
+    return value ? undefined : 'required';
+  };
 
   const uploadProps = {
     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
     onChange({ file, fileList }) {
       if (file.status !== 'uploading') {
-        console.log(file, fileList);
       }
     },
     defaultFileList: [
@@ -68,74 +81,93 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
     }
   };
 
-  return (
-    <div>
-      <div className='private-message-modal'>
-        <div as='h4' className='message-head-title'>
-          Inbox
-        </div>
-        <div
-          as='h4'
-          className='message-head-title message-head-link'
-          onClick={toggle}
-        >
-          <FormOutlined className='message-head-icon' />
-          Compose
-        </div>
-        {/*    <Button type='primary' className='pinkBtn'>
-          Message
-        </Button> */}
-      </div>
-      <Modal isOpen={modal} fade={false} toggle={toggle}>
-        <ModalHeader toggle={toggle}> Send Your Message</ModalHeader>
-        <ModalBody>
-          <Form>
-            <Form.Group>
-              <AutoCompleteUserSearch />
-            </Form.Group>
-            <Form.Group className='private-message-modal-field'>
-              <Input
-                className='post-form-text-input'
-                type='text'
-                name='subject'
-                placeholder='Subject'
-                onChange={e => onChange(e)}
-              />
-            </Form.Group>
-            <Form.Group className='private-message-modal-field'>
-              <textarea
+  const MessageForm = (
+    <Formik
+      initialValues={{
+        userId: auth && auth.user && auth.user._id ? auth.user._id : null,
+        endUserId: '',
+        subject: '',
+        message: '',
+        isPrivate: true
+      }}
+      onSubmit={(values, actions) => {
+        console.log(values);
+        sendPrivateMessage(values);
+        setModalVisibility(false);
+      }}
+      validator={() => ({})}
+      //validate={values => {}}
+      render={() => (
+        <div style={{ flex: 1, padding: 10 }}>
+          <Form
+            className='form-wrapper'
+            {...formItemLayout}
+            layout='vertical'
+            initialValues={{
+              size: componentSize
+            }}
+          >
+            {' '}
+            <FormItem
+              name='endUserId'
+              label='Select your buddies'
+              required={true}
+              validate={validateRequired}
+            >
+              <MultiSelectUserSearch endUsersSelect={'endUserId'} />
+            </FormItem>
+            <FormItem
+              name='subject'
+              label='Subject'
+              required={true}
+              validate={validateRequired}
+            >
+              <Input name='subject' placeholder='Subject' />
+            </FormItem>
+            <FormItem name='message' label='Your Message' required={false}>
+              <Input.TextArea
                 className='post-form-text-input post-form-textarea'
                 name='message'
                 cols='30'
                 rows='5'
                 placeholder='Enter your message ...'
-                onChange={e => onChange(e)}
-                required
+                required={false}
               />
-            </Form.Group>
-            <Form.Group>
-              <Upload {...uploadProps}>
-                <Button>
-                  <UploadOutlined /> Upload
-                </Button>
-              </Upload>
-            </Form.Group>
+            </FormItem>
+            {/*       <Upload {...uploadProps}>
+              <Button>
+                <UploadOutlined /> Upload
+              </Button>
+            </Upload> */}
+            <pre style={{ flex: 1 }}>
+              <FormikDebug />
+            </pre>
+            <SubmitButton className='ant-btn btn-primary'> Send</SubmitButton>
           </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color='primary'
-            onClick={e => {
-              e.preventDefault();
-              formData.userId = auth.user.email;
-              formData.endUserId = auth.senderEmail;
-              sendPrivateMessage(formData, history);
-              setModal(false);
-            }}
-          >
-            Send
-          </Button>
-        </ModalFooter>
+        </div>
+      )}
+    />
+  );
+
+  return (
+    <div>
+      <div className='private-message-modal' onClick={toggleModal}>
+        <Button type='primary' className='pinkBtn'>
+          Message
+        </Button>
+      </div>
+      <Modal
+        title={headerTitle}
+        centered
+        visible={visible}
+        onOk={hideModal}
+        onCancel={toggleModal} //pass close logic here
+        destroyOnClose={true}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        destroyOnClose={true}
+        footer={null}
+      >
+        {MessageForm}
       </Modal>
     </div>
   );
@@ -144,9 +176,9 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
 PrivateMessageModal.propTypes = {
   sendPrivateMessage: PropTypes.func.isRequired
 };
-
 const mapDispatchToProps = state => ({
   hideModal: state.hideModal,
+  currentGroup: state.group.currentGroup,
   auth: state.auth
 });
 

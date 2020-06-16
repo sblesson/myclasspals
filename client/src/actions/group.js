@@ -21,7 +21,8 @@ import {
   APPROVE_GROUP_REQUEST_ERROR,
   CHANGE_GROUP_USER_ROLE,
   CHANGE_GROUP_USER_ROLE_ERROR,
-  SEARCH_ALL_GROUP_ERROR
+  SEARCH_ALL_GROUP_ERROR,
+  UPDATE_USER_GROUP
 } from './types';
 
 import { updateUserGlobal } from './auth';
@@ -103,10 +104,13 @@ export const getAllGroups = userId => async dispatch => {
 };
 
 // Get all userGroups
-export const getGroupDetails = groupId => async dispatch => {
+export const getGroupDetails = (groupId, myCancelToken) => async dispatch => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/usergroup/getgroup?id=${groupId}`
+      `http://localhost:8080/usergroup/getgroup?id=${groupId}`,
+      {
+        cancelToken: myCancelToken
+      }
     );
 
     dispatch({
@@ -122,6 +126,12 @@ export const getGroupDetails = groupId => async dispatch => {
       payload: { msg: err, status: err }
     });
   }
+};
+export const updateUserGroup = userGroup => dispatch => {
+  dispatch({
+    type: UPDATE_USER_GROUP,
+    payload: userGroup
+  });
 };
 
 // Search Groups

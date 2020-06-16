@@ -71,7 +71,7 @@ const PostItem = ({
     <Menu onClick={onClick}>
       <Menu.Item key='deletepost'>
         {' '}
-        <DeletePostModal />
+        <DeletePostModal postId={_id} postType='post' />
       </Menu.Item>
       <Menu.Item key='editpost'>Edit</Menu.Item>
     </Menu>

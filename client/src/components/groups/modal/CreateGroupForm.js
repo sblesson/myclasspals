@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Formik, ErrorMessage } from 'formik';
-import { ModalFooter } from 'reactstrap';
 import {
   SubmitButton,
   Input,
@@ -103,6 +102,7 @@ const CreateGroupForm = ({
         grade: ''
       }}
       onSubmit={(values, actions) => {
+        debugger;
         submitProfileForm(values, actions);
       }}
       validator={() => ({})}
@@ -184,12 +184,7 @@ const CreateGroupForm = ({
             ) : (
               ''
             )}
-            <ModalFooter>
-              <SubmitButton className='ant-btn btn-primary'>
-                {' '}
-                Create
-              </SubmitButton>
-            </ModalFooter>
+            <SubmitButton className='ant-btn btn-primary'> Create</SubmitButton>
           </Form>
           {/*    <pre style={{ flex: 1 }}>
             <FormikDebug />

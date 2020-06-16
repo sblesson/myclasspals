@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
-import { Avatar, Button, Dropdown, Menu } from 'antd';
+import { Avatar, Button, Dropdown, Menu, List } from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
-import { List } from 'semantic-ui-react';
 
 import { deleteComment, deleteSinglePostComment } from '../../actions/post';
-import DeleteCommentModal from './DeleteCommentModal';
+import DeleteCommentModal from './modal/DeletePostModal';
 import { EllipsisOutlined } from '@ant-design/icons';
 const CommentItem = ({
   postId,
@@ -16,7 +15,7 @@ const CommentItem = ({
   auth,
   deleteComment,
   isSinglePost,
-  deleteSinglePostComment
+  deleteSinglePostCommenš
 }) => {
   const firstLetterUserName = userName => {
     if (typeof userName !== 'string') return '';
@@ -26,11 +25,7 @@ const CommentItem = ({
     <Menu>
       <Menu.Item key='deletepost'>
         {' '}
-        <DeleteCommentModal
-          isSinglePost={isSinglePost}
-          postId={postId}
-          commentId={_id}
-        />
+        <DeleteCommentModal postId={_id} postType='comment' />
       </Menu.Item>
       <Menu.Item key='editpost'>Edit</Menu.Item>
     </Menu>

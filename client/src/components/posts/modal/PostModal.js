@@ -1,66 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { Select } from 'antd';
 import { Upload, Button } from 'antd';
 import { UploadOutlined, StarOutlined } from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom';
-import { Form } from 'semantic-ui-react';
 import moment from 'moment';
 
-import { Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Tabs } from 'antd';
+import { Tabs, Modal } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Formik, ErrorMessage, useFormik } from 'formik';
+import PostCategorySelect from '../../common/postcategoryselect/PostCategorySelect';
+import {
+  SubmitButton,
+  Input,
+  Form,
+  Radio,
+  FormItem,
+  FormikDebug,
+  Select
+} from 'formik-antd';
 import { addPost, searchPostByGroupId } from '../../../actions/post';
 import { DatePicker, TimePicker } from 'antd';
 
 import './PostModal.scss';
-import { fontWeight } from '@material-ui/system';
 
 const PostModal = ({
   addPost,
   history,
-  categories,
   currentGroup,
   auth,
   searchPostByGroupId
 }) => {
+  const [componentSize, setComponentSize] = useState('small');
   const [activeIndex, setActiveIndex] = useState(0);
-  const [categoryId, setSelectedCategory] = useState(0);
 
   const { TabPane } = Tabs;
-  const [formData, setFormData] = useState({
-    subject: '',
-    message: '',
-    categoryId: 'General',
-    groupId: currentGroup.id
-  });
 
-  useEffect(() => {
-    formData.userId = auth.user._id;
-    formData.userName = auth.user.name;
-  }, [auth.user]);
+  const [visible, setModalVisibility] = useState(false);
+  const [headerTitle, setHeaderTitle] = useState('Post to' + currentGroup.name);
+  const showModal = () => {
+    setModalVisibility(true);
+  };
 
-  function callback(key) {}
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
-
-  const { Option } = Select;
-
-  const onChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const hideModal = () => {
+    setModalVisibility(false);
+  };
+  const toggleModal = () => {
+    setModalVisibility(!visible);
+  };
 
   const handleClick = (e, titleProps) => {
     const { index } = titleProps;
 
     const newIndex = activeIndex === index ? -1 : index;
     setActiveIndex(newIndex);
-  };
-
-  const onCategoryChange = value => {
-    setFormData({ ...formData, ['categoryId']: categories[value].title });
   };
 
   const uploadProps = {
@@ -105,58 +99,89 @@ const PostModal = ({
     }
   };
 
-  const postTab1Categories = categories.map(function(topic, index) {
-    if (topic === 'divider') {
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 }
     }
-    return <Option key={index}>{topic.title}</Option>;
-  });
+  };
+  const validateRequired = value => {
+    console.log(value);
+    return value ? undefined : 'required';
+  };
 
   const MessagePostForm = (
-    <Form>
-      <Form.Group className='post-form'>
-        <Select
-          allowClear
-          style={{ width: '100%' }}
-          placeholder='Choose category'
-          onChange={onCategoryChange}
-        >
-          {categories.map(function(topic, index) {
-            if (topic === 'divider') {
-            }
-            return <Option key={index}>{topic.title}</Option>;
-          })}
-        </Select>
-      </Form.Group>
-      <Form.Group className='post-form'>
-        <Input
-          className='post-form-text-input'
-          type='text'
-          name='subject'
-          placeholder='Subject'
-          onChange={e => onChange(e)}
-        />
-      </Form.Group>
-      <Form.Group className='post-form'>
-        <textarea
-          className='post-form-text-input post-form-textarea'
-          name='message'
-          cols='30'
-          rows='5'
-          placeholder='Enter your message ...'
-          onChange={e => onChange(e)}
-          required
-        />
-      </Form.Group>
-      <Form.Group>
-        <Upload {...uploadProps}>
-          <Button>
-            <UploadOutlined /> Upload
-          </Button>
-        </Upload>
-      </Form.Group>
-    </Form>
+    <Formik
+      initialValues={{
+        categoryId: 'General',
+        groupId: currentGroup.id,
+        subject: '',
+        message: ''
+      }}
+      onSubmit={(values, actions) => {
+        console.log(values);
+        addPost(values, history);
+        setModalVisibility(false);
+        setActiveIndex(0);
+      }}
+      validator={() => ({})}
+      //validate={values => {}}
+      render={() => (
+        <div style={{ flex: 1, padding: 10 }}>
+          <Form
+            className='form-wrapper'
+            {...formItemLayout}
+            layout='vertical'
+            initialValues={{
+              size: componentSize
+            }}
+          >
+            {' '}
+            <FormItem
+              name='categoryId'
+              label='Select Category'
+              required={true}
+              validate={validateRequired}
+            >
+              <PostCategorySelect />
+            </FormItem>
+            <FormItem
+              name='subject'
+              label='Subject'
+              required={true}
+              validate={validateRequired}
+            >
+              <Input name='subject' placeholder='Subject' />
+            </FormItem>
+            <FormItem name='message' label='Your Message' required={false}>
+              <Input.TextArea
+                className='post-form-text-input post-form-textarea'
+                name='message'
+                cols='30'
+                rows='5'
+                placeholder='Enter your message ...'
+                required={false}
+              />
+            </FormItem>
+            {/*       <Upload {...uploadProps}>
+              <Button>
+                <UploadOutlined /> Upload
+              </Button>
+            </Upload> */}
+            <pre style={{ flex: 1 }}>
+              <FormikDebug />
+            </pre>
+            <SubmitButton className='ant-btn btn-primary'> Post</SubmitButton>
+          </Form>
+        </div>
+      )}
+    />
   );
-
+  /* 
   const EventPostForm = (
     <Form>
       <Form.Group className='post-form'>
@@ -206,13 +231,16 @@ const PostModal = ({
           required
         />
       </Form.Group>
-      <Form.Group>
+             <Form.Group>
         <Upload {...uploadProps}>
           <Button>
             <UploadOutlined /> Upload
           </Button>
         </Upload>
-      </Form.Group>
+      </Form.Group> 
+      <ModalFooter>
+        <SubmitButton className='ant-btn btn-primary'> Post</SubmitButton>
+      </ModalFooter>
     </Form>
   );
 
@@ -230,10 +258,10 @@ const PostModal = ({
         />
       </Form.Group>
     </Form>
-  );
+  ); */
   return (
     <div>
-      <div className='new-post-form' onClick={toggle}>
+      <div className='new-post-form' onClick={showModal}>
         <div className='bg-post-head p'>
           <h6>What do you want to discuss?</h6>
         </div>
@@ -245,36 +273,28 @@ const PostModal = ({
           </div>
         </div>
       </div>
-      <Modal isOpen={modal} fade={false} toggle={toggle}>
-        <ModalHeader toggle={toggle}>
-          Post to {currentGroup.groupName}
-        </ModalHeader>
-        <ModalBody>
-          <Tabs defaultActiveKey='1' onChange={callback}>
-            <TabPane tab='Speak Up' key='1'>
-              {MessagePostForm}
-            </TabPane>
+      <Modal
+        title={headerTitle}
+        centered
+        visible={visible}
+        onOk={hideModal}
+        okText='Post'
+        onCancel={toggleModal} //pass close logic here
+        destroyOnClose={true}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        destroyOnClose={true}
+        footer={null}
+      >
+        {/*   <Tabs defaultActiveKey='1' onChange={callback}> */}
+        {/*             <TabPane tab="Let\'s discuss" key='1'>
+         */}{' '}
+        {MessagePostForm}
+        {/*     </TabPane>
             <TabPane tab="Let's Meet" key='2'>
               {EventPostForm}
-            </TabPane>
-            <TabPane tab='Alert' key='3'>
-              {ReminderPostForm}
-            </TabPane>
-          </Tabs>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            color='primary'
-            onClick={e => {
-              e.preventDefault();
-              addPost(formData, history);
-              setModal(false);
-              setActiveIndex(0);
-            }}
-          >
-            Post
-          </Button>
-        </ModalFooter>
+            </TabPane> */}
+        {/*           </Tabs>
+         */}{' '}
       </Modal>
     </div>
   );
@@ -286,7 +306,6 @@ PostModal.propTypes = {
 
 const mapDispatchToProps = state => ({
   hideModal: state.hideModal,
-  categories: state.post.categories,
   currentGroup: state.group.currentGroup,
   auth: state.auth
 });
