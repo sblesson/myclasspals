@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.core.SecurityContext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -11,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.mongocollections.Users;
@@ -22,30 +27,29 @@ import com.clazzbuddy.mongocollections.UserGroupMembers;
 
 @Component
 public class UserGroupService {
-	
+
 	Logger logger = LogManager.getLogger(UserGroupService.class);
 
 	@Autowired
 	MongoTemplate mongoTemplate;
-	
+
 	@Autowired
 	SchoolCache schoolCache;
-	
-	
+
 	@Autowired
 	UserService userService;
 
 	public UserGroup createUserGroup(UserGroup userGroup) throws Exception {
 		UserGroup userGroupFromDB = getUserGroupByName(userGroup.getGroupName());
-		
+
 		if (userGroupFromDB != null) {
 			return userGroupFromDB;
 		}
-		
+
 		userGroup.setCreatedDate(new Date().toString());
 		populateSchoolDetails(userGroup);
 		userGroupFromDB = mongoTemplate.insert(userGroup);
-		
+
 		if (userGroup.getUserGroupMembers() != null) {
 			for (UserGroupMembers userId : userGroup.getUserGroupMembers()) {
 				Users user = userService.getUserDetails(userId.get_id());
@@ -59,13 +63,12 @@ public class UserGroupService {
 				mongoTemplate.save(user);
 			}
 		}
-		
-		
+
 		return userGroupFromDB;
 	}
-	
+
 	private void populateSchoolDetails(UserGroup userGroup) throws Exception {
-		
+
 		if (userGroup.getSchoolId() != null) {
 			School school = schoolCache.getSchoolBySchoolId(userGroup.getSchoolId());
 			if (school == null) {
@@ -108,8 +111,14 @@ public class UserGroupService {
 		return mongoTemplate.findOne(userGroupById, UserGroup.class);
 
 	}
-	
+
 	public List<UserGroup> getUserGroupBySerachFilter(UserGroupSearchFilter filter) {
+
+		UserDetails userDetails = (UserDetails) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		
+		String userId = userDetails.getUsername();
+		
 
 		Query userGroupSearch = new Query();
 		if (filter.getGroupKeyword() != null) {
@@ -136,7 +145,7 @@ public class UserGroupService {
 			userGroupSearch.addCriteria(Criteria.where("schoolId").regex(filter.getSchoolId()));
 
 		}
-		
+
 		if (filter.getSchoolCity() != null) {
 			userGroupSearch.addCriteria(Criteria.where("schoolCity").regex(filter.getSchoolCity()));
 		}
@@ -145,10 +154,17 @@ public class UserGroupService {
 
 		}
 		logger.info(userGroupSearch.toString());
-		return mongoTemplate.find(userGroupSearch, UserGroup.class);
+		List<UserGroup> userGroups = mongoTemplate.find(userGroupSearch, UserGroup.class);
+		if (userGroups != null) {
+			Users user = userService.getUserDetails(userId);
+			for (UserGroup userGroup : userGroups) {
+				userGroup.initializeRole(user.get_id(), userId);
+			}
+		}
+		return userGroups;
 
 	}
-	
+
 	public UserGroup getUserGroupByName(String id) {
 
 		Query userByName = new Query();
@@ -156,18 +172,18 @@ public class UserGroupService {
 		return mongoTemplate.findOne(userByName, UserGroup.class);
 
 	}
-	
+
 	public UserGroup changeUserRole(GroupChangeRoleAction action) throws Exception {
 		UserGroup userGroup = getUserGroupById(action.getGroupId());
-		
+
 		if (userGroup == null) {
 			throw new Exception("user group is invalid");
 		}
-		
+
 		if (userGroup.getUserGroupMembers() == null) {
 			throw new Exception("No group members");
 		}
-		
+
 		for (UserGroupMembers member : userGroup.getUserGroupMembers()) {
 			if (member.get_id().equals(action.getUserId())) {
 				member.setRole(action.getNewRole());
@@ -176,7 +192,7 @@ public class UserGroupService {
 			}
 		}
 		throw new Exception("User is not a member in the group :" + action.getUserId());
-		
+
 	}
-	
+
 }

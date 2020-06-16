@@ -1,7 +1,7 @@
 import React from 'react';
-import Register from './auth/Register';
-import Login from './auth/Login';
-import PendingRegistration from './auth/PendingRegistration';
+import Register from './Register';
+import Login from './Login';
+import PendingRegistration from './PendingRegistration';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';

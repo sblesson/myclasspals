@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Formik, ErrorMessage } from 'formik';
-import { ModalFooter } from 'reactstrap';
 import {
   SubmitButton,
   Input,
@@ -103,6 +102,7 @@ const CreateGroupForm = ({
         grade: ''
       }}
       onSubmit={(values, actions) => {
+        debugger;
         submitProfileForm(values, actions);
       }}
       validator={() => ({})}
@@ -133,20 +133,15 @@ const CreateGroupForm = ({
               //validate={validateRequired}
             >
               <Radio.Group
-                name='groupType'
+                name='privacy'
                 options={[
                   {
                     label: 'Private --appears in search results',
-                    value: 'private'
+                    value: 'PRIVATE'
                   },
                   {
                     label: 'Public',
-                    value: 'public'
-                  },
-                  {
-                    label:
-                      'Hidden --not appear in search results, need invitation',
-                    value: 'hidden'
+                    value: 'PUBLIC'
                   }
                 ]}
               />
@@ -184,12 +179,7 @@ const CreateGroupForm = ({
             ) : (
               ''
             )}
-            <ModalFooter>
-              <SubmitButton className='ant-btn btn-primary'>
-                {' '}
-                Create
-              </SubmitButton>
-            </ModalFooter>
+            <SubmitButton className='ant-btn btn-primary'> Create</SubmitButton>
           </Form>
           {/*    <pre style={{ flex: 1 }}>
             <FormikDebug />

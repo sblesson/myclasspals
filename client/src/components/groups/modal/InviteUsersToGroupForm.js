@@ -1,25 +1,15 @@
 import React, { useState } from 'react';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-//import { useForm, Controller } from 'react-hook-form';
+
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inviteToJoinUserGroup } from '../../../actions/group';
 import { Formik } from 'formik';
 import MultiSelectUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
-import { message, Button, Row, Col } from 'antd';
+import { Button } from 'antd';
 
-import {
-  SubmitButton,
-  Input,
-  Checkbox,
-  Radio,
-  ResetButton,
-  FormikDebug,
-  Form,
-  FormItem
-} from 'formik-antd';
+import { SubmitButton, Input, FormikDebug, Form, FormItem } from 'formik-antd';
 
 import './CreateGroupModal.scss';
 
@@ -29,8 +19,7 @@ const InviteUsersToGroupForm = ({
   group,
   current,
   onStepChange,
-  isNewGroup,
-  setModal
+  isNewGroup
 }) => {
   debugger;
   console.log(current);
@@ -40,25 +29,22 @@ const InviteUsersToGroupForm = ({
     setComponentSize(size);
   };
 
-  const onChange = e => {
-    //setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleChange = value => {
-    console.log(`selected ${value}`);
-  };
-
-  const onCreateGroupSubmit = data => {};
-
   const validateRequired = value => {
     return value ? undefined : 'required';
   };
 
   const goToNextStep = (event, current) => {
-    console.log(event);
-    console.log(current);
-
     onStepChange(current + 1);
+  };
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 }
+    }
   };
 
   return (
@@ -81,8 +67,7 @@ const InviteUsersToGroupForm = ({
 
       <Formik
         initialValues={{
-          invitedUsers: '',
-          action: 'INVITE'
+          invitedUsers: ''
         }}
         onSubmit={(values, actions) => {
           values.invitedUsers =
@@ -99,41 +84,49 @@ const InviteUsersToGroupForm = ({
             onStepChange(current + 1);
           }
         }}
-        /*       validate={values => {
-          if (!values.invitedUsers) {
-            return { invitedUsers: 'required' };
-          }
-          return {};
-        }} */
         render={() => (
-          <Form>
-            <FormItem
-              name='usersSelect'
-              style={{ marginTop: 40 }}
-              //label='Add Users'
-              required={false}
-              //validate={validateRequired}
+          <div style={{ flex: 1, padding: 10 }}>
+            <Form
+              className='form-wrapper'
+              {...formItemLayout}
+              layout='vertical'
+              initialValues={{
+                size: componentSize
+              }}
             >
-              <MultiSelectUserSearch />
-            </FormItem>
-            <Input.TextArea
-              style={{ marginTop: 20 }}
-              className='post-form-text-input post-form-textarea'
-              name='invitedUsers'
-              cols='30'
-              rows='5'
-              placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
-              onChange={e => onChange(e)}
-              required={false}
-            />
-            <ModalFooter>
-              <SubmitButton className='ant-btn btn-primary'>
+              {' '}
+              <FormItem
+                name='usersSelect'
+                label='Select Members'
+                required={false}
+              >
+                <MultiSelectUserSearch endUsersSelect={'usersSelect'} />
+              </FormItem>
+              <FormItem
+                name='invitedUsers'
+                label='Invite non members'
+                required={false}
+                style={{ marginTop: 20 }}
+              >
+                <Input.TextArea
+                  className='post-form-text-input post-form-textarea'
+                  name='invitedUsers'
+                  cols='20'
+                  rows='5'
+                  placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
+                  required={false}
+                />
+              </FormItem>
+              <SubmitButton
+                className='ant-btn btn-primary'
+                style={{ marginTop: 20 }}
+              >
                 {' '}
                 Invite
               </SubmitButton>
-            </ModalFooter>
-            <FormikDebug />
-          </Form>
+              {/* <FormikDebug /> */}
+            </Form>
+          </div>
         )}
       />
     </div>
@@ -145,7 +138,6 @@ InviteUsersToGroupForm.propTypes = {
 };
 
 const mapDispatchToProps = state => ({
-  hideModal: state.hideModal,
   group: state.group
 });
 

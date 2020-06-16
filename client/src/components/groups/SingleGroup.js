@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Tabs, Table, Tag, Button, Menu, Dropdown, message } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { List } from 'semantic-ui-react';
 import Spinner from '../../layout/Spinner';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
@@ -36,7 +35,9 @@ const SingleGroup = ({
   useEffect(() => {
     let user = null;
     let groupId = null;
+    console.log('inside group');
 
+    console.log(match);
     if (match && match.params && match.params.id) {
       groupId = match.params.id;
       //user clicked on another group from dashboard leftnav groups menu,
@@ -70,6 +71,9 @@ const SingleGroup = ({
         history.push(`/create-profile/1`);
       }
     }
+    return function cleanup() {
+      //todo
+    };
   }, [getGroupDetails, auth.user, match]);
 
   const isNewUserInvitedToGroup = false;

@@ -15,7 +15,7 @@ const SinglePost = ({ getPost, post: { currentPost, loading }, match }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <Link to='/posts' className='btn'>
+      <Link to='/dashboard' className='btn'>
         Back To Posts
       </Link>
       <PostItem

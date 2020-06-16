@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import com.clazzbuddy.utils.Constants;
+
 public class UserGroup {
 
 	@Id
@@ -60,12 +62,13 @@ public class UserGroup {
 					role = group.getRole();
 					return;
 				}
+				
 			}
 		}
 		if (pendingInvitations != null) {
 			for (GroupInvitations group : pendingInvitations) {
 				if (group.getRequestorUserId() != null && group.getRequestorUserId().equals(currentUserId)) {
-					role = group.getRole();
+					role = Constants.PENDING_INVITATION;
 					return;
 				}
 			}
@@ -74,7 +77,7 @@ public class UserGroup {
 			for (GroupInvitations group : requestedInvitations) {
 				if (group.getInvitedUserId() != null && (group.getInvitedUserId().equals(currentUserId)
 						|| group.getInvitedUserId().equals(emailId))) {
-					role = group.getRole();
+					role = Constants.REQUESTED_INVITATION;
 					return;
 				}
 			}

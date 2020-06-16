@@ -3,7 +3,7 @@ import { UsergroupAddOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Steps } from 'antd';
 
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal } from 'antd';
 
 import CreateGroupForm from './CreateGroupForm';
 import InviteUsersToGroupForm from './InviteUsersToGroupForm';
@@ -19,11 +19,21 @@ const CreateGroupModal = () => {
   const { Step } = Steps;
   const [current, setCurrentStep] = useState(0);
 
-  const [modal, setModal] = useState(false);
-  const toggle = () => {
-    setModal(!modal);
+  const [visible, setModalVisibility] = useState(false);
+
+  const showModal = () => {
+    setModalVisibility(true);
+  };
+
+  const hideModal = () => {
+    setModalVisibility(false);
     setCurrentStep(0);
   };
+  const toggleModal = () => {
+    setModalVisibility(!visible);
+    setCurrentStep(0);
+  };
+
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -34,7 +44,7 @@ const CreateGroupModal = () => {
     //current = current + 1;
     setCurrentStep(current);
     if (current == 3) {
-      setModal(false);
+      setModalVisibility(false);
       current = 0;
     }
   };
@@ -42,37 +52,37 @@ const CreateGroupModal = () => {
   const steps = [
     {
       title: 'Create Group',
-      subTitle: '(step 1 of 3)',
+      subTitle: ' (step 1 of 3)',
       content: (
         <CreateGroupForm
           onStepChange={handleStepChange}
           current={current}
-          setModal={setModal}
+          setModal={setModalVisibility}
         />
       )
     },
     {
       title: 'Invite New Members',
-      subTitle: '(step 2 of 3)',
+      subTitle: ' (step 2 of 3)',
       content: (
         <InviteUsersToGroupForm
           onStepChange={handleStepChange}
           current={current}
           isNewGroup={true}
-          setModal={setModal}
+          setModal={setModalVisibility}
         />
       )
     },
     {
       title: 'About Group',
-      subTitle: '(step 3 of 3)',
+      subTitle: ' (step 3 of 3)',
       content: (
         <GroupRulesForm
           onStepChange={handleStepChange}
           current={current}
           isNewGroup={true}
-          setModal={setModal}
-          toggle={toggle}
+          setModal={setModalVisibility}
+          toggle={toggleModal}
         />
       )
     }
@@ -80,7 +90,7 @@ const CreateGroupModal = () => {
 
   return (
     <div>
-      <div onClick={toggle}>
+      <div onClick={toggleModal}>
         <Button
           className='btn-primary add-group'
           icon={<UsergroupAddOutlined />}
@@ -90,27 +100,21 @@ const CreateGroupModal = () => {
       </div>
       <Modal
         className='create-group-modal'
-        isOpen={modal}
-        fade={false}
-        toggle={toggle}
+        title={steps[current].title + `${steps[current].subTitle}`}
+        centered
+        closable={false}
+        visible={visible}
+        onOk={hideModal}
+        okText='Create'
+        onCancel={toggleModal}
+        destroyOnClose={true}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        destroyOnClose={true}
+        footer={null}
       >
-        <ModalHeader toggle={toggle}>
-          {' '}
-          <Steps current={current} size='small' className='group-step'>
-            {steps.map(item => (
-              <Step
-                key={item.title}
-                title={item.title}
-                subTitle={item.subTitle}
-              />
-            ))}
-          </Steps>{' '}
-        </ModalHeader>
-        <ModalBody>
-          {current <= steps.length - 1 && (
-            <div className='steps-content'>{steps[current].content}</div>
-          )}
-        </ModalBody>
+        {current <= steps.length - 1 && (
+          <div className='steps-content'>{steps[current].content}</div>
+        )}
       </Modal>
     </div>
   );

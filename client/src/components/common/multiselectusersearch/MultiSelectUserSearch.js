@@ -5,7 +5,7 @@ import { Select } from 'formik-antd';
 import debounce from 'lodash.debounce';
 import { searchUser } from '../../../actions/auth';
 
-const MultiSelectUserSearch = ({ searchUser, auth }) => {
+const MultiSelectUserSearch = ({ searchUser, auth, endUsersSelect }) => {
   const Option = Select.Option;
 
   const fetchUser = searchTerm => {
@@ -38,7 +38,7 @@ const MultiSelectUserSearch = ({ searchUser, auth }) => {
 
   return (
     <Select
-      name='usersSelect'
+      name={endUsersSelect}
       style={{ width: '100%' }}
       placeholder='Select Members'
       mode='multiple'
