@@ -102,6 +102,7 @@ const CreateGroupModal = () => {
         className='create-group-modal'
         title={steps[current].title + `${steps[current].subTitle}`}
         centered
+        closable={false}
         visible={visible}
         onOk={hideModal}
         okText='Create'

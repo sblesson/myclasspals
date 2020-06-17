@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deletePost } from '../../../actions/post';
+import { deletePost, deleteComment } from '../../../actions/post';
 import { Modal } from 'antd';
 
 import _ from 'lodash';
 
-const DeletePostModal = ({ deletePost, postId, postType }) => {
+const DeletePostModal = ({
+  deletePost,
+  deleteComment,
+  postId,
+  postType,
+  commentId
+}) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
   const [visible, setModalVisibility] = useState(false);
@@ -21,7 +27,12 @@ const DeletePostModal = ({ deletePost, postId, postType }) => {
     setModalVisibility(!visible);
   };
   const handleDelete = () => {
-    deletePost(postId);
+    debugger;
+    if (postType === 'comment') {
+      deleteComment(postId, commentId);
+    } else {
+      deletePost(postId);
+    }
     hideModal();
   };
   return (
@@ -51,4 +62,4 @@ const DeletePostModal = ({ deletePost, postId, postType }) => {
   );
 };
 
-export default connect(null, { deletePost })(DeletePostModal);
+export default connect(null, { deletePost, deleteComment })(DeletePostModal);

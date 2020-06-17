@@ -12,10 +12,7 @@ import Groups from '../groups/Groups';
 import DiscoverGroup from '../groups/DiscoverGroup';
 import SingleGroup from '../groups/SingleGroup';
 import AboutGroup from '../groups/AboutGroup';
-import Login from '../../layout/auth/Login';
 import Alert from '../../layout/Alert';
-import PendingRegistration from '../../layout/auth/PendingRegistration';
-import Posts from '../../layout/Dashboard';
 import SinglePost from '../posts/SinglePost';
 import Page401 from '../../layout/Page401';
 import Page404 from '../../layout/Page404';
@@ -31,7 +28,7 @@ import AboutUs from '../../layout/AboutUs';
 import TermsAndConditions from '../../layout/TermsAndConditions';
 import Guidelines from '../../layout/Guidelines';
 import Help from '../../layout/Help';
-import Landing from '../../layout/Landing';
+import Landing from '../../layout/auth/Landing';
 import { Link } from 'react-router-dom';
 
 import PrivateRoute from '../routing/PrivateRoute';
@@ -42,10 +39,9 @@ const Routes = () => {
       <Alert />
       <Switch>
         <Route exact path='/login' component={Landing} />
-        <Route exact path='/invite/:id/group' component={PendingRegistration} />
+        <Route exact path='/invite/:id/group' component={Landing} />
         <Route exact path='/' component={Landing} />
         <Route exact path='/register' component={Landing} />
-        {/*<Route exact path='/invite/:id/group' component={Landing} />*/}
         <Route exact path='/login' component={Landing} />
         <Route exact path='/our-story' component={OurStory} />
         <Route exact path='/our-mission' component={OurMission} />
@@ -73,15 +69,19 @@ const Routes = () => {
         <PrivateRoute exact path='/group/:id/members' component={SingleGroup} />
         <PrivateRoute exact path='/group/:id/about' component={SingleGroup} />
         <PrivateRoute exact path='/group/:id/about' component={AboutGroup} />
-        <PrivateRoute exact path='/dashboard' component={Posts} />
-        <PrivateRoute exact path='/dashboard/:id' component={SingleGroup} />
+        <PrivateRoute exact path='/dashboard' component={SingleGroup} />
+        <PrivateRoute
+          path='/dashboard/:id'
+          component={props => (
+            <SingleGroup {...props} key={window.location.pathname} />
+          )}
+        />
         <PrivateRoute
           exact
           path='/create-profile/:id'
           component={CreateProfile}
         />
         <PrivateRoute exact path='/account' component={Account} />
-        <PrivateRoute exact path='/posts' component={Posts} />
         <PrivateRoute exact path='/posts/:id' component={SinglePost} />
         {/*         <Route component={Page404} />
          */}{' '}

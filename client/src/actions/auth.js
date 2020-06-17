@@ -30,7 +30,7 @@ import { updateUserGroup } from './group';
 import { setAuthToken } from '../utils/axios';
 
 // Load User
-export const loadUser = (email, myCancelToken) => async dispatch => {
+export const loadUser = email => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
 
@@ -41,10 +41,7 @@ export const loadUser = (email, myCancelToken) => async dispatch => {
   if (email) {
     try {
       const response = await axios.get(
-        'http://localhost:8080/user/getuserdetails?user=' + email,
-        {
-          cancelToken: myCancelToken
-        }
+        'http://localhost:8080/user/getuserdetails?user=' + email
       );
 
       dispatch({
@@ -105,7 +102,6 @@ export const searchUser = keyword => async dispatch => {
 // Create or update user
 export const updateUser = (formData, edit = false) => async dispatch => {
   try {
-    console.log(formData);
     const config = {
       headers: {
         'Content-Type': 'application/json'
@@ -212,14 +208,12 @@ export const register = (formData, myCancelToken) => async dispatch => {
       type: REGISTER_SUCCESS,
       payload: res.data
     });
-    console.log(res);
 
     const authRes = await axios.post(
       'http://localhost:8080/user/authenticate',
       body,
       config
     );
-    console.log(authRes);
     dispatch({
       type: AUTH_SUCCESS,
       payload: authRes.data
@@ -309,7 +303,7 @@ export const changePassword = ({ password }) => async dispatch => {
 };
 
 // Login User
-export const login = (formData, myCancelToken) => async dispatch => {
+export const login = formData => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -330,7 +324,7 @@ export const login = (formData, myCancelToken) => async dispatch => {
       payload: res.data
     });
 
-    dispatch(loadUser(formData.email, myCancelToken));
+    dispatch(loadUser(formData.email));
   } catch (err) {
     const errors =
       err && err.response && err.response.data && err.response.data.errors;

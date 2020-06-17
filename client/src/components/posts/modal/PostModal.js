@@ -25,20 +25,14 @@ import { DatePicker, TimePicker } from 'antd';
 
 import './PostModal.scss';
 
-const PostModal = ({
-  addPost,
-  history,
-  currentGroup,
-  auth,
-  searchPostByGroupId
-}) => {
+const PostModal = ({ addPost, history, group, auth, searchPostByGroupId }) => {
   const [componentSize, setComponentSize] = useState('small');
   const [activeIndex, setActiveIndex] = useState(0);
 
   const { TabPane } = Tabs;
 
   const [visible, setModalVisibility] = useState(false);
-  const [headerTitle, setHeaderTitle] = useState('Post to' + currentGroup.name);
+
   const showModal = () => {
     setModalVisibility(true);
   };
@@ -118,7 +112,7 @@ const PostModal = ({
     <Formik
       initialValues={{
         categoryId: 'General',
-        groupId: currentGroup.id,
+        groupId: group.currentGroup.id,
         subject: '',
         message: ''
       }}
@@ -172,9 +166,9 @@ const PostModal = ({
                 <UploadOutlined /> Upload
               </Button>
             </Upload> */}
-            <pre style={{ flex: 1 }}>
+            {/*     <pre style={{ flex: 1 }}>
               <FormikDebug />
-            </pre>
+            </pre> */}
             <SubmitButton className='ant-btn btn-primary'> Post</SubmitButton>
           </Form>
         </div>
@@ -274,7 +268,7 @@ const PostModal = ({
         </div>
       </div>
       <Modal
-        title={headerTitle}
+        title={'Post to ' + group.currentGroup.groupName}
         centered
         visible={visible}
         onOk={hideModal}
@@ -305,8 +299,7 @@ PostModal.propTypes = {
 };
 
 const mapDispatchToProps = state => ({
-  hideModal: state.hideModal,
-  currentGroup: state.group.currentGroup,
+  group: state.group,
   auth: state.auth
 });
 

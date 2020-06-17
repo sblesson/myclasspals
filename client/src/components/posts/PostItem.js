@@ -76,6 +76,37 @@ const PostItem = ({
       <Menu.Item key='editpost'>Edit</Menu.Item>
     </Menu>
   );
+  const allComments = (
+    <List
+      itemLayout='horizontal'
+      dataSource={comments}
+      style={{ overflow: 'hidden' }}
+      renderItem={comment => (
+        <CommentItem
+          key={comment._id}
+          comment={comment}
+          postId={_id}
+          isSinglePost={isSinglePost}
+        />
+      )}
+    />
+  );
+  const lastThreeComments = (
+    <List
+      itemLayout='horizontal'
+      dataSource={comments.slice(-3).reverse()}
+      style={{ overflow: 'hidden' }}
+      renderItem={comment => (
+        <CommentItem
+          key={comment._id}
+          comment={comment}
+          postId={_id}
+          isSinglePost={isSinglePost}
+        />
+      )}
+    />
+  );
+
   return (
     <div>
       <Card
@@ -129,176 +160,15 @@ const PostItem = ({
 
         {showActions && (
           <Fragment>
-            {/*             <Menu>
-              <Menu.Item name='thank' onClick={() => toggleLike(_id)}>
-                <i className='far fa-smile'></i>&nbsp;&nbsp; Thank
-              </Menu.Item>
-              <Menu.Item name='Comment' onClick={() => toggleLike(_id)}>
-                <i className='far fa-comment-alt'></i>&nbsp;&nbsp;Comment
-              </Menu.Item>
-
-              <Menu.Menu position='right'>
-                {likes && likes.length > 0 && (
-                  <Menu.Item name='thanked'>
-                    <i className='far fa-smile'></i> &nbsp;&nbsp;{likes.length}
-                  </Menu.Item>
-                )}
-                {comments && comments.length > 0 && (
-                  <Menu.Item name='commented'>
-                    <i className='far fa-comment-alt'></i>&nbsp;&nbsp;
-                    {comments.length}
-                  </Menu.Item>
-                )}
-              </Menu.Menu>
-            </Menu> */}
             <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
-            {showAllComments === true ? (
-              <List divided relaxed>
-                {comments && comments.length > 0 ? (
-                  comments.map(comment => (
-                    <CommentItem
-                      key={comment._id}
-                      comment={comment}
-                      postId={_id}
-                      isSinglePost={isSinglePost}
-                    />
-                  ))
-                ) : (
-                  <hr />
-                )}
-              </List>
-            ) : (
-              <List>
-                {comments && comments.length > 0 ? (
-                  comments
-                    .slice(-3)
-                    .reverse()
-                    .map(comment => (
-                      <CommentItem
-                        key={comment._id}
-                        comment={comment}
-                        postId={_id}
-                      />
-                    ))
-                ) : (
-                  <hr />
-                )}
-              </List>
-            )}
+            {comments && comments.length > 0
+              ? showAllComments
+                ? allComments
+                : lastThreeComments
+              : ''}
           </Fragment>
         )}
       </Card>
-      {/* <List.Item>
-        <List.Content floated='right'>
-          {!auth.loading && user === auth.user._id && (
-            <Button
-              onClick={() => deletePost(_id)}
-              type='button'
-              content='Delete'
-              className='btn btn-danger'
-              size='tiny'
-            ></Button>
-          )}
-        </List.Content>
-        <List.Content>
-          <List.Header>
-            <Link to={`/profile/${_id}`}>
-              {' '}
-              <Avatar
-                style={{
-                  backgroundColor: '#00a2ae',
-                  verticalAlign: 'middle'
-                }}
-                shape='circle'
-                size='64'
-              >
-                {firstLetterUserName(userName)}
-              </Avatar>
-              <div className='feed-author'>
-                <span className='feed-author-title'>{userName}</span>
-                <div className='feed-author-time'>
-                  <Moment fromNow ago>
-                    {postedDate}
-                  </Moment>
-                </div>
-              </div>
-            </Link>
-          </List.Header>
-          <List.Header style={{ marginTop: 8 }}>
-            <Link className='feed-title' to={`/posts/${_id}`}>
-              <Ellipsis length={100} tooltip>
-                {subject}
-              </Ellipsis>
-            </Link>
-          </List.Header>
-
-          <List.Description style={{ marginTop: 8 }}>
-            <Ellipsis length={200} tooltip>
-              {message}
-            </Ellipsis>
-          </List.Description>
-        </List.Content>
-      </List.Item>
-      {showActions && (
-        <Fragment>
-          <Menu>
-            <Menu.Item name='thank' onClick={() => toggleLike(_id)}>
-              <i className='far fa-smile'></i>&nbsp;&nbsp; Thank
-            </Menu.Item>
-            <Menu.Item name='Comment' onClick={() => toggleLike(_id)}>
-              <i className='far fa-comment-alt'></i>&nbsp;&nbsp;Comment
-            </Menu.Item>
-
-            <Menu.Menu position='right'>
-              {likes && likes.length > 0 && (
-                <Menu.Item name='thanked'>
-                  <i className='far fa-smile'></i> &nbsp;&nbsp;{likes.length}
-                </Menu.Item>
-              )}
-              {comments && comments.length > 0 && (
-                <Menu.Item name='commented'>
-                  <i className='far fa-comment-alt'></i>&nbsp;&nbsp;
-                  {comments.length}
-                </Menu.Item>
-              )}
-            </Menu.Menu>
-          </Menu>
-          <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
-          {showAllComments === true ? (
-            <List divided relaxed>
-              {comments && comments.length > 0 ? (
-                comments.map(comment => (
-                  <CommentItem
-                    key={comment._id}
-                    comment={comment}
-                    postId={_id}
-                    isSinglePost={isSinglePost}
-                  />
-                ))
-              ) : (
-                <hr />
-              )}
-            </List>
-          ) : (
-            <List divided relaxed>
-              {comments && comments.length > 0 ? (
-                comments
-                  .slice(-3)
-                  .reverse()
-                  .map(comment => (
-                    <CommentItem
-                      key={comment._id}
-                      comment={comment}
-                      postId={_id}
-                    />
-                  ))
-              ) : (
-                <hr />
-              )}
-            </List>
-          )}
-        </Fragment>
-      )} */}
     </div>
   );
 };

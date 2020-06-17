@@ -25,6 +25,7 @@ import com.clazzbuddy.mongocollections.UserRegistration;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.restmodel.GroupInvitationAction;
 import com.clazzbuddy.utils.CommonUtils;
+import com.clazzbuddy.utils.Constants;
 
 @Component
 public class UserService implements UserDetailsService{
@@ -190,24 +191,44 @@ public class UserService implements UserDetailsService{
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 
 		Users requestorUser = getUserDetails(action.getRequestorUserId());
+		
+		if (Constants.PUBLIC.equals(userGroup.getPrivacy())) {
+			if (requestorUser.getUserGroup() == null) {
+				requestorUser.setUserGroup(new ArrayList<UserGroup>());
+			}
+			requestorUser.getUserGroup().add(userGroup);
 
-		GroupInvitations invitation = new GroupInvitations();
-		invitation.setGroupId(action.getGroupId());
-		invitation.setRequestorUserId(action.getRequestorUserId());
-		invitation.setRole(action.getRole());
+			if (userGroup.getUserGroupMembers() == null) {
+				userGroup.setUserGroupMembers(new ArrayList<UserGroupMembers>());
+			}
+			UserGroupMembers userGroupMember = new UserGroupMembers();
+			userGroupMember.set_id(requestorUser.get_id());
+			userGroupMember.setName(requestorUser.getEmail());
+			userGroupMember.setRole(action.getRole());
+			userGroup.getUserGroupMembers().add(userGroupMember);
 
-		if (userGroup.getPendingInvitations() == null) {
-			userGroup.setPendingInvitations(new ArrayList<GroupInvitations>());
+			
+		} else {
+
+			GroupInvitations invitation = new GroupInvitations();
+			invitation.setGroupId(action.getGroupId());
+			invitation.setRequestorUserId(action.getRequestorUserId());
+			invitation.setRole(action.getRole());
+	
+			if (userGroup.getPendingInvitations() == null) {
+				userGroup.setPendingInvitations(new ArrayList<GroupInvitations>());
+			}
+			userGroup.getPendingInvitations().add(invitation);
+	
+			if (requestorUser.getRequestedUserGroup() == null) {
+				requestorUser.setRequestedUserGroup(new ArrayList<UserGroup>());
+			}
+			requestorUser.getRequestedUserGroup().add(userGroup);
 		}
-		userGroup.getPendingInvitations().add(invitation);
-
-		if (requestorUser.getRequestedUserGroup() == null) {
-			requestorUser.setRequestedUserGroup(new ArrayList<UserGroup>());
-		}
-		requestorUser.getRequestedUserGroup().add(userGroup);
-
+	
 		mongoTemplate.save(requestorUser);
 		mongoTemplate.save(userGroup);
+		
 
 		return requestorUser;
 

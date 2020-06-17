@@ -104,13 +104,10 @@ export const getAllGroups = userId => async dispatch => {
 };
 
 // Get all userGroups
-export const getGroupDetails = (groupId, myCancelToken) => async dispatch => {
+export const getGroupDetails = groupId => async dispatch => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/usergroup/getgroup?id=${groupId}`,
-      {
-        cancelToken: myCancelToken
-      }
+      `http://localhost:8080/usergroup/getgroup?id=${groupId}`
     );
 
     dispatch({
@@ -265,8 +262,6 @@ export const requestToJoinUserGroup = (
     const res = await axios
       .post('http://localhost:8080/user/requestusergroup', requestData, config)
       .then(res => {
-        console.log(res);
-
         res.data.origin = requestData.origin;
 
         dispatch({

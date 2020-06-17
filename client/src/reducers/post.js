@@ -81,6 +81,10 @@ export default function(state = initialState, action) {
         loading: false
       };
     case DELETE_POST:
+      debugger;
+      console.log(state.posts);
+      console.log(payload);
+
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== payload),
@@ -121,6 +125,7 @@ export default function(state = initialState, action) {
         loading: false
       };
     case REMOVE_COMMENT:
+      debugger;
       return {
         ...state,
         posts: state.posts.map(post =>

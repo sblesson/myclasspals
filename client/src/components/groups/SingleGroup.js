@@ -33,9 +33,6 @@ const SingleGroup = ({
   history
 }) => {
   useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
     let user = null;
     let groupId = null;
     console.log('inside group');
@@ -45,7 +42,7 @@ const SingleGroup = ({
       groupId = match.params.id;
       //user clicked on another group from dashboard leftnav groups menu,
       //get groupId from params
-      getGroupDetails(groupId, signal);
+      getGroupDetails(groupId);
     } else if (auth.user) {
       try {
         user = JSON.parse(auth.user);
@@ -58,7 +55,7 @@ const SingleGroup = ({
         //first time groupId is not passed in url param.
         //So get groupId from user group first item
         groupId = user.userGroup[0].id;
-        getGroupDetails(groupId, signal);
+        getGroupDetails(groupId);
       } else if (
         user &&
         user.pendingInvitedUserGroups &&
@@ -75,7 +72,7 @@ const SingleGroup = ({
       }
     }
     return function cleanup() {
-      abortController.abort();
+      //todo
     };
   }, [getGroupDetails, auth.user, match]);
 

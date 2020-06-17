@@ -133,20 +133,15 @@ const CreateGroupForm = ({
               //validate={validateRequired}
             >
               <Radio.Group
-                name='groupType'
+                name='privacy'
                 options={[
                   {
                     label: 'Private --appears in search results',
-                    value: 'private'
+                    value: 'PRIVATE'
                   },
                   {
                     label: 'Public',
-                    value: 'public'
-                  },
-                  {
-                    label:
-                      'Hidden --not appear in search results, need invitation',
-                    value: 'hidden'
+                    value: 'PUBLIC'
                   }
                 ]}
               />

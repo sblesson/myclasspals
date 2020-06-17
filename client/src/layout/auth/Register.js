@@ -8,13 +8,10 @@ import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({ setAlert, register }) => {
   const [componentSize, setComponentSize] = useState('small');
   const { Title, Text } = Typography;
 
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
-  }
   const validateRequired = value => {
     console.log(value);
     return value ? undefined : 'required';
