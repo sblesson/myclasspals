@@ -82,7 +82,7 @@ const Routes = () => {
           component={CreateProfile}
         />
         <PrivateRoute exact path='/account' component={Account} />
-        <PrivateRoute exact path='/posts/:id' component={SinglePost} />
+        <PrivateRoute exact path='/posts/:id/:groupId' component={SinglePost} />
         {/*         <Route component={Page404} />
          */}{' '}
         <Route exact path='/401' component={Page403} />

@@ -1,21 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import { Avatar, Button, Dropdown, Menu, List } from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
-import { deleteComment, deleteSinglePostComment } from '../../actions/post';
 import DeleteCommentModal from './modal/DeletePostModal';
 import { EllipsisOutlined } from '@ant-design/icons';
+
 const CommentItem = ({
   postId,
   comment: { _id, message, userName, avatar, user, postedDate, subject },
-  auth,
-  deleteComment,
-  isSinglePost,
-  deleteSinglePostCommenš
+  isSinglePost
 }) => {
   const firstLetterUserName = userName => {
     if (typeof userName !== 'string') return '';
@@ -29,9 +25,9 @@ const CommentItem = ({
           postId={postId}
           commentId={_id}
           postType='comment'
+          isSinglePost={isSinglePost}
         />
       </Menu.Item>
-      <Menu.Item key='editpost'>Edit</Menu.Item>
     </Menu>
   );
   return (
@@ -73,17 +69,7 @@ const CommentItem = ({
 
 CommentItem.propTypes = {
   postId: PropTypes.string.isRequired,
-  comment: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  deleteSinglePostComment: PropTypes.func.isRequired
+  comment: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(mapStateToProps, {
-  deleteComment,
-  deleteSinglePostComment
-})(CommentItem);
+export default CommentItem;

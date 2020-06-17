@@ -32,6 +32,7 @@ const PostItem = ({
     user,
     likes,
     thanks,
+    groupId,
     comments,
     postedDate
   },
@@ -39,6 +40,7 @@ const PostItem = ({
   showAllComments,
   isSinglePost
 }) => {
+  debugger;
   const { Paragraph } = Typography;
 
   const { Meta } = Card;
@@ -76,7 +78,7 @@ const PostItem = ({
       <Menu.Item key='editpost'>Edit</Menu.Item>
     </Menu>
   );
-  const allComments = (
+  const allComments = comments !== null && comments && comments.length > 0 && (
     <List
       itemLayout='horizontal'
       dataSource={comments}
@@ -86,26 +88,31 @@ const PostItem = ({
           key={comment._id}
           comment={comment}
           postId={_id}
+          groupId={groupId}
           isSinglePost={isSinglePost}
         />
       )}
     />
   );
-  const lastThreeComments = (
-    <List
-      itemLayout='horizontal'
-      dataSource={comments.slice(-3).reverse()}
-      style={{ overflow: 'hidden' }}
-      renderItem={comment => (
-        <CommentItem
-          key={comment._id}
-          comment={comment}
-          postId={_id}
-          isSinglePost={isSinglePost}
-        />
-      )}
-    />
-  );
+
+  const lastThreeComments = comments !== null &&
+    comments &&
+    comments.length > 0 && (
+      <List
+        itemLayout='horizontal'
+        dataSource={comments.slice(-3)}
+        style={{ overflow: 'hidden' }}
+        renderItem={comment => (
+          <CommentItem
+            key={comment._id}
+            comment={comment}
+            postId={_id}
+            groupId={groupId}
+            isSinglePost={isSinglePost}
+          />
+        )}
+      />
+    );
 
   return (
     <div>
@@ -145,7 +152,7 @@ const PostItem = ({
           </Dropdown>
         }
       >
-        <Link className='feed-title' to={`/posts/${_id}`}>
+        <Link className='feed-title' to={`/posts/${_id}/${groupId}`}>
           <Meta
             title={
               <Ellipsis length={100} tooltip>
@@ -160,12 +167,14 @@ const PostItem = ({
 
         {showActions && (
           <Fragment>
-            <CommentForm postId={_id} isSinglePost={isSinglePost} />{' '}
-            {comments && comments.length > 0
-              ? showAllComments
-                ? allComments
-                : lastThreeComments
-              : ''}
+            {showAllComments ? allComments : lastThreeComments}
+            <CommentForm
+              postId={_id}
+              groupId={groupId}
+              userId={userId}
+              userName={userName}
+              isSinglePost={isSinglePost}
+            />{' '}
           </Fragment>
         )}
       </Card>

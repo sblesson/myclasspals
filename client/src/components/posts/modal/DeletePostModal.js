@@ -10,7 +10,8 @@ const DeletePostModal = ({
   deleteComment,
   postId,
   postType,
-  commentId
+  commentId,
+  isSinglePost
 }) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
@@ -27,9 +28,8 @@ const DeletePostModal = ({
     setModalVisibility(!visible);
   };
   const handleDelete = () => {
-    debugger;
     if (postType === 'comment') {
-      deleteComment(postId, commentId);
+      deleteComment(postId, commentId, isSinglePost);
     } else {
       deletePost(postId);
     }
@@ -62,4 +62,7 @@ const DeletePostModal = ({
   );
 };
 
-export default connect(null, { deletePost, deleteComment })(DeletePostModal);
+export default connect(null, {
+  deletePost,
+  deleteComment
+})(DeletePostModal);
