@@ -224,13 +224,7 @@ export const addMessageReply = (postId, formData) => async dispatch => {
 };
 
 // Add comment
-export const addComment = (postId, message) => async dispatch => {
-  const formData = {
-    message: message,
-    groupId: '5e866d173a4aad3d75d10448',
-    userId: '5e866ca0d6f79c4a79085a5f',
-    userName: 'susan'
-  };
+export const addComment = (postId, formData) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -306,40 +300,31 @@ export const deletePost = postId => async dispatch => {
 };
 
 // Delete comment
-export const deleteComment = (postId, commentId) => async dispatch => {
+export const deleteComment = (
+  postId,
+  commentId,
+  isSinglePost
+) => async dispatch => {
   try {
     const res = await axios.delete(
       `http://localhost:8080/post/deletepost/${commentId}`
     );
-    dispatch({
-      type: REMOVE_COMMENT,
-      payload: { postId, commentId, comments: res.data }
-    });
+    if (isSinglePost) {
+      dispatch({
+        type: REMOVE_COMMENT_SINGLE_POST,
+        payload: { postId, commentId, comments: res.data }
+      });
+    } else {
+      dispatch({
+        type: REMOVE_COMMENT,
+        payload: { postId, commentId, comments: res.data }
+      });
+    }
+    dispatch(setAlert('Comment Removed', 'success'));
   } catch (err) {
     dispatch({
       type: POST_ERROR
       //payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-
-export const deleteSinglePostComment = (
-  postId,
-  commentId
-) => async dispatch => {
-  try {
-    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
-
-    dispatch({
-      type: REMOVE_COMMENT_SINGLE_POST,
-      payload: { postId, commentId, comments: res.data }
-    });
-
-    dispatch(setAlert('Comment Removed', 'success'));
-  } catch (err) {
-    dispatch({
-      type: REMOVE_COMMENT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };

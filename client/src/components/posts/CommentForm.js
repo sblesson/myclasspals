@@ -8,10 +8,20 @@ import './CommentItem.scss';
 
 const CommentForm = ({
   postId,
+  groupId,
+  userId,
+  userName,
   isSinglePost,
   addComment,
   addCommentToSinglePost
 }) => {
+  const [formData, setFormData] = useState({
+    message: '',
+    groupId: groupId,
+    userId: userId,
+    userName: userName
+  });
+
   const [text, setText] = useState('');
   const keyPress = e => {
     if (e.keyCode == 13) {
@@ -20,30 +30,34 @@ const CommentForm = ({
   };
   const onChatFormSubmit = e => {
     e.preventDefault();
-    if (text) {
+    if (formData.message) {
       if (isSinglePost) {
-        addCommentToSinglePost(postId, { text });
+        addCommentToSinglePost(postId, formData);
       } else {
-        addComment(postId, text);
+        addComment(postId, formData);
       }
-      setText('');
+      setFormData({ ...formData, ['message']: '' });
     }
   };
   return (
     <div className='comment-form'>
       <form
-        className='form my-1'
         onSubmit={e => {
           onChatFormSubmit(e);
         }}
       >
         <textarea
           name='message'
-          className='comment-text'
+          className='form-control comment-rounded-textarea '
+          rows='2'
           placeholder='Write a comment...'
-          value={text}
-          onChange={e => setText(e.target.value)}
-          onKeyDown={e => setText(e.target.value)}
+          value={formData.message}
+          onChange={e =>
+            setFormData({ ...formData, [e.target.name]: e.target.value })
+          }
+          onKeyDown={e =>
+            setFormData({ ...formData, [e.target.name]: e.target.value })
+          }
           required
         />
         <Button

@@ -63,9 +63,16 @@ const GroupCard = ({
 
   const isCurrentGroupRequestedGroup = (currentGroup, group) => {
     let isGroupRequested = false;
-    let requestedGroupArr = group.requestedUserGroup.filter(
-      item => item.groupId === currentGroup.groupId
-    );
+    let requestedGroupArr = [];
+    if (
+      group &&
+      group.requestedUserGroup &&
+      group.requestedUserGroup.length > 0
+    ) {
+      requestedGroupArr = group.requestedUserGroup.filter(
+        item => item.groupId === currentGroup.groupId
+      );
+    }
 
     if (requestedGroupArr && requestedGroupArr.length > 0) {
       //current user is already part of group
@@ -101,7 +108,7 @@ const GroupCard = ({
           currentGroup,
           group
         );
-        if (!isMemberUserGroup && !currentGroup.isRequestUserGroupSuccess) {
+        if (currentGroup.role === null) {
           return (
             <Button
               type='link'

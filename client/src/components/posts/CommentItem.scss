@@ -6,22 +6,16 @@
   font-size: 1.1em;
   background: #fff;
   color: #fff;
-  border-radius: 40px;
-  max-width: 400px;
-  margin: 10px;
-  padding: 10px !important;
+  border-radius: 1rem;
+  margin: 1em 0.625em;
+  padding: 0.625em !important;
   background: var(--main-body-bg-color);
-  .description {
-    margin-left: 32px;
-    font-size: 12px;
-    line-height: normal;
-  }
 }
 .comment-author {
   display: inline-block;
   flex-grow: 1;
   flex-basis: 0;
-  margin-left: 8px;
+  margin-left: 0.5em;
   overflow: hidden;
   vertical-align: middle;
   &-title {
@@ -47,16 +41,14 @@
 }
 
 .comment-form {
-  height: 70px;
-  margin-bottom: 20px;
+  margin: 0.25em;
+  padding: 0.625em !important;
   .comment-item {
     border: 1px solid grey;
     background-origin: padding-box;
   }
-  .comment-text {
-    height: 35px;
-    padding: 8px;
-    overflow: hidden;
+  .comment-rounded-textarea {
+    border-radius: 1rem;
   }
   .reply-btn {
     margin-top: 5px;

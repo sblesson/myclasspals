@@ -121,11 +121,10 @@ export default function(state = initialState, action) {
     case ADD_COMMENT_SINGLE_POST:
       return {
         ...state,
-        currentPost: { ...state.post, comments: payload.comments },
+        currentPost: { ...state.currentPost, comments: payload.comments },
         loading: false
       };
     case REMOVE_COMMENT:
-      debugger;
       return {
         ...state,
         posts: state.posts.map(post =>
@@ -142,11 +141,12 @@ export default function(state = initialState, action) {
       };
 
     case REMOVE_COMMENT_SINGLE_POST:
+      debugger;
       return {
         ...state,
         currentPost: {
-          ...state.post,
-          comments: state.post.comments.filter(
+          ...state.currentPost,
+          comments: state.currentPost.comments.filter(
             comment => comment._id !== payload.commentId
           )
         },
