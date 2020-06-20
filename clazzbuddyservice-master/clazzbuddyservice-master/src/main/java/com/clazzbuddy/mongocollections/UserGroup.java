@@ -67,7 +67,8 @@ public class UserGroup {
 		}
 		if (pendingInvitations != null) {
 			for (GroupInvitations group : pendingInvitations) {
-				if (group.getRequestorUserId() != null && group.getRequestorUserId().equals(currentUserId)) {
+				if (group.getRequestorUserId() != null && (group.getRequestorUserId().equals(currentUserId) 
+						|| group.getRequestorUserId().equals(emailId))) {
 					role = Constants.PENDING_INVITATION;
 					return;
 				}

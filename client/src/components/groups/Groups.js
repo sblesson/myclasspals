@@ -49,7 +49,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
                       <GroupCard
                         currentGroup={group}
                         key={index}
-                        type='mygroups'
+                        type='mygroup'
                       />
                     ))
                   : 'Current user is not part of any groups.'}
