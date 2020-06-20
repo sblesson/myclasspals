@@ -108,7 +108,19 @@ public class UserGroupService {
 		ObjectId objID = new ObjectId(id);
 		Query userGroupById = new Query();
 		userGroupById.addCriteria(Criteria.where("_id").is(objID));
-		return mongoTemplate.findOne(userGroupById, UserGroup.class);
+		UserGroup userGroup = mongoTemplate.findOne(userGroupById, UserGroup.class);
+		if (userGroup != null) {
+			UserDetails userDetails = (UserDetails) SecurityContextHolder
+					.getContext().getAuthentication().getPrincipal();
+			String userId = userDetails.getUsername();
+			Users user = userService.getUserDetails(userId);
+			userGroup.initializeRole(user.get_id(), userId);
+			
+		}
+		
+		return userGroup;
+		
+		
 
 	}
 

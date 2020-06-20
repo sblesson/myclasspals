@@ -52,6 +52,7 @@ const CommentForm = ({
           rows='2'
           placeholder='Write a comment...'
           value={formData.message}
+          
           onChange={e =>
             setFormData({ ...formData, [e.target.name]: e.target.value })
           }
