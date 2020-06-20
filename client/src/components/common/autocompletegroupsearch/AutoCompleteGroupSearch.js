@@ -1,22 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Select } from 'antd';
+import { Input, AutoComplete } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import _ from 'lodash';
+import {
+  getGroupAutoComplete,
+  searchGroupWithFilters
+} from '../../../actions/group';
 
-import { searchGroupWithFilters } from '../../../actions/group';
-
-const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
-  const Option = Select.Option;
-
+const AutoCompleteGroupSearch = ({
+  getGroupAutoComplete,
+  searchGroupWithFilters,
+  group
+}) => {
   const handleGroupSearch = searchTerm => {
     console.log(searchTerm);
-    setTimeout(() => {
-      searchGroupWithFilters({
+    _.debounce(() => {
+      getGroupAutoComplete({
         groupKeyword: searchTerm
       });
     }, Math.random() * 1000);
   };
 
-  const children =
+  /*   const children =
     group &&
     group.searchResult &&
     group.searchResult.length > 0 &&
@@ -26,25 +32,40 @@ const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
           {item.groupName}
         </Option>
       );
-    });
+    }); */
 
-  return (
-    <Select
-      name='groupSelect'
-      showArrow={false}
-      showSearch={true}
-      allowClear={true}
-      style={{ width: '100%' }}
-      placeholder='Type Group Name or School Name'
-      onSearch={handleGroupSearch}
+  const renderTitle = title => <span>{title}</span>;
+
+  const options = [
+    {
+      label: renderTitle('Schools'),
+      options: group.searchResult.schools
+    },
+    {
+      label: renderTitle('Group Name'),
+      options: group.searchResult.userGroups
+    }
+  ];
+
+  const Complete = () => (
+    <AutoComplete
+      dropdownClassName='certain-category-search-dropdown'
+      dropdownMatchSelectWidth={500}
+      style={{
+        width: 250
+      }}
+      options={group.searchResult}
     >
-      {children}
-    </Select>
+      <Input.Search size='large' placeholder='input here' />
+    </AutoComplete>
   );
+
+  return <Complete />;
 };
 const mapStateToProps = state => ({
   group: state.group
 });
-export default connect(mapStateToProps, { searchGroupWithFilters })(
-  AutoCompleteGroupSearch
-);
+export default connect(mapStateToProps, {
+  searchGroupWithFilters,
+  getGroupAutoComplete
+})(AutoCompleteGroupSearch);

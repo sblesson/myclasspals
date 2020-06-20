@@ -22,7 +22,9 @@ import {
   CHANGE_GROUP_USER_ROLE,
   CHANGE_GROUP_USER_ROLE_ERROR,
   SEARCH_ALL_GROUP_ERROR,
-  UPDATE_USER_GROUP
+  UPDATE_USER_GROUP,
+  GET_GROUP_AUTO_COMPLETE,
+  GET_GROUP_AUTO_COMPLETE_ERROR
 } from './types';
 
 import { updateUserGlobal } from './auth';
@@ -98,6 +100,25 @@ export const getAllGroups = userId => async dispatch => {
   } catch (err) {
     dispatch({
       type: GET_ALL_GROUPS_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Get all userGroups
+export const getGroupAutoComplete = key => async dispatch => {
+  debugger;
+  try {
+    const response = await axios.get(
+      'http://localhost:8080/usergroup/groupautocomplete?key=' + key
+    );
+    dispatch({
+      type: GET_GROUP_AUTO_COMPLETE,
+      payload: response.data
+    });
+  } catch (err) {
+    dispatch({
+      type: GET_GROUP_AUTO_COMPLETE_ERROR
       //payload: { msg: err.response.statusText, status: err.response.status }
     });
   }

@@ -103,35 +103,55 @@ public class UserGroupService {
 		return userGroupFromDB;
 	}
 
-	public UserGroup getUserGroupById(String id) {
+	public UserGroup getUserGroupById(String id) throws Exception {
 
 		ObjectId objID = new ObjectId(id);
 		Query userGroupById = new Query();
 		userGroupById.addCriteria(Criteria.where("_id").is(objID));
-		return mongoTemplate.findOne(userGroupById, UserGroup.class);
+		UserGroup userGroup = mongoTemplate.findOne(userGroupById, UserGroup.class);
+		if (userGroup != null) {
+			Users user = (Users) SecurityContextHolder
+					.getContext().getAuthentication().getPrincipal();
+			userGroup.initializeRole(user.get_id(), user.getEmail());
+			
+		}
+		
+		return userGroup;
+		
+		
 
 	}
 
-	public List<UserGroup> getUserGroupBySerachFilter(UserGroupSearchFilter filter) {
-
-		UserDetails userDetails = (UserDetails) SecurityContextHolder
-				.getContext().getAuthentication().getPrincipal();
+	public List<UserGroup> getUserGroups(String key) {
+		Query userGroupSearch = new Query();
+		userGroupSearch.addCriteria(Criteria.where("groupName").regex(key));
+		List<UserGroup> userGroups = mongoTemplate.find(userGroupSearch, UserGroup.class);
+		return userGroups;
 		
-		String userId = userDetails.getUsername();
+
+	}
+	public List<UserGroup> getUserGroupBySerachFilter(UserGroupSearchFilter filter) throws Exception {
+
+		
 		
 
 		Query userGroupSearch = new Query();
-		if (filter.getGroupKeyword() != null) {
+		if (filter.getGroupKeyword() != null && filter.getSchoolName() != null) {
+			userGroupSearch.addCriteria(new Criteria()
+			        .orOperator(
+			        		Criteria.where("groupName").regex(filter.getGroupKeyword(), "i"),
+			        		Criteria.where("schoolName").regex(filter.getSchoolName(), "i")
+			            ) );
+		} else if (filter.getGroupKeyword() != null) {
 			userGroupSearch.addCriteria(Criteria.where("groupName").regex(filter.getGroupKeyword()));
+		} else if (filter.getSchoolName() != null) {
+			userGroupSearch.addCriteria(Criteria.where("schoolName").regex(filter.getSchoolName()));
 		}
 		if (filter.getPrivacy() != null) {
 			userGroupSearch.addCriteria(Criteria.where("privacy").regex(filter.getPrivacy()));
 
 		}
-		if (filter.getSchoolName() != null) {
-			userGroupSearch.addCriteria(Criteria.where("schoolName").regex(filter.getSchoolName()));
-
-		}
+		
 		if (filter.getCity() != null) {
 			userGroupSearch.addCriteria(Criteria.where("city").regex(filter.getCity()));
 		}
@@ -156,9 +176,11 @@ public class UserGroupService {
 		logger.info(userGroupSearch.toString());
 		List<UserGroup> userGroups = mongoTemplate.find(userGroupSearch, UserGroup.class);
 		if (userGroups != null) {
-			Users user = userService.getUserDetails(userId);
+			Users users = (Users) SecurityContextHolder
+					.getContext().getAuthentication().getPrincipal();
+
 			for (UserGroup userGroup : userGroups) {
-				userGroup.initializeRole(user.get_id(), userId);
+				userGroup.initializeRole(users.get_id(), users.getEmail());
 			}
 		}
 		return userGroups;

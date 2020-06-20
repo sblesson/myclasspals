@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -139,6 +140,7 @@ public class UserService implements UserDetailsService{
 				return null;
 			}
 		}
+		
 
 		if (user.getUserGroup() != null) {
 			for (UserGroup userGroup : user.getUserGroup()) {
@@ -186,7 +188,7 @@ public class UserService implements UserDetailsService{
 
 	}
 
-	public Users requestToJoinUserGroup(GroupInvitationAction action) {
+	public Users requestToJoinUserGroup(GroupInvitationAction action) throws Exception {
 
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 
@@ -332,7 +334,7 @@ public class UserService implements UserDetailsService{
 		}
 	}
 
-	public void acceptGroupRequest(GroupInvitationAction action) {
+	public void acceptGroupRequest(GroupInvitationAction action) throws Exception {
 
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 

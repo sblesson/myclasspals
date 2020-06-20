@@ -16,7 +16,9 @@ import {
   APPROVE_GROUP_REQUEST_ERROR,
   CHANGE_GROUP_USER_ROLE,
   SEARCH_GROUP_WITH_FILTERS,
-  UPDATE_USER_GROUP
+  UPDATE_USER_GROUP,
+  GET_GROUP_AUTO_COMPLETE,
+  GET_GROUP_AUTO_COMPLETE_ERROR
 } from '../actions/types';
 
 const initialState = {
@@ -99,6 +101,13 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         searchResult: payload.userGroupList
+      };
+    case GET_GROUP_AUTO_COMPLETE:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        searchResult: payload
       };
     case GET_GROUP:
       //Todo check why it is not getting set from return

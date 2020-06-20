@@ -120,7 +120,7 @@ const AboutGroup = ({
           return <Tag color={'green'}>{'Joined'}</Tag>;
         }
       }
-      case 'mygroups': {
+      case 'mygroup': {
         return (
           <Dropdown overlay={menu} placement='bottomCenter'>
             <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>

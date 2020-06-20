@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Menu, message, Tag, Button, Dropdown } from 'antd';
+import _ from 'lodash';
 
 import {
   EditOutlined,
@@ -13,9 +14,10 @@ import {
 import {
   getAllGroups,
   acceptUserGroupInvitation,
-  declineUserGroupRequest,
   requestToJoinUserGroup
 } from '../../actions/group';
+
+import './GroupCard.scss';
 
 const GroupCard = ({
   currentGroup,
@@ -24,7 +26,6 @@ const GroupCard = ({
   auth,
   group,
   acceptUserGroupInvitation,
-  declineUserGroupRequest,
   requestToJoinUserGroup,
   history
 }) => {
@@ -86,8 +87,6 @@ const GroupCard = ({
   const menu = (
     <Menu onClick={onClick}>
       <Menu.Item key='1'>Leave Group</Menu.Item>
-      <Menu.Item key='2'>Set as Moderator</Menu.Item>
-      <Menu.Item key='3'>Set as Member</Menu.Item>
     </Menu>
   );
 
@@ -99,17 +98,31 @@ const GroupCard = ({
     });
   };
 
+  const adminMemberActionMenu = (
+    <Dropdown overlay={menu} placement='bottomCenter'>
+      <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+        <EllipsisOutlined />
+      </a>
+    </Dropdown>
+  );
+
   const groupActionMenu = (currentGroup, group) => {
+    const memberActions = [
+      ((<SettingOutlined key='setting' />),
+      (<EditOutlined key='edit' />),
+      (<EllipsisOutlined key='ellipsis' />))
+    ];
+    console.log(type);
     switch (type) {
       case 'discover': {
-        //if user part of user group
+        /*         //if user part of user group
         let isMemberUserGroup = isLoggedInUserJoinedUserGroup(currentGroup);
         let isGroupRequested = isCurrentGroupRequestedGroup(
           currentGroup,
           group
         );
         if (currentGroup.role === null) {
-          return (
+          return [
             <Button
               type='link'
               style={{ marginRight: 16 }}
@@ -118,19 +131,71 @@ const GroupCard = ({
               {' '}
               Join
             </Button>
-          );
-        } else if (isMemberUserGroup & currentGroup.isRequestUserGroupSuccess) {
-          return <Tag color={'green'}>{'Joined'}</Tag>;
-        }
+          ];
+        } else {
+          return [<Tag color={'green'}>{currentGroup.role}</Tag>];
+        } */
+        return null;
       }
-      case 'mygroups': {
-        return (
-          <Dropdown overlay={menu} placement='bottomCenter'>
-            <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
-              <EllipsisOutlined />
-            </a>
-          </Dropdown>
-        );
+      case 'mygroup': {
+        if (currentGroup.role === null) {
+          //non members
+          if (currentGroup.privacy === 'PUBLIC') {
+            //display join button for public group
+            return [
+              null,
+              null,
+              <Button
+                type='link'
+                style={{ marginRight: 16 }}
+                onClick={() => requestToJoinUserGroupClickHandler(currentGroup)}
+              >
+                {' '}
+                Join
+              </Button>
+            ];
+          } else {
+            //display request button for private group
+            return [
+              null,
+              null,
+              <Button
+                type='link'
+                style={{ marginRight: 16 }}
+                onClick={() => requestToJoinUserGroupClickHandler(currentGroup)}
+              >
+                {' '}
+                Request
+              </Button>
+            ];
+          }
+        } else if (currentGroup.role === 'admin') {
+          return [
+            <Tag color={'green'}>{currentGroup.role}</Tag>,
+            <SettingOutlined key='setting' />,
+            <Dropdown overlay={menu} placement='bottomCenter'>
+              <a
+                className='ant-dropdown-link'
+                onClick={e => e.preventDefault()}
+              >
+                <EllipsisOutlined />
+              </a>
+            </Dropdown>
+          ];
+        } else if (currentGroup.role === 'member') {
+          return [
+            <Tag color={'green'}>{currentGroup.role}</Tag>,
+            null,
+            <Dropdown overlay={menu} placement='bottomCenter'>
+              <a
+                className='ant-dropdown-link'
+                onClick={e => e.preventDefault()}
+              >
+                <EllipsisOutlined />
+              </a>
+            </Dropdown>
+          ];
+        }
       }
 
       case 'pendingInvitedUserGroups': {
@@ -145,19 +210,55 @@ const GroupCard = ({
         );
       }
 
-      case 'requestedUserGroup': {
-        return (
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => declineUserGroupRequest(group)}
-          >
-            Withdraw
-          </Button>
-        );
-      }
       default:
         return;
+    }
+  };
+
+  const getGroupPrivacyLabel = privacy => {
+    if (privacy) {
+      let groupPrivacy = privacy.toLowerCase();
+      groupPrivacy = _.startCase(groupPrivacy);
+
+      if (privacy === 'PRIVATE') {
+        return (
+          <span>
+            <i className='fa fa-lock' title='private group'></i>&nbsp;
+            {groupPrivacy}
+          </span>
+        );
+      } else {
+        return (
+          <span>
+            <i className='fa fa-globe' title='public group'></i>
+            &nbsp;{groupPrivacy}
+          </span>
+        );
+      }
+    }
+  };
+
+  const getGroupMemberCount = currentGroup => {
+    if (
+      currentGroup &&
+      currentGroup.userGroupMembers &&
+      currentGroup.userGroupMembers.length > 0
+    ) {
+      if (currentGroup.userGroupMembers.length === 1) {
+        return (
+          <div>
+            {getGroupPrivacyLabel(currentGroup.privacy)} &nbsp;
+            {currentGroup.userGroupMembers.length} member
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            {getGroupPrivacyLabel()} &nbsp;
+            {currentGroup.userGroupMembers.length} members
+          </div>
+        );
+      }
     }
   };
 
@@ -169,7 +270,21 @@ const GroupCard = ({
         marginBottom: 16,
         textAlign: 'left'
       }}
-      title={
+      /*     extra={
+        currentGroup.role === null && (
+          <Button
+            type='link'
+            style={{ marginRight: 16 }}
+            onClick={() => requestToJoinUserGroupClickHandler(currentGroup)}
+          >
+            {' '}
+            Join
+          </Button>
+        )
+      } */
+      actions={groupActionMenu(currentGroup, type)}
+    >
+      <Link to={`/dashboard/${currentGroup.id}`}>
         <Meta
           avatar={
             currentGroup.isSchoolGroup === 'no' ? (
@@ -179,25 +294,14 @@ const GroupCard = ({
             )
           }
           title={currentGroup.groupName}
-        >
-          {' '}
-        </Meta>
-      }
-      actions={[
-        /*      <div className='member-count'>
-          {currentGroup.userGroupMembers &&
-          currentGroup.userGroupMembers.length > 0 &&
-          currentGroup.userGroupMembers.length === 1
-            ? currentGroup.userGroupMembers.length + ' member'
-            : currentGroup.userGroupMembers.length + ' members'}{' '}
-        </div>, */
-        null,
-        <SettingOutlined />,
+        ></Meta>
+      </Link>
+      <Meta
+        className='group-card-member-privacy'
+        description={getGroupMemberCount(currentGroup)}
+      ></Meta>
 
-        groupActionMenu(currentGroup, group)
-      ]}
-    >
-      <Link to={`/dashboard/${currentGroup.id}`}>
+      {/*       <Link to={`/dashboard/${currentGroup.id}`}>
         <Meta description={currentGroup.description}> </Meta>
       </Link>
       {currentGroup.role ? (
@@ -209,9 +313,7 @@ const GroupCard = ({
         </Tag>
       ) : (
         ''
-      )}
-
-      {currentGroup.privacy ? <div>{currentGroup.privacy}</div> : ''}
+      )} */}
     </Card>
   );
 };
@@ -227,6 +329,5 @@ const mapStateToProps = (state, ownProps) => ({
 
 export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
-  declineUserGroupRequest,
   requestToJoinUserGroup
 })(GroupCard);
