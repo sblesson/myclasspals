@@ -1,22 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Select } from 'antd';
+import { Input, Select } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import _ from 'lodash';
+import {
+  getGroupAutoComplete,
+  searchGroupWithFilters
+} from '../../../actions/group';
 
-import { searchGroupWithFilters } from '../../../actions/group';
-
-const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
+const AutoCompleteGroupSearch = ({
+  getGroupAutoComplete,
+  searchGroupWithFilters,
+  group
+}) => {
   const Option = Select.Option;
 
   const handleGroupSearch = searchTerm => {
+    debugger;
     console.log(searchTerm);
-    setTimeout(() => {
-      searchGroupWithFilters({
+    _.debounce(() => {
+      getGroupAutoComplete({
         groupKeyword: searchTerm
       });
     }, Math.random() * 1000);
   };
 
-  const children =
+  /*   const children =
     group &&
     group.searchResult &&
     group.searchResult.length > 0 &&
@@ -26,25 +35,67 @@ const AutoCompleteGroupSearch = ({ searchGroupWithFilters, group }) => {
           {item.groupName}
         </Option>
       );
+    }); */
+
+  const renderTitle = title => <span>{title}</span>;
+
+  const options = [
+    {
+      label: renderTitle('Schools'),
+      options: group.searchResult.schools
+    },
+    {
+      label: renderTitle('Group Name'),
+      options: group.searchResult.userGroups
+    }
+  ];
+
+  const onGroupSelect = (value, option) => {
+    console.log(value);
+    console.log(option);
+    if (group && group.searchResult && group.searchResult.length > 0) {
+      //update selected address in the reducer
+      //group.searchResult = group.searchResult[option.key];
+
+      console.log(group.searchResult[option.key]);
+    }
+  };
+
+  const children =
+    group &&
+    group.searchResult &&
+    group.searchResult.length > 0 &&
+    group.searchResult.map((item, index) => {
+      let selectedGroup = JSON.stringify(item);
+
+      return (
+        <Option key={index} value={selectedGroup}>
+          {item.name}
+        </Option>
+      );
     });
 
-  return (
+  const Complete = () => (
     <Select
-      name='groupSelect'
-      showArrow={false}
-      showSearch={true}
-      allowClear={true}
-      style={{ width: '100%' }}
-      placeholder='Type Group Name or School Name'
+      dropdownClassName='certain-category-search-dropdown'
+      dropdownMatchSelectWidth={500}
+      style={{
+        width: 250
+      }}
+      options={group.searchResult}
       onSearch={handleGroupSearch}
+      onChange={onGroupSelect}
     >
       {children}
     </Select>
   );
+
+  return <Complete />;
 };
 const mapStateToProps = state => ({
   group: state.group
 });
-export default connect(mapStateToProps, { searchGroupWithFilters })(
-  AutoCompleteGroupSearch
-);
+export default connect(mapStateToProps, {
+  searchGroupWithFilters,
+  getGroupAutoComplete
+})(AutoCompleteGroupSearch);

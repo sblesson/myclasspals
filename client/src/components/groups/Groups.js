@@ -18,8 +18,12 @@ const Groups = ({ getAllGroups, group, auth }) => {
   const { Meta } = Card;
 
   useEffect(() => {
-    getAllGroups();
-  }, [getAllGroups]);
+    if (auth && auth.user && auth.user.userGroup.length > 0) {
+      group.userGroup = auth.user.userGroup;
+    } else {
+      getAllGroups(auth.user.email);
+    }
+  }, [getAllGroups, auth]);
   const { TabPane } = Tabs;
 
   const { Search } = Input;

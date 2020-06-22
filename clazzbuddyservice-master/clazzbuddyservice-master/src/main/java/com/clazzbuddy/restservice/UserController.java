@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +29,8 @@ import com.clazzbuddy.restmodel.JwtResponse;
 import com.clazzbuddy.restmodel.UserGroupResult;
 import com.clazzbuddy.restmodel.UserResult;
 import com.clazzbuddy.service.UserService;
+import com.clazzbuddy.utils.Constants;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -106,9 +109,9 @@ public class UserController {
 	}
 
 	@PutMapping(value = "/updateuser", produces = { "application/json" })
-	public CommonResult updateuser(@RequestBody Users user) {
+	public CommonResult updateuser(@RequestBody Users user) throws Exception {
 		UserResult result = new UserResult();
-
+		authorizeUserRequest(user.getEmail());
 		try {
 			result.setUser(userService.updateUser(user));
 			result.setErrorCode(0);
@@ -121,11 +124,22 @@ public class UserController {
 		return result;
 
 	}
+	
+	public void authorizeUserRequest(String userKey) throws Exception {
+		
+		Users user = (Users) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		
+		
+		if (!userKey.equals(user.get_id()) && !userKey.equals(user.getEmail())) {
+			throw new Exception(Constants.NOT_AUTHORIZED);
+		}
+	}
 
 	@GetMapping(value = "/getuserdetails", produces = { "application/json" })
-	public CommonResult getUserDetails(@RequestParam(value = "user") String userkey) {
+	public CommonResult getUserDetails(@RequestParam(value = "user") String userkey) throws Exception {
 		UserResult result = new UserResult();
-
+		authorizeUserRequest(userkey);
 		try {
 			result.setUser(userService.getUserDetails(userkey));
 			result.setErrorCode(0);
@@ -134,7 +148,7 @@ public class UserController {
 			result.setException(e.toString());
 			logger.error("error", e);
 		}
-
+		
 		return result;
 
 	}
@@ -211,24 +225,7 @@ public class UserController {
 
 	}
 
-	// @PostMapping(value="/validateuser", produces={"application/json"})
-	// public CommonResult validateProfile(@RequestBody Users user) {
-	// UserResult result = new UserResult();
-	//
-	// try {
-	// List<Users> userList = new ArrayList<>();
-	// userList.add(userService.validateUser(user));
-	// result.setUser(userList);
-	// result.setErrorCode(0);
-	// } catch (Exception e) {
-	// result.setErrorCode(1);
-	// result.setException(e.toString());
-	// logger.error("error", e);
-	// }
-	//
-	// return result;
-	//
-	// }
+
 
 	@PostMapping(value = "/requestusergroup", produces = { "application/json" })
 	public UserResult requestUserGroup(@RequestBody GroupInvitationAction groupInvitationAction) {

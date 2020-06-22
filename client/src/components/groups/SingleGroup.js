@@ -9,6 +9,7 @@ import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
 import UserCard from './UserCard';
 
+import PostItem from '../posts/PostItem';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 
@@ -37,12 +38,7 @@ const SingleGroup = ({
     console.log('inside group');
 
     console.log(match);
-    if (match && match.params && match.params.id) {
-      groupId = match.params.id;
-      //user clicked on another group from dashboard leftnav groups menu,
-      //get groupId from params
-      getGroupDetails(groupId);
-    } else if (auth.user) {
+    if (auth.user) {
       try {
         user = JSON.parse(auth.user);
       } catch (e) {
@@ -51,10 +47,17 @@ const SingleGroup = ({
         user = auth.user;
       }
       if (user && user.userGroup && user.userGroup.length > 0) {
-        //first time groupId is not passed in url param.
-        //So get groupId from user group first item
-        groupId = user.userGroup[0].id;
-        getGroupDetails(groupId);
+        if (match && match.params && match.params.id) {
+          groupId = match.params.id;
+          //user clicked on another group from dashboard leftnav groups menu,
+          //get groupId from params
+          getGroupDetails(groupId);
+        } else {
+          //first time groupId is not passed in url param.
+          //So get groupId from user group first item
+          groupId = user.userGroup[0].id;
+          getGroupDetails(groupId);
+        }
       } else if (
         user &&
         user.pendingInvitedUserGroups &&
@@ -287,74 +290,8 @@ const SingleGroup = ({
           Join
         </Button>
       );
-    } else if (
-      currentGroup.role &&
-      (currentGroup.role === 'admin' || currentGroup.role === 'member')
-    )
-      return <InviteUsersToGroupModal />;
+    } else return <InviteUsersToGroupModal />;
   };
-  const showTabsForPublicAndMembers =
-    (group.currentGroup.role === null &&
-      group.currentGroup.privacy === 'PUBLIC') ||
-    group.currentGroup.role === 'admin' ||
-    group.currentGroup.role === 'member';
-
-  const groupTabs = (
-    <Tabs
-      defaultActiveKey='1'
-      tabBarExtraContent={isUserInPendingRequestedInvitations(
-        group.currentGroup
-      )}
-    >
-      <TabPane tab='Posts' key='posts'>
-        <PostModal />
-        <Posts
-          groupId={group.currentGroup.id}
-          currentGroup={group.currentGroup}
-        />
-      </TabPane>
-      <TabPane tab='Members' key='members'>
-        {group.currentGroup.userGroupMembers &&
-          group.currentGroup.userGroupMembers.length > 0 &&
-          group.currentGroup.userGroupMembers.map((item, index) => (
-            <UserCard
-              key={index}
-              currentGroup={group.currentGroup}
-              user={item}
-            />
-          ))}
-      </TabPane>
-      <TabPane tab='Invitations' key='request'>
-        {group.currentGroup.requestedInvitations &&
-        group.currentGroup.requestedInvitations.length > 0 ? (
-          <Table
-            columns={requestToJoinColumn}
-            dataSource={group.currentGroup.requestedInvitations}
-            rowKey='invitedUserId'
-          />
-        ) : (
-          'There are no pending invitations send from this group'
-        )}
-      </TabPane>
-
-      {group.isGroupAdmin ? (
-        <TabPane tab='Requests' key='approvals'>
-          {group.currentGroup.pendingInvitations &&
-          group.currentGroup.pendingInvitations.length > 0 ? (
-            <Table
-              columns={pendingInvitationsColumns}
-              dataSource={group.currentGroup.pendingInvitations}
-              rowKey='requestorUserId'
-            />
-          ) : (
-            ''
-          )}
-        </TabPane>
-      ) : (
-        ''
-      )}
-    </Tabs>
-  );
 
   return (
     <Fragment>
@@ -363,12 +300,63 @@ const SingleGroup = ({
       ) : (
         <Fragment>
           <div>
-            <GroupCard currentGroup={group.currentGroup} type='mygroup' />
+            <GroupCard currentGroup={group.currentGroup} type='mygroups' />
           </div>
+          {group !== null && group.currentGroup ? (
+            <Tabs
+              defaultActiveKey='1'
+              tabBarExtraContent={isUserInPendingRequestedInvitations(
+                group.currentGroup
+              )}
+            >
+              <TabPane tab='Posts' key='posts'>
+                <PostModal />
+                <Posts groupId={group.currentGroup.id} />
+              </TabPane>
+              <TabPane tab='Members' key='members'>
+                {group.currentGroup.userGroupMembers &&
+                  group.currentGroup.userGroupMembers.length > 0 &&
+                  group.currentGroup.userGroupMembers.map((item, index) => (
+                    <UserCard
+                      key={index}
+                      currentGroup={group.currentGroup}
+                      user={item}
+                    />
+                  ))}
+              </TabPane>
+              <TabPane tab='Invitations' key='request'>
+                {group.currentGroup.requestedInvitations &&
+                group.currentGroup.requestedInvitations.length > 0 ? (
+                  <Table
+                    columns={requestToJoinColumn}
+                    dataSource={group.currentGroup.requestedInvitations}
+                    rowKey='invitedUserId'
+                  />
+                ) : (
+                  'There are no pending invitations send from this group'
+                )}
+              </TabPane>
 
-          {group !== null && group.currentGroup && showTabsForPublicAndMembers
-            ? groupTabs
-            : 'About Group'}
+              {group.isGroupAdmin ? (
+                <TabPane tab='Requests' key='approvals'>
+                  {group.currentGroup.pendingInvitations &&
+                  group.currentGroup.pendingInvitations.length > 0 ? (
+                    <Table
+                      columns={pendingInvitationsColumns}
+                      dataSource={group.currentGroup.pendingInvitations}
+                      rowKey='requestorUserId'
+                    />
+                  ) : (
+                    ''
+                  )}
+                </TabPane>
+              ) : (
+                ''
+              )}
+            </Tabs>
+          ) : (
+            'Group is empty'
+          )}
         </Fragment>
       )}
     </Fragment>

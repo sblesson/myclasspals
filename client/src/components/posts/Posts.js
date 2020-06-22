@@ -5,19 +5,7 @@ import Spinner from '../../layout/Spinner';
 import PostItem from '../posts/PostItem';
 import { List } from 'antd';
 
-import { searchPost } from '../../actions/post';
-
-const Posts = ({
-  searchPost,
-  post: { posts, categories, loading },
-  groupId
-}) => {
-  useEffect(() => {
-    if (groupId) {
-      searchPost({ groupId: groupId });
-    }
-  }, [searchPost, groupId]);
-
+const Posts = ({ post: { posts, categories, loading } }) => {
   return (
     <Fragment>
       {posts.loading ? (
@@ -35,7 +23,6 @@ const Posts = ({
 };
 
 Posts.propTypes = {
-  searchPost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired
 };
 
@@ -43,6 +30,4 @@ const mapStateToProps = state => ({
   post: state.post
 });
 
-export default connect(mapStateToProps, {
-  searchPost
-})(Posts);
+export default connect(mapStateToProps, {})(Posts);
