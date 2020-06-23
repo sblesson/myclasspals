@@ -22,10 +22,10 @@ import {
 import { setAuthToken } from '../utils/axios';
 
 const initialState = {
-  token: localStorage.getItem('token'),
+  token: '',
   isAuthenticated: false,
   loading: true,
-  user: { email: localStorage.getItem('userEmail') },
+  user: {},
   profileUser: null,
   searchUserResult: [],
   senderEmail: null,
@@ -160,7 +160,8 @@ export default function(state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: false
+        loading: false,
+        user: {}
       };
     case SEND_USER_EMAIL:
       return { ...state, ...payload, loading: false };

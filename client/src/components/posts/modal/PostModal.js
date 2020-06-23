@@ -20,12 +20,12 @@ import {
   FormikDebug,
   Select
 } from 'formik-antd';
-import { addPost, searchPostByGroupId } from '../../../actions/post';
+import { addPost } from '../../../actions/post';
 import { DatePicker, TimePicker } from 'antd';
 
 import './PostModal.scss';
 
-const PostModal = ({ addPost, history, group, auth, searchPostByGroupId }) => {
+const PostModal = ({ addPost, history, group, auth }) => {
   const [componentSize, setComponentSize] = useState('small');
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -305,6 +305,5 @@ const mapDispatchToProps = state => ({
 
 export default connect(mapDispatchToProps, {
   addPost,
-  searchPostByGroupId,
   mapDispatchToProps
 })(withRouter(PostModal));
