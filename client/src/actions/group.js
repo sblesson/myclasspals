@@ -24,10 +24,13 @@ import {
   SEARCH_ALL_GROUP_ERROR,
   UPDATE_USER_GROUP,
   GET_GROUP_AUTO_COMPLETE,
-  GET_GROUP_AUTO_COMPLETE_ERROR
+  GET_GROUP_AUTO_COMPLETE_ERROR,
+  SEND_PRIVATE_MESSAGE,
+  SEARCH_POST
 } from './types';
 
 import { updateUserGlobal } from './auth';
+import { searchPost } from './post';
 
 // Add post
 export const addGroup = formData => async dispatch => {
@@ -104,7 +107,6 @@ export const getAllGroups = userId => async dispatch => {
     });
   }
 };
-
 // Get all userGroups
 export const getGroupAutoComplete = key => async dispatch => {
   debugger;
@@ -123,7 +125,6 @@ export const getGroupAutoComplete = key => async dispatch => {
     });
   }
 };
-
 // Get all userGroups
 export const getGroupDetails = groupId => async dispatch => {
   try {
@@ -138,6 +139,7 @@ export const getGroupDetails = groupId => async dispatch => {
           ? response.data.userGroupList[0]
           : null
     });
+    dispatch(searchPost(groupId));
   } catch (err) {
     dispatch({
       type: GET_GROUP_ERROR,

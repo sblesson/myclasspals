@@ -6,8 +6,9 @@ import post from './post';
 import school from './school';
 import group from './group';
 import address from './address';
+import { DESTROY_SESSION } from '../actions/types';
 
-export default combineReducers({
+const appReducer = combineReducers({
   alert,
   auth,
   profile,
@@ -16,3 +17,11 @@ export default combineReducers({
   group,
   address
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === DESTROY_SESSION) state = undefined;
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;

@@ -43,6 +43,7 @@ const Login = ({ setAlert, login, isAuthenticated, auth }) => {
       }}
       onSubmit={values => {
         login({ email: values.email, password: values.password });
+        
       }}
       validator={() => ({})}
       //validate={values => {}}

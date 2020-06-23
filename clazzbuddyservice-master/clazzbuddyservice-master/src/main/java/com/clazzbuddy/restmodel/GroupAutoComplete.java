@@ -4,25 +4,27 @@ import java.util.List;
 
 public class GroupAutoComplete {
 
-	private List<String> schools;
+	private String label;
 	
-	private List<String> userGroups;
+	private List<String> options;
 
-	public List<String> getSchools() {
-		return schools;
+	public String getLabel() {
+		return label;
 	}
 
-	public void setSchools(List<String> schools) {
-		this.schools = schools;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
-	public List<String> getUserGroups() {
-		return userGroups;
+	public List<String> getOptions() {
+		return options;
 	}
 
-	public void setUserGroups(List<String> userGroups) {
-		this.userGroups = userGroups;
+	public void setOptions(List<String> options) {
+		this.options = options;
 	}
+	
+	
 	
 	
 }

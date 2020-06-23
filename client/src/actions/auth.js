@@ -24,10 +24,15 @@ import {
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_ERROR,
   UPDATE_USER_ERROR,
-  UPDATE_USER_GLOBAL
+  UPDATE_USER_GLOBAL,
+  DESTROY_SESSION
 } from './types';
 import { updateUserGroup } from './group';
 import { setAuthToken } from '../utils/axios';
+
+export const onClear = () => {
+  return { type: DESTROY_SESSION };
+};
 
 // Load User
 export const loadUser = email => async dispatch => {
@@ -304,39 +309,40 @@ export const changePassword = ({ password }) => async dispatch => {
 
 // Login User
 export const login = formData => async dispatch => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+  if (formData) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    try {
+      const body = JSON.stringify(formData);
+      const res = await axios.post(
+        'http://localhost:8080/user/authenticate',
+        body,
+        config
+      );
+
+      dispatch({
+        type: AUTH_SUCCESS,
+        payload: res.data
+      });
+
+      dispatch(loadUser(formData.email));
+    } catch (err) {
+      const errors =
+        err && err.response && err.response.data && err.response.data.errors;
+
+      if (errors) {
+        errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      }
+      dispatch(setAlert('Token Invalid', 'error'));
+
+      dispatch({
+        type: LOGIN_FAIL
+      });
     }
-  };
-
-  const body = JSON.stringify(formData);
-
-  try {
-    const res = await axios.post(
-      'http://localhost:8080/user/authenticate',
-      body,
-      config
-    );
-
-    dispatch({
-      type: AUTH_SUCCESS,
-      payload: res.data
-    });
-
-    dispatch(loadUser(formData.email));
-  } catch (err) {
-    const errors =
-      err && err.response && err.response.data && err.response.data.errors;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    }
-    dispatch(setAlert('Token Invalid', 'error'));
-
-    dispatch({
-      type: LOGIN_FAIL
-    });
   }
 };
 
@@ -344,4 +350,5 @@ export const login = formData => async dispatch => {
 export const logout = () => dispatch => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
+  onClear();
 };
