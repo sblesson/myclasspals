@@ -83,13 +83,7 @@ const PostModal = ({ addPost, history, group, auth }) => {
       showDownloadIcon: true,
       downloadIcon: 'download ',
       showRemoveIcon: true,
-      removeIcon: (
-        <StarOutlined
-          onClick={e => {
-            /*console.log(e, 'custom removeIcon event')*/
-          }}
-        />
-      )
+      removeIcon: <StarOutlined onClick={e => {}} />
     }
   };
 
@@ -104,7 +98,6 @@ const PostModal = ({ addPost, history, group, auth }) => {
     }
   };
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
 
@@ -117,7 +110,6 @@ const PostModal = ({ addPost, history, group, auth }) => {
         message: ''
       }}
       onSubmit={(values, actions) => {
-        console.log(values);
         addPost(values, history);
         setModalVisibility(false);
         setActiveIndex(0);

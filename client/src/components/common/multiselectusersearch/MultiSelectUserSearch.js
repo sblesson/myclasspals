@@ -10,7 +10,7 @@ const MultiSelectUserSearch = ({ searchUser, auth, endUsersSelect }) => {
 
   const fetchUser = searchTerm => {
     if (searchTerm) {
-      debounce(() => {
+      setTimeout(() => {
         searchUser(searchTerm);
       }, Math.random() * 1000);
     }

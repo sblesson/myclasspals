@@ -39,7 +39,7 @@ const Routes = () => {
       <Alert />
       <Switch>
         <Route exact path='/login' component={Landing} />
-        <Route exact path='/invite/:id/group' component={Landing} />
+        <Route exact path='/invite/group/:id' component={Landing} />
         <Route exact path='/' component={Landing} />
         <Route exact path='/register' component={Landing} />
         <Route exact path='/login' component={Landing} />

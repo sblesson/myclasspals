@@ -12,13 +12,7 @@ const Login = ({ setAlert, login, isAuthenticated, auth }) => {
   const [componentSize, setComponentSize] = useState('small');
   const { Title, Text } = Typography;
 
-  /*  if (isAuthenticated) {
-    debugger;
-    console.log(auth);
-    return <Redirect to='/dashboard' />;
-  } */
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
 

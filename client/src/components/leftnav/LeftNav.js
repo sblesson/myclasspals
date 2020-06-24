@@ -26,11 +26,8 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
   }, []);
 
   const getNavByScreen = screen => {
-    debugger;
-    console.log('inside left nav', auth, group);
     switch (screen) {
       case 'dashboard': {
-        console.log('inside left nav', auth, group);
         let user = null;
         let userGroup = null;
         let myGroups = [];
@@ -65,7 +62,6 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
       }
 
       case 'account':
-        console.log('yaya');
         return [
           {
             name: 'account',
@@ -116,7 +112,6 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
   };
 
   const sideNavMenu = getNavByScreen(screen);
-  console.log(sideNavMenu);
 
   return (
     <Fragment>

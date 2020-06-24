@@ -30,7 +30,6 @@ const CreateGroupForm = ({
 }) => {
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
   const [componentSize, setComponentSize] = useState('small');
@@ -38,7 +37,6 @@ const CreateGroupForm = ({
     if (!event.target.value) {
       return;
     }
-    console.log(event.target);
     //fetchSchools(event.target.value);
   };
 
@@ -57,7 +55,6 @@ const CreateGroupForm = ({
   };
 
   const showHideSchoolSelect = event => {
-    console.log('shool', event);
     if (event.target.value === 'yes') {
       setIsSchoolVisible(true);
     } else {
@@ -84,12 +81,9 @@ const CreateGroupForm = ({
       delete values.schoolSelect;
     }
 
-    console.log(values);
-
     addGroup(JSON.stringify(values));
     //actions.setSubmitting(false);
     actions.resetForm();
-    console.log(current);
     onStepChange(current + 1);
   };
 
@@ -102,7 +96,6 @@ const CreateGroupForm = ({
         grade: ''
       }}
       onSubmit={(values, actions) => {
-        debugger;
         submitProfileForm(values, actions);
       }}
       validator={() => ({})}

@@ -29,6 +29,9 @@ public class Users {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	@Transient
+	private String regId;
 
 	private String email;
 
@@ -178,6 +181,14 @@ public class Users {
 
 	public void setSchoolId(List<String> schoolId) {
 		this.schoolId = schoolId;
+	}
+
+	public String getRegId() {
+		return regId;
+	}
+
+	public void setRegId(String regId) {
+		this.regId = regId;
 	}
 
 

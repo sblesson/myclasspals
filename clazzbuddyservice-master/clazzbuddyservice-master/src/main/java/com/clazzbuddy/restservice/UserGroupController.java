@@ -116,9 +116,9 @@ public class UserGroupController {
 	}
 	
 	@GetMapping(value = "/groupautocomplete", produces = { "application/json" })
-	public GroupAutoComplete getAutoComplete(@RequestParam(value = "key") String key) {
+	public List<GroupAutoComplete> getAutoComplete(@RequestParam(value = "key") String key) {
 		
-		GroupAutoComplete groupAutoComplete = new GroupAutoComplete();
+		List<GroupAutoComplete> groupAutoCompleteList = new ArrayList<GroupAutoComplete>();
 		try {
 			List<UserGroup> userGroups = userGroupService.getUserGroups(key);
 			List<School> schools = schoolCache.getSchoolStartingWithLetters(key);
@@ -131,13 +131,20 @@ public class UserGroupController {
 			for(School school: schools) {
 				schoolNameList.add(school.getSchoolName() + ", " + school.getCity() + ", " + school.getState() + ", " + school.getZip() );
 			}
-			groupAutoComplete.setSchools(schoolNameList);
-			groupAutoComplete.setUserGroups(groupNameList);
+			GroupAutoComplete schoolAutoComplete = new GroupAutoComplete();
+			schoolAutoComplete.setLabel("Schools");
+			schoolAutoComplete.setOptions(schoolNameList);
+			
+			GroupAutoComplete groupAutoComplete = new GroupAutoComplete();
+			groupAutoComplete.setLabel("Groups");
+			groupAutoComplete.setOptions(groupNameList);
+			groupAutoCompleteList.add(groupAutoComplete);
+			groupAutoCompleteList.add(schoolAutoComplete);
 		} catch (Exception e) {
 			logger.error("error : ", e);
 		}
 
-		return groupAutoComplete;
+		return groupAutoCompleteList;
 
 	}
 	

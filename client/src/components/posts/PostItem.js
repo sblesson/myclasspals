@@ -13,14 +13,12 @@ import {
   EllipsisOutlined,
   SettingOutlined
 } from '@ant-design/icons';
-import { addLike, removeLike, deletePost } from '../../actions/post';
+import { deletePost } from '../../actions/post';
 import DeletePostModal from './modal/DeletePostModal';
 
 import './PostItem.scss';
 
 const PostItem = ({
-  addLike,
-  removeLike,
   auth,
   post: {
     _id,
@@ -40,31 +38,17 @@ const PostItem = ({
   showAllComments,
   isSinglePost
 }) => {
-  debugger;
   const { Paragraph } = Typography;
 
   const { Meta } = Card;
 
-  const [isLiked, setLike] = useState(false);
-
-  const toggleLike = _id => {
-    setLike(!isLiked);
-
-    if (isLiked) {
-      addLike(_id);
-    } else {
-      removeLike(_id);
-    }
-  };
   const firstLetterUserName = userName => {
     if (typeof userName !== 'string') return '';
     return userName.charAt(0).toUpperCase();
   };
 
   const onClick = key => {
-    console.log(key);
     if (key === 'deletepost') {
-      console.log(key);
     } else if (key === 'editpost') {
     }
   };
@@ -191,8 +175,6 @@ PostItem.defaultProps = {
 PostItem.propTypes = {
   //post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  addLike: PropTypes.func.isRequired,
-  removeLike: PropTypes.func.isRequired,
   showActions: PropTypes.bool,
   showAllComments: PropTypes.bool
 };
@@ -201,4 +183,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { addLike, removeLike })(PostItem);
+export default connect(mapStateToProps, {})(PostItem);

@@ -40,7 +40,6 @@ const CreateGroupModal = () => {
   };
 
   const handleStepChange = current => {
-    console.log(current);
     //current = current + 1;
     setCurrentStep(current);
     if (current == 3) {

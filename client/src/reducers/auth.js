@@ -33,8 +33,6 @@ const initialState = {
 };
 
 const updateUserLocalObject = user => {
-  debugger;
-  console.log(user);
   if (user) {
     localStorage.setItem('userEmail', user.email);
     localStorage.setItem('userId', user._id);
@@ -45,6 +43,8 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case GET_USER:
+    case USER_LOADED:
+      updateUserLocalObject(payload.user);
       return {
         ...state,
         isAuthenticated: true,
@@ -59,7 +59,6 @@ export default function(state = initialState, action) {
         searchUserResult: payload.users
       };
     case UPDATE_USER:
-      console.log(payload);
       return {
         ...state,
         user: payload.user,
@@ -67,7 +66,6 @@ export default function(state = initialState, action) {
       };
 
     case GET_USER_BY_REGISTRATION_ID:
-      console.log(payload);
       if (payload.exception) {
         return {
           ...state,
@@ -94,19 +92,7 @@ export default function(state = initialState, action) {
         user: payload
       };
 
-    case USER_LOADED:
-      console.log('USER_LOADED');
-      console.log(payload);
-
-      return {
-        ...state,
-        isAuthenticated: true,
-        loading: false,
-        user: payload.user
-      };
-
     case REGISTER_SUCCESS:
-      debugger;
       if (payload.user) {
         updateUserLocalObject(payload.user);
       }
@@ -153,7 +139,10 @@ export default function(state = initialState, action) {
     case LOGOUT:
     case ACCOUNT_DELETED:
       localStorage.removeItem('token');
-      localStorage.setItem('isAuthenticated', false);
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userId');
+
       updateUserLocalObject(null);
 
       return {

@@ -13,7 +13,6 @@ const Register = ({ setAlert, register }) => {
   const { Title, Text } = Typography;
 
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
 

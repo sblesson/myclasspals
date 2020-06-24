@@ -9,12 +9,13 @@ export const setInterceptors = store => {
       return response;
     },
     error => {
-      console.log(error.response.status);
-      if (error.response.status === 401) {
+      /*    if (error.response.status === 401) {
         return (window.location.pathname = '/403');
       } else if (error.response.status === 403) {
         return (window.location.pathname = '/403');
-      } else if (error.response.status === 404) {
+      } else */ if (
+        error.response.status === 404
+      ) {
         return (window.location.pathname = '/404');
       } else if (error.response.status === 500) {
         return (window.location.pathname = '/500');

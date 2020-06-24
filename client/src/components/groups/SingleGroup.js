@@ -7,6 +7,8 @@ import Spinner from '../../layout/Spinner';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
+import AboutGroup from './AboutGroup';
+
 import UserCard from './UserCard';
 
 import PostItem from '../posts/PostItem';
@@ -35,9 +37,7 @@ const SingleGroup = ({
   useEffect(() => {
     let user = null;
     let groupId = null;
-    console.log('inside group');
 
-    console.log(match);
     if (auth.user) {
       try {
         user = JSON.parse(auth.user);
@@ -46,31 +46,37 @@ const SingleGroup = ({
         // Let's assume the error is that we already have parsed the auth.user so just return that
         user = auth.user;
       }
-      if (user && user.userGroup && user.userGroup.length > 0) {
-        if (match && match.params && match.params.id) {
-          groupId = match.params.id;
-          //user clicked on another group from dashboard leftnav groups menu,
-          //get groupId from params
-          getGroupDetails(groupId);
-        } else {
+      if (match && match.params && match.params.id) {
+        groupId = match.params.id;
+        //user clicked on another group from dashboard leftnav groups menu,
+        //get groupId from params
+        getGroupDetails(groupId);
+      } else if (user) {
+        if (user.userGroup && user.userGroup.length > 0) {
           //first time groupId is not passed in url param.
           //So get groupId from user group first item
           groupId = user.userGroup[0].id;
           getGroupDetails(groupId);
-        }
-      } else if (
-        user &&
-        user.pendingInvitedUserGroups &&
-        user.pendingInvitedUserGroups.length > 0
-      ) {
-        //New user who got invitation from another group, redirect to groups page
-        group.currentGroup = user.pendingInvitedUserGroups[0];
-        groupId = user.pendingInvitedUserGroups[0].id;
+        } else if (
+          user.pendingInvitedUserGroups &&
+          user.pendingInvitedUserGroups.length > 0
+        ) {
+          //New user who got invitation from another group, redirect to groups page
+          group.currentGroup = user.pendingInvitedUserGroups[0];
+          groupId = group.currentGroup.id;
 
-        history.push(`/dashboard/${groupId}`);
-      } else {
-        //New user login for first time, not part of any groups, redirect to create profile and help user discover group
-        history.push(`/create-profile/1`);
+          history.push(`/group/${groupId}`);
+        } else if (
+          user.requestedUserGroup &&
+          user.requestedUserGroup.length > 0
+        ) {
+          group.currentGroup = user.requestedUserGroup[0];
+          groupId = group.currentGroup.id;
+          history.push(`/group/${groupId}`);
+        } else {
+          //New user login for first time, not part of any groups, redirect to create profile and help user discover group
+          history.push(`/create-profile/1`);
+        }
       }
     }
     return function cleanup() {
@@ -280,7 +286,6 @@ const SingleGroup = ({
       rtl: true
     });
     if (found) {
-      message.warning('Action required. Click Join to be a member');
       return (
         <Button
           className='ant-btn btn-primary'
@@ -299,63 +304,65 @@ const SingleGroup = ({
         <Spinner />
       ) : (
         <Fragment>
-          <div>
-            <GroupCard currentGroup={group.currentGroup} type='mygroups' />
-          </div>
-          {group !== null && group.currentGroup ? (
-            <Tabs
-              defaultActiveKey='1'
-              tabBarExtraContent={isUserInPendingRequestedInvitations(
-                group.currentGroup
-              )}
-            >
-              <TabPane tab='Posts' key='posts'>
-                <PostModal />
-                <Posts groupId={group.currentGroup.id} />
-              </TabPane>
-              <TabPane tab='Members' key='members'>
-                {group.currentGroup.userGroupMembers &&
-                  group.currentGroup.userGroupMembers.length > 0 &&
-                  group.currentGroup.userGroupMembers.map((item, index) => (
-                    <UserCard
-                      key={index}
-                      currentGroup={group.currentGroup}
-                      user={item}
-                    />
-                  ))}
-              </TabPane>
-              <TabPane tab='Invitations' key='request'>
-                {group.currentGroup.requestedInvitations &&
-                group.currentGroup.requestedInvitations.length > 0 ? (
-                  <Table
-                    columns={requestToJoinColumn}
-                    dataSource={group.currentGroup.requestedInvitations}
-                    rowKey='invitedUserId'
-                  />
-                ) : (
-                  'There are no pending invitations send from this group'
+          {group !== null &&
+          group.currentGroup &&
+          group.currentGroup.role !== null ? (
+            <div>
+              <GroupCard currentGroup={group.currentGroup} type='mygroup' />
+              <Tabs
+                defaultActiveKey='1'
+                tabBarExtraContent={isUserInPendingRequestedInvitations(
+                  group.currentGroup
                 )}
-              </TabPane>
-
-              {group.isGroupAdmin ? (
-                <TabPane tab='Requests' key='approvals'>
-                  {group.currentGroup.pendingInvitations &&
-                  group.currentGroup.pendingInvitations.length > 0 ? (
+              >
+                <TabPane tab='Posts' key='posts'>
+                  <PostModal />
+                  <Posts groupId={group.currentGroup.id} />
+                </TabPane>
+                <TabPane tab='Members' key='members'>
+                  {group.currentGroup.userGroupMembers &&
+                    group.currentGroup.userGroupMembers.length > 0 &&
+                    group.currentGroup.userGroupMembers.map((item, index) => (
+                      <UserCard
+                        key={index}
+                        currentGroup={group.currentGroup}
+                        user={item}
+                      />
+                    ))}
+                </TabPane>
+                <TabPane tab='Invitations' key='request'>
+                  {group.currentGroup.requestedInvitations &&
+                  group.currentGroup.requestedInvitations.length > 0 ? (
                     <Table
-                      columns={pendingInvitationsColumns}
-                      dataSource={group.currentGroup.pendingInvitations}
-                      rowKey='requestorUserId'
+                      columns={requestToJoinColumn}
+                      dataSource={group.currentGroup.requestedInvitations}
+                      rowKey='invitedUserId'
                     />
                   ) : (
-                    ''
+                    'There are no pending invitations send from this group'
                   )}
                 </TabPane>
-              ) : (
-                ''
-              )}
-            </Tabs>
+
+                {group.isGroupAdmin ? (
+                  <TabPane tab='Requests' key='approvals'>
+                    {group.currentGroup.pendingInvitations &&
+                    group.currentGroup.pendingInvitations.length > 0 ? (
+                      <Table
+                        columns={pendingInvitationsColumns}
+                        dataSource={group.currentGroup.pendingInvitations}
+                        rowKey='requestorUserId'
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </TabPane>
+                ) : (
+                  ''
+                )}
+              </Tabs>
+            </div>
           ) : (
-            'Group is empty'
+            ''
           )}
         </Fragment>
       )}

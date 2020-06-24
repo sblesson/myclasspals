@@ -23,8 +23,6 @@ const UserAccountForm = ({
 }) => {
   useEffect(() => {
     if (auth && auth.user) {
-      console.log(auth.user);
-
       let user = auth.user;
       if (user.userGroup && user.userGroup.length > 0) {
         history
@@ -44,7 +42,6 @@ const UserAccountForm = ({
   }, [auth]);
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
   const [componentSize, setComponentSize] = useState('small');
@@ -52,7 +49,6 @@ const UserAccountForm = ({
     if (!event.target.value) {
       return;
     }
-    console.log(event.target);
     //fetchSchools(event.target.value);
   };
   const formItemLayout = {
@@ -78,8 +74,6 @@ const UserAccountForm = ({
         zipcode: ''
       }}
       onSubmit={values => {
-        console.log(auth.user.email);
-        console.log(values);
         let myAddress =
           values && values.citySelect ? JSON.parse(values.citySelect) : null;
         if (myAddress !== null) {

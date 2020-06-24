@@ -28,10 +28,6 @@ const GroupRulesForm = ({
     setComponentSize(size);
   };
 
-  const onChange = e => {
-    console.log(e.target.name, e.target.value);
-  };
-
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },

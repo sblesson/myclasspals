@@ -7,7 +7,7 @@ import { GET_CITY_DATA, GET_CITY_DATA_ERROR } from './types';
 export const getCityData = (searchTerm = '') => async dispatch => {
   try {
     const res = await axios.get(
-      `http://localhost:8080/postaladdress/searchbycity?searchkey=${searchTerm}`
+      `/postaladdress/searchbycity?searchkey=${searchTerm}`
     );
     dispatch({
       type: GET_CITY_DATA,
