@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Input, Select } from 'antd';
+import { Input, AutoComplete, Select } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import {
@@ -13,42 +13,49 @@ const AutoCompleteGroupSearch = ({
   searchGroupWithFilters,
   group
 }) => {
-  const Option = Select.Option;
+  const { Option, OptGroup } = Select;
 
   const handleGroupSearch = searchTerm => {
-    debugger;
-    console.log(searchTerm);
-    _.debounce(() => {
-      getGroupAutoComplete({
-        groupKeyword: searchTerm
-      });
+    setTimeout(() => {
+      getGroupAutoComplete(searchTerm);
     }, Math.random() * 1000);
   };
 
-  /*   const children =
+  const renderTitle = title => <span>{title}</span>;
+
+  const renderItem = title => ({
+    value: title,
+    label: (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        {title}
+      </div>
+    )
+  });
+
+  const children =
     group &&
     group.searchResult &&
     group.searchResult.length > 0 &&
     group.searchResult.map(item => {
       return (
-        <Option key={item.id} value={item.groupName}>
-          {item.groupName}
-        </Option>
+        <OptGroup label={item.label} key={item.label}>
+          {item.options &&
+            item.options.length > 0 &&
+            item.options.map(dataOption => {
+              return (
+                <Option key={dataOption} value={dataOption}>
+                  {dataOption}
+                </Option>
+              );
+            })}
+        </OptGroup>
       );
-    }); */
-
-  const renderTitle = title => <span>{title}</span>;
-
-  const options = [
-    {
-      label: renderTitle('Schools'),
-      options: group.searchResult.schools
-    },
-    {
-      label: renderTitle('Group Name'),
-      options: group.searchResult.userGroups
-    }
-  ];
+    });
 
   const onGroupSelect = (value, option) => {
     console.log(value);
@@ -61,20 +68,6 @@ const AutoCompleteGroupSearch = ({
     }
   };
 
-  const children =
-    group &&
-    group.searchResult &&
-    group.searchResult.length > 0 &&
-    group.searchResult.map((item, index) => {
-      let selectedGroup = JSON.stringify(item);
-
-      return (
-        <Option key={index} value={selectedGroup}>
-          {item.name}
-        </Option>
-      );
-    });
-
   const Complete = () => (
     <Select
       dropdownClassName='certain-category-search-dropdown'
@@ -82,12 +75,27 @@ const AutoCompleteGroupSearch = ({
       style={{
         width: 250
       }}
-      options={group.searchResult}
       onSearch={handleGroupSearch}
       onChange={onGroupSelect}
+      notFoundContent={''}
+      /*      allowClear={true}
+       */
+      showSearch={true}
+      defaultOpen={true}
     >
       {children}
     </Select>
+    /*
+    <AutoComplete
+      //dropdownMatchSelectWidth={252}
+      style={{
+        width: 300
+      }}
+      onSelect={onGroupSelect}
+      onSearch={handleGroupSearch}
+    >
+      {children}
+    </AutoComplete> */
   );
 
   return <Complete />;
