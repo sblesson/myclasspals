@@ -330,21 +330,9 @@ const SingleGroup = ({
                       />
                     ))}
                 </TabPane>
-                <TabPane tab='Invitations' key='request'>
-                  {group.currentGroup.requestedInvitations &&
-                  group.currentGroup.requestedInvitations.length > 0 ? (
-                    <Table
-                      columns={requestToJoinColumn}
-                      dataSource={group.currentGroup.requestedInvitations}
-                      rowKey='invitedUserId'
-                    />
-                  ) : (
-                    'There are no pending invitations send from this group'
-                  )}
-                </TabPane>
 
                 {group.isGroupAdmin ? (
-                  <TabPane tab='Requests' key='approvals'>
+                  <TabPane tab='Waiting For Approvals' key='approvals'>
                     {group.currentGroup.pendingInvitations &&
                     group.currentGroup.pendingInvitations.length > 0 ? (
                       <Table
@@ -353,12 +341,24 @@ const SingleGroup = ({
                         rowKey='requestorUserId'
                       />
                     ) : (
-                      ''
+                      'There are no request waiting for approvals'
                     )}
                   </TabPane>
                 ) : (
                   ''
                 )}
+                <TabPane tab='Requested To Join' key='request'>
+                  {group.currentGroup.requestedInvitations &&
+                  group.currentGroup.requestedInvitations.length > 0 ? (
+                    <Table
+                      columns={requestToJoinColumn}
+                      dataSource={group.currentGroup.requestedInvitations}
+                      rowKey='invitedUserId'
+                    />
+                  ) : (
+                    'There are no request to join send from this group'
+                  )}
+                </TabPane>
               </Tabs>
             </div>
           ) : (

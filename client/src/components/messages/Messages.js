@@ -2,7 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../../layout/Spinner';
-import { searchPost, getPost, addMessageReply } from '../../actions/post';
+import {
+  getPrivateMessages,
+  getPost,
+  addMessageReply
+} from '../../actions/post';
 import { FormOutlined } from '@ant-design/icons';
 import PrivateMessageModal from './modal/PrivateMessageModal';
 import { Comment, Avatar, Form, Button, List, Input, Card } from 'antd';
@@ -12,7 +16,7 @@ import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
 import './Messages.scss';
 const Messages = ({
-  searchPost,
+  getPrivateMessages,
   getPost,
   addMessageReply,
   post: { posts, loading, currentPost },
@@ -26,12 +30,12 @@ const Messages = ({
   });
   useEffect(() => {
     if (auth && auth.user && auth.user.email) {
-      searchPost({ userId: auth.user.email, isPrivate: true });
+      getPrivateMessages({ userId: auth.user.email, isPrivate: true });
     } else {
       const email = localStorage.getItem('userEmail');
-      searchPost({ userId: email, isPrivate: true });
+      getPrivateMessages({ userId: email, isPrivate: true });
     }
-  }, [searchPost, auth.user._id]);
+  }, [getPrivateMessages, auth.user._id]);
 
   useEffect(() => {
     const recentPost = posts && posts.length > 0 ? posts[0] : null;
@@ -194,7 +198,7 @@ const Messages = ({
 };
 
 Messages.propTypes = {
-  searchPost: PropTypes.func.isRequired,
+  getPrivateMessages: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired
 };
 
@@ -204,7 +208,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  searchPost,
+  getPrivateMessages,
   getPost,
   addMessageReply
 })(Messages);

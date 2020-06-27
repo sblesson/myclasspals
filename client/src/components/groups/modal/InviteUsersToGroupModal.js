@@ -58,7 +58,11 @@ const InviteUsersToGroupModal = ({ current }) => {
         destroyOnClose={true}
         footer={null}
       >
-        <InviteUsersToGroupForm />
+        <InviteUsersToGroupForm
+          current={current}
+          isNewGroup={false}
+          setModal={setModalVisibility}
+        />
       </Modal>
     </div>
   );

@@ -44,11 +44,7 @@ export const addPost = formData => async dispatch => {
   };
 
   try {
-    const res = await axios.post(
-      '/post/createpost',
-      formData,
-      config
-    );
+    const res = await axios.post('/post/createpost', formData, config);
     dispatch({
       type: ADD_POST,
       payload: res.data
@@ -73,11 +69,29 @@ export const searchPost = groupId => async dispatch => {
   const formData = { groupId: groupId };
 
   try {
-    const res = await axios.post(
-      '/post/searchpost',
-      formData,
-      config
-    );
+    const res = await axios.post('/post/searchpost', formData, config);
+    dispatch({
+      type: SEARCH_POST,
+      payload: res.data.post
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Search post by groupId
+export const getPrivateMessages = formData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post('/post/searchpost', formData, config);
     dispatch({
       type: SEARCH_POST,
       payload: res.data.post
@@ -97,11 +111,7 @@ export const sendPrivateMessage = formData => async dispatch => {
     }
   };
   try {
-    const res = await axios.post(
-      '/post/createpost',
-      formData,
-      config
-    );
+    const res = await axios.post('/post/createpost', formData, config);
 
     dispatch({
       type: SEND_PRIVATE_MESSAGE,
@@ -223,9 +233,7 @@ export const addCommentToSinglePost = (postId, formData) => async dispatch => {
 // Delete post
 export const deletePost = postId => async dispatch => {
   try {
-    const res = await axios.delete(
-      `/post/deletepost/${postId}`
-    );
+    const res = await axios.delete(`/post/deletepost/${postId}`);
     dispatch({
       type: DELETE_POST,
       payload: postId
@@ -245,9 +253,7 @@ export const deleteComment = (
   isSinglePost
 ) => async dispatch => {
   try {
-    const res = await axios.delete(
-      `/post/deletepost/${commentId}`
-    );
+    const res = await axios.delete(`/post/deletepost/${commentId}`);
     if (isSinglePost) {
       dispatch({
         type: REMOVE_COMMENT_SINGLE_POST,

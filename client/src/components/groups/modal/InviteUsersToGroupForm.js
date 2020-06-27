@@ -19,7 +19,8 @@ const InviteUsersToGroupForm = ({
   group,
   current,
   onStepChange,
-  isNewGroup
+  isNewGroup,
+  setModal
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
@@ -79,12 +80,17 @@ const InviteUsersToGroupForm = ({
           values.groupId = isNewGroup
             ? group.newGroup.id
             : group.currentGroup.id;
-          inviteToJoinUserGroup(JSON.stringify(values));
+
+          if (values.invitedUsers) {
+            inviteToJoinUserGroup(JSON.stringify(values));
+          }
 
           actions.setSubmitting(false);
           actions.resetForm();
           if (isNewGroup) {
             onStepChange(current + 1);
+          } else {
+            setModal(false);
           }
         }}
         render={() => (
