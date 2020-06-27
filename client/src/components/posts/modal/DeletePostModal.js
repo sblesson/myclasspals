@@ -11,7 +11,8 @@ const DeletePostModal = ({
   postId,
   postType,
   commentId,
-  isSinglePost
+  isSinglePost,
+  post
 }) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
@@ -30,8 +31,10 @@ const DeletePostModal = ({
   const handleDelete = () => {
     if (postType === 'comment') {
       deleteComment(postId, commentId, isSinglePost);
-    } else {
+    } else if (postId) {
       deletePost(postId);
+    } else if (post && post.currentPost && post.currentPost._id) {
+      deletePost(post.currentPost._id);
     }
     hideModal();
   };
@@ -54,15 +57,19 @@ const DeletePostModal = ({
         destroyOnClose={true}
       >
         <div>
-          'Deleting this {postType} will removes it forever. Are you sure you
-          want to delete?'
+          Deleting this {postType} will removes it forever. Are you sure you
+          want to delete?
         </div>
       </Modal>
     </div>
   );
 };
 
-export default connect(null, {
+const mapStateToProps = state => ({
+  post: state.post
+});
+
+export default connect(mapStateToProps, {
   deletePost,
   deleteComment
 })(DeletePostModal);

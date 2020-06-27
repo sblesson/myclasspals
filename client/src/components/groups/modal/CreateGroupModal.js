@@ -81,7 +81,6 @@ const CreateGroupModal = () => {
           current={current}
           isNewGroup={true}
           setModal={setModalVisibility}
-          toggle={toggleModal}
         />
       )
     }

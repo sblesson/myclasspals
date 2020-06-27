@@ -11,9 +11,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.mongocollections.Post;
+import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.restmodel.PostSearchQuery;
 
 @Component
@@ -23,6 +25,9 @@ public class PostMessageService {
 	MongoTemplate mongoTemplate;
 
 	public Post createPost(Post post) {
+		Users user = (Users) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		post.setUserId(user.getEmail());
 		Date current = new Date();
 		post.setPostedDate(current);
 		if (post.getIsPrivate() == null) {
@@ -39,6 +44,10 @@ public class PostMessageService {
 		Date current = new Date();
 		post.setPostedDate(current);
 		post.setIsComment(true);
+		Users user = (Users) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		post.setUserId(user.getEmail());
+		
 		mongoTemplate.insert(post);
 		if (parentPost.getComments() == null) {
 			parentPost.setComments(new ArrayList<Post>());
@@ -76,12 +85,13 @@ public class PostMessageService {
 		if (postSearchQuery.getKeyword() != null) {
 			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase()));
 		}
-
+		Users user = (Users) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
 		if ((postSearchQuery.getIsPrivate() != null) && (postSearchQuery.getIsPrivate() == true)) {
 			postListQuery.addCriteria(new Criteria()
 			        .orOperator(
-			                Criteria.where("endUserId").is(postSearchQuery.getUserId()),
-			                Criteria.where("userId").is(postSearchQuery.getUserId())
+			                Criteria.where("endUserId").is(user.getEmail()),
+			                Criteria.where("userId").is(user.getEmail())
 			            ) );
 		}
 		if (postSearchQuery.getGroupId() != null) {
