@@ -12,13 +12,7 @@ const Login = ({ setAlert, login, isAuthenticated, auth }) => {
   const [componentSize, setComponentSize] = useState('small');
   const { Title, Text } = Typography;
 
-  /*  if (isAuthenticated) {
-    debugger;
-    console.log(auth);
-    return <Redirect to='/dashboard' />;
-  } */
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
 
@@ -43,7 +37,6 @@ const Login = ({ setAlert, login, isAuthenticated, auth }) => {
       }}
       onSubmit={values => {
         login({ email: values.email, password: values.password });
-        
       }}
       validator={() => ({})}
       //validate={values => {}}

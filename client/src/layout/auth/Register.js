@@ -7,14 +7,12 @@ import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
-import * as emailjs from 'emailjs-com';
 
 const Register = ({ setAlert, register }) => {
   const [componentSize, setComponentSize] = useState('small');
   const { Title, Text } = Typography;
 
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
 
@@ -31,25 +29,6 @@ const Register = ({ setAlert, register }) => {
     }
   };
 
-  //Custom EmailJS method
-  const sendFeedback = templateParams => {
-    emailjs
-      .send(
-        'default_service',
-        'group_invitation',
-        templateParams,
-        'user_lol6VvJrSdlG57bHeWx0I'
-      )
-      .then(res => {
-        // Email successfully sent alert
-        window.alert('email send');
-      })
-      // Email Failed to send Error alert
-      .catch(err => {
-        console.error('Email Error:', err);
-      });
-  };
-
   const yourInfo = (
     <Formik
       initialValues={{
@@ -62,12 +41,6 @@ const Register = ({ setAlert, register }) => {
           setAlert('Passwords do not match', 'danger');
         } else {
           register({ email: values.email, password: values.password });
-          const templateParams = {
-            message: 'cool',
-            name: 'span',
-            email: values.email
-          };
-          sendFeedback(templateParams);
         }
       }}
       validator={() => ({})}

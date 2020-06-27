@@ -16,7 +16,7 @@ import {
   APPROVE_GROUP_REQUEST_ERROR,
   CHANGE_GROUP_USER_ROLE,
   SEARCH_GROUP_WITH_FILTERS,
-  UPDATE_USER_GROUP,
+  UPDATE_GROUP_STORE,
   GET_GROUP_AUTO_COMPLETE,
   GET_GROUP_AUTO_COMPLETE_ERROR
 } from '../actions/types';
@@ -27,6 +27,7 @@ const initialState = {
   pendingInvitedUserGroups: [],
   requestedUserGroup: [],
   searchResult: [],
+  autoCompleteSearchResult: [],
   newGroup: null,
   currentGroup: {},
   isGroupAdmin: false,
@@ -56,6 +57,26 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case UPDATE_GROUP_STORE:
+      return {
+        ...state,
+        userGroup:
+          payload.userGroup && payload.userGroup.length > 0
+            ? payload.userGroup
+            : [],
+        pendingInvitedUserGroups:
+          payload.pendingInvitedUserGroups &&
+          payload.pendingInvitedUserGroups.length > 0
+            ? payload.pendingInvitedUserGroups
+            : [],
+
+        requestedUserGroup:
+          payload.requestedUserGroup && payload.requestedUserGroup.length > 0
+            ? payload.requestedUserGroup
+            : [],
+
+        loading: false
+      };
     case ADD_GROUP:
       return {
         ...state,
@@ -72,13 +93,7 @@ export default function(state = initialState, action) {
         newGroup: payload.userGroup,
         loading: false
       };
-    case UPDATE_USER_GROUP:
-      debugger;
-      return {
-        ...state,
-        userGroup: [payload, ...state.userGroup],
-        loading: false
-      };
+
     case GET_ALL_GROUPS:
       return {
         ...state,
@@ -107,7 +122,7 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        searchResult: payload
+        autoCompleteSearchResult: payload
       };
     case GET_GROUP:
       //Todo check why it is not getting set from return
@@ -138,32 +153,15 @@ export default function(state = initialState, action) {
         loading: false
       };
     case REQUEST_JOIN_USER_GROUP:
-      let isRequestUserGroupSuccess = false;
-      console.log(payload);
-      debugger;
-      if (payload && payload.origin === 'discovergroup') {
-        //searchResult = payload;
-        isRequestUserGroupSuccess = true;
-        return {
-          ...state,
-
-          ...state,
-          userGroup: payload.user.userGroup,
-          pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
-          requestedUserGroup: payload.user.requestedUserGroup,
-          loading: false,
-          isRequestUserGroupSuccess: true
-        };
-      } else {
-        return {
-          ...state,
-          userGroup: payload.user.userGroup,
-          pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
-          requestedUserGroup: payload.user.requestedUserGroup,
-          loading: false,
-          isRequestUserGroupSuccess: isRequestUserGroupSuccess
-        };
-      }
+      return {
+        ...state,
+        currentGroup: payload.currentGroup,
+        userGroup: payload.user.userGroup,
+        pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
+        requestedUserGroup: payload.user.requestedUserGroup,
+        loading: false,
+        isRequestUserGroupSuccess: true
+      };
 
     case APPROVE_GROUP_REQUEST:
       return {

@@ -37,7 +37,6 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
     }
   };
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
 
@@ -91,7 +90,6 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
         isPrivate: true
       }}
       onSubmit={(values, actions) => {
-        console.log(values);
         sendPrivateMessage(values);
         setModalVisibility(false);
       }}

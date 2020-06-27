@@ -19,7 +19,6 @@ const MultiSelectSchoolSearch = ({ fetchSchool, school }) => {
   };
 
   const onSchoolChange = (value, option) => {
-    console.log(value);
     /* if (school && school.results && school.results.length > 0) {
       //update selected school in the reducer
       school.selectedSchools.push(option);

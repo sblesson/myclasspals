@@ -4,10 +4,9 @@ import { withRouter } from 'react-router-dom';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { inviteToJoinUserGroup } from '../../../actions/group';
 import InviteUsersToGroupForm from './InviteUsersToGroupForm';
 
-import { message, Button, Row, Col } from 'antd';
+import { Button } from 'antd';
 
 import './CreateGroupModal.scss';
 
@@ -66,15 +65,14 @@ const InviteUsersToGroupModal = ({ current }) => {
 };
 
 InviteUsersToGroupModal.propTypes = {
-  inviteToJoinUserGroup: PropTypes.func.isRequired
+  group: PropTypes.object.isRequired
 };
 
 const mapDispatchToProps = state => ({
-  hideModal: state.hideModal,
   group: state.group
 });
 
-export default connect(mapDispatchToProps, {
-  inviteToJoinUserGroup,
-  mapDispatchToProps
-})(withRouter(InviteUsersToGroupModal));
+export default connect(
+  mapDispatchToProps,
+  {}
+)(withRouter(InviteUsersToGroupModal));

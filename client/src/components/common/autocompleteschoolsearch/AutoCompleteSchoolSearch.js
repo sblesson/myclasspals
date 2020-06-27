@@ -19,7 +19,6 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
     school.results &&
     school.results.length > 0 &&
     school.results.map((item, index) => {
-      console.log(item);
       let selectedSchool =
         item.schoolName +
         ', ' +

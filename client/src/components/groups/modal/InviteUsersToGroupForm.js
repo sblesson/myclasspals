@@ -21,9 +21,6 @@ const InviteUsersToGroupForm = ({
   onStepChange,
   isNewGroup
 }) => {
-  debugger;
-  console.log(current);
-
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -36,6 +33,7 @@ const InviteUsersToGroupForm = ({
   const goToNextStep = (event, current) => {
     onStepChange(current + 1);
   };
+
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -70,14 +68,19 @@ const InviteUsersToGroupForm = ({
           invitedUsers: ''
         }}
         onSubmit={(values, actions) => {
-          values.invitedUsers =
-            values.usersSelect.toString() + ',' + values.invitedUsers;
+          if (values.usersSelect && values.invitedUsers) {
+            values.invitedUsers =
+              values.usersSelect.toString() + ',' + values.invitedUsers;
+          } else if (values.usersSelect && !values.invitedUsers) {
+            values.invitedUsers = values.usersSelect.toString();
+          }
           delete values.usersSelect;
 
           values.groupId = isNewGroup
             ? group.newGroup.id
             : group.currentGroup.id;
           inviteToJoinUserGroup(JSON.stringify(values));
+
           actions.setSubmitting(false);
           actions.resetForm();
           if (isNewGroup) {

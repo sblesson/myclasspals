@@ -2,21 +2,15 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import {
-  getuserbyregistrationid,
-  registerPendingInvitedUser,
-  getUser
-} from '../../actions/auth';
-import { getGroupDetails } from '../../actions/group';
+import { getuserbyregistrationid, register } from '../../actions/auth';
 
 import PropTypes from 'prop-types';
 
 const PendingRegistration = ({
   setAlert,
   getuserbyregistrationid,
-  registerPendingInvitedUser,
+  register,
   isAuthenticated,
-  getGroupDetails,
   auth,
   token
 }) => {
@@ -27,16 +21,12 @@ const PendingRegistration = ({
   }, [getuserbyregistrationid, token]);
 
   useEffect(() => {
-    console.log('yay');
-    console.log(auth.user);
     if (auth.invalidRegistrationToken) {
       //todo change window.location logic later
       window.location.pathname = '/register';
       //return <Redirect to='/register' />;
     }
   }, [auth.user]);
-
-  const [groupId, setGroupId] = useState(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -57,11 +47,22 @@ const PendingRegistration = ({
       if (auth && auth.user && auth.user.email) {
         let email = auth.user.email;
         //setGroupId(auth.user.pendingInvitedUserGroups[0].id);
-        registerPendingInvitedUser({
-          name,
-          email,
-          password /* city, zipcode  */
-        });
+        if (token) {
+          let regId = token;
+          register({
+            name,
+            email,
+            password,
+            regId
+          });
+        } else {
+          register({
+            name,
+            email,
+            password
+          });
+        }
+
         //getGroupDetails(groupId);
       }
     }
@@ -120,7 +121,8 @@ const PendingRegistration = ({
 
 PendingRegistration.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  registerPendingInvitedUser: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
   isAuthenticated: PropTypes.bool
 };
 
@@ -133,6 +135,5 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setAlert,
   getuserbyregistrationid,
-  registerPendingInvitedUser,
-  getGroupDetails
+  register
 })(PendingRegistration);

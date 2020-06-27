@@ -45,9 +45,6 @@ export default function(state = initialState, action) {
         loading: false
       };
     case SEARCH_POST:
-      console.log(state);
-      //state.posts = state.posts.concat(payload);
-
       return {
         ...state,
         posts: payload,
@@ -81,10 +78,6 @@ export default function(state = initialState, action) {
         loading: false
       };
     case DELETE_POST:
-      debugger;
-      console.log(state.posts);
-      console.log(payload);
-
       return {
         ...state,
         posts: state.posts.filter(post => post._id !== payload),
@@ -141,7 +134,6 @@ export default function(state = initialState, action) {
       };
 
     case REMOVE_COMMENT_SINGLE_POST:
-      debugger;
       return {
         ...state,
         currentPost: {
