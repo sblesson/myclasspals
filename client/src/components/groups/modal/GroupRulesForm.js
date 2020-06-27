@@ -21,15 +21,11 @@ const GroupRulesForm = ({
   current,
   onStepChange,
   history,
-  toggle
+  setModal
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
-  };
-
-  const onChange = e => {
-    console.log(e.target.name, e.target.value);
   };
 
   const formItemLayout = {
@@ -55,12 +51,14 @@ const GroupRulesForm = ({
     }
   };
 
-  const closeModalAndredirectToGroupPage = () => {
-    onStepChange(current + 1);
-    toggle();
+  const closeModalAndredirectToGroupPage = actions => {
+    if (actions) {
+      actions.setSubmitting(false);
+      actions.resetForm();
+    }
 
-    history.push('/dashboard/' + group.newGroup.id);
-    window.location.reload();
+    onStepChange(0);
+    setModal(false);
   };
 
   const groupRulesForm = (
@@ -71,11 +69,13 @@ const GroupRulesForm = ({
       }}
       onSubmit={(values, actions) => {
         values.id = group.newGroup.id;
-        updateGroup(values, () => {
-          actions.setSubmitting(false);
-          actions.resetForm();
-          closeModalAndredirectToGroupPage();
-        });
+        if (values.aboutGroup || values.groupRules) {
+          updateGroup(values, () => {
+            closeModalAndredirectToGroupPage(actions);
+          });
+        } else {
+          closeModalAndredirectToGroupPage(actions);
+        }
       }}
       validate={values => {}}
       render={() => (
@@ -86,7 +86,7 @@ const GroupRulesForm = ({
               <Button
                 type='link'
                 style={{ float: 'right' }}
-                onClick={e => closeModalAndredirectToGroupPage(e)}
+                onClick={e => closeModalAndredirectToGroupPage()}
               >
                 Skip
               </Button>

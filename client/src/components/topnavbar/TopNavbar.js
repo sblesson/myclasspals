@@ -4,6 +4,7 @@ import UserMenu from './UserMenu';
 import GuestMenu from './GuestMenu';
 import { Drawer, Button } from 'antd';
 import './TopNavbar.scss';
+import logo from '../../assets/images/cblogo.png';
 
 const TopNavbar = ({ auth: { isAuthenticated, loading, user } }) => {
   const [visible, setVisible] = useState(false);
@@ -19,7 +20,11 @@ const TopNavbar = ({ auth: { isAuthenticated, loading, user } }) => {
   return (
     <nav className='menuBar'>
       <div className='logo'>
-        <a href=''>logo</a>
+        <a href=''>
+          {' '}
+          {/*           <img src={logo} alt='classbuddy logo' />
+           */}{' '}
+        </a>
       </div>
       <div className='menuCon'>
         <div className='leftMenu'></div>

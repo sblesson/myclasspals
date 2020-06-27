@@ -14,8 +14,6 @@ import './CreateProfile.scss';
 const CreateProfile = ({ auth, history }) => {
   useEffect(() => {
     if (auth && auth.user) {
-      console.log(auth.user);
-
       let user = auth.user;
       if (user.userGroup && user.userGroup.length > 0) {
         history.push('/dashboard');
@@ -23,7 +21,6 @@ const CreateProfile = ({ auth, history }) => {
         user.requestedUserGroup &&
         user.requestedUserGroup.length > 0
       ) {
-        console.log('hererere');
         history.push('/groups');
       } else if (user.city) {
         handleStepChange(current);

@@ -14,8 +14,6 @@ const AutoCompleteCitySeach = ({ getCityData, address }) => {
   };
 
   const onCitySelect = (value, option) => {
-    console.log(value);
-    console.log(option);
     if (address && address.results && address.results.length > 0) {
       //update selected address in the reducer
       address.selectedAddress = address.results[option.key];

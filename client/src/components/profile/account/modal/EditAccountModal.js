@@ -26,7 +26,6 @@ const EditAccountModal = ({ auth, updateUser }) => {
   };
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
-    console.log(value);
     return value ? undefined : 'required';
   };
   const [componentSize, setComponentSize] = useState('small');
@@ -34,7 +33,6 @@ const EditAccountModal = ({ auth, updateUser }) => {
     if (!event.target.value) {
       return;
     }
-    console.log(event.target);
     //fetchSchools(event.target.value);
   };
   const formItemLayout = {

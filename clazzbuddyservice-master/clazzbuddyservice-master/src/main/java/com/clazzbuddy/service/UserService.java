@@ -47,6 +47,14 @@ public class UserService implements UserDetailsService{
     private PasswordEncoder bcryptEncoder;
 
 	public Users createUser(Users user) throws Exception {
+		if (user.getRegId() != null) {
+			Users userWithRegId = getUserDetailsFromRegistrationId(user.getRegId());
+			deleteUserRegToken(user.getRegId());
+			userWithRegId.setPassword(bcryptEncoder.encode(user.getPassword()));
+			userWithRegId.setName(user.getName());
+			mongoTemplate.save(userWithRegId);
+			return userWithRegId;
+		}
 		Query userByName = new Query();
 		userByName.addCriteria(Criteria.where("email").is(user.getEmail()));
 		Users userFromDB = mongoTemplate.findOne(userByName, Users.class);
@@ -162,7 +170,7 @@ public class UserService implements UserDetailsService{
 
 	public Users getUserDetailsFromRegistrationId(String id) throws Exception {
 		Query userRegById = new Query();
-		userRegById.addCriteria(Criteria.where("id").is(id));
+		userRegById.addCriteria(Criteria.where("regId").is(id));
 		UserRegistration userReg = mongoTemplate.findOne(userRegById, UserRegistration.class);
 
 		if (userReg == null) {
@@ -246,9 +254,9 @@ public class UserService implements UserDetailsService{
 			invitedUser.setEmail(action.getInvitedUserId());
 			UserRegistration userRegistration = new UserRegistration();
 			userRegistration.setUserId(action.getInvitedUserId());
-			userRegistration.setId(CommonUtils.getRandomId().toString());
+			userRegistration.setRegId(CommonUtils.getRandomId().toString());
 			mongoTemplate.save(userRegistration);
-			emailServiceClient.sendUserRegistrationEmail(userRegistration.getId().toString(),
+			emailServiceClient.sendUserRegistrationEmail(userRegistration.getRegId(),
 					action.getInvitedUserId());
 
 		}
@@ -382,7 +390,7 @@ public class UserService implements UserDetailsService{
 	public void deleteUserRegToken(String id) {
 
 		Query userRegById = new Query();
-		userRegById.addCriteria(Criteria.where("id").is(id));
+		userRegById.addCriteria(Criteria.where("regId").is(id));
 		UserRegistration userReg = mongoTemplate.findOne(userRegById, UserRegistration.class);
 
 		mongoTemplate.remove(userReg);

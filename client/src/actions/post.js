@@ -35,40 +35,6 @@ export const getPostCategories = () => async dispatch => {
   }
 };
 
-// Add like
-export const addLike = id => async dispatch => {
-  try {
-    const res = await axios.put(`/api/posts/like/${id}`);
-
-    dispatch({
-      type: UPDATE_LIKES,
-      payload: { id, likes: res.data }
-    });
-  } catch (err) {
-    dispatch({
-      type: POST_ERROR,
-      payload: { msg: err, status: err } //todo change error message
-    });
-  }
-};
-
-// Remove like
-export const removeLike = id => async dispatch => {
-  try {
-    const res = await axios.put(`/api/posts/unlike/${id}`);
-
-    dispatch({
-      type: UPDATE_LIKES,
-      payload: { id, likes: res.data }
-    });
-  } catch (err) {
-    dispatch({
-      type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-
 // Add post
 export const addPost = formData => async dispatch => {
   const config = {
@@ -78,11 +44,7 @@ export const addPost = formData => async dispatch => {
   };
 
   try {
-    const res = await axios.post(
-      'http://localhost:8080/post/createpost',
-      formData,
-      config
-    );
+    const res = await axios.post('/post/createpost', formData, config);
     dispatch({
       type: ADD_POST,
       payload: res.data
@@ -104,15 +66,32 @@ export const searchPost = groupId => async dispatch => {
       'Content-Type': 'application/json'
     }
   };
-  const formData = { 'groupId': groupId };
+  const formData = { groupId: groupId };
 
   try {
-    const res = await axios.post(
-      'http://localhost:8080/post/searchpost',
-      formData,
-      config
-    );
-    console.log(res);
+    const res = await axios.post('/post/searchpost', formData, config);
+    dispatch({
+      type: SEARCH_POST,
+      payload: res.data.post
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Search post by groupId
+export const getPrivateMessages = formData => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post('/post/searchpost', formData, config);
     dispatch({
       type: SEARCH_POST,
       payload: res.data.post
@@ -132,11 +111,7 @@ export const sendPrivateMessage = formData => async dispatch => {
     }
   };
   try {
-    const res = await axios.post(
-      'http://localhost:8080/post/createpost',
-      formData,
-      config
-    );
+    const res = await axios.post('/post/createpost', formData, config);
 
     dispatch({
       type: SEND_PRIVATE_MESSAGE,
@@ -155,7 +130,7 @@ export const sendPrivateMessage = formData => async dispatch => {
 // Search post by postId
 export const getPost = id => async dispatch => {
   try {
-    const res = await axios.get(`http://localhost:8080/post/getpost?id=${id}`);
+    const res = await axios.get(`/post/getpost?id=${id}`);
 
     dispatch({
       type: GET_POST,
@@ -179,7 +154,7 @@ export const addMessageReply = (postId, formData) => async dispatch => {
 
   try {
     const res = await axios.post(
-      `http://localhost:8080/post/${postId}/addcomment`,
+      `/post/${postId}/addcomment`,
       formData,
       config
     );
@@ -208,7 +183,7 @@ export const addComment = (postId, formData) => async dispatch => {
 
   try {
     const res = await axios.post(
-      `http://localhost:8080/post/${postId}/addcomment`,
+      `/post/${postId}/addcomment`,
       formData,
       config
     );
@@ -237,7 +212,7 @@ export const addCommentToSinglePost = (postId, formData) => async dispatch => {
 
   try {
     const res = await axios.post(
-      `http://localhost:8080/post/${postId}/addcomment`,
+      `/post/${postId}/addcomment`,
       formData,
       config
     );
@@ -258,10 +233,7 @@ export const addCommentToSinglePost = (postId, formData) => async dispatch => {
 // Delete post
 export const deletePost = postId => async dispatch => {
   try {
-    const res = await axios.delete(
-      `http://localhost:8080/post/deletepost/${postId}`
-    );
-    console.log(res);
+    const res = await axios.delete(`/post/deletepost/${postId}`);
     dispatch({
       type: DELETE_POST,
       payload: postId
@@ -281,9 +253,7 @@ export const deleteComment = (
   isSinglePost
 ) => async dispatch => {
   try {
-    const res = await axios.delete(
-      `http://localhost:8080/post/deletepost/${commentId}`
-    );
+    const res = await axios.delete(`/post/deletepost/${commentId}`);
     if (isSinglePost) {
       dispatch({
         type: REMOVE_COMMENT_SINGLE_POST,

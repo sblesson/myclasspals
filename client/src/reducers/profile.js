@@ -20,15 +20,12 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case GET_PROFILE:
-      debugger;
-      console.log(payload.user);
       return {
         ...state,
         profile: payload.user,
         loading: false
       };
     case UPDATE_PROFILE:
-      console.log(payload);
       return {
         ...state,
         profile: payload,

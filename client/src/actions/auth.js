@@ -25,13 +25,41 @@ import {
   CHANGE_PASSWORD_ERROR,
   UPDATE_USER_ERROR,
   UPDATE_USER_GLOBAL,
-  DESTROY_SESSION
+  DESTROY_SESSION,
+  UPDATE_GROUP_STORE
 } from './types';
-import { updateUserGroup } from './group';
 import { setAuthToken } from '../utils/axios';
 
 export const onClear = () => {
   return { type: DESTROY_SESSION };
+};
+
+export const updateUserGlobal = userObj => dispatch => {
+  dispatch({
+    type: UPDATE_USER_GLOBAL,
+    payload: userObj
+  });
+};
+
+export const getUser = (userId, signal) => async dispatch => {
+  try {
+    const userResp = await axios.get(`/user/getuserdetails?user=${userId}`, {
+      cancelToken: signal
+    });
+    dispatch({
+      type: GET_USER,
+      payload: userResp.data
+    });
+    dispatch({
+      type: UPDATE_GROUP_STORE,
+      payload: userResp.data.user
+    });
+    //updateGroupStore(userResp.data.user);
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR
+    });
+  }
 };
 
 // Load User
@@ -44,55 +72,13 @@ export const loadUser = email => async dispatch => {
     }
   }
   if (email) {
-    try {
-      const response = await axios.get(
-        'http://localhost:8080/user/getuserdetails?user=' + email
-      );
-
-      dispatch({
-        type: USER_LOADED,
-        payload: response.data
-      });
-    } catch (err) {
-      dispatch({
-        type: AUTH_ERROR
-      });
-    }
-  }
-};
-export const updateUserGlobal = userObj => dispatch => {
-  dispatch({
-    type: UPDATE_USER_GLOBAL,
-    payload: userObj
-  });
-};
-
-export const getUser = (userId, signal) => async dispatch => {
-  try {
-    const userResp = await axios.get(
-      'http://localhost:8080/user/getuserdetails?user=' + userId,
-      {
-        cancelToken: signal
-      }
-    );
-    dispatch({
-      type: GET_USER,
-      payload: userResp.data
-    });
-
-    updateUserGroup(userResp.data.user.userGroup);
-  } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    });
+    getUser(email);
   }
 };
 
 export const searchUser = keyword => async dispatch => {
   try {
-    const userResp = await axios.get(
-      'http://localhost:8080/user/searchuser?user=' + keyword
-    );
+    const userResp = await axios.get(`/user/searchuser?user=${keyword}`);
     dispatch({
       type: SEARCH_USER,
       payload: userResp.data
@@ -113,11 +99,7 @@ export const updateUser = (formData, edit = false) => async dispatch => {
       }
     };
 
-    const res = await axios.put(
-      'http://localhost:8080/user/updateuser',
-      formData,
-      config
-    );
+    const res = await axios.put(`/user/updateuser`, formData, config);
 
     dispatch({
       type: UPDATE_USER,
@@ -143,16 +125,14 @@ export const updateUser = (formData, edit = false) => async dispatch => {
 
 export const getuserbyregistrationid = (token, history) => async dispatch => {
   try {
-    const response = await axios.get(
-      'http://localhost:8080/user/userbyregid/' + token
-    );
+    const response = await axios.get(`/user/userbyregid/${token}`);
     dispatch({
       type: GET_USER_BY_REGISTRATION_ID,
       payload: response.data
     });
     if (response.data.errorCode !== 1) {
       //no error valid case
-      dispatch(deleteUserRegistrationToken(token));
+      // dispatch(deleteUserRegistrationToken(token));
     } else {
       dispatch(
         setAlert(
@@ -175,9 +155,7 @@ export const getuserbyregistrationid = (token, history) => async dispatch => {
 
 export const deleteUserRegistrationToken = token => async dispatch => {
   try {
-    const response = await axios.delete(
-      'http://localhost:8080/user/userbyregid/' + token
-    );
+    const response = await axios.delete(`/user/userbyregid/${token}`);
     dispatch({
       type: DELETE_USER_REGISTRATION_TOKEN,
       payload: response.data
@@ -201,28 +179,24 @@ export const register = (formData, myCancelToken) => async dispatch => {
   const body = JSON.stringify(formData);
 
   try {
-    const res = await axios.post(
-      'http://localhost:8080/user/register',
-      body,
-      config,
-      {
-        cancelToken: myCancelToken
-      }
-    );
+    const res = await axios.post(`/user/register`, body, config, {
+      cancelToken: myCancelToken
+    });
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
     });
 
-    const authRes = await axios.post(
-      'http://localhost:8080/user/authenticate',
-      body,
-      config
-    );
-    dispatch({
-      type: AUTH_SUCCESS,
-      payload: authRes.data
-    });
+    if (res.data.errorCode) {
+      dispatch(setAlert('Token Invalid, click signup to register', 'error'));
+    } else {
+      const authRes = await axios.post(`/user/authenticate`, body, config);
+      dispatch({
+        type: AUTH_SUCCESS,
+        payload: authRes.data
+      });
+      dispatch(getUser(formData.email));
+    }
   } catch (err) {
     const errors =
       err && err.response && err.response.data && err.response.data.errors
@@ -230,7 +204,6 @@ export const register = (formData, myCancelToken) => async dispatch => {
         : 'Error occured when sending email';
 
     if (errors && errors.length > 0) {
-      console.log(errors);
       //errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
 
@@ -240,55 +213,18 @@ export const register = (formData, myCancelToken) => async dispatch => {
   }
 };
 
-// Register User
-export const registerPendingInvitedUser = ({
-  name,
-  email,
-  password
-}) => async dispatch => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
-  const body = JSON.stringify({ name, email, password });
-
-  try {
-    const res = await axios.put('/api/users', body, config);
-
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: res.data
-    });
-
-    //const emailRes = await axios.post('/api/sendMail', body, config);
-    dispatch(loadUser(email));
-  } catch (err) {
-    /*   const errors = err.response.data.errorCode;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    } */
-
-    dispatch({
-      type: REGISTER_FAIL
-    });
-  }
-};
-
 // Change User Password
-export const changePassword = ({ password }) => async dispatch => {
+export const changePassword = ({ email, password }) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  const body = JSON.stringify({ password });
+  const formData = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.put('/api/users', body, config);
+    const res = await axios.put('/user/updateuser', formData, config);
 
     dispatch({
       type: CHANGE_PASSWORD_SUCCESS,
@@ -318,18 +254,14 @@ export const login = formData => async dispatch => {
 
     try {
       const body = JSON.stringify(formData);
-      const res = await axios.post(
-        'http://localhost:8080/user/authenticate',
-        body,
-        config
-      );
+      const res = await axios.post('/user/authenticate', body, config);
 
       dispatch({
         type: AUTH_SUCCESS,
         payload: res.data
       });
 
-      dispatch(loadUser(formData.email));
+      dispatch(getUser(formData.email));
     } catch (err) {
       const errors =
         err && err.response && err.response.data && err.response.data.errors;

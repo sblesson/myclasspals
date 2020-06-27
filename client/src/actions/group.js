@@ -22,14 +22,14 @@ import {
   CHANGE_GROUP_USER_ROLE,
   CHANGE_GROUP_USER_ROLE_ERROR,
   SEARCH_ALL_GROUP_ERROR,
-  UPDATE_USER_GROUP,
+  UPDATE_GROUP_STORE,
   GET_GROUP_AUTO_COMPLETE,
   GET_GROUP_AUTO_COMPLETE_ERROR,
   SEND_PRIVATE_MESSAGE,
-  SEARCH_POST
+  SEARCH_POST,
+  GET_USER
 } from './types';
 
-import { updateUserGlobal } from './auth';
 import { searchPost } from './post';
 
 // Add post
@@ -41,11 +41,7 @@ export const addGroup = formData => async dispatch => {
   };
 
   try {
-    const res = await axios.post(
-      'http://localhost:8080/usergroup/creategroup',
-      formData,
-      config
-    );
+    const res = await axios.post('/usergroup/creategroup', formData, config);
 
     dispatch({
       type: ADD_GROUP,
@@ -70,16 +66,14 @@ export const updateGroup = (formData, callback) => async dispatch => {
   };
 
   try {
-    await axios
-      .put('http://localhost:8080/usergroup/updategroup', formData, config)
-      .then(res => {
-        dispatch({
-          type: UPDATE_GROUP,
-          payload: res.data
-        });
-        dispatch(setAlert('Group Updated', 'success'));
-        callback();
+    await axios.put('/usergroup/updategroup', formData, config).then(res => {
+      dispatch({
+        type: UPDATE_GROUP,
+        payload: res.data
       });
+      dispatch(setAlert('Group Updated', 'success'));
+      callback();
+    });
   } catch (err) {
     dispatch({
       type: GROUP_ERROR
@@ -93,9 +87,7 @@ export const getAllGroups = userId => async dispatch => {
   try {
     const userId = localStorage.getItem('userId');
 
-    const response = await axios.get(
-      'http://localhost:8080/user/getuserdetails?user=' + userId
-    );
+    const response = await axios.get('/user/getuserdetails?user=' + userId);
     dispatch({
       type: GET_ALL_GROUPS,
       payload: response.data.user
@@ -109,11 +101,8 @@ export const getAllGroups = userId => async dispatch => {
 };
 // Get all userGroups
 export const getGroupAutoComplete = key => async dispatch => {
-  debugger;
   try {
-    const response = await axios.get(
-      'http://localhost:8080/usergroup/groupautocomplete?key=' + key
-    );
+    const response = await axios.get('/usergroup/groupautocomplete?key=' + key);
     dispatch({
       type: GET_GROUP_AUTO_COMPLETE,
       payload: response.data
@@ -128,9 +117,7 @@ export const getGroupAutoComplete = key => async dispatch => {
 // Get all userGroups
 export const getGroupDetails = groupId => async dispatch => {
   try {
-    const response = await axios.get(
-      `http://localhost:8080/usergroup/getgroup?id=${groupId}`
-    );
+    const response = await axios.get(`/usergroup/getgroup?id=${groupId}`);
 
     dispatch({
       type: GET_GROUP,
@@ -147,10 +134,10 @@ export const getGroupDetails = groupId => async dispatch => {
     });
   }
 };
-export const updateUserGroup = userGroup => dispatch => {
+export const updateGroupStore = user => dispatch => {
   dispatch({
-    type: UPDATE_USER_GROUP,
-    payload: userGroup
+    type: UPDATE_GROUP_STORE,
+    payload: user
   });
 };
 
@@ -166,7 +153,7 @@ export const searchGroup = searchKey => async dispatch => {
   };
   try {
     const response = await axios.post(
-      `http://localhost:8080/usergroup/getgroupbyfilter`,
+      `/usergroup/getgroupbyfilter`,
       requestData,
       config
     );
@@ -192,7 +179,7 @@ export const searchGroupWithFilters = requestData => async dispatch => {
   };
   try {
     const response = await axios.post(
-      `http://localhost:8080/usergroup/getgroupbyfilter`,
+      `/usergroup/getgroupbyfilter`,
       requestData,
       config
     );
@@ -210,7 +197,7 @@ export const searchGroupWithFilters = requestData => async dispatch => {
 };
 
 //Admin sends users invitation to join userGroup
-export const inviteToJoinUserGroup = formData => async dispatch => {
+export const inviteToJoinUserGroup = requestData => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -219,14 +206,18 @@ export const inviteToJoinUserGroup = formData => async dispatch => {
 
   try {
     const res = await axios.post(
-      'http://localhost:8080/user/invitetousergroup',
-      formData,
+      '/user/invitetousergroup',
+      requestData,
       config
+    );
+    let currentGroup = res.data.user.userGroup.find(
+      request => request.id === requestData.groupId
     );
     dispatch({
       type: INVITE_TO_GROUP,
-      payload: res.data
+      payload: { user: res.data.user, currentGroup: currentGroup }
     });
+
     /*  if (res.data.errorCode === null) {
       getGroupDetails(JSON.parse(formData).groupId);
     } */
@@ -248,10 +239,18 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
   requestData.action = 'INVITE_ACCEPT';
   try {
     const res = await axios.post(
-      'http://localhost:8080/user/acceptusergroupinvitaion',
+      '/user/acceptusergroupinvitaion',
       requestData,
       config
     );
+
+    if (res && res.data && res.data.user) {
+      //globally update user object
+      dispatch({
+        type: GET_USER,
+        payload: res.data
+      });
+    }
 
     let currentGroup = res.data.user.userGroup.find(
       request => request.id === requestData.groupId
@@ -282,22 +281,29 @@ export const requestToJoinUserGroup = (
   };
 
   try {
-    const res = await axios
-      .post('http://localhost:8080/user/requestusergroup', requestData, config)
-      .then(res => {
-        res.data.origin = requestData.origin;
-
-        dispatch({
-          type: REQUEST_JOIN_USER_GROUP,
-          payload: res.data
-        });
-
-        //globally update user object
-        updateUserGlobal(res.data.user);
-
-        dispatch(setAlert('User added to group', 'success'));
-        callback(requestData.groupId);
+    const res = await axios.post('/user/requestusergroup', requestData, config);
+    // .then(res => {
+    let currentGroup = res.data.user.requestedUserGroup.find(
+      request => request.id === requestData.groupId
+    );
+    if (!currentGroup.role) {
+      currentGroup.role = 'Pending Invitation';
+    }
+    if (res && res.data && res.data.user) {
+      //globally update user object
+      dispatch({
+        type: GET_USER,
+        payload: res.data
       });
+    }
+    dispatch({
+      type: REQUEST_JOIN_USER_GROUP,
+      payload: { user: res.data.user, currentGroup: currentGroup }
+    });
+
+    dispatch(setAlert('User added to group', 'success'));
+    //callback(requestData.groupId);
+    // });
   } catch (err) {
     dispatch({
       type: REQUEST_JOIN_USER_GROUP_ERROR
@@ -305,6 +311,47 @@ export const requestToJoinUserGroup = (
     });
   }
 };
+//User sends request to join user group
+export const cancelRequestToJoinUserGroup = (
+  requestData,
+  callback
+) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    /*     const res = await axios.post(
+      'http://localhost:8080/user/cancelrequestusergroup',
+      requestData,
+      config
+    );
+    // .then(res => {
+    let currentGroup = res.data.user.requestedUserGroup.find(
+      request => request.id === requestData.groupId
+    );
+    dispatch({
+      type: REQUEST_JOIN_USER_GROUP,
+      payload: { user: res.data.user, currentGroup: currentGroup }
+    });
+    if (res && res.data && res.data.user) {
+      //globally update user object
+      updateUserGlobal(res.data.user);
+    } */
+
+    dispatch(setAlert('Request to join group is cancelled', 'success'));
+    //callback(requestData.groupId);
+    // });
+  } catch (err) {
+    dispatch({
+      type: REQUEST_JOIN_USER_GROUP_ERROR
+      //payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
 //Admin approves group request initiated by user
 export const approveUserGroupRequest = requestData => async dispatch => {
   const config = {
@@ -316,7 +363,7 @@ export const approveUserGroupRequest = requestData => async dispatch => {
 
   try {
     const res = await axios.post(
-      'http://localhost:8080/user/acceptusergrouprequest',
+      '/user/acceptusergrouprequest',
       requestData,
       config
     );
@@ -347,7 +394,7 @@ export const declineUserGroupRequest = requestData => async dispatch => {
 
   try {
     const res = await axios.post(
-      'http://localhost:8080/user/declineusergrouprequest',
+      '/user/declineusergrouprequest',
       requestData,
       config
     );
@@ -374,7 +421,7 @@ export const changeGroupUserRole = requestData => async dispatch => {
   };
   try {
     const res = await axios.post(
-      'http://localhost:8080/usergroup/changeuserrole',
+      '/usergroup/changeuserrole',
       requestData,
       config
     );
@@ -401,7 +448,7 @@ export const removeUserFromGroup = requestData => async dispatch => {
   };
   try {
     const res = await axios.post(
-      'http://localhost:8080/user/removeuserfromgroup',
+      '/user/removeuserfromgroup',
       requestData,
       config
     );

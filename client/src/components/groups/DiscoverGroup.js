@@ -48,9 +48,12 @@ const DiscoverGroups = ({
             {group !== null &&
             group.searchResult &&
             group.searchResult.length > 0 ? (
-              group.searchResult.map((group, index) => (
-                <GroupCard currentGroup={group} key={index} type='discover' />
-              ))
+              group.searchResult.map((group, index) => {
+                let key = 'discover_' + index;
+                return (
+                  <GroupCard currentGroup={group} key={key} type='discover' />
+                );
+              })
             ) : (
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             )}

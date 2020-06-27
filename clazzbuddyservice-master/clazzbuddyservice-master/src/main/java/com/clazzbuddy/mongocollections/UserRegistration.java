@@ -11,6 +11,8 @@ public class UserRegistration {
 
 	@Id
 	private String id;
+	
+	private String regId;
 
 	private String userId;
 
@@ -38,6 +40,14 @@ public class UserRegistration {
 
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public String getRegId() {
+		return regId;
+	}
+
+	public void setRegId(String regId) {
+		this.regId = regId;
 	}
 
 }
