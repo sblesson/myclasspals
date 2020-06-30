@@ -57,9 +57,9 @@ const App = () => {
               </Switch>
             </Content>
           </Layout>
-          <Footer style={{ bottom: '0', textAlign: 'center' }}>
+          {/*    <Footer style={{ bottom: '0', textAlign: 'center' }}>
             <FooterContent />
-          </Footer>
+          </Footer> */}
         </Layout>
       </Router>
     </Provider>

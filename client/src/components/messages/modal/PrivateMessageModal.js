@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Upload, Button, Modal } from 'antd';
-import { UploadOutlined, StarOutlined } from '@ant-design/icons';
+import { UploadOutlined, StarOutlined, FormOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
-import { Formik, ErrorMessage, useFormik } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
-import MultiSelectUserSearch from '../../common/multiselectusersearch/MultiSelectUserSearch';
+import AutoCompleteUserSeach from '../../common/autocompleteusersearch/AutoCompleteUserSeach';
 
 import './PrivateMessageModal.scss';
 
@@ -16,7 +16,7 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
   const [componentSize, setComponentSize] = useState('small');
 
   const [visible, setModalVisibility] = useState(false);
-  const [headerTitle, setHeaderTitle] = useState('New Message');
+  const [headerTitle, setHeaderTitle] = useState('Send Private Message');
   const showModal = () => {
     setModalVisibility(true);
   };
@@ -112,7 +112,7 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
               required={true}
               validate={validateRequired}
             >
-              <MultiSelectUserSearch endUsersSelect={'endUserId'} />
+              <AutoCompleteUserSeach />
             </FormItem>
             <FormItem
               name='subject'
@@ -136,10 +136,9 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
               <Button>
                 <UploadOutlined /> Upload
               </Button>
-            </Upload> */}
-            <pre style={{ flex: 1 }}>
+            </Upload>             <pre style={{ flex: 1 }}>
               <FormikDebug />
-            </pre>
+            </pre>*/}
             <SubmitButton className='ant-btn btn-primary'> Send</SubmitButton>
           </Form>
         </div>
@@ -150,10 +149,19 @@ const PrivateMessageModal = ({ sendPrivateMessage, history, auth }) => {
   return (
     <div>
       <div className='private-message-modal' onClick={toggleModal}>
-        <Button type='primary' className='pinkBtn'>
-          Message
-        </Button>
+        <div as='h4' className='message-head-title'>
+          Inbox
+        </div>
+        <div
+          as='h4'
+          className='message-head-title message-head-link'
+          onClick={toggleModal}
+        >
+          <FormOutlined className='message-head-icon' />
+          Compose
+        </div>
       </div>
+
       <Modal
         title={headerTitle}
         centered

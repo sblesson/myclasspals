@@ -124,7 +124,7 @@ public class UserGroupService {
 
 	public List<UserGroup> getUserGroups(String key) {
 		Query userGroupSearch = new Query();
-		userGroupSearch.addCriteria(Criteria.where("groupName").regex(key));
+		userGroupSearch.addCriteria(Criteria.where("groupName").regex("^" + key));
 		List<UserGroup> userGroups = mongoTemplate.find(userGroupSearch, UserGroup.class);
 		return userGroups;
 		
@@ -139,8 +139,8 @@ public class UserGroupService {
 		if (filter.getGroupKeyword() != null && filter.getSchoolName() != null) {
 			userGroupSearch.addCriteria(new Criteria()
 			        .orOperator(
-			        		Criteria.where("groupName").regex(filter.getGroupKeyword(), "i"),
-			        		Criteria.where("schoolName").regex(filter.getSchoolName(), "i")
+			        		Criteria.where("groupName").regex("^" +filter.getGroupKeyword(), "i"),
+			        		Criteria.where("schoolName").regex("^" + filter.getSchoolName(), "i")
 			            ) );
 		} else if (filter.getGroupKeyword() != null) {
 			userGroupSearch.addCriteria(Criteria.where("groupName").regex(filter.getGroupKeyword()));
