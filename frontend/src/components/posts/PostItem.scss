@@ -1,0 +1,83 @@
+.feed {
+  align-items: center;
+  border-radius: 5px;
+  padding: 2rem;
+  //background-color: #fff;
+  .feed-author {
+    display: inline-block;
+    margin-left: 10px;
+    flex-grow: 1;
+    flex-basis: 0;
+    margin-left: 8px;
+    overflow: hidden;
+    vertical-align: middle;
+    &-title {
+      //font-weight: 500;
+      color: var(--color-primary-text);
+      line-height: 1.5;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    &-time {
+      font-size: 0.7em;
+      color: var(--font-color-3);
+      font-weight: 400;
+    }
+  }
+  .feed-title {
+    font-weight: 500;
+    color: #333; //var(--color-primary-text);
+    line-height: 1.5;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .post-content-wrapper {
+    border: 1px solid grey;
+  }
+  .post-heading {
+    //font-family: 'Comfortaa', cursive;
+    font-size: 1rem;
+  }
+
+  .post-message {
+    font-family: 'Comfortaa', cursive;
+    font-size: 12px;
+  }
+
+  .post-date {
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .action-status-container {
+    float: right;
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-right: 0.6em;
+    .action-status-item-container {
+      display: inline-block;
+      margin-left: 5px;
+    }
+  }
+  .action-item-container {
+    display: inline-block;
+    margin-left: 5px;
+    padding: 0.1rem 0.6rem;
+
+    .action-label {
+      font-size: 0.8rem;
+      margin-left: 5px;
+      color: var(--primary-color);
+    }
+    &:hover {
+      background: var(--light-color);
+      border-radius: 5px;
+    }
+  }
+  .m-left-minus-5 {
+    margin-left: -5px;
+  }
+}
