@@ -4,8 +4,7 @@ cd /classbuddynodeserver
 
 npm install
 
-cd /classbuddynodeserver/client
+npm run build
 
-npm install
 
 

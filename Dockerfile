@@ -43,7 +43,7 @@ RUN mkdir -p /classbuddyserver/log
 
 ADD clazzvilla-server.conf    /etc/supervisor/conf.d/clazzvilla-server.conf
 
-COPY clazzbuddyservice-master/clazzbuddyservice-master/target/*.jar /classbuddyserver/lib 
+COPY backend/clazzbuddyservice-master/target/*.jar /classbuddyserver/lib 
 
 RUN apt-get update && \
 	apt-get install -y gnupg && \
@@ -54,8 +54,8 @@ RUN apt-get update && \
 	apt-get install -y mongodb-org && \
 	mkdir -p /data/db;
 
-COPY clazzbuddyservice-master/mongoscript.sh /classbuddyserver/mongoscript.sh
-COPY clazzbuddyservice-master/mongo.sql  /classbuddyserver/mongo.sql
+COPY backend/mongoscript.sh /classbuddyserver/mongoscript.sh
+COPY backend/mongo.sql  /classbuddyserver/mongo.sql
 RUN chmod 777 /classbuddyserver/mongoscript.sh && \
    /classbuddyserver/mongoscript.sh
 
@@ -63,16 +63,10 @@ RUN chmod 777 /classbuddyserver/mongoscript.sh && \
 ADD mongo.conf    /etc/supervisor/conf.d/mongo.conf
 
 RUN mkdir -p /classbuddynodeserver/log
-RUN mkdir -p /classbuddynodeserver/client
-COPY client/public /classbuddynodeserver/client/public
-COPY client/src /classbuddynodeserver/client/src
-COPY client/package.json /classbuddynodeserver/client/package.json
-COPY middleware /classbuddynodeserver/middleware
-COPY config /classbuddynodeserver/config
-COPY models /classbuddynodeserver/models
-COPY package.json /classbuddynodeserver/package.json	
-COPY routes /classbuddynodeserver/routes
-COPY server.js /classbuddynodeserver/server.js
+RUN mkdir -p /classbuddynodeserver
+COPY frontend/public /classbuddynodeserver/public
+COPY frontend/src /classbuddynodeserver/src
+COPY frontend/package.json /classbuddynodeserver/package.json
 COPY nodeinstall.sh /classbuddynodeserver/nodeinstall.sh
 
 
