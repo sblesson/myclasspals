@@ -1,7 +1,7 @@
 @import '../../styles/abstracts/variables';
 
 .menuBar {
-  padding: 0 20px;
+  //padding: 0 20px;
   overflow: hidden;
 
   .ant-menu-horizontal {
@@ -28,12 +28,10 @@
 }
 .ant-layout-header {
   height: 36px !important;
-  /*   background-image: linear-gradient(
-    90deg,
-    var(--bg-gradient1),
-    var(--bg-gradient2)
-  ) !important; */
+  border-bottom: 1px solid #f0f0f0;
   background: #fff !important;
+  margin: 0;
+  padding: 0;
 }
 .logo {
   width: 150px;

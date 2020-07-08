@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAlert } from './alert';
+import { catchHandler } from './alert';
 
 import { GET_CITY_DATA, GET_CITY_DATA_ERROR } from './types';
 
@@ -14,9 +14,6 @@ export const getCityData = (searchTerm = '') => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    dispatch({
-      type: GET_CITY_DATA_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'GET_CITY_DATA_ERROR');
   }
 };

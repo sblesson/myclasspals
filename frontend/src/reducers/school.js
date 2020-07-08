@@ -1,4 +1,8 @@
-import { FETCH_SCHOOL, FETCH_SCHOOL_ERROR } from '../actions/types';
+import {
+  FETCH_SCHOOL,
+  FETCH_SCHOOL_ERROR,
+  CLEAR_AUTOCOMPLETE_SCHOOL_SEARCH
+} from '../actions/types';
 
 const initialState = {
   results: [],
@@ -25,6 +29,12 @@ export default function(state = initialState, action) {
         ...state,
         error: payload,
         isLoading: false
+      };
+    case CLEAR_AUTOCOMPLETE_SCHOOL_SEARCH:
+      return {
+        ...state,
+        loading: false,
+        results: []
       };
     default:
       return state;

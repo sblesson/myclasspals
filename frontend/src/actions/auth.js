@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAlert } from './alert';
+import { setAlert, catchHandler, onClear } from './alert';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -26,13 +26,12 @@ import {
   UPDATE_USER_ERROR,
   UPDATE_USER_GLOBAL,
   DESTROY_SESSION,
-  UPDATE_GROUP_STORE
+  UPDATE_GROUP_STORE,
+  SEARCH_USER_ERROR
 } from './types';
-import { setAuthToken } from '../utils/axios';
+import { setAuthToken, CancelToken } from '../utils/axios';
 
-export const onClear = () => {
-  return { type: DESTROY_SESSION };
-};
+let cancel;
 
 export const updateUserGlobal = userObj => dispatch => {
   dispatch({
@@ -41,10 +40,12 @@ export const updateUserGlobal = userObj => dispatch => {
   });
 };
 
-export const getUser = (userId, signal) => async dispatch => {
+export const getUser = userId => async dispatch => {
+  if (cancel !== undefined) cancel();
+
   try {
     const userResp = await axios.get(`/user/getuserdetails?user=${userId}`, {
-      cancelToken: signal
+      cancelToken: new CancelToken(c => (cancel = c))
     });
     dispatch({
       type: GET_USER,
@@ -56,9 +57,7 @@ export const getUser = (userId, signal) => async dispatch => {
     });
     //updateGroupStore(userResp.data.user);
   } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    });
+    catchHandler(err, 'AUTH_ERROR');
   }
 };
 
@@ -77,21 +76,25 @@ export const loadUser = email => async dispatch => {
 };
 
 export const searchUser = keyword => async dispatch => {
+  if (cancel !== undefined) cancel();
+
   try {
-    const userResp = await axios.get(`/user/searchuser?user=${keyword}`);
+    const userResp = await axios.get(`/user/searchuser?user=${keyword}`, {
+      cancelToken: new CancelToken(c => (cancel = c))
+    });
     dispatch({
       type: SEARCH_USER,
       payload: userResp.data
     });
   } catch (err) {
-    dispatch({
-      type: AUTH_ERROR //todo add error later
-    });
+    catchHandler(err, 'SEARCH_USER_ERROR');
   }
 };
 
 // Create or update user
 export const updateUser = (formData, edit = false) => async dispatch => {
+  if (cancel !== undefined) cancel();
+
   try {
     const config = {
       headers: {
@@ -99,7 +102,9 @@ export const updateUser = (formData, edit = false) => async dispatch => {
       }
     };
 
-    const res = await axios.put(`/user/updateuser`, formData, config);
+    const res = await axios.put(`/user/updateuser`, formData, config, {
+      cancelToken: new CancelToken(c => (cancel = c))
+    });
 
     dispatch({
       type: UPDATE_USER,
@@ -110,22 +115,17 @@ export const updateUser = (formData, edit = false) => async dispatch => {
       setAlert(edit ? 'User Account Updated' : 'Profile Created', 'success')
     );
   } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'error')));
-    }
-
-    dispatch({
-      type: UPDATE_USER_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'UPDATE_USER_ERROR');
   }
 };
 
 export const getuserbyregistrationid = (token, history) => async dispatch => {
+  if (cancel !== undefined) cancel();
+
   try {
-    const response = await axios.get(`/user/userbyregid/${token}`);
+    const response = await axios.get(`/user/userbyregid/${token}`, {
+      cancelToken: new CancelToken(c => (cancel = c))
+    });
     dispatch({
       type: GET_USER_BY_REGISTRATION_ID,
       payload: response.data
@@ -145,31 +145,30 @@ export const getuserbyregistrationid = (token, history) => async dispatch => {
       history.push('/register');
     }
   } catch (err) {
-    dispatch(setAlert('Token Invalid', 'error'));
-    /*    dispatch({
-      type: GET_USER_BY_REGISTRATION_ID_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    }); */
+    catchHandler(err, 'GET_USER_BY_REGISTRATION_ID_ERROR');
   }
 };
 
 export const deleteUserRegistrationToken = token => async dispatch => {
+  if (cancel !== undefined) cancel();
+
   try {
-    const response = await axios.delete(`/user/userbyregid/${token}`);
+    const response = await axios.delete(`/user/userbyregid/${token}`, {
+      cancelToken: new CancelToken(c => (cancel = c))
+    });
     dispatch({
       type: DELETE_USER_REGISTRATION_TOKEN,
       payload: response.data
     });
   } catch (err) {
-    console.log(err);
-    dispatch({
-      // type: AUTH_ERROR //todo add error later
-    });
+    catchHandler(err, 'DELETE_USER_REGISTRATION_TOKEN_ERROR', dispatch);
   }
 };
 
 // Register User
 export const register = (formData, callback) => async dispatch => {
+  let cancelTokenSrc = axios.CancelToken.source();
+
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -179,7 +178,9 @@ export const register = (formData, callback) => async dispatch => {
   const body = JSON.stringify(formData);
 
   try {
-    const res = await axios.post(`/user/register`, body, config);
+    const res = await axios.post(`/user/register`, body, config, {
+      cancelToken: cancelTokenSrc.token
+    });
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -188,7 +189,9 @@ export const register = (formData, callback) => async dispatch => {
     if (res.data.errorCode) {
       dispatch(setAlert('Token Invalid, click signup to register', 'error'));
     } else {
-      const authRes = await axios.post(`/user/authenticate`, body, config);
+      const authRes = await axios.post(`/user/authenticate`, body, config, {
+        cancelToken: cancelTokenSrc.token
+      });
       dispatch({
         type: AUTH_SUCCESS,
         payload: authRes.data
@@ -196,24 +199,15 @@ export const register = (formData, callback) => async dispatch => {
       dispatch(getUser(formData.email));
     }
   } catch (err) {
-    const errors =
-      err && err.response && err.response.data && err.response.data.errors
-        ? 'err.response.data.errors'
-        : 'Error occured when sending email';
-
-    if (errors && errors.length > 0) {
-      //errors.forEach(error => dispatch(setAlert(error.msg, 'error')));
-    }
-
-    dispatch({
-      type: REGISTER_FAIL
-    });
+    catchHandler(err, 'REGISTER_FAIL');
   }
-  callback();
+  callback(cancelTokenSrc);
 };
 
 // Change User Password
 export const changePassword = ({ email, password }) => async dispatch => {
+  if (cancel !== undefined) cancel();
+
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -223,27 +217,23 @@ export const changePassword = ({ email, password }) => async dispatch => {
   const formData = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.put('/user/updateuser', formData, config);
+    const res = await axios.put('/user/updateuser', formData, config, {
+      cancelToken: new CancelToken(c => (cancel = c))
+    });
 
     dispatch({
       type: CHANGE_PASSWORD_SUCCESS,
       payload: res.data
     });
   } catch (err) {
-    /*   const errors = err.response.data.errorCode;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'error')));
-    } */
-
-    dispatch({
-      type: CHANGE_PASSWORD_ERROR
-    });
+    catchHandler(err, 'CHANGE_PASSWORD_ERROR');
   }
 };
 
 // Login User
 export const login = (formData, callback) => async dispatch => {
+  if (cancel !== undefined) cancel();
+
   if (formData) {
     const config = {
       headers: {
@@ -253,7 +243,9 @@ export const login = (formData, callback) => async dispatch => {
 
     try {
       const body = JSON.stringify(formData);
-      const res = await axios.post('/user/authenticate', body, config);
+      const res = await axios.post('/user/authenticate', body, config, {
+        cancelToken: new CancelToken(c => (cancel = c))
+      });
 
       dispatch({
         type: AUTH_SUCCESS,
@@ -262,17 +254,7 @@ export const login = (formData, callback) => async dispatch => {
 
       dispatch(getUser(formData.email));
     } catch (err) {
-      const errors =
-        err && err.response && err.response.data && err.response.data.errors;
-
-      if (errors) {
-        errors.forEach(error => dispatch(setAlert(error.msg, 'error')));
-      }
-      dispatch(setAlert('Token Invalid', 'error'));
-
-      dispatch({
-        type: LOGIN_FAIL
-      });
+      catchHandler(err, 'LOGIN_FAIL');
     }
   }
   callback();
@@ -281,6 +263,8 @@ export const login = (formData, callback) => async dispatch => {
 // Logout / Clear Profile
 export const logout = () => dispatch => {
   dispatch({ type: CLEAR_PROFILE });
+  dispatch({ type: DESTROY_SESSION });
   dispatch({ type: LOGOUT });
+
   onClear();
 };

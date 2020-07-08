@@ -13,15 +13,7 @@ import GroupCard from './GroupCard';
 
 import './DiscoverGroups.scss';
 
-const DiscoverGroups = ({
-  group,
-  searchGroup,
-  searchGroupWithFilters,
-  newRegistration,
-  history
-}) => {
-  const { Search } = Input;
-
+const DiscoverGroups = ({ group }) => {
   return (
     <Fragment>
       {!group ? (
@@ -35,16 +27,14 @@ const DiscoverGroups = ({
               fontWeight: 'normal',
               marginBottom: 10
             }}
-          >
-            <PrivateMessageModal />
-          </div>
-          <Card style={{ marginBottom: 30 }}>
+          ></div>
+          <Card style={{ marginBottom: 30 }} bordered={false}>
             <AutoCompleteGroupSearch />
             <div className='filter-wrapper'>
               <GroupFilterPanel />
             </div>{' '}
           </Card>
-          <Card>
+          <Card bordered={group.searchTerm?true:false}>
             {group !== null &&
             group.searchResult &&
             group.searchResult.length > 0 ? (
@@ -55,7 +45,7 @@ const DiscoverGroups = ({
                 );
               })
             ) : (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                <Empty imageStyle={{display:'none'}} description={group.searchTerm?'No results found. Check the spelling or try again with another keyword.':''} /> 
             )}
           </Card>
         </div>

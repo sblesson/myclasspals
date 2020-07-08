@@ -14,8 +14,7 @@ import {
 import {
   getAllGroups,
   acceptUserGroupInvitation,
-  requestToJoinUserGroup,
-  cancelRequestToJoinUserGroup
+  requestToJoinUserGroup
 } from '../../actions/group';
 
 import './GroupCard.scss';
@@ -26,8 +25,7 @@ const GroupCard = ({
   type,
   auth,
   acceptUserGroupInvitation,
-  requestToJoinUserGroup,
-  cancelRequestToJoinUserGroup
+  requestToJoinUserGroup
 }) => {
   const { Meta } = Card;
 
@@ -42,14 +40,6 @@ const GroupCard = ({
         window.location.pathname = '/group/' + groupId;
       } */
     );
-  };
-
-  const cancelRequestToJoinUserGroupClickHandler = record => {
-    cancelRequestToJoinUserGroup({
-      groupId: record.id,
-      role: 'member',
-      requestorUserId: auth.user.email
-    });
   };
 
   const isLoggedInUserJoinedUserGroup = group => {
@@ -176,9 +166,7 @@ const GroupCard = ({
               ];
             }
           } else if (currentGroup.role === 'admin') {
-            return [
-              <Tag color={'green'}>{currentGroup.role}</Tag>,
-              <SettingOutlined key='setting' />,
+            return (
               <Dropdown overlay={menu} placement='bottomCenter'>
                 <a
                   className='ant-dropdown-link'
@@ -187,11 +175,9 @@ const GroupCard = ({
                   <EllipsisOutlined />
                 </a>
               </Dropdown>
-            ];
+            );
           } else if (currentGroup.role === 'member') {
-            return [
-              <Tag color={'green'}>{currentGroup.role}</Tag>,
-              null,
+            return (
               <Dropdown overlay={menu} placement='bottomCenter'>
                 <a
                   className='ant-dropdown-link'
@@ -200,21 +186,9 @@ const GroupCard = ({
                   <EllipsisOutlined />
                 </a>
               </Dropdown>
-            ];
+            );
           } else if (currentGroup.role === 'Pending Invitation') {
-            return [
-              null,
-              null,
-              <Button
-                type='link'
-                style={{ marginRight: 16 }}
-                onClick={() =>
-                  cancelRequestToJoinUserGroupClickHandler(currentGroup.id)
-                }
-              >
-                {'Cancel Request'}
-              </Button>
-            ];
+            return <div>{'Pending Invitation'}</div>;
           }
         }
 
@@ -286,56 +260,32 @@ const GroupCard = ({
   return (
     <Card
       key={index}
+      className='group-card'
       style={{
         width: '100%',
-        marginBottom: 16,
+        marginBottom: '1.25rem',
         textAlign: 'left'
       }}
-      /*     extra={
-        currentGroup.role === null && (
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => requestToJoinUserGroupClickHandler(currentGroup)}
-          >
-            {' '}
-            Join
-          </Button>
-        )
-      } */
-      actions={groupActionMenu(currentGroup, type)}
-    >
-      <Link to={`/group/${currentGroup.id}`}>
-        <Meta
-          avatar={
-            currentGroup.isSchoolGroup === 'no' ? (
-              <i className='fas fa-users icon-group'></i>
-            ) : (
-              <i className='fas fa-school icon-group' title='school group'></i>
-            )
-          }
-          title={currentGroup.groupName}
-        ></Meta>
-      </Link>
-      <Meta
-        className='group-card-member-privacy'
-        description={getGroupMemberCount(currentGroup)}
-      ></Meta>
-
-      {/*       <Link to={`/dashboard/${currentGroup.id}`}>
-        <Meta description={currentGroup.description}> </Meta>
-      </Link>
-      {currentGroup.role ? (
-        <Tag
-          color={currentGroup.role === 'admin' ? 'geekblue' : 'green'}
-          key={currentGroup.role}
-        >
-          {currentGroup.role ? currentGroup.role.toUpperCase() : null}
-        </Tag>
-      ) : (
-        ''
-      )} */}
-    </Card>
+      bordered={false}
+      title={
+        <Link to={`/group/${currentGroup.id}`}>
+          <Meta
+            avatar={
+              currentGroup.isSchoolGroup === 'no' ? (
+                <i className='fas fa-users icon-group'></i>
+              ) : (
+                <i
+                  className='fas fa-school icon-group'
+                  title='school group'
+                ></i>
+              )
+            }
+            title={currentGroup.groupName}
+          ></Meta>
+        </Link>
+      }
+      extra={groupActionMenu(currentGroup, type)}
+    ></Card>
   );
 };
 
@@ -349,6 +299,5 @@ const mapStateToProps = (state, ownProps) => ({
 
 export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
-  requestToJoinUserGroup,
-  cancelRequestToJoinUserGroup
+  requestToJoinUserGroup
 })(GroupCard);

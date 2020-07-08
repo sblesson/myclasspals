@@ -43,9 +43,14 @@ const Register = ({ setAlert, register }) => {
           setAlert('Passwords do not match', 'danger');
           setIsLoadingSignUpBtn(false);
         } else {
-          register({ email: values.email, password: values.password }, () => {
-            setIsLoadingSignUpBtn(false);
-          });
+          register(
+            { email: values.email, password: values.password },
+            cancelTokenSrc => {
+              setIsLoadingSignUpBtn(false);
+              console.log(cancelTokenSrc);
+              cancelTokenSrc.cancel();
+            }
+          );
         }
       }}
       validator={() => ({})}

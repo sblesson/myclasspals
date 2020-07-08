@@ -1,7 +1,11 @@
 import axios from 'axios';
-import { setAlert } from './alert';
+import { catchHandler } from './alert';
 
-import { FETCH_SCHOOL, FETCH_SCHOOL_ERROR } from './types';
+import {
+  FETCH_SCHOOL,
+  FETCH_SCHOOL_ERROR,
+  CLEAR_AUTOCOMPLETE_SCHOOL_SEARCH
+} from './types';
 
 export const fetchSchool = (searchTerm = '') => async dispatch => {
   try {
@@ -11,9 +15,9 @@ export const fetchSchool = (searchTerm = '') => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    dispatch({
-      type: FETCH_SCHOOL_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, FETCH_SCHOOL_ERROR);
   }
+};
+export const clearAutoCompleteSchoolSearchResult = () => async dispatch => {
+  dispatch({ type: CLEAR_AUTOCOMPLETE_SCHOOL_SEARCH });
 };

@@ -1,24 +1,37 @@
-import React from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Input, AutoComplete, Select } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Spin, Select, AutoComplete, Input } from 'antd';
 import _ from 'lodash';
+import Spinner from '../../../layout/Spinner';
+import { SearchOutlined } from '@ant-design/icons';
 import {
   getGroupAutoComplete,
+  clearAutoCompleteGroupSearchResult,
   searchGroupWithFilters
 } from '../../../actions/group';
 
 const AutoCompleteGroupSearch = ({
   getGroupAutoComplete,
+  clearAutoCompleteGroupSearchResult,
   searchGroupWithFilters,
   group
 }) => {
   const { Option, OptGroup } = Select;
+  const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    clearAutoCompleteGroupSearchResult();
+  }, []);
 
   const handleGroupSearch = searchTerm => {
-    setTimeout(() => {
-      getGroupAutoComplete(searchTerm);
-    }, Math.random() * 1000);
+    if (searchTerm) {
+      var debounced = _.debounce(() => {
+        getGroupAutoComplete(searchTerm, () => {
+          setSearchValue(searchValue);
+        });
+      }, 1000);
+      debounced();
+    }
   };
 
   const children =
@@ -31,43 +44,81 @@ const AutoCompleteGroupSearch = ({
           {item.options &&
             item.options.length > 0 &&
             item.options.map(dataOption => {
-              return (
-                <Option key={dataOption} value={dataOption}>
-                  {dataOption}
-                </Option>
-              );
+              if (dataOption) {
+                return (
+                  <Option key={dataOption} value={dataOption}>
+                    <div>
+                      {' '}
+                      <SearchOutlined
+                        twoToneColor='#52c41a'
+                        style={{ fontSize: '.8rem' }}
+                      />
+                      <span
+                        style={{
+                          marginLeft: '.5rem',
+                          paddingTop: '.3rem',
+                          fontSize: '.8rem',
+                          display: 'inline-block'
+                        }}
+                      >
+                        {dataOption}
+                      </span>
+                    </div>
+                  </Option>
+                );
+              }
             })}
         </OptGroup>
       );
     });
 
-  const onGroupSelect = (value, option) => {
-    const selectedSearchTerm = value.split(',')[0];
-    searchGroupWithFilters({ groupKeyword: selectedSearchTerm });
-    group.autoCompleteSearchResult = [];
+  const onGroupChange = (value, action) => {
+    if (
+      group &&
+      group.autoCompleteSearchResult &&
+      group.autoCompleteSearchResult.length > 0
+    ) {
+      setSearchValue(value);
+      group.searchTerm = value;
+    }
+  };
+  const onGroupSelect = selectedSearchTerm => {
+    if (selectedSearchTerm) {
+
+      let selectedSearch = selectedSearchTerm.split(',')[0];
+      searchGroupWithFilters({ groupKeyword: selectedSearch });
+      clearAutoCompleteGroupSearchResult();
+    }
   };
 
   const Complete = () => (
-    <Select
+    <AutoComplete
+      name='groupSearchTerm'
       style={{
-        width: 250
+        width: '80%'
       }}
+      autoFocus={true}
+      value={searchValue}
+      placeholder={'Type school name or group name'}
       onSearch={handleGroupSearch}
+      onChange={onGroupChange}
       onSelect={onGroupSelect}
-      notFoundContent={''}
-      showSearch={true}
+      notFoundContent={group.loading ? <Spin size='small' /> : null}
       defaultOpen={true}
     >
       {children}
-    </Select>
+    </AutoComplete>
   );
 
-  return <Complete />;
+  return (
+    <Fragment> {group && group.loading ? <Spinner /> : <Complete />}</Fragment>
+  );
 };
 const mapStateToProps = state => ({
   group: state.group
 });
 export default connect(mapStateToProps, {
   searchGroupWithFilters,
-  getGroupAutoComplete
+  getGroupAutoComplete,
+  clearAutoCompleteGroupSearchResult
 })(AutoCompleteGroupSearch);

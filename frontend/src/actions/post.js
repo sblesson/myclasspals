@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAlert } from './alert';
+import { setAlert, catchHandler } from './alert';
 import {
   GET_POSTS,
   GET_POST_CATEGORIES,
@@ -29,11 +29,7 @@ export const getPostCategories = () => async dispatch => {
       payload: { screen: 'dash' }
     });
   } catch (err) {
-    dispatch({
-      type: GET_POST_CATEGORIES_ERROR,
-      payload: { msg: err, status: err }
-      //payload: { msg: err.response.statusText, status: err.response.status } //todo change error message
-    });
+    catchHandler(err, GET_POST_CATEGORIES_ERROR);
   }
 };
 
@@ -54,10 +50,7 @@ export const addPost = formData => async dispatch => {
 
     dispatch(setAlert('Post created', 'success'));
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'ADD_POST_ERROR');
   }
 };
 
@@ -77,10 +70,7 @@ export const searchPost = groupId => async dispatch => {
       payload: res.data.post
     });
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'SEARCH_POST_ERROR');
   }
 };
 
@@ -99,10 +89,7 @@ export const getPrivateMessages = formData => async dispatch => {
       payload: res.data.post
     });
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'CREATE_PRIVATE_POST_ERROR');
   }
 };
 // Add post
@@ -122,10 +109,7 @@ export const sendPrivateMessage = formData => async dispatch => {
 
     dispatch(setAlert('New Message Created', 'success'));
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'CREATE_POST_ERROR');
   }
 };
 
@@ -139,10 +123,7 @@ export const getPost = id => async dispatch => {
       payload: res.data.post
     });
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'GET_POST_ERROR');
   }
 };
 
@@ -168,10 +149,7 @@ export const addMessageReply = (postId, formData) => async dispatch => {
 
     dispatch(setAlert('Comment Added', 'success'));
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'ADD_MESSAGE_REPLY_ERROR');
   }
 };
 
@@ -197,10 +175,7 @@ export const addComment = (postId, formData) => async dispatch => {
 
     dispatch(setAlert('Comment Added', 'success'));
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'ADD_COMMENT_ERROR');
   }
 };
 
@@ -226,10 +201,7 @@ export const addCommentToSinglePost = (postId, formData) => async dispatch => {
 
     dispatch(setAlert('Comment Added', 'success'));
   } catch (err) {
-    dispatch({
-      type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'ADD_COMMENT_SINGLE_POST_ERROR');
   }
 };
 // Delete post
@@ -241,10 +213,7 @@ export const deletePost = postId => async dispatch => {
       payload: postId
     });
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'DELETE_POST_ERROR');
   }
 };
 
@@ -269,9 +238,6 @@ export const deleteComment = (
     }
     dispatch(setAlert('Comment Removed', 'success'));
   } catch (err) {
-    dispatch({
-      type: POST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'DELETE_POST_ERROR');
   }
 };

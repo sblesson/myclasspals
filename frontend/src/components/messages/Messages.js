@@ -50,12 +50,21 @@ const Messages = ({
   }, [getPrivateMessages, auth.user._id]);
 
   useEffect(() => {
-    const recentPost = messages && messages.length > 0 ? messages[0] : null;
+    debugger;
+    console.log(messagePanelSelected);
+    console.log(messages);
+    const recentPost =
+      messages && messages.length > 0
+        ? messagePanelSelected
+          ? messagePanelSelected
+          : messages[0]
+        : null;
     if (recentPost) {
-      setMessagePanelItemSelected(recentPost);
       getPost(recentPost._id);
       const redirectUrl = `/messages/${recentPost._id}`;
       history.push(redirectUrl);
+      setMessagePanelItemSelected(recentPost);
+
     }
   }, [messages]);
 
