@@ -152,27 +152,26 @@ public class UserGroupService {
 
 		}
 		
-		if (filter.getCity() != null) {
-			userGroupSearch.addCriteria(Criteria.where("city").regex(filter.getCity()));
+		if (filter.getCity() != null && filter.getZipcode() != null) {
+			userGroupSearch.addCriteria(new Criteria()
+			        .orOperator(
+			        		Criteria.where("city").regex(filter.getCity(), "i"),
+			        		Criteria.where("schoolCity").regex(filter.getCity(), "i"),
+			        		Criteria.where("zipcode").regex(filter.getZipcode(), "i"),
+			        		Criteria.where("schoolZipCode").regex(filter.getZipcode(), "i")
+			            ) );
 		}
 		if (filter.getState() != null) {
 			userGroupSearch.addCriteria(Criteria.where("state").regex(filter.getState()));
 		}
-		if (filter.getZipcode() != null) {
-			userGroupSearch.addCriteria(Criteria.where("zipcode").regex(filter.getZipcode()));
-		}
+
 		if (filter.getSchoolId() != null) {
 			userGroupSearch.addCriteria(Criteria.where("schoolId").regex(filter.getSchoolId()));
 
 		}
 
-		if (filter.getSchoolCity() != null) {
-			userGroupSearch.addCriteria(Criteria.where("schoolCity").regex(filter.getSchoolCity()));
-		}
-		if (filter.getSchoolZipCode() != null) {
-			userGroupSearch.addCriteria(Criteria.where("schoolZipCode").regex(filter.getSchoolZipCode()));
 
-		}
+
 		logger.info(userGroupSearch.toString());
 		List<UserGroup> userGroups = mongoTemplate.find(userGroupSearch, UserGroup.class);
 		if (userGroups != null) {

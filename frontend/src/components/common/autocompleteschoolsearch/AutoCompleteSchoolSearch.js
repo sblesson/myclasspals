@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Select } from 'formik-antd';
-import { fetchSchool } from '../../../actions/school';
+import _ from 'lodash';
+
+import {
+  fetchSchool,
+  clearAutoCompleteSchoolSearchResult
+} from '../../../actions/school';
 
 const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
   const Option = Select.Option;
 
+  useEffect(() => {
+    clearAutoCompleteSchoolSearchResult();
+  }, []);
   const handleSchoolSearch = searchTerm => {
     if (searchTerm) {
-      setTimeout(() => {
+      var debounced = _.debounce(() => {
         fetchSchool(searchTerm);
-      }, Math.random() * 1000);
+      }, 1000);
+      debounced();
     }
   };
 
@@ -49,6 +58,7 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
 const mapStateToProps = state => ({
   school: state.school
 });
-export default connect(mapStateToProps, { fetchSchool })(
-  AutoCompleteSchoolSearch
-);
+export default connect(mapStateToProps, {
+  fetchSchool,
+  clearAutoCompleteSchoolSearchResult
+})(AutoCompleteSchoolSearch);

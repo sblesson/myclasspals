@@ -1,5 +1,21 @@
 @import '../../styles/abstracts/variables';
+.group-card {
+  .ant-card-head {
+    border: 1px solid #f0f0f0;
+  }
+  .ant-card-body {
+    padding: 0 !important;
+  }
+}
 
 .group-card-member-privacy {
   color: var(--color-secondary-text) !important;
+}
+.group-card-status {
+  margin-left: 3rem !important;
+  margin-top: 1rem !important;
+  .btn-primary {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
 }

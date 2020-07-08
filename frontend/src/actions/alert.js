@@ -10,3 +10,22 @@ export const setAlert = (msg, alertType, timeout = 5000) => dispatch => {
 
   setTimeout(() => dispatch({ type: REMOVE_ALERT, payload: id }), timeout);
 };
+
+export const catchHandler = (err, errorType) => dispatch => {
+  const error = err && err.response && err.response.data && err.response.data;
+
+  if (error && error.length > 0) {
+    error.forEach(error => dispatch(setAlert(error.message, errorType)));
+  } else {
+    dispatch(setAlert(error.message, errorType, error.status));
+  }
+
+  dispatch(
+    setAlert('Error occured, please try again after sometime', errorType)
+  );
+  return;
+};
+
+export const onClear = () => {
+  return { type: 'DESTROY_SESSION' };
+};

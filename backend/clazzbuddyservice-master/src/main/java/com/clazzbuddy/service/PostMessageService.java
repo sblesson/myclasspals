@@ -85,7 +85,12 @@ public class PostMessageService {
 
 		Query postListQuery = new Query();
 		if (postSearchQuery.getKeyword() != null) {
-			postListQuery.addCriteria(Criteria.where("message").regex(postSearchQuery.getKeyword().toLowerCase()));
+			postListQuery.addCriteria(new Criteria()
+			        .orOperator(
+			                Criteria.where("message").regex(postSearchQuery.getKeyword(), "i"),
+			                Criteria.where("subject").regex(postSearchQuery.getKeyword(), "i")
+			            ) );
+			
 		}
 		Users user = (Users) SecurityContextHolder
 				.getContext().getAuthentication().getPrincipal();

@@ -248,9 +248,7 @@ const PostModal = ({ addPost, history, group, auth }) => {
   return (
     <div>
       <div className='new-post-form' onClick={showModal}>
-        <div className='bg-post-head p'>
-          <h6>What do you want to discuss?</h6>
-        </div>
+        <div className='bg-post-head p'>What do you want to discuss?</div>
 
         <div className='post-create-textarea'>
           <div className='avatar-container'>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAlert } from './alert';
+import { setAlert, catchHandler } from './alert';
 import {
   ADD_GROUP,
   UPDATE_GROUP,
@@ -27,7 +27,8 @@ import {
   GET_GROUP_AUTO_COMPLETE_ERROR,
   SEND_PRIVATE_MESSAGE,
   SEARCH_POST,
-  GET_USER
+  GET_USER,
+  CLEAR_AUTOCOMPLETE_GROUP_SEARCH
 } from './types';
 
 import { searchPost } from './post';
@@ -50,10 +51,7 @@ export const addGroup = formData => async dispatch => {
 
     dispatch(setAlert('Group Created', 'success'));
   } catch (err) {
-    dispatch({
-      type: GROUP_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'CREATE_GROUP_ERROR');
   }
 };
 
@@ -75,10 +73,7 @@ export const updateGroup = (formData, callback) => async dispatch => {
       callback();
     });
   } catch (err) {
-    dispatch({
-      type: GROUP_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'UPDATE_GROUP_ERROR');
   }
 };
 
@@ -93,25 +88,20 @@ export const getAllGroups = userId => async dispatch => {
       payload: response.data.user
     });
   } catch (err) {
-    dispatch({
-      type: GET_ALL_GROUPS_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, GET_ALL_GROUPS_ERROR);
   }
 };
 // Get all userGroups
 export const getGroupAutoComplete = key => async dispatch => {
   try {
     const response = await axios.get('/usergroup/groupautocomplete?key=' + key);
+
     dispatch({
       type: GET_GROUP_AUTO_COMPLETE,
       payload: response.data
     });
   } catch (err) {
-    dispatch({
-      type: GET_GROUP_AUTO_COMPLETE_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, GET_GROUP_AUTO_COMPLETE_ERROR);
   }
 };
 // Get all userGroups
@@ -126,12 +116,9 @@ export const getGroupDetails = groupId => async dispatch => {
           ? response.data.userGroupList[0]
           : null
     });
-    dispatch(searchPost(groupId));
+    dispatch(searchPost({ groupId: groupId }));
   } catch (err) {
-    dispatch({
-      type: GET_GROUP_ERROR,
-      payload: { msg: err, status: err }
-    });
+    catchHandler(err, GET_GROUP_ERROR);
   }
 };
 export const updateGroupStore = user => dispatch => {
@@ -163,10 +150,7 @@ export const searchGroup = searchKey => async dispatch => {
       payload: response.data
     });
   } catch (err) {
-    dispatch({
-      type: SEARCH_ALL_GROUP_ERROR,
-      payload: { msg: err, status: err }
-    });
+    catchHandler(err, SEARCH_ALL_GROUP_ERROR);
   }
 };
 
@@ -189,10 +173,7 @@ export const searchGroupWithFilters = requestData => async dispatch => {
       payload: response.data
     });
   } catch (err) {
-    dispatch({
-      type: SEARCH_ALL_GROUP_ERROR,
-      payload: { msg: err, status: err }
-    });
+    catchHandler(err, SEARCH_ALL_GROUP_ERROR);
   }
 };
 
@@ -223,10 +204,7 @@ export const inviteToJoinUserGroup = requestData => async dispatch => {
     } */
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
-    dispatch({
-      type: INVITE_TO_GROUP_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, INVITE_TO_GROUP_ERROR);
   }
 };
 //Users accept invitation to join userGroup
@@ -262,10 +240,7 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
 
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
-    dispatch({
-      type: ACCEPT_USER_GROUP_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, ACCEPT_USER_GROUP_ERROR);
   }
 };
 
@@ -283,12 +258,12 @@ export const requestToJoinUserGroup = (
   try {
     const res = await axios.post('/user/requestusergroup', requestData, config);
     // .then(res => {
-    let currentGroup = res.data.user.requestedUserGroup.find(
+    /*     let currentGroup = res.data.user.requestedUserGroup.find(
       request => request.id === requestData.groupId
     );
     if (!currentGroup.role) {
       currentGroup.role = 'Pending Invitation';
-    }
+    } */
     if (res && res.data && res.data.user) {
       //globally update user object
       dispatch({
@@ -298,57 +273,15 @@ export const requestToJoinUserGroup = (
     }
     dispatch({
       type: REQUEST_JOIN_USER_GROUP,
-      payload: { user: res.data.user, currentGroup: currentGroup }
+      payload: { user: res.data.user }
     });
 
     dispatch(setAlert('User added to group', 'success'));
     //callback(requestData.groupId);
     // });
+    callback(res.data.user.userGroup);
   } catch (err) {
-    dispatch({
-      type: REQUEST_JOIN_USER_GROUP_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-//User sends request to join user group
-export const cancelRequestToJoinUserGroup = (
-  requestData,
-  callback
-) => async dispatch => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
-  try {
-    /*     const res = await axios.post(
-      'http://localhost:8080/user/cancelrequestusergroup',
-      requestData,
-      config
-    );
-    // .then(res => {
-    let currentGroup = res.data.user.requestedUserGroup.find(
-      request => request.id === requestData.groupId
-    );
-    dispatch({
-      type: REQUEST_JOIN_USER_GROUP,
-      payload: { user: res.data.user, currentGroup: currentGroup }
-    });
-    if (res && res.data && res.data.user) {
-      //globally update user object
-      updateUserGlobal(res.data.user);
-    } */
-
-    dispatch(setAlert('Request to join group is cancelled', 'success'));
-    //callback(requestData.groupId);
-    // });
-  } catch (err) {
-    dispatch({
-      type: REQUEST_JOIN_USER_GROUP_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, REQUEST_JOIN_USER_GROUP_ERROR);
   }
 };
 
@@ -376,10 +309,7 @@ export const approveUserGroupRequest = requestData => async dispatch => {
     dispatch(setAlert('User added to group', 'success'));
     getGroupDetails(requestData.groupId);
   } catch (err) {
-    dispatch({
-      type: APPROVE_GROUP_REQUEST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, APPROVE_GROUP_REQUEST_ERROR);
   }
 };
 
@@ -405,10 +335,7 @@ export const declineUserGroupRequest = requestData => async dispatch => {
 
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
-    dispatch({
-      type: APPROVE_GROUP_REQUEST_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, APPROVE_GROUP_REQUEST_ERROR);
   }
 };
 
@@ -432,10 +359,7 @@ export const changeGroupUserRole = requestData => async dispatch => {
 
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
-    dispatch({
-      type: CHANGE_GROUP_USER_ROLE_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, CHANGE_GROUP_USER_ROLE_ERROR);
   }
 };
 
@@ -459,9 +383,10 @@ export const removeUserFromGroup = requestData => async dispatch => {
 
     dispatch(setAlert('User removed from the group', 'success'));
   } catch (err) {
-    dispatch({
-      type: CHANGE_GROUP_USER_ROLE_ERROR
-      //payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    catchHandler(err, 'REMOVE_USER_FROM_GROUP');
   }
+};
+
+export const clearAutoCompleteGroupSearchResult = () => async dispatch => {
+  dispatch({ type: CLEAR_AUTOCOMPLETE_GROUP_SEARCH });
 };

@@ -18,7 +18,8 @@ import {
   SEARCH_GROUP_WITH_FILTERS,
   UPDATE_GROUP_STORE,
   GET_GROUP_AUTO_COMPLETE,
-  GET_GROUP_AUTO_COMPLETE_ERROR
+  GET_GROUP_AUTO_COMPLETE_ERROR,
+  CLEAR_AUTOCOMPLETE_GROUP_SEARCH
 } from '../actions/types';
 
 const initialState = {
@@ -34,6 +35,7 @@ const initialState = {
   loading: true,
   error: {},
   redirect: false,
+  searchTerm:'',
   isRequestUserGroupSuccess: false
 };
 
@@ -124,6 +126,13 @@ export default function(state = initialState, action) {
         loading: false,
         autoCompleteSearchResult: payload
       };
+    case CLEAR_AUTOCOMPLETE_GROUP_SEARCH:
+      return {
+        ...state,
+        loading: false,
+        autoCompleteSearchResult: []
+      };
+
     case GET_GROUP:
       //Todo check why it is not getting set from return
       state.currentGroup = payload;

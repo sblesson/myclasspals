@@ -9,25 +9,17 @@ import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompl
 
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
-import GroupCard from './GroupCard';
+import GroupCardtem from './GroupCardtem';
 
 import './DiscoverGroups.scss';
 
-const DiscoverGroups = ({
-  group,
-  searchGroup,
-  searchGroupWithFilters,
-  newRegistration,
-  history
-}) => {
-  const { Search } = Input;
-
+const DiscoverGroups = ({ group }) => {
   return (
     <Fragment>
       {!group ? (
         <Spinner />
       ) : (
-        <div className='main-container'>
+        <div>
           <div
             style={{
               color: '#333',
@@ -38,26 +30,33 @@ const DiscoverGroups = ({
           >
             <PrivateMessageModal />
           </div>
-          <Card style={{ marginBottom: 30 }}>
+          <Card style={{ marginBottom: 30 }} bordered={false}>
             <AutoCompleteGroupSearch />
-            <div className='filter-wrapper'>
-              <GroupFilterPanel />
-            </div>{' '}
           </Card>
-          <Card>
-            {group !== null &&
-            group.searchResult &&
-            group.searchResult.length > 0 ? (
-              group.searchResult.map((group, index) => {
-                let key = 'discover_' + index;
-                return (
-                  <GroupCard currentGroup={group} key={key} type='discover' />
-                );
-              })
-            ) : (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-          </Card>
+          {group !== null &&
+          group.searchResult &&
+          group.searchResult.length > 0 ? (
+            group.searchResult.map((group, index) => {
+              return (
+                <Card bordered={group.searchTerm ? true : false}>
+                  <GroupCardtem
+                    currentGroup={group}
+                    key={index}
+                    type='discover'
+                  />
+                </Card>
+              );
+            })
+          ) : (
+            <Empty
+              imageStyle={{ display: 'none' }}
+              description={
+                group.searchTerm
+                  ? 'No results found. Check the spelling or try again with another keyword.'
+                  : ''
+              }
+            />
+          )}
         </div>
       )}
     </Fragment>

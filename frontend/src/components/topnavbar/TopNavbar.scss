@@ -1,13 +1,13 @@
 @import '../../styles/abstracts/variables';
 
 .menuBar {
-  padding: 0 20px;
+  //padding: 0 20px;
   overflow: hidden;
 
   .ant-menu-horizontal {
     line-height: 15px !important;
     & > .ant-menu-item > a {
-      color: var(--primary-color) !important;
+      color: var(--font-color-2) !important;
     }
   }
 
@@ -19,7 +19,7 @@
   .ant-menu-horizontal > .ant-menu-submenu-open,
   .ant-menu-horizontal > .ant-menu-item-selected,
   .ant-menu-horizontal > .ant-menu-submenu-selected {
-    color: var(--primary-color) !important;
+    color: var(--font-color-2) !important;
     border-bottom: 2px solid var(--primary-color) !important;
   }
   .ant-menu {
@@ -28,12 +28,10 @@
 }
 .ant-layout-header {
   height: 36px !important;
-  /*   background-image: linear-gradient(
-    90deg,
-    var(--bg-gradient1),
-    var(--bg-gradient2)
-  ) !important; */
+  border-bottom: 1px solid #f0f0f0;
   background: #fff !important;
+  margin: 0;
+  padding: 0;
 }
 .logo {
   width: 150px;
@@ -60,7 +58,7 @@
 .menuCon .ant-menu-submenu-title {
   padding: 10px 20px;
   span {
-    color: var(--primary-color) !important;
+    color: var(--font-color-2) !important;
   }
 }
 .menuCon .ant-menu-item a,

@@ -1,14 +1,13 @@
-.post-form {
-  position: relative;
-  width: 90%;
-  padding: 12px 12px;
-  margin: 0 12px;
+.new-post-form {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  .new-post {
+    padding-left: 0.525rem;
+  }
   .ui.menu {
     border: none !important;
     box-shadow: none !important;

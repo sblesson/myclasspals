@@ -18,9 +18,13 @@ const PendingRegistration = ({
   token
 }) => {
   useEffect(() => {
-    if (token) {
+    let unmounted = false;
+    if (token && !unmounted) {
       getuserbyregistrationid(token);
     }
+    return () => {
+      unmounted = true;
+    };
   }, [getuserbyregistrationid, token]);
 
   useEffect(() => {
