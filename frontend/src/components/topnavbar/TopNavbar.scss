@@ -7,7 +7,7 @@
   .ant-menu-horizontal {
     line-height: 15px !important;
     & > .ant-menu-item > a {
-      color: var(--primary-color) !important;
+      color: var(--font-color-2) !important;
     }
   }
 
@@ -19,7 +19,7 @@
   .ant-menu-horizontal > .ant-menu-submenu-open,
   .ant-menu-horizontal > .ant-menu-item-selected,
   .ant-menu-horizontal > .ant-menu-submenu-selected {
-    color: var(--primary-color) !important;
+    color: var(--font-color-2) !important;
     border-bottom: 2px solid var(--primary-color) !important;
   }
   .ant-menu {
@@ -58,7 +58,7 @@
 .menuCon .ant-menu-submenu-title {
   padding: 10px 20px;
   span {
-    color: var(--primary-color) !important;
+    color: var(--font-color-2) !important;
   }
 }
 .menuCon .ant-menu-item a,

@@ -7,7 +7,24 @@
     padding: 0 !important;
   }
 }
-
+.ant-list-items {
+  height: 100%;
+}
 .group-card-member-privacy {
   color: var(--color-secondary-text) !important;
+}
+.group-card-status {
+  margin-left: 3rem !important;
+  margin-top: 1rem !important;
+  .btn-primary {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+.group-card-meta-desc {
+  margin: 0.4rem 3.2rem !important;
+}
+.group-card-update-status-link {
+  margin: 0.4rem 3.2rem !important;
+  cursor: pointer;
 }

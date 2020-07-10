@@ -1,46 +1,34 @@
-.create-profile-component-container {
+@import '../../styles/abstracts/mixins';
+
+.create-profile-wrapper {
   //background-color: white;
-  //background-color: rgba(0, 153, 186, 0.06);
+  background: var(--bg-profile);
+  border: 1px solid var(--bg-profile);
+  padding: 2rem 4rem;
+  min-height: calc(100vh - 20rem);
+  margin: 6rem auto;
+  @include respond(phone) {
+    font-size: 56.25%;
+    width: 90% !important;
+    margin: 2rem 2rem;
+  }
+  @include respond(tab-port) {
+    width: 90%;
+    margin: 2rem 2rem;
+    width: 80% !important;
+  }
+  @include respond(tab-land) {
+    font-size: 56.25%;
+    width: 60% !important;
+  }
+  @include respond(big-desktop) {
+    width: 60% !important;
+  }
 
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  border-radius: 3px;
-  margin-bottom: 8px;
-  position: relative;
-  .create-profile-component-header {
-    border-bottom: 1px #dfe1e4 solid;
-    padding: 16px 16px;
-    .create-profile-component-title {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'HelveticaNeue',
-        'Helvetica Neue', Helvetica, 'Roboto', 'Segoe UI', Arial, sans-serif;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 20px;
-      padding: 0;
-      margin: 0;
-    }
-  }
-  .create-profile-component-content {
-    padding: 16px 16px;
-    min-height: 400px;
-
-    .actionBtnWrapper {
-      margin-bottom: 20px;
-      margin-top: 20px;
-      float: right;
-    }
-  }
-}
-.create-profile-component-content {
-  padding: 16px 16px;
-  min-height: 400px;
-  min-width: 600px;
-  margin: auto;
-  .actionBtnWrapper {
-    margin-bottom: 20px;
-    margin-top: 20px;
-    float: right;
-  }
   .profile-step {
+    .ant-steps-item-title {
+      padding: 0.625rem !important;
+    }
     .ant-steps-item-icon {
       background: var(--bg-primary-btn) !important;
       border-color: transparent;

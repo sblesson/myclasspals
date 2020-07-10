@@ -28,8 +28,9 @@ import AboutUs from '../../layout/AboutUs';
 import TermsAndConditions from '../../layout/TermsAndConditions';
 import Guidelines from '../../layout/Guidelines';
 import Help from '../../layout/Help';
-import Landing from '../../layout/auth/Landing';
-import { Link } from 'react-router-dom';
+import Register from '../../layout/auth/Register';
+import Login from '../../layout/auth/Login';
+import PendingRegistration from '../../layout/auth/PendingRegistration';
 
 import PrivateRoute from '../routing/PrivateRoute';
 
@@ -38,11 +39,10 @@ const Routes = () => {
     <section>
       <Alert />
       <Switch>
-        <Route exact path='/login' component={Landing} />
-        <Route exact path='/invite/group/:id' component={Landing} />
-        <Route exact path='/' component={Landing} />
-        <Route exact path='/register' component={Landing} />
-        <Route exact path='/login' component={Landing} />
+        <Route exact path='/login' component={Login} />
+        <Route exact path='/invite/group/:id' component={PendingRegistration} />
+        <Route exact path='/' component={Register} />
+        <Route exact path='/register' component={Register} />
         <Route exact path='/our-story' component={OurStory} />
         <Route exact path='/our-mission' component={OurMission} />
         <Route exact path='/faq' component={FAQ} />
@@ -67,7 +67,6 @@ const Routes = () => {
         />
         {/* <PrivateRoute exact path='/group/:id' component={SingleGroup} /> */}
         <PrivateRoute exact path='/group/:id/members' component={SingleGroup} />
-        <PrivateRoute exact path='/group/:id/about' component={SingleGroup} />
         <PrivateRoute exact path='/group/:id/about' component={AboutGroup} />
         <PrivateRoute exact path='/dashboard' component={SingleGroup} />
         <PrivateRoute

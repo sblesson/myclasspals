@@ -28,6 +28,8 @@ const CreateGroupForm = ({
   onStepChange,
   setModal
 }) => {
+  const [isLoadingCreateBtn, setIsLoadingCreateBtn] = useState(false);
+
   //const [formData, setFormData] = useState({ user });
   const validateRequired = value => {
     return value ? undefined : 'required';
@@ -81,7 +83,10 @@ const CreateGroupForm = ({
       delete values.schoolSelect;
     }
 
-    addGroup(JSON.stringify(values));
+    addGroup(JSON.stringify(values), cancelTokenSrc => {
+      setIsLoadingCreateBtn(false);
+      //if (cancelTokenSrc) cancelTokenSrc.cancel();
+    });
     //actions.setSubmitting(false);
     actions.resetForm();
     onStepChange(current + 1);
@@ -91,11 +96,12 @@ const CreateGroupForm = ({
     <Formik
       initialValues={{
         groupName: '',
-        groupType: 'private',
+        privacy: 'PUBLIC',
         isSchoolGroup: 'yes',
         grade: ''
       }}
       onSubmit={(values, actions) => {
+        setIsLoadingCreateBtn(true);
         submitProfileForm(values, actions);
       }}
       validator={() => ({})}
@@ -129,12 +135,12 @@ const CreateGroupForm = ({
                 name='privacy'
                 options={[
                   {
-                    label: 'Private --appears in search results',
-                    value: 'PRIVATE'
-                  },
-                  {
                     label: 'Public',
                     value: 'PUBLIC'
+                  },
+                  {
+                    label: 'Private',
+                    value: 'PRIVATE'
                   }
                 ]}
               />
@@ -172,7 +178,13 @@ const CreateGroupForm = ({
             ) : (
               ''
             )}
-            <SubmitButton className='ant-btn btn-primary'> Create</SubmitButton>
+            <SubmitButton
+              className='ant-btn btn-primary'
+              loading={isLoadingCreateBtn}
+            >
+              {' '}
+              Create
+            </SubmitButton>
           </Form>
           {/*    <pre style={{ flex: 1 }}>
             <FormikDebug />

@@ -949,7 +949,7 @@ thead {
   color: #444 !important;
 }
 .ant-tabs-ink-bar {
-  background: var(--color-active-tab-border) !important;
+  background: var(--primary-color) !important;
 }
 
 ///////////
@@ -1003,8 +1003,12 @@ thead {
 .ant-steps-item-icon {
   display: none;
 }
-
 .main-container {
+  margin-top: 2.25rem;
+  background: var(--bg-main);
+}
+
+.wrapper {
   @include respond(phone) {
     font-size: 56.25%;
     width: 100%;
@@ -1019,9 +1023,9 @@ thead {
   @include respond(big-desktop) {
     width: 70%;
   }
-
-  background-color: white;
-  margin-bottom: 8px;
+  background: #fff;
+  margin: 1rem 2rem;
+  padding: 2rem;
 }
 
 .ant-dropdown-link {

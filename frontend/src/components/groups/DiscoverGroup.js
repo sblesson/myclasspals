@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../../layout/Spinner';
 import PrivateMessageModal from './modal/CreateGroupModal';
-import { Input, Card, Empty } from 'antd';
+import { List, Card, Empty } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
 import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
 
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
-import GroupCard from './GroupCard';
+import GroupCardtem from './GroupCardtem';
 
 import './DiscoverGroups.scss';
 
@@ -19,7 +19,7 @@ const DiscoverGroups = ({ group }) => {
       {!group ? (
         <Spinner />
       ) : (
-        <div className='main-container'>
+        <div>
           <div
             style={{
               color: '#333',
@@ -27,27 +27,51 @@ const DiscoverGroups = ({ group }) => {
               fontWeight: 'normal',
               marginBottom: 10
             }}
-          ></div>
+          >
+            <PrivateMessageModal />
+          </div>
           <Card style={{ marginBottom: 30 }} bordered={false}>
             <AutoCompleteGroupSearch />
-            <div className='filter-wrapper'>
-              <GroupFilterPanel />
-            </div>{' '}
           </Card>
-          <Card bordered={group.searchTerm?true:false}>
-            {group !== null &&
-            group.searchResult &&
-            group.searchResult.length > 0 ? (
-              group.searchResult.map((group, index) => {
-                let key = 'discover_' + index;
-                return (
-                  <GroupCard currentGroup={group} key={key} type='discover' />
-                );
-              })
-            ) : (
-                <Empty imageStyle={{display:'none'}} description={group.searchTerm?'No results found. Check the spelling or try again with another keyword.':''} /> 
-            )}
-          </Card>
+
+          {group !== null &&
+          group.searchResult &&
+          group.searchResult.length > 0 ? (
+            <List
+              itemLayout='vertical'
+              size='small'
+              header={
+                group.searchTerm
+                  ? `Groups based on your search`
+                  : 'Groups near you'
+              }
+              pagination={{
+                onChange: page => {
+                  console.log(page);
+                },
+                pageSize: 3
+              }}
+              dataSource={group.searchResult}
+              //style={{ overflow: 'hidden' }}
+              renderItem={item => (
+                <Card
+                  key={`${item.id}-card`}
+                  hoverable={true}
+                  bordered={group.searchTerm ? true : false}
+                >
+                  <GroupCardtem currentGroup={item} type='discover' />
+                </Card>
+              )}
+            />
+          ) : (
+            <Empty
+              description={
+                group.searchTerm
+                  ? 'No results found. Check the spelling or try again with another keyword.'
+                  : 'No groups found'
+              }
+            />
+          )}
         </div>
       )}
     </Fragment>

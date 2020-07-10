@@ -1,27 +1,23 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Spin, Select, AutoComplete, Input } from 'antd';
 import _ from 'lodash';
 import Spinner from '../../../layout/Spinner';
 import { SearchOutlined } from '@ant-design/icons';
+import { Form, FormItem } from 'formik-antd';
 import {
   getGroupAutoComplete,
-  clearAutoCompleteGroupSearchResult,
   searchGroupWithFilters
 } from '../../../actions/group';
+import './AutoCompleteGroupSearch.scss';
 
 const AutoCompleteGroupSearch = ({
   getGroupAutoComplete,
-  clearAutoCompleteGroupSearchResult,
   searchGroupWithFilters,
   group
 }) => {
   const { Option, OptGroup } = Select;
   const [searchValue, setSearchValue] = useState('');
-
-  useEffect(() => {
-    clearAutoCompleteGroupSearchResult();
-  }, []);
 
   const handleGroupSearch = searchTerm => {
     if (searchTerm) {
@@ -29,8 +25,10 @@ const AutoCompleteGroupSearch = ({
         getGroupAutoComplete(searchTerm, () => {
           setSearchValue(searchValue);
         });
-      }, 1000);
+      }, 100);
+      //if (isCurrent.current) {
       debounced();
+      //}
     }
   };
 
@@ -84,30 +82,35 @@ const AutoCompleteGroupSearch = ({
   };
   const onGroupSelect = selectedSearchTerm => {
     if (selectedSearchTerm) {
-
       let selectedSearch = selectedSearchTerm.split(',')[0];
       searchGroupWithFilters({ groupKeyword: selectedSearch });
-      clearAutoCompleteGroupSearchResult();
     }
   };
 
   const Complete = () => (
-    <AutoComplete
-      name='groupSearchTerm'
-      style={{
-        width: '80%'
-      }}
-      autoFocus={true}
-      value={searchValue}
-      placeholder={'Type school name or group name'}
-      onSearch={handleGroupSearch}
-      onChange={onGroupChange}
-      onSelect={onGroupSelect}
-      notFoundContent={group.loading ? <Spin size='small' /> : null}
-      defaultOpen={true}
-    >
-      {children}
-    </AutoComplete>
+    <div>
+      <div>
+        <label className='auto-complete-label' title='Find your group'>
+          {'Search your group'}
+        </label>
+      </div>
+      <AutoComplete
+        name='groupSearchTerm'
+        style={{
+          width: '100%'
+        }}
+        autoFocus={true}
+        value={searchValue}
+        placeholder={'Type school name or group name'}
+        onSearch={handleGroupSearch}
+        onChange={onGroupChange}
+        onSelect={onGroupSelect}
+        notFoundContent={group.loading ? <Spin size='small' /> : null}
+        defaultOpen={true}
+      >
+        {children}
+      </AutoComplete>
+    </div>
   );
 
   return (
@@ -119,6 +122,5 @@ const mapStateToProps = state => ({
 });
 export default connect(mapStateToProps, {
   searchGroupWithFilters,
-  getGroupAutoComplete,
-  clearAutoCompleteGroupSearchResult
+  getGroupAutoComplete
 })(AutoCompleteGroupSearch);
