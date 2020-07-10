@@ -1,11 +1,14 @@
 import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Layout } from 'antd';
 
 import EditAccountModal from './modal/EditAccountModal';
 
 import './Account.scss';
 const Account = ({ auth }) => {
+  const { Content } = Layout;
+
   const userDetails = (
     <div className='profile-content-details' key={auth.user._id}>
       <EditAccountModal />
@@ -38,16 +41,18 @@ const Account = ({ auth }) => {
   );
 
   return (
-    <div className='main-container'>
-      {auth && auth.user && (
-        <div className='profile-component-container'>
-          <div className='profile-component-header'>
-            <h4 className='profile-component-title'>My Account</h4>
+    <Content>
+      <div className='wrapper'>
+        {auth && auth.user && (
+          <div className='profile-component-container'>
+            <div className='profile-component-header'>
+              <h4 className='profile-component-title'>My Account</h4>
+            </div>
+            <div className='profile-component-content'> {userDetails}</div>
           </div>
-          <div className='profile-component-content'> {userDetails}</div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </Content>
   );
 };
 

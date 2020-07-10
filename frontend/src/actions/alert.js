@@ -15,14 +15,14 @@ export const catchHandler = (err, errorType) => dispatch => {
   const error = err && err.response && err.response.data && err.response.data;
 
   if (error && error.length > 0) {
-    error.forEach(error => dispatch(setAlert(error.message, 'error')));
+    error.forEach(error => dispatch(setAlert(error.message, errorType)));
   } else {
-    dispatch(setAlert(error.message, 'error', error.status));
+    dispatch(setAlert(error.message, errorType, error.status));
   }
 
-  dispatch({
-    type: errorType
-  });
+  dispatch(
+    setAlert('Error occured, please try again after sometime', errorType)
+  );
   return;
 };
 

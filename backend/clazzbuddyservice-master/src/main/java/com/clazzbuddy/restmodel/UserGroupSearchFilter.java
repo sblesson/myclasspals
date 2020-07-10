@@ -17,9 +17,7 @@ public class UserGroupSearchFilter {
 	
 	private String schoolName;
 	
-	private String schoolCity;
-	
-	private String schoolZipCode;
+
 
 	public String getGroupKeyword() {
 		return groupKeyword;
@@ -45,21 +43,7 @@ public class UserGroupSearchFilter {
 		this.schoolName = schoolName;
 	}
 
-	public String getSchoolCity() {
-		return schoolCity;
-	}
 
-	public void setSchoolCity(String schoolCity) {
-		this.schoolCity = schoolCity;
-	}
-
-	public String getSchoolZipCode() {
-		return schoolZipCode;
-	}
-
-	public void setSchoolZipCode(String schoolZipCode) {
-		this.schoolZipCode = schoolZipCode;
-	}
 
 	public String getCity() {
 		return city;

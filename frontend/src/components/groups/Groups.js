@@ -3,25 +3,27 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../../layout/Spinner';
-import moment from 'moment';
-import GroupFilters from '../common/filterpanel/FilterPanel';
 import GroupCard from './GroupCard';
 
 import PrivateMessageModal from './modal/CreateGroupModal';
 import { getAllGroups } from '../../actions/group';
-import { Tabs, Table, Tag, Button, Input } from 'antd';
-import { Menu, Dropdown, message, Card } from 'antd';
+import { Tabs, Table, Tag, Button, Input, Empty } from 'antd';
+import { Layout, Card } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import './Groups.scss';
 const Groups = ({ getAllGroups, group, auth }) => {
   const { Meta } = Card;
+  const { Content } = Layout;
 
   const { TabPane } = Tabs;
 
   const { Search } = Input;
 
   const [activeIndex, setActiveIndex] = useState(0);
+  useEffect(() => {
+    getAllGroups(auth.user._id);
+  }, []);
 
   const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
 
@@ -36,36 +38,47 @@ const Groups = ({ getAllGroups, group, auth }) => {
       {group.loading ? (
         <Spinner />
       ) : (
-        <div className='main-container'>
-          <GroupFilters />
-          {group !== null ? (
-            <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
-              <TabPane tab='My Groups' key='1'>
-                {group.userGroup && group.userGroup.length > 0
-                  ? group.userGroup.map((group, index) => (
+        <Content>
+          <div className='wrapper'>
+            {group !== null ? (
+              <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+                <TabPane tab='My Groups' key='1'>
+                  {group.userGroup && group.userGroup.length > 0 ? (
+                    group.userGroup.map((group, index) => (
                       <GroupCard
                         currentGroup={group}
                         key={index}
                         type='mygroup'
                       />
                     ))
-                  : 'Current user is not part of any groups.'}
-              </TabPane>
-              <TabPane tab='Pending Invitations' key='2'>
-                {group.pendingInvitedUserGroups &&
-                group.pendingInvitedUserGroups.length > 0
-                  ? group.pendingInvitedUserGroups.map((group, index) => (
+                  ) : (
+                    <Empty
+                      description={'Current user is not part of any groups.'}
+                    />
+                  )}
+                </TabPane>
+                <TabPane tab='Waiting for Approvals' key='2'>
+                  {group.pendingInvitedUserGroups &&
+                  group.pendingInvitedUserGroups.length > 0 ? (
+                    group.pendingInvitedUserGroups.map((group, index) => (
                       <GroupCard
                         currentGroup={group}
                         key={index}
                         type='pendingInvitedUserGroups'
                       />
                     ))
-                  : 'There are no pending group invitation for current user.'}
-              </TabPane>
-              <TabPane tab='Pending Requests' key='3'>
-                {group.requestedUserGroup && group.requestedUserGroup.length > 0
-                  ? group.requestedUserGroup.map((group, index) => (
+                  ) : (
+                    <Empty
+                      description={
+                        'There are no pending group invitation for current user.'
+                      }
+                    />
+                  )}
+                </TabPane>
+                <TabPane tab='Requested To Join' key='3'>
+                  {group.requestedUserGroup &&
+                  group.requestedUserGroup.length > 0 ? (
+                    group.requestedUserGroup.map((group, index) => (
                       <GroupCard
                         currentGroup={group}
                         key={index}
@@ -73,13 +86,20 @@ const Groups = ({ getAllGroups, group, auth }) => {
                         type='requestedUserGroup'
                       />
                     ))
-                  : 'There are no group requests initiated by the current user.'}
-              </TabPane>
-            </Tabs>
-          ) : (
-            'Group is empty'
-          )}
-        </div>
+                  ) : (
+                    <Empty
+                      description={
+                        'There are no group requests initiated by the current user.'
+                      }
+                    />
+                  )}
+                </TabPane>
+              </Tabs>
+            ) : (
+              <Empty description={'No Group Data Found'} />
+            )}
+          </div>
+        </Content>
       )}
     </Fragment>
   );

@@ -1,12 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import Register from './Register';
 import Login from './Login';
+import FooterContent from '../Footer';
+
 import PendingRegistration from './PendingRegistration';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { Layout } from 'antd';
 
 const Landing = ({ location, match, auth, history }) => {
+  const { Footer } = Layout;
+
   useEffect(() => {
     let unmounted = false;
 
@@ -64,33 +69,40 @@ const Landing = ({ location, match, auth, history }) => {
   }
 
   return (
-    <div className='row' style={{ marginTop: '20px' }}>
-      <div className='col col-8'>
-        {' '}
-        <section>
-          <div>
-            <img
-              src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
-              alt='Custom banner image for this neighborhood group.'
-              data-testid='groups-page-header-image'
-            ></img>
-          </div>
-          <div className='dark-overlay'>
-            <div className='landing-inner'>
-              <h1 className='x-large'>Social network for parent&#39;s</h1>
-              <h1 className='large'>
-                Connect with other parents in your child&#39;s classroom
-              </h1>
-              <p className='lead'>
-                Create a profile, search school and share posts with other
-                parents in your childs classroom
-              </p>
+    <Fragment>
+      <div className='row' style={{ marginTop: '20px' }}>
+        <div className='col col-8'>
+          {' '}
+          <section>
+            <div>
+              <img
+                src='https://d19rpgkrjeba2z.cloudfront.net/static/images/groups/default-cover4@2x.svg'
+                alt='Custom banner image for this neighborhood group.'
+                data-testid='groups-page-header-image'
+              ></img>
             </div>
-          </div>
-        </section>
+            <div className='dark-overlay'>
+              <div className='landing-inner'>
+                <h1 className='x-large'>Social network for parent&#39;s</h1>
+                <h1 className='large'>
+                  Connect with other parents in your child&#39;s classroom
+                </h1>
+                <p className='lead'>
+                  Create a profile, search school and share posts with other
+                  parents in your childs classroom
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div className='col col-4' style={{ background: '#fff' }}>
+          {loginComponent}
+        </div>
       </div>
-      <div className='col col-4'>{loginComponent}</div>
-    </div>
+      <Footer style={{ bottom: '0', textAlign: 'center' }}>
+        <FooterContent />
+      </Footer>
+    </Fragment>
   );
 };
 
