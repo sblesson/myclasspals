@@ -55,16 +55,15 @@ export const addPost = formData => async dispatch => {
 };
 
 // Search post by groupId
-export const searchPost = groupId => async dispatch => {
+export const searchPost = requestObj => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
-  const formData = { groupId: groupId };
 
   try {
-    const res = await axios.post('/post/searchpost', formData, config);
+    const res = await axios.post('/post/searchpost', requestObj, config);
     dispatch({
       type: SEARCH_POST,
       payload: res.data.post

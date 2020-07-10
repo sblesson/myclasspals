@@ -1,6 +1,15 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Table, Tag, Button, Menu, Dropdown, message } from 'antd';
+import {
+  Tabs,
+  Table,
+  Tag,
+  Button,
+  Menu,
+  Dropdown,
+  message,
+  Layout
+} from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../../layout/Spinner';
@@ -8,7 +17,8 @@ import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
 import AboutGroup from './AboutGroup';
-
+import SearchPost from '../common/searchPost/SearchPost';
+import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
 
 import PostItem from '../posts/PostItem';
@@ -34,6 +44,8 @@ const SingleGroup = ({
   auth,
   history
 }) => {
+  const { Content } = Layout;
+
   useEffect(() => {
     let user = null;
     let groupId = null;
@@ -299,15 +311,20 @@ const SingleGroup = ({
   };
 
   return (
-    <Fragment>
+    <div>
       {loading ? (
         <Spinner />
       ) : (
-        <Fragment>
+        <Content>
+          {' '}
           {group !== null &&
           group.currentGroup &&
           group.currentGroup.role !== null ? (
-            <div className='main-container'>
+            <div className='wrapper'>
+              <div style={{ marginBottom: '20px' }}>
+                <SearchPost />
+                <PostFilterPanel />
+              </div>
               <GroupCard currentGroup={group.currentGroup} type='mygroup' />
               <Tabs
                 defaultActiveKey='1'
@@ -364,9 +381,9 @@ const SingleGroup = ({
           ) : (
             ''
           )}
-        </Fragment>
+        </Content>
       )}
-    </Fragment>
+    </div>
   );
 };
 

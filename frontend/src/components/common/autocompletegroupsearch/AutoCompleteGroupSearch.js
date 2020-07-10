@@ -29,7 +29,7 @@ const AutoCompleteGroupSearch = ({
         getGroupAutoComplete(searchTerm, () => {
           setSearchValue(searchValue);
         });
-      }, 1000);
+      }, 100);
       debounced();
     }
   };
@@ -84,7 +84,6 @@ const AutoCompleteGroupSearch = ({
   };
   const onGroupSelect = selectedSearchTerm => {
     if (selectedSearchTerm) {
-
       let selectedSearch = selectedSearchTerm.split(',')[0];
       searchGroupWithFilters({ groupKeyword: selectedSearch });
       clearAutoCompleteGroupSearchResult();

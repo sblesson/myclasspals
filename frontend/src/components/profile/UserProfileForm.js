@@ -11,7 +11,7 @@ import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 
 import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
 
-import MultiSelectSchoolSearch from '../common/multiselectschoolsearch/MultiSelectSchoolSearch';
+import AutoCompleteSchoolSearch from '../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
 
 const UserAccountForm = ({
   auth,
@@ -77,17 +77,36 @@ const UserAccountForm = ({
         let myAddress =
           values && values.citySelect ? JSON.parse(values.citySelect) : null;
         if (myAddress !== null) {
-          updateUser({
-            email: auth.user.email,
-            name: values.userName,
-            city: myAddress.city,
-            state: myAddress.state,
-            zipcode: myAddress.postalcode,
-            schoolId: values.schoolId
-          });
-          searchGroupWithFilters({
-            zipcode: myAddress.postalcode
-          });
+          if (values.schoolSelect) {
+            //school selected
+            let schoolItem = values.schoolSelect.split(',');
+            updateUser({
+              email: auth.user.email,
+              name: values.userName,
+              city: myAddress.city,
+              state: myAddress.state,
+              zipcode: myAddress.postalcode,
+              schoolName: schoolItem[0]
+            });
+            searchGroupWithFilters({
+              schoolName: schoolItem[0],
+              zipcode: schoolItem[3],
+              city: schoolItem[1]
+            });
+          } else {
+            //school not selected
+            updateUser({
+              email: auth.user.email,
+              name: values.userName,
+              city: myAddress.city,
+              state: myAddress.state,
+              zipcode: myAddress.postalcode
+            });
+            searchGroupWithFilters({
+              zipcode: myAddress.postalcode,
+              city: myAddress.city
+            });
+          }
         }
 
         onStepChange(current);
@@ -126,13 +145,16 @@ const UserAccountForm = ({
             </FormItem>
             <FormItem
               name='schoolName'
-              label='Schools you want to follow'
+              label='School group you want to discover'
               required={false}
             >
-              <MultiSelectSchoolSearch />
+              <AutoCompleteSchoolSearch />
             </FormItem>
             <FormItem name='submit'>
-              <SubmitButton className='ant-btn btn-primary'>
+              <SubmitButton
+                className='ant-btn btn-primary'
+                style={{ float: 'right' }}
+              >
                 {' '}
                 Proceed{' '}
               </SubmitButton>

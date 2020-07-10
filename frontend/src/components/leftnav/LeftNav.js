@@ -60,7 +60,9 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
       case 'messages': {
         return null;
       }
-
+      case 'create-profile': {
+        return null;
+      }
       case 'account':
         return [
           {
@@ -103,8 +105,6 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
             url: '/group/' + id + '/about'
           }
         ];
-      case 'create-profile':
-        return [];
 
       default:
         return;

@@ -31,7 +31,7 @@ const MultiSelectSchoolSearch = ({ fetchSchool, school }) => {
     school.results.length > 0 &&
     school.results.map((item, index) => {
       return (
-        <Option key={index} value={item.schoolid}>
+        <Option key={index} value={item}>
           <span style={{ fontWeigth: 'bolder' }}>
             {' '}
             {item.schoolName}, {item.city} {item.state}
@@ -42,13 +42,11 @@ const MultiSelectSchoolSearch = ({ fetchSchool, school }) => {
 
   return (
     <Select
-      name='schoolId'
+      name='schoolItem'
       placeholder='Type School names'
-      mode='multiple'
       onSearch={onSearchSchool}
       onChange={onSchoolChange}
       notFoundContent={school.isLoading ? <Spin size='small' /> : null}
-      filterOption={false}
       showArrow={true}
     >
       {children}

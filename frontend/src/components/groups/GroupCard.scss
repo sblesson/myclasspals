@@ -11,3 +11,11 @@
 .group-card-member-privacy {
   color: var(--color-secondary-text) !important;
 }
+.group-card-status {
+  margin-left: 3rem !important;
+  margin-top: 1rem !important;
+  .btn-primary {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
