@@ -50,9 +50,6 @@ const Messages = ({
   }, [getPrivateMessages, auth.user._id]);
 
   useEffect(() => {
-    debugger;
-    console.log(messagePanelSelected);
-    console.log(messages);
     const recentPost =
       messages && messages.length > 0
         ? messagePanelSelected
@@ -64,7 +61,6 @@ const Messages = ({
       const redirectUrl = `/messages/${recentPost._id}`;
       history.push(redirectUrl);
       setMessagePanelItemSelected(recentPost);
-
     }
   }, [messages]);
 
@@ -258,7 +254,13 @@ const Messages = ({
                 />
               </Card>
             ) : (
-              <Empty className='empty-container' description={false} />
+              <Empty
+                imageStyle={{ display: 'none' }}
+                className='empty-container'
+                description={
+                  'No messages found. Create new message by clicking on compose link'
+                }
+              />
             )}
           </Content>
         </Layout>
