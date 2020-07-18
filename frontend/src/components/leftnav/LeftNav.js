@@ -31,7 +31,7 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
         let user = null;
         let userGroup = null;
         let myGroups = [];
-        if (auth && auth.user) {
+/*         if (auth && auth.user) {
           //first time groupId is not passed in url param.
           //So get groupId from user group first item
           try {
@@ -45,9 +45,9 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
           if (user && user.userGroup && user.userGroup.length > 0) {
             userGroup = user.userGroup;
           }
-        }
-        if (userGroup && userGroup.length > 0) {
-          myGroups = userGroup.map(group => ({
+        } */
+        if (group && group.userGroup && group.userGroup.length > 0) {
+          myGroups = group.userGroup.map(group => ({
             id: group.id,
             title: group.groupName,
             value: group.id,
@@ -115,7 +115,7 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
 
   return (
     <Fragment>
-      {auth && auth.isAuthenticated && screen !== 'messages' ? (
+      {group && group.userGroup && screen !== 'messages' ? (
         <Sider
           trigger={null}
           collapsible

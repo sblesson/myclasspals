@@ -9,8 +9,8 @@ const AlertComponent = ({ alerts }) =>
   alerts.map(alert => (
     <Alert
       key={alert.id}
-      message={''}
-      description={alert.msg}
+      message={alert.msg}
+      banner
       type={alert.alertType}
       closable
     />

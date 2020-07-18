@@ -31,8 +31,6 @@ import {
   CLEAR_AUTOCOMPLETE_GROUP_SEARCH
 } from './types';
 
-import { searchPost } from './post';
-
 // Add post
 export const addGroup = formData => async dispatch => {
   const config = {
@@ -116,7 +114,6 @@ export const getGroupDetails = groupId => async dispatch => {
           ? response.data.userGroupList[0]
           : null
     });
-    dispatch(searchPost({ groupId: groupId }));
   } catch (err) {
     catchHandler(err, GET_GROUP_ERROR);
   }
@@ -247,6 +244,7 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
 //User sends request to join user group
 export const requestToJoinUserGroup = (
   requestData,
+  currentGroup,
   callback
 ) => async dispatch => {
   const config = {
@@ -257,13 +255,7 @@ export const requestToJoinUserGroup = (
 
   try {
     const res = await axios.post('/user/requestusergroup', requestData, config);
-    // .then(res => {
-    /*     let currentGroup = res.data.user.requestedUserGroup.find(
-      request => request.id === requestData.groupId
-    );
-    if (!currentGroup.role) {
-      currentGroup.role = 'Pending Invitation';
-    } */
+
     if (res && res.data && res.data.user) {
       //globally update user object
       dispatch({
@@ -273,12 +265,9 @@ export const requestToJoinUserGroup = (
     }
     dispatch({
       type: REQUEST_JOIN_USER_GROUP,
-      payload: { user: res.data.user }
+      payload: { user: res.data.user, currentGroup: currentGroup }
     });
-
-    dispatch(setAlert('User added to group', 'success'));
-    //callback(requestData.groupId);
-    // });
+    //dispatch(setAlert('User added to group', 'success'));
     callback(res.data.user.userGroup);
   } catch (err) {
     catchHandler(err, REQUEST_JOIN_USER_GROUP_ERROR);

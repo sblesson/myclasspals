@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import TopNavbar from './components/topnavbar/TopNavbar';
 import LeftNav from './components/leftnav/LeftNav';
 
+
 // Redux
 import store from './store';
 import { persistor } from './store';

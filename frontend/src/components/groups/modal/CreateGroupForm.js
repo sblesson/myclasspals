@@ -85,7 +85,7 @@ const CreateGroupForm = ({
 
     addGroup(JSON.stringify(values), cancelTokenSrc => {
       setIsLoadingCreateBtn(false);
-      if (cancelTokenSrc) cancelTokenSrc.cancel();
+      //if (cancelTokenSrc) cancelTokenSrc.cancel();
     });
     //actions.setSubmitting(false);
     actions.resetForm();
@@ -96,7 +96,7 @@ const CreateGroupForm = ({
     <Formik
       initialValues={{
         groupName: '',
-        groupType: 'private',
+        privacy: 'PUBLIC',
         isSchoolGroup: 'yes',
         grade: ''
       }}
@@ -135,12 +135,12 @@ const CreateGroupForm = ({
                 name='privacy'
                 options={[
                   {
-                    label: 'Private --appears in search results',
-                    value: 'PRIVATE'
-                  },
-                  {
                     label: 'Public',
                     value: 'PUBLIC'
+                  },
+                  {
+                    label: 'Private',
+                    value: 'PRIVATE'
                   }
                 ]}
               />

@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
 import { Typography, Text } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
+import Landing from './Landing';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
+import { authRedirect } from '../../utils/authRedirect';
 import PropTypes from 'prop-types';
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, auth, history }) => {
   const [componentSize, setComponentSize] = useState('small');
   const { Title, Text } = Typography;
   const [isLoadingSignUpBtn, setIsLoadingSignUpBtn] = useState(false);
@@ -49,6 +51,7 @@ const Register = ({ setAlert, register }) => {
               setIsLoadingSignUpBtn(false);
               console.log(cancelTokenSrc);
               cancelTokenSrc.cancel();
+              authRedirect(auth, history);
             }
           );
         }
@@ -110,14 +113,17 @@ const Register = ({ setAlert, register }) => {
   );
 
   return (
-    <div>
-      <Title className='form-title-text' level={4}>
-        Create Your Account
-      </Title>
-      {yourInfo}
-      <Text className='form-info-text'>
-        Already have an account? <Link to='/login'>Sign In</Link>
-      </Text>
+    <div className='row' style={{ marginTop: '20px' }}>
+      <Landing />
+      <div className='col col-4' style={{ background: '#fff' }}>
+        <Title className='form-title-text' level={4}>
+          Create Your Account
+        </Title>
+        {yourInfo}
+        <Text className='form-info-text'>
+          Already have an account? <Link to='/login'>Sign In</Link>
+        </Text>
+      </div>
     </div>
   );
 };
@@ -130,7 +136,8 @@ Register.propTypes = {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.school.isLoading
+  isLoading: state.school.isLoading,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { setAlert, register })(Register);

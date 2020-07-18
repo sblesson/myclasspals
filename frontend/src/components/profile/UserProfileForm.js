@@ -25,9 +25,10 @@ const UserAccountForm = ({
     if (auth && auth.user) {
       let user = auth.user;
       if (user.userGroup && user.userGroup.length > 0) {
+        let groupId = user.userGroup[0].id;
         history
-          ? history.push('/dashboard')
-          : (window.location.pathname = '/dashboard');
+          ? history.push(`/dashboard/${groupId}`)
+          : (window.location.pathname = `/dashboard/${groupId}`);
       } else if (
         user.requestedUserGroup &&
         user.requestedUserGroup.length > 0

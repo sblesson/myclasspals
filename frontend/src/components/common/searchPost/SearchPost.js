@@ -19,7 +19,7 @@ const SearchPost = ({ searchPost, post, group }) => {
 
   return (
     <Search
-      placeholder={`Search posts in ${group.currentGroup.groupName}`}
+      placeholder={`Search posts from ${group.currentGroup.groupName}`}
       size='large'
       onPressEnter={fetchPost}
       onSearch={fetchPost}

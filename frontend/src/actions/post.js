@@ -55,7 +55,9 @@ export const addPost = formData => async dispatch => {
 };
 
 // Search post by groupId
-export const searchPost = requestObj => async dispatch => {
+export const searchPost = (requestObj, callback) => async dispatch => {
+  debugger;
+  console.log(requestObj);
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -68,6 +70,7 @@ export const searchPost = requestObj => async dispatch => {
       type: SEARCH_POST,
       payload: res.data.post
     });
+    callback(res.data.post);
   } catch (err) {
     catchHandler(err, 'SEARCH_POST_ERROR');
   }

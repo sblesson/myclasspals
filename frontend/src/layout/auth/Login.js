@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
-import { Typography, Text } from 'antd';
+import { Typography } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
-import { setAlert } from '../../actions/alert';
 import { login } from '../../actions/auth';
+import Landing from './Landing';
+import { authRedirect } from '../../utils/authRedirect';
 import PropTypes from 'prop-types';
 
-const Login = ({ setAlert, login, isAuthenticated, auth }) => {
+const Login = ({ login, auth, history }) => {
   const [componentSize, setComponentSize] = useState('small');
   const [isLoadingSignInBtn, setIsLoadingSignInBtn] = useState(false);
 
@@ -41,6 +42,7 @@ const Login = ({ setAlert, login, isAuthenticated, auth }) => {
         setIsLoadingSignInBtn(true);
         login({ email: values.email, password: values.password }, () => {
           setIsLoadingSignInBtn(false);
+          authRedirect(auth, history);
         });
       }}
       validator={() => ({})}
@@ -88,14 +90,17 @@ const Login = ({ setAlert, login, isAuthenticated, auth }) => {
   );
 
   return (
-    <div>
-      <Title className='form-title-text' level={4}>
-        Sign In
-      </Title>
-      {yourInfo}
-      <Text className='form-info-text'>
-        Don't have an account? <Link to='/register'>Sign Up</Link>
-      </Text>
+    <div className='row' style={{ marginTop: '20px' }}>
+      <Landing />
+      <div className='col col-4' style={{ background: '#fff' }}>
+        <Title className='form-title-text' level={4}>
+          Sign In
+        </Title>
+        {yourInfo}
+        <Text className='form-info-text'>
+          Don't have an account? <Link to='/register'>Sign Up</Link>
+        </Text>
+      </div>
     </div>
   );
 };
@@ -106,7 +111,8 @@ Login.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { login })(Login);

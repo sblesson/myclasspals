@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   Tabs,
@@ -20,8 +20,6 @@ import AboutGroup from './AboutGroup';
 import SearchPost from '../common/searchPost/SearchPost';
 import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
-
-import PostItem from '../posts/PostItem';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 
@@ -45,63 +43,29 @@ const SingleGroup = ({
   history
 }) => {
   const { Content } = Layout;
+  const isCurrent = useRef(true);
 
   useEffect(() => {
-    let user = null;
-    let groupId = null;
+    return () => {
+      //called when component is going to unmount
+      isCurrent.current = false;
+    };
+  }, []);
 
-    if (auth.user) {
-      try {
-        user = JSON.parse(auth.user);
-      } catch (e) {
-        // You can read e for more info
-        // Let's assume the error is that we already have parsed the auth.user so just return that
-        user = auth.user;
-      }
-      if (match && match.params && match.params.id) {
-        groupId = match.params.id;
-        //user clicked on another group from dashboard leftnav groups menu,
-        //get groupId from params
+  useEffect(() => {
+    if (match && match.params && match.params.id) {
+      let groupId = match.params.id;
+      //user clicked on another group from dashboard leftnav groups menu,
+      //get groupId from params
+      if (isCurrent.current) {
         getGroupDetails(groupId);
-      } else if (user) {
-        if (user.userGroup && user.userGroup.length > 0) {
-          //first time groupId is not passed in url param.
-          //So get groupId from user group first item
-          groupId = user.userGroup[0].id;
-          getGroupDetails(groupId);
-        } else if (
-          user.pendingInvitedUserGroups &&
-          user.pendingInvitedUserGroups.length > 0
-        ) {
-          //New user who got invitation from another group, redirect to groups page
-          group.currentGroup = user.pendingInvitedUserGroups[0];
-          groupId = group.currentGroup.id;
-
-          history.push(`/group/${groupId}`);
-        } else if (
-          user.requestedUserGroup &&
-          user.requestedUserGroup.length > 0
-        ) {
-          group.currentGroup = user.requestedUserGroup[0];
-          groupId = group.currentGroup.id;
-          history.push(`/group/${groupId}`);
-        } else {
-          //New user login for first time, not part of any groups, redirect to create profile and help user discover group
-          history.push(`/create-profile/1`);
-        }
       }
     }
-    return function cleanup() {
+
+    return () => {
       //todo
     };
-  }, [getGroupDetails, auth.user, match]);
-
-  const isNewUserInvitedToGroup = false;
-
-  const isUserInvitedToGroup = requestedInvitations => {
-    requestedInvitations.filter(invitations => console.log(invitations));
-    isNewUserInvitedToGroup = true;
-  };
+  }, [getGroupDetails, match]);
 
   const { TabPane } = Tabs;
 
@@ -326,57 +290,66 @@ const SingleGroup = ({
                 <PostFilterPanel />
               </div>
               <GroupCard currentGroup={group.currentGroup} type='mygroup' />
-              <Tabs
-                defaultActiveKey='1'
-                tabBarExtraContent={isUserInPendingRequestedInvitations(
-                  group.currentGroup
-                )}
-              >
-                <TabPane tab='Posts' key='posts'>
-                  <PostModal />
-                  <Posts groupId={group.currentGroup.id} />
-                </TabPane>
-                <TabPane tab='Members' key='members'>
-                  {group.currentGroup.userGroupMembers &&
-                    group.currentGroup.userGroupMembers.length > 0 &&
-                    group.currentGroup.userGroupMembers.map((item, index) => (
-                      <UserCard
-                        key={index}
-                        currentGroup={group.currentGroup}
-                        user={item}
-                      />
-                    ))}
-                </TabPane>
-
-                {group.isGroupAdmin ? (
-                  <TabPane tab='Waiting For Approvals' key='approvals'>
-                    {group.currentGroup.pendingInvitations &&
-                    group.currentGroup.pendingInvitations.length > 0 ? (
-                      <Table
-                        columns={pendingInvitationsColumns}
-                        dataSource={group.currentGroup.pendingInvitations}
-                        rowKey='requestorUserId'
-                      />
-                    ) : (
-                      'There are no request waiting for approvals'
-                    )}
-                  </TabPane>
-                ) : (
-                  ''
-                )}
-                <TabPane tab='Requested To Join' key='request'>
-                  {group.currentGroup.requestedInvitations &&
-                  group.currentGroup.requestedInvitations.length > 0 ? (
-                    <Table
-                      columns={requestToJoinColumn}
-                      dataSource={group.currentGroup.requestedInvitations}
-                      rowKey='invitedUserId'
-                    />
-                  ) : (
-                    'There are no request to join send from this group'
+              {group.currentGroup.role === 'admin' ||
+              group.currentGroup.role === 'member' ? (
+                <Tabs
+                  defaultActiveKey='1'
+                  tabBarExtraContent={isUserInPendingRequestedInvitations(
+                    group.currentGroup
                   )}
-                </TabPane>
-              </Tabs>
+                >
+                  <TabPane tab='Posts' key='posts'>
+                    <PostModal />
+                    <Posts groupId={group.currentGroup.id} />
+                  </TabPane>
+                  <TabPane tab='Members' key='members'>
+                    {group.currentGroup.userGroupMembers &&
+                      group.currentGroup.userGroupMembers.length > 0 &&
+                      group.currentGroup.userGroupMembers.map((item, index) => (
+                        <UserCard
+                          key={index}
+                          currentGroup={group.currentGroup}
+                          user={item}
+                        />
+                      ))}
+                  </TabPane>
+
+                  {group.currentGroup.role === 'admin' ? (
+                    <TabPane tab='Waiting For Approvals' key='approvals'>
+                      {group.currentGroup.pendingInvitations &&
+                      group.currentGroup.pendingInvitations.length > 0 ? (
+                        <Table
+                          columns={pendingInvitationsColumns}
+                          dataSource={group.currentGroup.pendingInvitations}
+                          rowKey='requestorUserId'
+                        />
+                      ) : (
+                        'There are no request waiting for approvals'
+                      )}
+                    </TabPane>
+                  ) : (
+                    ''
+                  )}
+                  {group.currentGroup.role === 'admin' ? (
+                    <TabPane tab='Requested To Join' key='request'>
+                      {group.currentGroup.requestedInvitations &&
+                      group.currentGroup.requestedInvitations.length > 0 ? (
+                        <Table
+                          columns={requestToJoinColumn}
+                          dataSource={group.currentGroup.requestedInvitations}
+                          rowKey='invitedUserId'
+                        />
+                      ) : (
+                        'There are no request to join send from this group'
+                      )}
+                    </TabPane>
+                  ) : (
+                    ''
+                  )}
+                </Tabs>
+              ) : (
+                <AboutGroup />
+              )}
             </div>
           ) : (
             ''

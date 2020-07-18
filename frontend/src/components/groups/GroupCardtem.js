@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -31,6 +31,7 @@ const GroupCardtem = ({
   searchGroupWithFilters
 }) => {
   const { Meta } = Card;
+  const [isRequestUpdated, setRequestUpdate] = useState(false);
 
   const requestToJoinUserGroupClickHandler = record => {
     requestToJoinUserGroup(
@@ -39,9 +40,10 @@ const GroupCardtem = ({
         role: 'member',
         requestorUserId: auth.user.email
       },
+      record,
       userGroup => {
         console.log(userGroup);
-        searchGroupWithFilters({ groupKeyword: group.searchTerm });
+        //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
     );
   };
@@ -132,11 +134,27 @@ const GroupCardtem = ({
         );
       }
     } else if (currentGroup.role === 'admin') {
-      return <Tag color={'blue'}>{currentGroup.role}</Tag>;
+      return (
+        <div>
+          <Tag color={'blue'}>{currentGroup.role}</Tag>
+          {currentGroup.userGroupMembers.length} member
+        </div>
+      );
     } else if (currentGroup.role === 'member') {
-      return <Tag color={'geekblue'}>{currentGroup.role}</Tag>;
+      return (
+        <div>
+          <Tag color={'geekblue'}>{currentGroup.role}</Tag>
+          {currentGroup.userGroupMembers.length} member
+        </div>
+      );
     } else if (currentGroup.role === 'Pending Invitation') {
-      return <Tag color={'green'}>{currentGroup.role}</Tag>;
+      return (
+        <div>
+          {' '}
+          <Tag color={'green'}>{currentGroup.role}</Tag>
+          {currentGroup.userGroupMembers.length} member
+        </div>
+      );
     }
   };
 
@@ -163,26 +181,16 @@ const GroupCardtem = ({
     }
   };
 
-  const getGroupMemberCount = currentGroup => {
+  const getGroupPrivacy = currentGroup => {
     if (
       currentGroup &&
       currentGroup.userGroupMembers &&
       currentGroup.userGroupMembers.length > 0
     ) {
       if (currentGroup.userGroupMembers.length === 1) {
-        return (
-          <div>
-            {getGroupPrivacyLabel(currentGroup.privacy)} &nbsp;
-            {currentGroup.userGroupMembers.length} member
-          </div>
-        );
+        return <div>{getGroupPrivacyLabel(currentGroup.privacy)} &nbsp;</div>;
       } else {
-        return (
-          <div>
-            {getGroupPrivacyLabel()} &nbsp;
-            {currentGroup.userGroupMembers.length} members
-          </div>
-        );
+        return <div>{getGroupPrivacyLabel()} &nbsp;</div>;
       }
     }
   };
@@ -209,20 +217,36 @@ const GroupCardtem = ({
         ></Meta>
       </Link>
       <Meta
-        className='group-card-member-privacy'
-        description={getGroupMemberCount(currentGroup)}
+        className='group-card-meta-desc'
+        description={getGroupPrivacy(currentGroup)}
       ></Meta>
+      {currentGroup.schoolName ? (
+        <Meta
+          className='group-card-meta-desc'
+          description={
+            currentGroup.schoolName
+              ? `School Name: ${currentGroup.schoolName}`
+              : ''
+          }
+        />
+      ) : (
+        ''
+      )}
 
       <Meta
-        className='group-card-member-privacy'
-        description={currentGroup.description}
-      >
-        {' '}
-      </Meta>
-      <Meta
-        className='group-card-status'
+        className='group-card-meta-desc'
         description={groupActionMenu(currentGroup)}
       ></Meta>
+      {currentGroup.isGroupStatusUpdated ? (
+        <Link
+          className='group-card-update-status-link'
+          to={`/group/${currentGroup.id}`}
+        >
+          Peek inside
+        </Link>
+      ) : (
+        ''
+      )}
     </Card>
   );
 };

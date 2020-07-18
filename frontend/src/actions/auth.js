@@ -111,9 +111,9 @@ export const updateUser = (formData, edit = false) => async dispatch => {
       payload: res.data
     });
 
-    dispatch(
-      setAlert(edit ? 'User Account Updated' : 'Profile Created', 'success')
-    );
+    if (edit) {
+      dispatch(setAlert('User Account Updated', 'success'));
+    }
   } catch (err) {
     catchHandler(err, 'UPDATE_USER_ERROR');
   }
