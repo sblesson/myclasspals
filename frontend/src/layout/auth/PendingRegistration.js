@@ -1,11 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { Formik, ErrorMessage } from 'formik';
-
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
+import { Formik, ErrorMessage } from 'formik';
+import { Typography } from 'antd';
+import Landing from './Landing';
 import { setAlert } from '../../actions/alert';
 import { getuserbyregistrationid, register } from '../../actions/auth';
+import { authRedirect } from '../../utils/authRedirect';
 
 import PropTypes from 'prop-types';
 
@@ -13,27 +15,29 @@ const PendingRegistration = ({
   setAlert,
   getuserbyregistrationid,
   register,
-  isAuthenticated,
   auth,
-  token
+  history,
+  match
 }) => {
+  const { Title, Text } = Typography;
+  const [regId, setRegId] = useState('');
   useEffect(() => {
     let unmounted = false;
-    if (token && !unmounted) {
-      getuserbyregistrationid(token);
+    if (match.params && !unmounted) {
+      setRegId(match.params.id);
+      getuserbyregistrationid(match.params.id);
     }
     return () => {
       unmounted = true;
     };
-  }, [getuserbyregistrationid, token]);
+  }, [getuserbyregistrationid, match]);
 
   useEffect(() => {
     if (auth.invalidRegistrationToken) {
       //todo change window.location logic later
       window.location.pathname = '/register';
-      //return <Redirect to='/register' />;
     }
-  }, [auth.user]);
+  }, [auth.invalidRegistrationToken]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -62,10 +66,6 @@ const PendingRegistration = ({
     return value ? undefined : 'required';
   };
 
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
-  }
-
   const yourInfo = (
     <Formik
       initialValues={{
@@ -83,8 +83,7 @@ const PendingRegistration = ({
           if (auth && auth.user && auth.user.email) {
             let email = auth.user.email;
 
-            if (token) {
-              let regId = token;
+            if (regId) {
               register(
                 {
                   name: values.name,
@@ -92,8 +91,10 @@ const PendingRegistration = ({
                   password: values.password,
                   regId
                 },
-                () => {
+                cancelTokenSrc => {
                   setIsLoadingSignUpBtn(false);
+                  cancelTokenSrc.cancel();
+                  authRedirect(auth, history);
                 }
               );
             } else {
@@ -105,6 +106,7 @@ const PendingRegistration = ({
                 },
                 () => {
                   setIsLoadingSignUpBtn(false);
+                  authRedirect(auth, history);
                 }
               );
             }
@@ -169,13 +171,18 @@ const PendingRegistration = ({
 
   return (
     <Fragment>
-      <p className='lead'>
-        <i className='fas fa-user' /> Create Your Account
-      </p>
-      {yourInfo}
-      <p className='my-1'>
-        Already have an account? <Link to='/login'>Sign In</Link>
-      </p>
+      <div className='row' style={{ marginTop: '20px' }}>
+        <Landing />
+        <div className='col col-4' style={{ background: '#fff' }}>
+          <Title className='form-title-text' level={4}>
+            Create Your Account
+          </Title>
+          {yourInfo}
+          <Text className='form-info-text'>
+            Already have an account? <Link to='/login'>Sign In</Link>
+          </Text>
+        </div>
+      </div>
     </Fragment>
   );
 };
@@ -183,12 +190,10 @@ const PendingRegistration = ({
 PendingRegistration.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  isAuthenticated: PropTypes.bool
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
   auth: state.auth,
   isLoading: state.school.isLoading
 });

@@ -59,8 +59,10 @@ const GroupRulesForm = ({
 
     onStepChange(0);
     setModal(false);
-    history.push('/dashboard/' + group.newGroup.id);
-    window.location.reload();
+    if (group && group.newGroup && group.newGroup.id) {
+      history.push('/dashboard/' + group.newGroup.id);
+      window.location.reload();
+    }
   };
 
   const groupRulesForm = (

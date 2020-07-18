@@ -12,7 +12,6 @@ import {
 } from '@ant-design/icons';
 
 import {
-  getAllGroups,
   acceptUserGroupInvitation,
   requestToJoinUserGroup
 } from '../../actions/group';
@@ -138,6 +137,7 @@ const GroupCard = ({
                 null,
                 null,
                 <Button
+                  key={`${currentGroup.id}_join_btn`}
                   type='link'
                   style={{ marginRight: 16 }}
                   onClick={() =>
@@ -154,6 +154,7 @@ const GroupCard = ({
                 null,
                 null,
                 <Button
+                  key={`${currentGroup.id}_request_btn`}
                   type='link'
                   style={{ marginRight: 16 }}
                   onClick={() =>
@@ -195,6 +196,7 @@ const GroupCard = ({
         case 'pendingInvitedUserGroups': {
           return (
             <Button
+              key={`${currentGroup.id}_pending_join_btn`}
               type='link'
               style={{ marginRight: 16 }}
               onClick={() => acceptPendingInviteActionClick(group)}
@@ -259,7 +261,7 @@ const GroupCard = ({
 
   return (
     <Card
-      key={index}
+      key={`${currentGroup.id}_group-card`}
       className='group-card'
       style={{
         width: '100%',

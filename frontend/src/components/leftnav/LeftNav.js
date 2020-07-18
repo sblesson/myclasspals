@@ -2,13 +2,15 @@ import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../../layout/Spinner';
-import { Menu, Layout } from 'antd';
+import { Menu, Layout, Result } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
+import CreateGroupModal from '../groups/modal/CreateGroupModal';
 
 import './LeftNav.scss';
 
-const LeftNav = ({ screen = '', id, auth, group }) => {
+const LeftNav = ({ screen = '', id, group }) => {
   const { Sider } = Layout;
+  let myGroups = [];
 
   const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
   const [collapse, setCollapse] = useState(true);
@@ -23,39 +25,26 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
   }
   useEffect(() => {
     window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
-  }, []);
+  }, [group]);
 
   const getNavByScreen = screen => {
     switch (screen) {
-      case 'dashboard': {
-        let user = null;
-        let userGroup = null;
-        let myGroups = [];
-        if (auth && auth.user) {
-          //first time groupId is not passed in url param.
-          //So get groupId from user group first item
-          try {
-            user = JSON.parse(auth.user);
-          } catch (e) {
-            // You can read e for more info
-            // Let's assume the error is that we already have parsed the auth.user
-            // So just return that
-            user = auth.user;
-          }
-          if (user && user.userGroup && user.userGroup.length > 0) {
-            userGroup = user.userGroup;
-          }
-        }
-        if (userGroup && userGroup.length > 0) {
-          myGroups = userGroup.map(group => ({
+      case 'dashboard':
+      case 'profile':
+      case 'posts': {
+        if (myGroups && myGroups.length > 0) {
+          return myGroups;
+        } else if (group && group.userGroup && group.userGroup.length > 0) {
+          myGroups = group.userGroup.map(group => ({
             id: group.id,
             title: group.groupName,
             value: group.id,
             url: '/dashboard/' + group.id
           }));
+          return myGroups;
+        } else {
+          return null;
         }
-
-        return myGroups;
       }
       case 'messages': {
         return null;
@@ -107,15 +96,30 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
         ];
 
       default:
-        return;
+        return null;
     }
   };
 
   const sideNavMenu = getNavByScreen(screen);
+  console.log(sideNavMenu);
 
   return (
     <Fragment>
-      {auth && auth.isAuthenticated && screen !== 'messages' ? (
+      {screen === 'dashboard' && sideNavMenu.length === 0 && (
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapse}
+          style={{ marginTop: '4rem' }}
+        >
+          <Result
+            status='warning'
+            subTitle='No groups found!'
+            extra={<CreateGroupModal />}
+          />
+        </Sider>
+      )}
+      {sideNavMenu != null && sideNavMenu.length > 0 && (
         <Sider
           trigger={null}
           collapsible
@@ -143,8 +147,6 @@ const LeftNav = ({ screen = '', id, auth, group }) => {
               ))}
           </Menu>
         </Sider>
-      ) : (
-        ''
       )}
     </Fragment>
   );

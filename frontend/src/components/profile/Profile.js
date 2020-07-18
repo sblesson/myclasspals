@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Spinner from '../../layout/Spinner';
 import ProfileAbout from './ProfileAbout';
 import { getProfileById } from '../../actions/profile';
+import { LeftCircleOutlined } from '@ant-design/icons';
 
 const Profile = ({
   getProfileById,
@@ -14,8 +15,8 @@ const Profile = ({
   match
 }) => {
   useEffect(() => {
-    getProfileById(match.params.id);
-  }, [getProfileById, match.params.id]);
+    getProfileById(match.params.userId);
+  }, [getProfileById, match.params.userId]);
 
   return (
     <Fragment>
@@ -23,17 +24,19 @@ const Profile = ({
         <Spinner />
       ) : (
         <Fragment>
-          <Link to='/dashboard'>Back To dashboard</Link>
-          {/*      {auth.isAuthenticated &&
-            auth.loading === false &&
-            profile._id === profile.user._id && (
-              <Link to='/edit-profile' className='btn btn-dark'>
-                Edit Profile
-              </Link>
-            )} */}
-          <div className='profile-grid my-1'>
-            <ProfileAbout profile={profile} />
-          </div>
+          <Link
+            to={`/dashboard/${match.params.id}`}
+            style={{
+              fontSize: '1rem',
+              marginLeft: '1rem',
+              marginTop: '1rem',
+              cursor: 'pointer',
+              display: 'inline-block'
+            }}
+          >
+            <LeftCircleOutlined />
+          </Link>
+          <ProfileAbout profile={profile} />
         </Fragment>
       )}
     </Fragment>

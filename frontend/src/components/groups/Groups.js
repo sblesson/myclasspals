@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Spinner from '../../layout/Spinner';
 import GroupCard from './GroupCard';
 
-import PrivateMessageModal from './modal/CreateGroupModal';
+import CreateGroupModal from './modal/CreateGroupModal';
 import { getAllGroups } from '../../actions/group';
 import { Tabs, Table, Tag, Button, Input, Empty } from 'antd';
 import { Layout, Card } from 'antd';
@@ -31,7 +31,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
     setActiveIndex(e.target.value);
   };
 
-  const operations = <PrivateMessageModal />;
+  const operations = <CreateGroupModal />;
 
   return (
     <Fragment>

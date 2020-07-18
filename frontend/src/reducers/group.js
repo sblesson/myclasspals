@@ -35,7 +35,8 @@ const initialState = {
   loading: true,
   error: {},
   redirect: false,
-  searchTerm:'',
+  searchTerm: '',
+  isGroupStatusUpdated: false,
   isRequestUserGroupSuccess: false
 };
 
@@ -80,10 +81,10 @@ export default function(state = initialState, action) {
         loading: false
       };
     case ADD_GROUP:
+      debugger;
       return {
         ...state,
-        groups: [payload.userGroup, ...state.groups],
-        userGroup: [payload.userGroup, ...state.groups],
+        userGroup: [...state.userGroup, payload.userGroup],
         newGroup: payload.userGroup,
         loading: false
       };
@@ -162,15 +163,49 @@ export default function(state = initialState, action) {
         loading: false
       };
     case REQUEST_JOIN_USER_GROUP:
-      return {
-        ...state,
-        currentGroup: payload.currentGroup,
-        userGroup: payload.user.userGroup,
-        pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
-        requestedUserGroup: payload.user.requestedUserGroup,
-        loading: false,
-        isRequestUserGroupSuccess: true
-      };
+      debugger;
+      if (payload.currentGroup.privacy === 'PRIVATE') {
+        let currentRequestedGrp = payload.user.requestedUserGroup.filter(
+          result => result.id === payload.currentGroup.id
+        );
+        currentRequestedGrp.role = 'Pending Invitation';
+
+        if (currentRequestedGrp) {
+          state.searchResult.map(result => {
+            if (result.id === payload.currentGroup.id) {
+              result.role = 'Pending Invitation';
+              result.isGroupStatusUpdated = true;
+            }
+          });
+          console.log(state.searchResult);
+        }
+
+        return {
+          ...state,
+          requestedUserGroup: payload.user.requestedUserGroup,
+          loading: false,
+          isRequestUserGroupSuccess: true
+        };
+      } else {
+        let currentRequestedGrp = payload.user.userGroup.filter(
+          result => result.id === payload.currentGroup.id
+        );
+        if (currentRequestedGrp) {
+          state.searchResult.map(result => {
+            if (result.id === payload.currentGroup.id) {
+              result.role = 'member';
+              result.isGroupStatusUpdated = true;
+            }
+          });
+        }
+
+        return {
+          ...state,
+          userGroup: payload.user.userGroup,
+          loading: false,
+          isRequestUserGroupSuccess: true
+        };
+      }
 
     case APPROVE_GROUP_REQUEST:
       return {

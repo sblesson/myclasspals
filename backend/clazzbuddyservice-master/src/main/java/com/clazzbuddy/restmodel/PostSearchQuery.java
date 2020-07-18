@@ -21,6 +21,10 @@ public class PostSearchQuery {
 	private String lastseen;
 	
 	private int resultSize;
+	
+	private int startIndex;
+	
+	private int endIndex;
 
 	public String getKeyword() {
 		return keyword;
@@ -93,6 +97,22 @@ public class PostSearchQuery {
 
 	public void setResultSize(int resultSize) {
 		this.resultSize = resultSize;
+	}
+
+	public int getStartIndex() {
+		return startIndex;
+	}
+
+	public void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
+	}
+
+	public int getEndIndex() {
+		return endIndex;
+	}
+
+	public void setEndIndex(int endIndex) {
+		this.endIndex = endIndex;
 	}
 
 }

@@ -1,43 +1,77 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Typography, Button } from 'antd';
+import { Card, Typography } from 'antd';
 import _ from 'lodash';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import PrivateMessageModal from '../messages/modal/PrivateMessageModal';
-
+import './ProfileAbout.scss';
 const ProfileAbout = ({ profile: { email, userGroup, name } }) => {
+  const { Meta } = Card;
   const { Text } = Typography;
+  const gridStyle = {
+    width: '50%',
+    textAlign: 'center'
+  };
+  const [publicGroup, setPublicGroups] = useState([]);
+  const [privateGroup, setPrivateGroups] = useState([]);
 
+  const getGroup = () => {
+    let myPublicGroup = [];
+    let myPrivateGroup = [];
+    userGroup.map((group, index) => {
+      if (group.privacy === 'PRIVATE') {
+        myPrivateGroup.push(group);
+      } else {
+        myPublicGroup.push(group);
+      }
+    });
+
+    setPublicGroups(myPublicGroup);
+    setPrivateGroups(myPrivateGroup);
+    console.log(publicGroup);
+    console.log(privateGroup);
+  };
+  useEffect(() => {
+    getGroup();
+    return () => {
+      //cleanup
+    };
+  }, [userGroup]);
+  const publicGroupItems = publicGroup.map((item, index) => (
+    <div key={`public-${index}`}>{item.groupName}</div>
+  ));
+  const privateGroupItems = privateGroup.map((item, index) => (
+    <div key={`private-${index}`}>{item.groupName}</div>
+  ));
   return (
     <Card
+      className='profile-card'
       title={
         <Ellipsis length={80} tooltip>
           {email}
         </Ellipsis>
       }
-      style={{ width: '50%' }}
       extra={<PrivateMessageModal toAddress={email} />}
     >
-      <div>
-        <Text strong>{'My Groups'}</Text>
+      {privateGroup && privateGroup.length > 0 && (
+        <div>
+          <span>
+            <i className='fa fa-lock privacy-icon' title='private group'></i>
+            Private Groups
+          </span>
 
-        {userGroup.map((group, index) => (
-          <div key={index} className='p-1 m3'>
-            {group.privacy === 'PRIVATE' ? (
-              <span>
-                <i className='fa fa-lock' title='private group'></i>&nbsp;
-                {_.startCase(_.lowerCase(group.privacy))}
-              </span>
-            ) : (
-              <span>
-                <i className='fa fa-globe' title='public group'></i>
-                &nbsp; {_.startCase(_.lowerCase(group.privacy))}
-              </span>
-            )}
-            {group.groupName}
-          </div>
-        ))}
-      </div>
+          <div className='groups-wrapper'>{privateGroupItems}</div>
+        </div>
+      )}
+      {publicGroup && publicGroup.length > 0 && (
+        <div>
+          <span>
+            <i className='fa fa-globe privacy-icon' title='private group'></i>
+            Public Groups
+          </span>
+          <div className='groups-wrapper'>{publicGroupItems}</div>
+        </div>
+      )}
     </Card>
   );
 };

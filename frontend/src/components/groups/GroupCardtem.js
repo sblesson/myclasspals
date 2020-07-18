@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -31,6 +31,7 @@ const GroupCardtem = ({
   searchGroupWithFilters
 }) => {
   const { Meta } = Card;
+  const [isRequestUpdated, setRequestUpdate] = useState(false);
 
   const requestToJoinUserGroupClickHandler = record => {
     requestToJoinUserGroup(
@@ -39,9 +40,10 @@ const GroupCardtem = ({
         role: 'member',
         requestorUserId: auth.user.email
       },
+      record,
       userGroup => {
         console.log(userGroup);
-        searchGroupWithFilters({ groupKeyword: group.searchTerm });
+        //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
     );
   };
@@ -131,12 +133,26 @@ const GroupCardtem = ({
           </Button>
         );
       }
-    } else if (currentGroup.role === 'admin') {
+    }
+  };
+
+  const getUserGroupRole = currentGroup => {
+    if (currentGroup.role === 'admin') {
       return <Tag color={'blue'}>{currentGroup.role}</Tag>;
     } else if (currentGroup.role === 'member') {
       return <Tag color={'geekblue'}>{currentGroup.role}</Tag>;
     } else if (currentGroup.role === 'Pending Invitation') {
       return <Tag color={'green'}>{currentGroup.role}</Tag>;
+    }
+  };
+
+  const getUserGroupMemberCount = currentGroup => {
+    if (currentGroup && currentGroup.userGroupMembers) {
+      if (currentGroup.userGroupMembers.length <= 1) {
+        return `${currentGroup.userGroupMembers.length} member`;
+      } else if (currentGroup.userGroupMembers.length > 1) {
+        return `${currentGroup.userGroupMembers.length} members`;
+      }
     }
   };
 
@@ -163,66 +179,81 @@ const GroupCardtem = ({
     }
   };
 
-  const getGroupMemberCount = currentGroup => {
+  const getGroupPrivacy = currentGroup => {
     if (
       currentGroup &&
       currentGroup.userGroupMembers &&
       currentGroup.userGroupMembers.length > 0
     ) {
       if (currentGroup.userGroupMembers.length === 1) {
-        return (
-          <div>
-            {getGroupPrivacyLabel(currentGroup.privacy)} &nbsp;
-            {currentGroup.userGroupMembers.length} member
-          </div>
-        );
+        return <div>{getGroupPrivacyLabel(currentGroup.privacy)}</div>;
       } else {
-        return (
-          <div>
-            {getGroupPrivacyLabel()} &nbsp;
-            {currentGroup.userGroupMembers.length} members
-          </div>
-        );
+        return <div>{getGroupPrivacyLabel()}</div>;
       }
     }
   };
 
   return (
-    <Card
-      key={index}
-      style={{
-        width: '100%',
-        textAlign: 'left',
-        padding: 10
-      }}
-    >
+    <Card key={index} className='discover-group-card'>
       <Link to={`/group/${currentGroup.id}`}>
         <Meta
           avatar={
             currentGroup.isSchoolGroup === 'no' ? (
-              <i className='fas fa-users icon-group'></i>
+              <i
+                className='fas fa-users icon-group no-padding'
+                style={{ paddingRight: 0 }}
+              ></i>
             ) : (
-              <i className='fas fa-school icon-group' title='school group'></i>
+              <i
+                className='fas fa-school icon-group no-padding'
+                title='school group'
+              ></i>
             )
           }
           title={currentGroup.groupName}
         ></Meta>
       </Link>
       <Meta
-        className='group-card-member-privacy'
-        description={getGroupMemberCount(currentGroup)}
+        className='group-card-meta-privacy no-padding'
+        description={getGroupPrivacy(currentGroup)}
       ></Meta>
 
       <Meta
-        className='group-card-member-privacy'
-        description={currentGroup.description}
-      >
-        {' '}
-      </Meta>
+        className='group-card-meta-count no-padding'
+        description={getUserGroupMemberCount(currentGroup)}
+      ></Meta>
+
       <Meta
-        className='group-card-status'
+        className='group-card-meta-role no-padding'
+        description={getUserGroupRole(currentGroup)}
+      ></Meta>
+      <Meta
+        className='group-card-meta-action group-action no-padding'
         description={groupActionMenu(currentGroup)}
       ></Meta>
+      {currentGroup.schoolName ? (
+        <Meta
+          className='group-card-meta-desc no-padding'
+          description={
+            currentGroup.schoolName
+              ? `School Name: ${currentGroup.schoolName}`
+              : ''
+          }
+        />
+      ) : (
+        ''
+      )}
+
+      {currentGroup.isGroupStatusUpdated ? (
+        <Meta
+          className='group-card-update-status-link no-padding'
+          description={
+            <Link to={`/group/${currentGroup.id}`}>Peek inside</Link>
+          }
+        />
+      ) : (
+        ''
+      )}
     </Card>
   );
 };
