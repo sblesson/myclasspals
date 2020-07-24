@@ -181,24 +181,18 @@ export const inviteToJoinUserGroup = requestData => async dispatch => {
       'Content-Type': 'application/json'
     }
   };
-
   try {
     const res = await axios.post(
       '/user/invitetousergroup',
       requestData,
       config
     );
-    let currentGroup = res.data.user.userGroup.find(
-      request => request.id === requestData.groupId
-    );
+
     dispatch({
       type: INVITE_TO_GROUP,
-      payload: { user: res.data.user, currentGroup: currentGroup }
+      payload: { userGroup: res.data.userGroup }
     });
 
-    /*  if (res.data.errorCode === null) {
-      getGroupDetails(JSON.parse(formData).groupId);
-    } */
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
     catchHandler(err, INVITE_TO_GROUP_ERROR);
@@ -230,6 +224,7 @@ export const acceptUserGroupInvitation = requestData => async dispatch => {
     let currentGroup = res.data.user.userGroup.find(
       request => request.id === requestData.groupId
     );
+    currentGroup.role = 'member';
     dispatch({
       type: ACCEPT_USER_GROUP,
       payload: { user: res.data.user, currentGroup: currentGroup }
@@ -378,4 +373,20 @@ export const removeUserFromGroup = requestData => async dispatch => {
 
 export const clearAutoCompleteGroupSearchResult = () => async dispatch => {
   dispatch({ type: CLEAR_AUTOCOMPLETE_GROUP_SEARCH });
+};
+
+// Delete post
+export const deleteGroup = (groupId, callback) => async dispatch => {
+  try {
+    const res = await axios.delete(`/usergroup/group/${groupId}`);
+    dispatch({
+      type: DELETE_GROUP,
+      payload: groupId
+    });
+    if (res.data.userGroup === null) {
+      callback();
+    }
+  } catch (err) {
+    catchHandler(err, 'DELETE_GROUP_ERROR');
+  }
 };

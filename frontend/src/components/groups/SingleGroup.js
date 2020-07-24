@@ -22,13 +22,14 @@ import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
+import DiscoverGroup from './DiscoverGroup';
 
 import {
   getGroupDetails,
   approveUserGroupRequest,
   declineUserGroupRequest,
   changeGroupUserRole,
-  removeUserFromGroup,
+  deleteGroup,
   acceptUserGroupInvitation
 } from '../../actions/group';
 
@@ -42,7 +43,7 @@ const SingleGroup = ({
   auth,
   history
 }) => {
-  const { Content } = Layout;
+  const { Content, Sider } = Layout;
   const isCurrent = useRef(true);
 
   useEffect(() => {
@@ -279,82 +280,88 @@ const SingleGroup = ({
       {loading ? (
         <Spinner />
       ) : (
-        <Content>
-          {' '}
-          {group !== null &&
-          group.currentGroup &&
-          group.currentGroup.role !== null ? (
-            <div className='wrapper'>
-              <GroupCard currentGroup={group.currentGroup} type='mygroup' />
-              {group.currentGroup.role === 'admin' ||
-              group.currentGroup.role === 'member' ? (
-                <Tabs
-                  defaultActiveKey='1'
-                  tabBarExtraContent={isUserInPendingRequestedInvitations(
-                    group.currentGroup
-                  )}
-                >
-                  <TabPane tab='Posts' key='posts'>
-                    <PostModal />
-                    <div style={{ marginBottom: '20px' }}>
-                      <SearchPost />
-                      <PostFilterPanel />
-                    </div>
-                    <Posts groupId={group.currentGroup.id} />
-                  </TabPane>
-                  <TabPane tab='Members' key='members'>
-                    {group.currentGroup.userGroupMembers &&
-                      group.currentGroup.userGroupMembers.length > 0 &&
-                      group.currentGroup.userGroupMembers.map((item, index) => (
-                        <UserCard
-                          key={index}
-                          currentGroup={group.currentGroup}
-                          user={item}
-                        />
-                      ))}
-                  </TabPane>
+        <Layout>
+          <Content>
+            {group !== null &&
+            group.currentGroup &&
+            group.currentGroup.role !== null ? (
+              <div className='wrapper'>
+                <GroupCard currentGroup={group.currentGroup} type='mygroup' />
+                {group.currentGroup.role === 'admin' ||
+                group.currentGroup.role === 'member' ? (
+                  <Tabs
+                    defaultActiveKey='1'
+                    tabBarExtraContent={isUserInPendingRequestedInvitations(
+                      group.currentGroup
+                    )}
+                  >
+                    <TabPane tab='Posts' key='posts'>
+                      <PostModal />
+                      <div style={{ marginBottom: '20px' }}>
+                        <SearchPost />
+                        <PostFilterPanel />
+                      </div>
+                      <Posts groupId={group.currentGroup.id} />
+                    </TabPane>
+                    <TabPane tab='Members' key='members'>
+                      {group.currentGroup.userGroupMembers &&
+                        group.currentGroup.userGroupMembers.length > 0 &&
+                        group.currentGroup.userGroupMembers.map(
+                          (item, index) => (
+                            <UserCard
+                              key={index}
+                              currentGroup={group.currentGroup}
+                              user={item}
+                            />
+                          )
+                        )}
+                    </TabPane>
 
-                  {group.currentGroup.role === 'admin' ? (
-                    <TabPane tab='Waiting For Approvals' key='approvals'>
-                      {group.currentGroup.pendingInvitations &&
-                      group.currentGroup.pendingInvitations.length > 0 ? (
-                        <Table
-                          columns={pendingInvitationsColumns}
-                          dataSource={group.currentGroup.pendingInvitations}
-                          rowKey='requestorUserId'
-                        />
-                      ) : (
-                        'There are no request waiting for approvals'
-                      )}
-                    </TabPane>
-                  ) : (
-                    ''
-                  )}
-                  {group.currentGroup.role === 'admin' ? (
-                    <TabPane tab='Requested To Join' key='request'>
-                      {group.currentGroup.requestedInvitations &&
-                      group.currentGroup.requestedInvitations.length > 0 ? (
-                        <Table
-                          columns={requestToJoinColumn}
-                          dataSource={group.currentGroup.requestedInvitations}
-                          rowKey='invitedUserId'
-                        />
-                      ) : (
-                        'There are no request to join send from this group'
-                      )}
-                    </TabPane>
-                  ) : (
-                    ''
-                  )}
-                </Tabs>
-              ) : (
-                <AboutGroup />
-              )}
-            </div>
-          ) : (
-            ''
-          )}
-        </Content>
+                    {group.currentGroup.role === 'admin' ? (
+                      <TabPane tab='Waiting For Approvals' key='approvals'>
+                        {group.currentGroup.pendingInvitations &&
+                        group.currentGroup.pendingInvitations.length > 0 ? (
+                          <Table
+                            columns={pendingInvitationsColumns}
+                            dataSource={group.currentGroup.pendingInvitations}
+                            rowKey='requestorUserId'
+                          />
+                        ) : (
+                          'There are no request waiting for approvals'
+                        )}
+                      </TabPane>
+                    ) : (
+                      ''
+                    )}
+                    {group.currentGroup.role === 'admin' ? (
+                      <TabPane tab='Requested To Join' key='request'>
+                        {group.currentGroup.requestedInvitations &&
+                        group.currentGroup.requestedInvitations.length > 0 ? (
+                          <Table
+                            columns={requestToJoinColumn}
+                            dataSource={group.currentGroup.requestedInvitations}
+                            rowKey='invitedUserId'
+                          />
+                        ) : (
+                          'There are no request to join send from this group'
+                        )}
+                      </TabPane>
+                    ) : (
+                      ''
+                    )}
+                  </Tabs>
+                ) : (
+                  <AboutGroup />
+                )}
+              </div>
+            ) : (
+              ''
+            )}
+          </Content>
+          <Sider>
+            <DiscoverGroup />
+          </Sider>
+        </Layout>
       )}
     </div>
   );

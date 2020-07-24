@@ -103,7 +103,14 @@ const Posts = ({ groupId, searchPost, post: { posts } }) => {
                               <Spin />
                             </div>
                           )}
-                          {post ? <PostItem post={post} /> : ''}
+                          {post ? (
+                            <PostItem
+                              style={{ marginBottom: '1rem' }}
+                              post={post}
+                            />
+                          ) : (
+                            ''
+                          )}
                         </div>
                       </CellMeasurer>
                     );

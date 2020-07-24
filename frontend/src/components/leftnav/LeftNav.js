@@ -105,7 +105,7 @@ const LeftNav = ({ screen = '', id, group }) => {
 
   return (
     <Fragment>
-      {screen === 'dashboard' && sideNavMenu.length === 0 && (
+      {screen === 'dashboard' && sideNavMenu && sideNavMenu.length === 0 && (
         <Sider
           trigger={null}
           collapsible

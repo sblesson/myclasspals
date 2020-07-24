@@ -143,7 +143,7 @@ const PostItem = ({
         </Paragraph>
 
         {showActions && (
-          <Fragment>
+          <div style={{ marginBottom: '2rem' }}>
             {showAllComments ? allComments : lastThreeComments}
             <CommentForm
               postId={_id}
@@ -152,7 +152,7 @@ const PostItem = ({
               userName={userName}
               isSinglePost={isSinglePost}
             />{' '}
-          </Fragment>
+          </div>
         )}
       </Card>
     </div>

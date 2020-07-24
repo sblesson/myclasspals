@@ -40,16 +40,23 @@
 }
 
 .comment-form {
-  margin: 0.53em 0;
+  border: none;
+  margin: 0.53rem 0;
   .comment-item {
     border: 1px solid grey;
     background-origin: padding-box;
   }
   .comment-rounded-textarea {
-    border-radius: 0.5rem;
+    border-radius: 1.5rem;
+    background: #eff1f3;
+    border: none;
+    line-height: 1rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
   }
   .reply-btn {
-    margin-top: 5px;
+    margin-top: 0.3rem;
     float: right;
+    padding: 0 1rem;
   }
 }

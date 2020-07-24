@@ -8,7 +8,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -87,6 +89,23 @@ public class UserGroupController {
 			List<UserGroup> userGroupList = new ArrayList<>();
 			userGroupList.add(userGroupService.getUserGroupById(id));
 			result.setUserGroupList(userGroupList);
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error : ", e);
+		}
+
+		return result;
+
+	}
+	
+	@DeleteMapping(value = "/group/{id}", produces = { "application/json" })
+	public CommonResult deleteGroupById(@PathVariable("id") String id) {
+		UserGroupResult result = new UserGroupResult();
+
+		try {
+			userGroupService.deleteUserGroupById(id);
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);
