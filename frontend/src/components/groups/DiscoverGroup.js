@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../../layout/Spinner';
-import PrivateMessageModal from './modal/CreateGroupModal';
+import CreateGroupModal from './modal/CreateGroupModal';
 import { List, Card, Empty } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
 import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
@@ -26,9 +26,13 @@ const DiscoverGroups = ({ group }) => {
               textAlign: 'right',
               fontWeight: 'normal',
               marginBottom: 10
+         /*      marginBottom: '.2rem',
+              marginTop: '3rem',
+              marginRight: '3rem' */
+              //margin: '3rem auto 1.2rem auto'
             }}
           >
-            <PrivateMessageModal />
+            <CreateGroupModal />
           </div>
           <Card style={{ marginBottom: 30 }} bordered={false}>
             <AutoCompleteGroupSearch />
@@ -68,7 +72,7 @@ const DiscoverGroups = ({ group }) => {
               description={
                 group.searchTerm
                   ? 'No results found. Check the spelling or try again with another keyword.'
-                  : 'No groups found'
+                  : 'No groups found in your city or school'
               }
             />
           )}

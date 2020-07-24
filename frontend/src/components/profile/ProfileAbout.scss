@@ -1,0 +1,26 @@
+@import '../../styles/abstracts/mixins';
+.privacy-icon {
+  display: inline-block;
+  margin-right: 0.4rem;
+}
+.groups-wrapper {
+  margin-left: 1.2rem;
+  margin-bottom: 1.4rem;
+}
+.profile-card {
+  margin-left: 3rem !important;
+  margin-top: 0rem !important;
+
+  @include respond(phone) {
+    width: 80%;
+  }
+  @include respond(tab-port) {
+    width: 80%;
+  }
+  @include respond(tab-land) {
+    width: 60%;
+  }
+  @include respond(big-desktop) {
+    width: 60%;
+  }
+}

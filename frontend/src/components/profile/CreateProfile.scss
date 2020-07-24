@@ -10,19 +10,19 @@
   @include respond(phone) {
     font-size: 56.25%;
     width: 90% !important;
-    margin: 2rem 2rem;
+    margin: 80vw 2rem;
   }
   @include respond(tab-port) {
     width: 90%;
     margin: 2rem 2rem;
-    width: 80% !important;
+    width: 80vw !important;
   }
   @include respond(tab-land) {
     font-size: 56.25%;
-    width: 60% !important;
+    width: 60vw !important;
   }
   @include respond(big-desktop) {
-    width: 60% !important;
+    width: 60vw !important;
   }
 
   .profile-step {

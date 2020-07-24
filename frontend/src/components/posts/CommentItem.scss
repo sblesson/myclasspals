@@ -7,8 +7,7 @@
   background: #fff;
   color: #fff;
   border-radius: 1rem;
-  margin: 1em 0.625em;
-  padding: 0.625em !important;
+  margin: 0.5rem 0;
   background: var(--main-body-bg-color);
 }
 .comment-author {
@@ -41,14 +40,13 @@
 }
 
 .comment-form {
-  margin: 0.25em;
-  padding: 0.625em !important;
+  margin: 0.53em 0;
   .comment-item {
     border: 1px solid grey;
     background-origin: padding-box;
   }
   .comment-rounded-textarea {
-    border-radius: 1rem;
+    border-radius: 0.5rem;
   }
   .reply-btn {
     margin-top: 5px;

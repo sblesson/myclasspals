@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Button, Modal } from 'antd';
+import { Upload, Button, Modal, Result } from 'antd';
 import { UploadOutlined, StarOutlined, FormOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
@@ -16,7 +16,8 @@ const PrivateMessageModal = ({
   sendPrivateMessage,
   history,
   auth,
-  toAddress
+  toAddress,
+  noMessagesFound
 }) => {
   const [componentSize, setComponentSize] = useState('small');
 
@@ -153,7 +154,7 @@ const PrivateMessageModal = ({
       )}
     />
   );
-  const displayCompose = (
+  const displayInboxCompose = (
     <div className='private-message-modal' onClick={toggleModal}>
       <div as='h4' className='message-head-title'>
         Inbox
@@ -181,9 +182,30 @@ const PrivateMessageModal = ({
     </div>
   );
 
+  const displayCompose = (
+    <div className='private-message-modal' onClick={toggleModal}>
+      <Result
+        status='warning'
+        subTitle='No messages found!'
+        extra={
+          <div
+            as='h4'
+            className='message-head-title message-head-link'
+            onClick={toggleModal}
+          >
+            <FormOutlined className='message-head-icon' />
+            Compose
+          </div>
+        }
+      />
+    </div>
+  );
+
   return (
     <div>
-      {toAddress ? displayMessageButton : displayCompose}
+      {noMessagesFound && displayCompose}
+      {!noMessagesFound && !toAddress && displayInboxCompose}
+      {toAddress && displayMessageButton}
       <Modal
         title={headerTitle}
         centered

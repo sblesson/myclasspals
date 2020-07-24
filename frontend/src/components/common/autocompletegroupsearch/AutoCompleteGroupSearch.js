@@ -99,7 +99,6 @@ const AutoCompleteGroupSearch = ({
         style={{
           width: '100%'
         }}
-        autoFocus={true}
         value={searchValue}
         placeholder={'Type school name or group name'}
         onSearch={handleGroupSearch}

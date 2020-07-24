@@ -53,7 +53,7 @@ const CommentItem = ({
       <List.Item.Meta
         avatar={
           <Link to={`/profile/${_id}`}>
-            <Avatar className='avatar-icon' size='mall'>
+            <Avatar className='avatar-icon' size='small'>
               {userId.charAt(0)}
             </Avatar>
           </Link>

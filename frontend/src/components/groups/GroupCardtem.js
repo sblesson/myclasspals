@@ -133,28 +133,26 @@ const GroupCardtem = ({
           </Button>
         );
       }
-    } else if (currentGroup.role === 'admin') {
-      return (
-        <div>
-          <Tag color={'blue'}>{currentGroup.role}</Tag>
-          {currentGroup.userGroupMembers.length} member
-        </div>
-      );
+    }
+  };
+
+  const getUserGroupRole = currentGroup => {
+    if (currentGroup.role === 'admin') {
+      return <Tag color={'blue'}>{currentGroup.role}</Tag>;
     } else if (currentGroup.role === 'member') {
-      return (
-        <div>
-          <Tag color={'geekblue'}>{currentGroup.role}</Tag>
-          {currentGroup.userGroupMembers.length} member
-        </div>
-      );
+      return <Tag color={'geekblue'}>{currentGroup.role}</Tag>;
     } else if (currentGroup.role === 'Pending Invitation') {
-      return (
-        <div>
-          {' '}
-          <Tag color={'green'}>{currentGroup.role}</Tag>
-          {currentGroup.userGroupMembers.length} member
-        </div>
-      );
+      return <Tag color={'green'}>{currentGroup.role}</Tag>;
+    }
+  };
+
+  const getUserGroupMemberCount = currentGroup => {
+    if (currentGroup && currentGroup.userGroupMembers) {
+      if (currentGroup.userGroupMembers.length <= 1) {
+        return `${currentGroup.userGroupMembers.length} member`;
+      } else if (currentGroup.userGroupMembers.length > 1) {
+        return `${currentGroup.userGroupMembers.length} members`;
+      }
     }
   };
 
@@ -188,41 +186,54 @@ const GroupCardtem = ({
       currentGroup.userGroupMembers.length > 0
     ) {
       if (currentGroup.userGroupMembers.length === 1) {
-        return <div>{getGroupPrivacyLabel(currentGroup.privacy)} &nbsp;</div>;
+        return <div>{getGroupPrivacyLabel(currentGroup.privacy)}</div>;
       } else {
-        return <div>{getGroupPrivacyLabel()} &nbsp;</div>;
+        return <div>{getGroupPrivacyLabel()}</div>;
       }
     }
   };
 
   return (
-    <Card
-      key={index}
-      style={{
-        width: '100%',
-        textAlign: 'left',
-        padding: 10
-      }}
-    >
+    <Card key={index} className='discover-group-card'>
       <Link to={`/group/${currentGroup.id}`}>
         <Meta
           avatar={
             currentGroup.isSchoolGroup === 'no' ? (
-              <i className='fas fa-users icon-group'></i>
+              <i
+                className='fas fa-users icon-group no-padding'
+                style={{ paddingRight: 0 }}
+              ></i>
             ) : (
-              <i className='fas fa-school icon-group' title='school group'></i>
+              <i
+                className='fas fa-school icon-group no-padding'
+                title='school group'
+              ></i>
             )
           }
           title={currentGroup.groupName}
         ></Meta>
       </Link>
       <Meta
-        className='group-card-meta-desc'
+        className='group-card-meta-privacy no-padding'
         description={getGroupPrivacy(currentGroup)}
+      ></Meta>
+
+      <Meta
+        className='group-card-meta-count no-padding'
+        description={getUserGroupMemberCount(currentGroup)}
+      ></Meta>
+
+      <Meta
+        className='group-card-meta-role no-padding'
+        description={getUserGroupRole(currentGroup)}
+      ></Meta>
+      <Meta
+        className='group-card-meta-action group-action no-padding'
+        description={groupActionMenu(currentGroup)}
       ></Meta>
       {currentGroup.schoolName ? (
         <Meta
-          className='group-card-meta-desc'
+          className='group-card-meta-desc no-padding'
           description={
             currentGroup.schoolName
               ? `School Name: ${currentGroup.schoolName}`
@@ -233,17 +244,13 @@ const GroupCardtem = ({
         ''
       )}
 
-      <Meta
-        className='group-card-meta-desc'
-        description={groupActionMenu(currentGroup)}
-      ></Meta>
       {currentGroup.isGroupStatusUpdated ? (
-        <Link
-          className='group-card-update-status-link'
-          to={`/group/${currentGroup.id}`}
-        >
-          Peek inside
-        </Link>
+        <Meta
+          className='group-card-update-status-link no-padding'
+          description={
+            <Link to={`/group/${currentGroup.id}`}>Peek inside</Link>
+          }
+        />
       ) : (
         ''
       )}

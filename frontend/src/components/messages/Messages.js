@@ -108,20 +108,20 @@ const Messages = ({
         <Spinner />
       ) : (
         <Layout>
-          <Sider
-            style={{
-              overflow: 'auto',
-              height: '100vh',
-              position: 'fixed',
-              left: '50',
-              right: '10'
-            }}
-            className='message-inbox-list'
-          >
-            <div className='message-head'>
-              <PrivateMessageModal />
-            </div>
-            {messages && messages.length > 0 ? (
+          {messages && messages.length > 0 ? (
+            <Sider
+              style={{
+                overflow: 'auto',
+                height: '100vh',
+                position: 'fixed',
+                left: '50',
+                right: '10'
+              }}
+              className='message-inbox-list'
+            >
+              <div className='message-head'>
+                <PrivateMessageModal />
+              </div>
               <List
                 //className='message-list'
                 itemLayout='horizontal'
@@ -159,10 +159,10 @@ const Messages = ({
                   </List.Item>
                 )}
               />
-            ) : (
-              ''
-            )}
-          </Sider>
+            </Sider>
+          ) : (
+            ''
+          )}
           <Content
             style={{
               marginLeft: 200,
@@ -254,13 +254,7 @@ const Messages = ({
                 />
               </Card>
             ) : (
-              <Empty
-                imageStyle={{ display: 'none' }}
-                className='empty-container'
-                description={
-                  'No messages found. Create new message by clicking on compose link'
-                }
-              />
+              <PrivateMessageModal noMessagesFound={true} />
             )}
           </Content>
         </Layout>

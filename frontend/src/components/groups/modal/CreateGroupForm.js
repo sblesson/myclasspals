@@ -64,6 +64,8 @@ const CreateGroupForm = ({
     }
   };
   const submitProfileForm = (values, actions) => {
+    //setIsLoadingCreateBtn(true);
+
     values.userGroupMembers = [
       {
         _id: auth.user._id,
@@ -83,10 +85,7 @@ const CreateGroupForm = ({
       delete values.schoolSelect;
     }
 
-    addGroup(JSON.stringify(values), cancelTokenSrc => {
-      setIsLoadingCreateBtn(false);
-      //if (cancelTokenSrc) cancelTokenSrc.cancel();
-    });
+    addGroup(JSON.stringify(values));
     //actions.setSubmitting(false);
     actions.resetForm();
     onStepChange(current + 1);
@@ -101,7 +100,6 @@ const CreateGroupForm = ({
         grade: ''
       }}
       onSubmit={(values, actions) => {
-        setIsLoadingCreateBtn(true);
         submitProfileForm(values, actions);
       }}
       validator={() => ({})}

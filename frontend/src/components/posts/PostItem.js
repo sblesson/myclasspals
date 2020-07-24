@@ -101,9 +101,9 @@ const PostItem = ({
   return (
     <div className='feed'>
       <Card
-        style={{ marginTop: '1em' }}
+        className={isSinglePost ? 'single-feed-card' : 'feed-card'}
         title={
-          <Link to={`/profile/${userId}`}>
+          <Link to={`/profile/${groupId}/${userId}`}>
             <Meta
               avatar={
                 <Avatar className='avatar-icon' size='large'>

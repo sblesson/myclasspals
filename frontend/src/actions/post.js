@@ -20,6 +20,7 @@ import {
   GET_POST_CATEGORIES_ERROR,
   ADD_MESSAGE_REPLY
 } from './types';
+import { CancelToken } from '../utils/axios';
 
 // Get posts
 export const getPostCategories = () => async dispatch => {
@@ -56,7 +57,7 @@ export const addPost = formData => async dispatch => {
 
 // Search post by groupId
 export const searchPost = (requestObj, callback) => async dispatch => {
-  debugger;
+  let cancel;
   console.log(requestObj);
   const config = {
     headers: {
@@ -65,13 +66,17 @@ export const searchPost = (requestObj, callback) => async dispatch => {
   };
 
   try {
-    const res = await axios.post('/post/searchpost', requestObj, config);
+    const res = await axios.post('/post/searchpost', requestObj, config, {
+      cancelToken: new axios.CancelToken(c => (cancel = c))
+    });
     dispatch({
       type: SEARCH_POST,
       payload: res.data.post
     });
-    callback(res.data.post);
+    console.log(res.data);
+    callback(res.data.post, cancel);
   } catch (err) {
+    if (axios.isCancel(err)) return;
     catchHandler(err, 'SEARCH_POST_ERROR');
   }
 };

@@ -1,5 +1,7 @@
-import React, { Fragment, useEffect, useRef } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
+import { Spin } from 'antd';
+
 import PropTypes from 'prop-types';
 import Spinner from '../../layout/Spinner';
 import PostItem from '../posts/PostItem';
@@ -13,15 +15,24 @@ import {
   CellMeasurerCache
 } from 'react-virtualized';
 
-const Posts = ({ groupId, post: { posts, loading }, searchPost }) => {
-  debugger;
-  console.log('inside posts' + groupId);
+const Posts = ({ groupId, searchPost, post: { posts } }) => {
   const isCurrent = useRef(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const MAX_FEED_COUNT = 100;
 
   useEffect(() => {
     if (groupId) {
       if (isCurrent.current) {
-        searchPost({ groupId: groupId });
+        setIsLoading(true);
+
+        searchPost(
+          { groupId: groupId, startIndex: 0, endIndex: 3 },
+          (response, cancel) => {
+            setIsLoading(false);
+            cancel = cancel();
+          }
+        );
       }
     }
   }, [searchPost, groupId]);
@@ -33,66 +44,76 @@ const Posts = ({ groupId, post: { posts, loading }, searchPost }) => {
     })
   );
 
-  const isRowLoaded = ({ index }) => {
-    return !!posts[index];
-  };
+  const isRowLoaded = index =>
+    index < posts.length && posts[index] !== null && !isLoading && hasMorePosts;
 
-  const loadMoreRows = ({ startIndex, stopIndex }) => {
-    console.log(startIndex);
-    console.log(stopIndex);
-
-    /*    return fetch(`path/to/api?startIndex=${startIndex}&stopIndex=${stopIndex}`)
-      .then(response => {
-        // Store response data in list...
-      }) */
-    searchPost({ groupId: groupId });
+  const handleInfiniteOnLoad = ({ startIndex, stopIndex }) => {
+    setIsLoading(true);
+    if (posts.length > MAX_FEED_COUNT) {
+      setIsLoading(false);
+      setHasMorePosts(false);
+      return;
+    }
+    searchPost(
+      {
+        groupId: groupId,
+        startIndex: startIndex,
+        endIndex: stopIndex
+      },
+      (response, cancel) => {
+        setIsLoading(false);
+        cancel();
+      }
+    );
   };
 
   return (
     <Fragment>
-      {posts.loading ? (
-        <Spinner />
-      ) : (
-        <div style={{ width: '100%', height: '100vh' }}>
-          <InfiniteLoader
-            isRowLoaded={isRowLoaded}
-            loadMoreRows={loadMoreRows}
-            rowCount={100}
-          >
-            {({ onRowsRendered, registerChild }) => (
-              <AutoSizer>
-                {({ width, height }) => (
-                  <List
-                    width={width}
-                    height={height}
-                    onRowsRendered={onRowsRendered}
-                    ref={registerChild}
-                    rowHeight={cache.current.rowHeight}
-                    deferredMeasurementCache={cache.current}
-                    rowCount={posts.length}
-                    rowRenderer={({ key, index, style, parent }) => {
-                      const post = posts[index];
-                      return (
-                        <CellMeasurer
-                          key={key}
-                          cache={cache.current}
-                          parent={parent}
-                          columnIndex={0}
-                          rowIndex={index}
-                        >
-                          <div style={style}>
-                            <PostItem post={post} />
-                          </div>
-                        </CellMeasurer>
-                      );
-                    }}
-                  />
-                )}
-              </AutoSizer>
-            )}
-          </InfiniteLoader>
-        </div>
-      )}
+      <div style={{ width: '100%', height: '100vh' }}>
+        <InfiniteLoader
+          isRowLoaded={isRowLoaded}
+          loadMoreRows={handleInfiniteOnLoad}
+          rowCount={MAX_FEED_COUNT}
+          minimumBatchSize={3}
+        >
+          {({ onRowsRendered, registerChild }) => (
+            <AutoSizer>
+              {({ width, height }) => (
+                <List
+                  width={width}
+                  height={height}
+                  onRowsRendered={onRowsRendered}
+                  ref={registerChild}
+                  rowHeight={cache.current.rowHeight}
+                  deferredMeasurementCache={cache.current}
+                  rowCount={posts.length}
+                  rowRenderer={({ key, index, style, parent }) => {
+                    const post = posts[index];
+                    return (
+                      <CellMeasurer
+                        key={key}
+                        cache={cache.current}
+                        parent={parent}
+                        columnIndex={0}
+                        rowIndex={index}
+                      >
+                        <div style={style}>
+                          {isLoading && hasMorePosts && (
+                            <div>
+                              <Spin />
+                            </div>
+                          )}
+                          {post ? <PostItem post={post} /> : ''}
+                        </div>
+                      </CellMeasurer>
+                    );
+                  }}
+                />
+              )}
+            </AutoSizer>
+          )}
+        </InfiniteLoader>
+      </div>
     </Fragment>
   );
 };

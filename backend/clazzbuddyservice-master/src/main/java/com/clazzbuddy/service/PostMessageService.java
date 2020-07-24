@@ -127,8 +127,14 @@ public class PostMessageService {
 		postListQuery.with(new Sort(Sort.Direction.DESC, "_id"));
 		if (postSearchQuery.getResultSize() > 0) {
 			postListQuery.limit(postSearchQuery.getResultSize());
-		} else {
-			postListQuery.limit(30);
+		}
+		
+		if (postSearchQuery.getStartIndex() > 0) {
+			postListQuery.skip(postSearchQuery.getStartIndex());
+		}
+		
+		if (postSearchQuery.getEndIndex() > 0) {
+			postListQuery.limit(postSearchQuery.getEndIndex() - postSearchQuery.getStartIndex());
 		}
 		List<Post> posts = mongoTemplate.find(postListQuery, Post.class);
 		return posts;

@@ -54,7 +54,7 @@ const Routes = () => {
         <Route exact path='/help' component={Help} />
         {/*        <PrivateRoute exact path='/profiles' component={Profiles} />
          */}
-        <PrivateRoute exact path='/profile/:id' component={Profile} />
+        <PrivateRoute exact path='/profile/:id/:userId' component={Profile} />
         <PrivateRoute exact path='/messages' component={Messages} />
         <PrivateRoute exact path='/messages/:id' component={Messages} />
         <PrivateRoute exact path='/groups' component={Groups} />

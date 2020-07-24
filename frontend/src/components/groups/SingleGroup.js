@@ -285,10 +285,6 @@ const SingleGroup = ({
           group.currentGroup &&
           group.currentGroup.role !== null ? (
             <div className='wrapper'>
-              <div style={{ marginBottom: '20px' }}>
-                <SearchPost />
-                <PostFilterPanel />
-              </div>
               <GroupCard currentGroup={group.currentGroup} type='mygroup' />
               {group.currentGroup.role === 'admin' ||
               group.currentGroup.role === 'member' ? (
@@ -300,6 +296,10 @@ const SingleGroup = ({
                 >
                   <TabPane tab='Posts' key='posts'>
                     <PostModal />
+                    <div style={{ marginBottom: '20px' }}>
+                      <SearchPost />
+                      <PostFilterPanel />
+                    </div>
                     <Posts groupId={group.currentGroup.id} />
                   </TabPane>
                   <TabPane tab='Members' key='members'>

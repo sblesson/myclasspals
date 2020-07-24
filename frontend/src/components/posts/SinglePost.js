@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Spinner from '../../layout/Spinner';
 import PostItem from './PostItem';
 import { getPost } from '../../actions/post';
+import { LeftCircleOutlined } from '@ant-design/icons';
 
 const SinglePost = ({ getPost, post: { currentPost, loading }, match }) => {
   let groupId = null;
@@ -19,9 +20,15 @@ const SinglePost = ({ getPost, post: { currentPost, loading }, match }) => {
     <Fragment>
       <Link
         to={`/dashboard/${match.params.groupId}`}
-        style={{ fontSize: '0.750rem', cursor: 'pointer' }}
+        style={{
+          fontSize: '1rem',
+          marginLeft: '1rem',
+          marginTop: '1rem',
+          cursor: 'pointer',
+          display: 'inline-block'
+        }}
       >
-        Back To Posts
+        <LeftCircleOutlined />
       </Link>
       <PostItem
         post={currentPost}

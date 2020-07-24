@@ -81,6 +81,7 @@ export default function(state = initialState, action) {
         loading: false
       };
     case ADD_GROUP:
+      debugger;
       return {
         ...state,
         userGroup: [...state.userGroup, payload.userGroup],
