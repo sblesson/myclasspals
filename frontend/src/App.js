@@ -7,7 +7,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import TopNavbar from './components/topnavbar/TopNavbar';
 import LeftNav from './components/leftnav/LeftNav';
 
-
 // Redux
 import store from './store';
 import { persistor } from './store';
@@ -16,6 +15,7 @@ import { setInterceptors } from './utils/axios';
 import { loadUser } from './actions/auth';
 
 import 'bootstrap/dist/css/bootstrap.css';
+
 /* import 'semantic-ui-css/semantic.min.css'; */
 import 'antd/dist/antd.css';
 import './App.scss';

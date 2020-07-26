@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import GroupCard from './GroupCard';
 
 import CreateGroupModal from './modal/CreateGroupModal';
@@ -57,7 +57,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
                     />
                   )}
                 </TabPane>
-                <TabPane tab='Waiting for Approvals' key='2'>
+                <TabPane tab='Pending Invitations' key='2'>
                   {group.pendingInvitedUserGroups &&
                   group.pendingInvitedUserGroups.length > 0 ? (
                     group.pendingInvitedUserGroups.map((group, index) => (

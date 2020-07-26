@@ -8,11 +8,13 @@ import {
   Menu,
   Dropdown,
   message,
-  Layout
+  Layout,
+  Card,
+  List
 } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
@@ -22,15 +24,18 @@ import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
+import DiscoverGroup from './DiscoverGroup';
+import CreateGroupModal from './modal/CreateGroupModal';
 
 import {
   getGroupDetails,
   approveUserGroupRequest,
   declineUserGroupRequest,
   changeGroupUserRole,
-  removeUserFromGroup,
+  deleteGroup,
   acceptUserGroupInvitation
 } from '../../actions/group';
+import './GroupCard.scss';
 
 const SingleGroup = ({
   loading,
@@ -42,8 +47,10 @@ const SingleGroup = ({
   auth,
   history
 }) => {
-  const { Content } = Layout;
+  const { Meta } = Card;
+  const { Content, Sider } = Layout;
   const isCurrent = useRef(true);
+  let isPathGroup = false;
 
   useEffect(() => {
     return () => {
@@ -54,11 +61,19 @@ const SingleGroup = ({
 
   useEffect(() => {
     if (match && match.params && match.params.id) {
+      console.log(match.params);
+      if (match.path.includes('/group')) {
+        isPathGroup = true;
+      } else {
+        isPathGroup = false;
+      }
       let groupId = match.params.id;
       //user clicked on another group from dashboard leftnav groups menu,
       //get groupId from params
       if (isCurrent.current) {
-        getGroupDetails(groupId);
+        getGroupDetails(groupId, cancelTokenSrc => {
+          cancelTokenSrc.cancel();
+        });
       }
     }
 
@@ -141,7 +156,7 @@ const SingleGroup = ({
       render: role => (
         <span>
           <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role.toUpperCase()}
+            {role}
           </Tag>
         </span>
       )
@@ -207,7 +222,7 @@ const SingleGroup = ({
       render: role => (
         <span>
           <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role.toUpperCase()}
+            {role}
           </Tag>
         </span>
       )
@@ -274,87 +289,121 @@ const SingleGroup = ({
     } else return <InviteUsersToGroupModal />;
   };
 
+  const getUserGroupMemberCount = currentGroup => {
+    if (currentGroup && currentGroup.userGroupMembers) {
+      if (currentGroup.userGroupMembers.length <= 1) {
+        return `${currentGroup.userGroupMembers.length} member`;
+      } else if (currentGroup.userGroupMembers.length > 1) {
+        return `${currentGroup.userGroupMembers.length} members`;
+      }
+    }
+  };
+
   return (
     <div>
       {loading ? (
         <Spinner />
       ) : (
-        <Content>
-          {' '}
-          {group !== null &&
-          group.currentGroup &&
-          group.currentGroup.role !== null ? (
-            <div className='wrapper'>
-              <GroupCard currentGroup={group.currentGroup} type='mygroup' />
-              {group.currentGroup.role === 'admin' ||
-              group.currentGroup.role === 'member' ? (
-                <Tabs
-                  defaultActiveKey='1'
-                  tabBarExtraContent={isUserInPendingRequestedInvitations(
-                    group.currentGroup
-                  )}
-                >
-                  <TabPane tab='Posts' key='posts'>
-                    <PostModal />
-                    <div style={{ marginBottom: '20px' }}>
-                      <SearchPost />
-                      <PostFilterPanel />
-                    </div>
-                    <Posts groupId={group.currentGroup.id} />
-                  </TabPane>
-                  <TabPane tab='Members' key='members'>
-                    {group.currentGroup.userGroupMembers &&
-                      group.currentGroup.userGroupMembers.length > 0 &&
-                      group.currentGroup.userGroupMembers.map((item, index) => (
-                        <UserCard
-                          key={index}
-                          currentGroup={group.currentGroup}
-                          user={item}
-                        />
-                      ))}
-                  </TabPane>
+        <Layout>
+          <Content>
+            {group !== null && group.currentGroup ? (
+              <div
+                className={`wrapper ${
+                  isPathGroup ? 'group-page' : 'dashboard-page'
+                }`}
+              >
+                <GroupCard currentGroup={group.currentGroup} type='mygroup' />
+                {group.currentGroup.role === 'admin' ||
+                group.currentGroup.role === 'member' ||
+                group.currentGroup.privacy === 'PUBLIC' ? (
+                  <Tabs
+                    defaultActiveKey='1'
+                    tabBarExtraContent={isUserInPendingRequestedInvitations(
+                      group.currentGroup
+                    )}
+                  >
+                    <TabPane tab='Posts' key='posts'>
+                      <PostModal />
+                      <div style={{ marginBottom: '20px' }}>
+                        <SearchPost />
+                        <PostFilterPanel />
+                      </div>
+                      <Posts groupId={group.currentGroup.id} />
+                    </TabPane>
+                    <TabPane tab='Members' key='members'>
+                      <Meta
+                        className='user-card-member-title'
+                        description={getUserGroupMemberCount(
+                          group.currentGroup
+                        )}
+                      ></Meta>
+                      <List
+                        className='user-card-list'
+                        itemLayout='vertical'
+                        size='large'
+                        pagination={{
+                          onChange: page => {
+                            console.log(page);
+                          },
+                          pageSize: 3
+                        }}
+                      >
+                        {group.currentGroup.userGroupMembers &&
+                          group.currentGroup.userGroupMembers.length > 0 &&
+                          group.currentGroup.userGroupMembers.map(
+                            (item, index) => (
+                              <UserCard
+                                key={index}
+                                currentGroup={group.currentGroup}
+                                user={item}
+                              />
+                            )
+                          )}
+                      </List>
+                    </TabPane>
 
-                  {group.currentGroup.role === 'admin' ? (
-                    <TabPane tab='Waiting For Approvals' key='approvals'>
-                      {group.currentGroup.pendingInvitations &&
-                      group.currentGroup.pendingInvitations.length > 0 ? (
-                        <Table
-                          columns={pendingInvitationsColumns}
-                          dataSource={group.currentGroup.pendingInvitations}
-                          rowKey='requestorUserId'
-                        />
-                      ) : (
-                        'There are no request waiting for approvals'
-                      )}
-                    </TabPane>
-                  ) : (
-                    ''
-                  )}
-                  {group.currentGroup.role === 'admin' ? (
-                    <TabPane tab='Requested To Join' key='request'>
-                      {group.currentGroup.requestedInvitations &&
-                      group.currentGroup.requestedInvitations.length > 0 ? (
-                        <Table
-                          columns={requestToJoinColumn}
-                          dataSource={group.currentGroup.requestedInvitations}
-                          rowKey='invitedUserId'
-                        />
-                      ) : (
-                        'There are no request to join send from this group'
-                      )}
-                    </TabPane>
-                  ) : (
-                    ''
-                  )}
-                </Tabs>
-              ) : (
-                <AboutGroup />
-              )}
-            </div>
-          ) : (
-            ''
-          )}
-        </Content>
+                    {group.currentGroup.role === 'admin' ? (
+                      <TabPane tab='Waiting For Approvals' key='approvals'>
+                        {group.currentGroup.pendingInvitations &&
+                        group.currentGroup.pendingInvitations.length > 0 ? (
+                          <Table
+                            columns={pendingInvitationsColumns}
+                            dataSource={group.currentGroup.pendingInvitations}
+                            rowKey='requestorUserId'
+                          />
+                        ) : (
+                          'There are no request waiting for approvals'
+                        )}
+                      </TabPane>
+                    ) : (
+                      ''
+                    )}
+                    {group.currentGroup.role === 'admin' ? (
+                      <TabPane tab='Requested To Join' key='request'>
+                        {group.currentGroup.requestedInvitations &&
+                        group.currentGroup.requestedInvitations.length > 0 ? (
+                          <Table
+                            columns={requestToJoinColumn}
+                            dataSource={group.currentGroup.requestedInvitations}
+                            rowKey='invitedUserId'
+                          />
+                        ) : (
+                          'There are no request to join send from this group'
+                        )}
+                      </TabPane>
+                    ) : (
+                      ''
+                    )}
+                  </Tabs>
+                ) : (
+                  <AboutGroup />
+                )}
+              </div>
+            ) : (
+              ''
+            )}
+          </Content>
+        </Layout>
       )}
     </div>
   );

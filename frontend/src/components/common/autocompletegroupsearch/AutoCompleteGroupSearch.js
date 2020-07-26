@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Spin, Select, AutoComplete, Input } from 'antd';
 import _ from 'lodash';
-import Spinner from '../../../layout/Spinner';
+import Spinner from '../spinner/Spinner';
 import { SearchOutlined } from '@ant-design/icons';
 import { Form, FormItem } from 'formik-antd';
 import {
@@ -105,7 +105,7 @@ const AutoCompleteGroupSearch = ({
         onChange={onGroupChange}
         onSelect={onGroupSelect}
         notFoundContent={group.loading ? <Spin size='small' /> : null}
-        defaultOpen={true}
+        defaultOpen={false}
       >
         {children}
       </AutoComplete>

@@ -19,7 +19,8 @@ import {
   UPDATE_GROUP_STORE,
   GET_GROUP_AUTO_COMPLETE,
   GET_GROUP_AUTO_COMPLETE_ERROR,
-  CLEAR_AUTOCOMPLETE_GROUP_SEARCH
+  CLEAR_AUTOCOMPLETE_GROUP_SEARCH,
+  DELETE_GROUP
 } from '../actions/types';
 
 const initialState = {
@@ -81,7 +82,6 @@ export default function(state = initialState, action) {
         loading: false
       };
     case ADD_GROUP:
-      debugger;
       return {
         ...state,
         userGroup: [...state.userGroup, payload.userGroup],
@@ -148,9 +148,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         currentGroup: payload.userGroup,
-        userGroup: payload.userGroup,
-        pendingInvitedUserGroups: payload.userGroup.pendingInvitations,
-        requestedUserGroup: payload.userGroup.requestedInvitations,
         loading: false
       };
     case ACCEPT_USER_GROUP:
@@ -163,21 +160,19 @@ export default function(state = initialState, action) {
         loading: false
       };
     case REQUEST_JOIN_USER_GROUP:
-      debugger;
       if (payload.currentGroup.privacy === 'PRIVATE') {
         let currentRequestedGrp = payload.user.requestedUserGroup.filter(
           result => result.id === payload.currentGroup.id
         );
-        currentRequestedGrp.role = 'Pending Invitation';
+        currentRequestedGrp.role = 'Pending Requests';
 
         if (currentRequestedGrp) {
           state.searchResult.map(result => {
             if (result.id === payload.currentGroup.id) {
-              result.role = 'Pending Invitation';
+              result.role = 'Pending Requests';
               result.isGroupStatusUpdated = true;
             }
           });
-          console.log(state.searchResult);
         }
 
         return {
@@ -221,6 +216,13 @@ export default function(state = initialState, action) {
         //group: [payload, ...state.groupName],
         loading: false
       };
+    case DELETE_GROUP:
+      return {
+        ...state,
+        userGroup: state.userGroup.filter(group => group.id !== payload),
+        loading: false
+      };
+
     default:
       return state;
   }

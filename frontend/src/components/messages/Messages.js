@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Menu, Layout, Divider, Empty } from 'antd';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import {
   getPrivateMessages,
   getPost,
@@ -11,13 +11,13 @@ import {
 import PrivateMessageModal from './modal/PrivateMessageModal';
 import {
   Comment,
-  Avatar,
   Form,
   Button,
   List,
   Input,
   Card,
-  Dropdown
+  Dropdown,
+  Avatar
 } from 'antd';
 import DeletePostModal from '../posts/modal/DeletePostModal';
 import { EllipsisOutlined } from '@ant-design/icons';

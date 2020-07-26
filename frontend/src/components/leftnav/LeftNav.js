@@ -1,16 +1,18 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import { Menu, Layout, Result } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import CreateGroupModal from '../groups/modal/CreateGroupModal';
+import { LeftCircleOutlined } from '@ant-design/icons';
 
 import './LeftNav.scss';
 
 const LeftNav = ({ screen = '', id, group }) => {
   const { Sider } = Layout;
   let myGroups = [];
+  let groupName;
 
   const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
   const [collapse, setCollapse] = useState(true);
@@ -25,6 +27,9 @@ const LeftNav = ({ screen = '', id, group }) => {
   }
   useEffect(() => {
     window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
+    if (group && group.currentGroup && group.currentGroup.name) {
+      groupName = group.currentGroup.name;
+    }
   }, [group]);
 
   const getNavByScreen = screen => {
@@ -79,21 +84,7 @@ const LeftNav = ({ screen = '', id, group }) => {
           }
         ];
       case 'group':
-        return [
-          {
-            name: 'members',
-            title: 'Membership',
-            icon: 'fas fa-user-edit',
-            url: '/group/' + id + '/members'
-          },
-
-          {
-            name: 'about_group',
-            title: 'About',
-            //icon: 'fas fa-user-edit',
-            url: '/group/' + id + '/about'
-          }
-        ];
+        return null;
 
       default:
         return null;
@@ -105,7 +96,7 @@ const LeftNav = ({ screen = '', id, group }) => {
 
   return (
     <Fragment>
-      {screen === 'dashboard' && sideNavMenu.length === 0 && (
+      {screen === 'dashboard' && sideNavMenu && sideNavMenu.length === 0 && (
         <Sider
           trigger={null}
           collapsible

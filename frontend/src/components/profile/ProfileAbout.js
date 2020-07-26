@@ -6,12 +6,6 @@ import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import PrivateMessageModal from '../messages/modal/PrivateMessageModal';
 import './ProfileAbout.scss';
 const ProfileAbout = ({ profile: { email, userGroup, name } }) => {
-  const { Meta } = Card;
-  const { Text } = Typography;
-  const gridStyle = {
-    width: '50%',
-    textAlign: 'center'
-  };
   const [publicGroup, setPublicGroups] = useState([]);
   const [privateGroup, setPrivateGroups] = useState([]);
 
@@ -27,9 +21,6 @@ const ProfileAbout = ({ profile: { email, userGroup, name } }) => {
     });
 
     setPublicGroups(myPublicGroup);
-    setPrivateGroups(myPrivateGroup);
-    console.log(publicGroup);
-    console.log(privateGroup);
   };
   useEffect(() => {
     getGroup();
@@ -37,11 +28,11 @@ const ProfileAbout = ({ profile: { email, userGroup, name } }) => {
       //cleanup
     };
   }, [userGroup]);
-  const publicGroupItems = publicGroup.map((item, index) => (
-    <div key={`public-${index}`}>{item.groupName}</div>
+  const publicGroupItems = publicGroup.map(item => (
+    <div key={`public-${item.id}`}>{item.groupName}</div>
   ));
-  const privateGroupItems = privateGroup.map((item, index) => (
-    <div key={`private-${index}`}>{item.groupName}</div>
+  const privateGroupItems = privateGroup.map(item => (
+    <div key={`private-${item.id}`}>{item.groupName}</div>
   ));
   return (
     <Card
