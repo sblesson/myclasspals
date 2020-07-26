@@ -13,7 +13,8 @@ import {
 
 import {
   acceptUserGroupInvitation,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
+  deleteGroup
 } from '../../actions/group';
 
 import './GroupCard.scss';
@@ -23,8 +24,10 @@ const GroupCard = ({
   index,
   type,
   auth,
+  group,
   acceptUserGroupInvitation,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
+  deleteGroup
 }) => {
   const { Meta } = Card;
 
@@ -78,11 +81,16 @@ const GroupCard = ({
     return isGroupRequested;
   };
   const onClick = ({ key }) => {
-    message.info(`Click on item ${key}`);
+    deleteGroup(currentGroup.id, () => {
+      if (group.userGroup.length > 0) {
+        let redirectGroupId = group.userGroup[0].id;
+        window.location.href = `/dashboard/${redirectGroupId}`;
+      }
+    });
   };
   const menu = (
     <Menu onClick={onClick}>
-      <Menu.Item key='1'>Leave Group</Menu.Item>
+      <Menu.Item key='1'>Delete Group</Menu.Item>
     </Menu>
   );
 
@@ -102,32 +110,9 @@ const GroupCard = ({
     </Dropdown>
   );
 
-  const groupActionMenu = (currentGroup, group) => {
+  const groupActionMenu = (currentGroup, type) => {
     if (currentGroup) {
       switch (type) {
-        case 'discover': {
-          /*         //if user part of user group
-        let isMemberUserGroup = isLoggedInUserJoinedUserGroup(currentGroup);
-        let isGroupRequested = isCurrentGroupRequestedGroup(
-          currentGroup,
-          group
-        );
-        if (currentGroup.role === null) {
-          return [
-            <Button
-              type='link'
-              style={{ marginRight: 16 }}
-              onClick={() => requestToJoinUserGroupClickHandler(currentGroup)}
-            >
-              {' '}
-              Join
-            </Button>
-          ];
-        } else {
-          return [<Tag color={'green'}>{currentGroup.role}</Tag>];
-        } */
-          return null;
-        }
         case 'mygroup': {
           if (currentGroup.role === null) {
             //non members
@@ -178,16 +163,7 @@ const GroupCard = ({
               </Dropdown>
             );
           } else if (currentGroup.role === 'member') {
-            return (
-              <Dropdown overlay={menu} placement='bottomCenter'>
-                <a
-                  className='ant-dropdown-link'
-                  onClick={e => e.preventDefault()}
-                >
-                  <EllipsisOutlined />
-                </a>
-              </Dropdown>
-            );
+            return null;
           } else if (currentGroup.role === 'Pending Invitation') {
             return <div>{'Pending Invitation'}</div>;
           }
@@ -199,7 +175,7 @@ const GroupCard = ({
               key={`${currentGroup.id}_pending_join_btn`}
               type='link'
               style={{ marginRight: 16 }}
-              onClick={() => acceptPendingInviteActionClick(group)}
+              onClick={() => acceptPendingInviteActionClick(currentGroup)}
             >
               Join
             </Button>
@@ -296,10 +272,12 @@ GroupCard.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  auth: state.auth
+  auth: state.auth,
+  group: state.group
 });
 
 export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
+  deleteGroup
 })(GroupCard);

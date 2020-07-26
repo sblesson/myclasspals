@@ -57,7 +57,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
                     />
                   )}
                 </TabPane>
-                <TabPane tab='Waiting for Approvals' key='2'>
+                <TabPane tab='Pending Invitations' key='2'>
                   {group.pendingInvitedUserGroups &&
                   group.pendingInvitedUserGroups.length > 0 ? (
                     group.pendingInvitedUserGroups.map((group, index) => (

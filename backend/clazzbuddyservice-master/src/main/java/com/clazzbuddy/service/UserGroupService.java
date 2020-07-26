@@ -121,6 +121,20 @@ public class UserGroupService {
 		
 
 	}
+	
+	public void deleteUserGroupById(String id) throws Exception {
+
+		UserGroup userGroup = getUserGroupById(id);
+		
+		if (userGroup.getRole().equals("admin")) {
+			mongoTemplate.remove(userGroup);
+		} else {
+			throw new Exception("Only admin can delete the group");
+		}
+		
+		
+
+	}
 
 	public List<UserGroup> getUserGroups(String key) {
 		Query userGroupSearch = new Query();

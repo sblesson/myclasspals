@@ -107,10 +107,13 @@ public class PostMessageService {
 		if (postSearchQuery.getCatagoryId() != null) {
 			postListQuery.addCriteria(Criteria.where("catagoryId").is(postSearchQuery.getCatagoryId()));
 		}
-		if (postSearchQuery.getDateFilterGreaterThan() != null) {
+		if (postSearchQuery.getDateFilterGreaterThan() != null && postSearchQuery.getDateFilterLessThan() != null) {
+			postListQuery.addCriteria(new Criteria().andOperator(
+					Criteria.where("postedDate").gte(postSearchQuery.getDateFilterGreaterThan()),
+					Criteria.where("postedDate").lte(postSearchQuery.getDateFilterLessThan())));
+		} else if (postSearchQuery.getDateFilterGreaterThan() != null) {
 			postListQuery.addCriteria(Criteria.where("postedDate").gte(postSearchQuery.getDateFilterGreaterThan()));
-		}
-		if (postSearchQuery.getDateFilterLessThan() != null) {
+		} else if (postSearchQuery.getDateFilterLessThan() != null) {
 			postListQuery.addCriteria(Criteria.where("postedDate").lte(postSearchQuery.getDateFilterLessThan()));
 		}
 		if (postSearchQuery.getLastseen() != null) {
