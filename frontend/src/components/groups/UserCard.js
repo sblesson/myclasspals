@@ -2,7 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Card, Menu, message, Tag, Button, Dropdown } from 'antd';
+import {
+  Card,
+  Menu,
+  message,
+  Tag,
+  Button,
+  Dropdown,
+  List,
+  Avatar,
+  Comment
+} from 'antd';
 
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import {
@@ -69,34 +79,33 @@ const UserCard = ({
   };
 
   return (
-    <Card
-      key={index}
-      style={{
-        width: 300,
-        marginBottom: 16
-      }}
-      actions={[]}
-    >
-      <Link to={`/profile/${user._id}`}>
-        <Meta
-          avatar={
-            user.role ? (
-              <Tag
-                color={user.role === 'admin' ? 'geekblue' : 'green'}
-                key={user.role}
-              >
-                {user.role ? user.role.toUpperCase() : null}
-              </Tag>
-            ) : (
-              ''
-            )
-          }
-          title={user.name}
-        >
-          {' '}
-        </Meta>
-      </Link>
-    </Card>
+    <List.Item key={`user-card-${user._id}`}>
+      <Comment
+        avatar={
+          <Avatar size='small' className='avatar-icon' gap={4}>
+            {user.name ? user.name.charAt(0) : ''}
+          </Avatar>
+        }
+        key={user._id}
+        author={
+          <Link to={`/profile/${currentGroup.id}/${user._id}`}>
+            {user.name}
+          </Link>
+        }
+        content={
+          user.role ? (
+            <Tag
+              color={user.role === 'admin' ? 'geekblue' : 'green'}
+              key={user.role}
+            >
+              {user.role ? user.role : null}
+            </Tag>
+          ) : (
+            ''
+          )
+        }
+      ></Comment>
+    </List.Item>
   );
 };
 

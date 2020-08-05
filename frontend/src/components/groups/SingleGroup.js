@@ -8,11 +8,13 @@ import {
   Menu,
   Dropdown,
   message,
-  Layout
+  Layout,
+  Card,
+  List
 } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
@@ -23,6 +25,7 @@ import UserCard from './UserCard';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 import DiscoverGroup from './DiscoverGroup';
+import CreateGroupModal from './modal/CreateGroupModal';
 
 import {
   getGroupDetails,
@@ -32,6 +35,7 @@ import {
   deleteGroup,
   acceptUserGroupInvitation
 } from '../../actions/group';
+import './GroupCard.scss';
 
 const SingleGroup = ({
   loading,
@@ -43,8 +47,10 @@ const SingleGroup = ({
   auth,
   history
 }) => {
+  const { Meta } = Card;
   const { Content, Sider } = Layout;
   const isCurrent = useRef(true);
+  let isPathGroup = false;
 
   useEffect(() => {
     return () => {
@@ -55,11 +61,19 @@ const SingleGroup = ({
 
   useEffect(() => {
     if (match && match.params && match.params.id) {
+      console.log(match.params);
+      if (match.path.includes('/group')) {
+        isPathGroup = true;
+      } else {
+        isPathGroup = false;
+      }
       let groupId = match.params.id;
       //user clicked on another group from dashboard leftnav groups menu,
       //get groupId from params
       if (isCurrent.current) {
-        getGroupDetails(groupId);
+        getGroupDetails(groupId, cancelTokenSrc => {
+          cancelTokenSrc.cancel();
+        });
       }
     }
 
@@ -142,7 +156,7 @@ const SingleGroup = ({
       render: role => (
         <span>
           <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role.toUpperCase()}
+            {role}
           </Tag>
         </span>
       )
@@ -208,7 +222,7 @@ const SingleGroup = ({
       render: role => (
         <span>
           <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role.toUpperCase()}
+            {role}
           </Tag>
         </span>
       )
@@ -275,6 +289,16 @@ const SingleGroup = ({
     } else return <InviteUsersToGroupModal />;
   };
 
+  const getUserGroupMemberCount = currentGroup => {
+    if (currentGroup && currentGroup.userGroupMembers) {
+      if (currentGroup.userGroupMembers.length <= 1) {
+        return `${currentGroup.userGroupMembers.length} member`;
+      } else if (currentGroup.userGroupMembers.length > 1) {
+        return `${currentGroup.userGroupMembers.length} members`;
+      }
+    }
+  };
+
   return (
     <div>
       {loading ? (
@@ -282,13 +306,16 @@ const SingleGroup = ({
       ) : (
         <Layout>
           <Content>
-            {group !== null &&
-            group.currentGroup &&
-            group.currentGroup.role !== null ? (
-              <div className='wrapper'>
+            {group !== null && group.currentGroup ? (
+              <div
+                className={`wrapper ${
+                  isPathGroup ? 'group-page' : 'dashboard-page'
+                }`}
+              >
                 <GroupCard currentGroup={group.currentGroup} type='mygroup' />
                 {group.currentGroup.role === 'admin' ||
-                group.currentGroup.role === 'member' ? (
+                group.currentGroup.role === 'member' ||
+                group.currentGroup.privacy === 'PUBLIC' ? (
                   <Tabs
                     defaultActiveKey='1'
                     tabBarExtraContent={isUserInPendingRequestedInvitations(
@@ -304,17 +331,35 @@ const SingleGroup = ({
                       <Posts groupId={group.currentGroup.id} />
                     </TabPane>
                     <TabPane tab='Members' key='members'>
-                      {group.currentGroup.userGroupMembers &&
-                        group.currentGroup.userGroupMembers.length > 0 &&
-                        group.currentGroup.userGroupMembers.map(
-                          (item, index) => (
-                            <UserCard
-                              key={index}
-                              currentGroup={group.currentGroup}
-                              user={item}
-                            />
-                          )
+                      <Meta
+                        className='user-card-member-title'
+                        description={getUserGroupMemberCount(
+                          group.currentGroup
                         )}
+                      ></Meta>
+                      <List
+                        className='user-card-list'
+                        itemLayout='vertical'
+                        size='large'
+                        pagination={{
+                          onChange: page => {
+                            console.log(page);
+                          },
+                          pageSize: 3
+                        }}
+                      >
+                        {group.currentGroup.userGroupMembers &&
+                          group.currentGroup.userGroupMembers.length > 0 &&
+                          group.currentGroup.userGroupMembers.map(
+                            (item, index) => (
+                              <UserCard
+                                key={index}
+                                currentGroup={group.currentGroup}
+                                user={item}
+                              />
+                            )
+                          )}
+                      </List>
                     </TabPane>
 
                     {group.currentGroup.role === 'admin' ? (
@@ -358,9 +403,6 @@ const SingleGroup = ({
               ''
             )}
           </Content>
-          <Sider>
-            <DiscoverGroup />
-          </Sider>
         </Layout>
       )}
     </div>

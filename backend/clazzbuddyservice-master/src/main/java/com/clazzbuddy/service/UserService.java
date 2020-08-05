@@ -151,19 +151,36 @@ public class UserService implements UserDetailsService{
 		
 
 		if (user.getUserGroup() != null) {
-			for (UserGroup userGroup : user.getUserGroup()) {
-				userGroup.initializeRole(user.get_id(), user.getEmail());
+			for (Iterator<UserGroup> i = user.getUserGroup().iterator() ; i.hasNext();){
+				UserGroup userGroup = i.next();
+				if (userGroup == null || userGroup.getEnabled() == false) {
+					i.remove();
+				} else {
+					userGroup.initializeRole(user.get_id(), user.getEmail());
+				}
 			}
 		}
 		if (user.getRequestedUserGroup() != null) {
-			for (UserGroup userGroup : user.getRequestedUserGroup()) {
-				userGroup.initializeRole(user.get_id(), user.getEmail());
+			for (Iterator<UserGroup> i = user.getRequestedUserGroup().iterator() ; i.hasNext();){
+				UserGroup userGroup = i.next();
+				if (userGroup == null || userGroup.getEnabled() == false) {
+					i.remove();
+				} else {
+					userGroup.initializeRole(user.get_id(), user.getEmail());
+				}
 			}
+			
 		}
 		if (user.getPendingInvitedUserGroups() != null) {
-			for (UserGroup userGroup : user.getPendingInvitedUserGroups()) {
-				userGroup.initializeRole(user.get_id(), user.getEmail());
+			for (Iterator<UserGroup> i = user.getPendingInvitedUserGroups().iterator() ; i.hasNext();){
+				UserGroup userGroup = i.next();
+				if (userGroup == null || userGroup.getEnabled() == false) {
+					i.remove();
+				} else {
+					userGroup.initializeRole(user.get_id(), user.getEmail());
+				}
 			}
+
 		}
 		return user;
 	}

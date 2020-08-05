@@ -1,8 +1,50 @@
 import React from 'react';
+import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
+import './Footer.scss';
 
 const Footer = () => {
+  const { Footer } = Layout;
+
   return (
+    <Footer style={{ textAlign: 'center' }}>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-lg-3 col-md-3 col-sm-4 col-xs-12'>
+            <div class='footer-section col-xs-12'>
+              <p class='text-muted copyright-footer-text'>
+                Copyright ©2020 clazzbuddy, inc
+              </p>
+            </div>
+          </div>
+          <div class='col-lg-5 col-md-5 col-sm-4 col-xs-12'>
+            <ul>
+              <li>
+                <a href='#'>About</a>
+              </li>
+
+              <li>
+                <a href='#'>Contact</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class='col-lg-4 col-md-4 col-sm-4 col-xs-12'>
+            <ul>
+              <li>
+                <a href='#'>Terms &amp; Conditions</a>
+              </li>
+
+              <li>
+                <a href='#'>Privacy Policy</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </Footer>
+  );
+  /*   return (
     <div
       className='ui inverted vertical footer segment'
       style={{ background: '#f3fafd', color: '#333', fontSize: '8px' }}
@@ -89,7 +131,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  );
+  ); */
 };
 
 export default Footer;

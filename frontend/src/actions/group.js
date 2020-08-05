@@ -49,7 +49,17 @@ export const addGroup = formData => async dispatch => {
 
     dispatch(setAlert('Group Created', 'success'));
   } catch (err) {
-    catchHandler(err, 'CREATE_GROUP_ERROR');
+    dispatch(
+      setAlert(
+        err &&
+          err.response &&
+          err.response.data &&
+          err.response.data.message !== null
+          ? err.data.message
+          : 'Unable to create group, please try again later',
+        'error'
+      )
+    );
   }
 };
 
@@ -103,9 +113,13 @@ export const getGroupAutoComplete = key => async dispatch => {
   }
 };
 // Get all userGroups
-export const getGroupDetails = groupId => async dispatch => {
+export const getGroupDetails = (groupId, callback) => async dispatch => {
+  let cancelTokenSrc = axios.CancelToken.source();
+
   try {
-    const response = await axios.get(`/usergroup/getgroup?id=${groupId}`);
+    const response = await axios.get(`/usergroup/getgroup?id=${groupId}`, {
+      cancelToken: cancelTokenSrc.token
+    });
 
     dispatch({
       type: GET_GROUP,
@@ -117,6 +131,7 @@ export const getGroupDetails = groupId => async dispatch => {
   } catch (err) {
     catchHandler(err, GET_GROUP_ERROR);
   }
+  callback(cancelTokenSrc);
 };
 export const updateGroupStore = user => dispatch => {
   dispatch({
@@ -193,7 +208,7 @@ export const inviteToJoinUserGroup = requestData => async dispatch => {
       payload: { userGroup: res.data.userGroup }
     });
 
-    dispatch(setAlert('User added to group', 'success'));
+    dispatch(setAlert('Send invitation to new users', 'success'));
   } catch (err) {
     catchHandler(err, INVITE_TO_GROUP_ERROR);
   }

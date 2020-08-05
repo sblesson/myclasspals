@@ -186,8 +186,8 @@ export const register = (formData, callback) => async dispatch => {
       payload: res.data
     });
 
-    if (res.data.errorCode) {
-      dispatch(setAlert('Token Invalid, click signup to register', 'error'));
+    if (res.data.exception) {
+      dispatch(setAlert(res.data.exception, 'error'));
     } else {
       const authRes = await axios.post(`/user/authenticate`, body, config, {
         cancelToken: cancelTokenSrc.token
@@ -254,7 +254,7 @@ export const login = (formData, callback) => async dispatch => {
 
       dispatch(getUser(formData.email));
     } catch (err) {
-      catchHandler(err, 'LOGIN_FAIL');
+      dispatch(catchHandler(err));
     }
   }
   callback();
