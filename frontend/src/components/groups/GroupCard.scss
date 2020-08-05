@@ -1,4 +1,12 @@
 @import '../../styles/abstracts/variables';
+.user-card-list {
+  background: #fff;
+  border-top: 1px solid #f0f0f0 !important;
+}
+.user-card-member-title {
+  background: #fff;
+  padding: 1.3rem !important;
+}
 .group-card {
   .ant-card-head {
     border: 1px solid #f0f0f0;
@@ -21,8 +29,12 @@
     padding: 0.25rem 0.5rem;
   }
 }
-
-.discover-group-card {
+.group-card {
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+}
+.discover-group-card,
+.group-card {
   .ant-card-meta-avatar {
     padding-right: 0.6rem;
   }
@@ -44,11 +56,11 @@
     display: inline-block;
   }
   .group-card-meta-count {
-    margin: 0.4rem 0.5rem !important;
+    margin: 0.4rem !important;
     display: inline-block;
   }
   .group-card-meta-action {
-    margin: 0.4rem 0.3rem !important;
+    float: right;
     display: inline-block;
   }
   .group-card-update-status-link {

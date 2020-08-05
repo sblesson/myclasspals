@@ -1,8 +1,80 @@
 import React from 'react';
+import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
+import { Menu } from 'antd';
+
+import './Footer.scss';
 
 const Footer = () => {
+  const { Footer } = Layout;
+
   return (
+    <Footer className='footer'>
+      <Menu mode='horizontal'>
+        <Menu.Item key='about'>
+          <Link to='/' className='footer-link-text'>
+            {'About Us'}
+          </Link>
+        </Menu.Item>
+        <Menu.Item key='contact'>
+          <Link to='/contact-us' className='footer-link-text'>
+            {'Contact Us'}
+          </Link>
+        </Menu.Item>
+        <Menu.Item key='privacy'>
+          <Link to='/privacy' className='footer-link-text'>
+            {'Privacy Policy'}
+          </Link>
+        </Menu.Item>
+        <Menu.Item key='terms'>
+          <Link to='/terms' className='footer-link-text'>
+            {'Terms and Conditions'}
+          </Link>
+        </Menu.Item>
+      </Menu>
+      <div className='text-muted copyright-footer-text'>
+        Copyright ©2020 clazzbuddy, inc. All rights reserved.
+      </div>
+      {/*       <div className='container'>
+        <div className='row'>
+          <div className='col-lg-3 col-md-3 col-sm-4 col-xs-12'>
+            <div className='footer-section col-xs-12'>
+              <p className='text-muted copyright-footer-text'>
+                Copyright ©2020 clazzbuddy, inc
+              </p>
+            </div>
+          </div>
+          <div className='col-lg-5 col-md-5 col-sm-4 col-xs-12'>
+            <ul>
+              <li>
+                <Link to={`/about-us`}>About</Link>
+              </li>
+
+              <li>
+                <Link to={`/contact-us`}>Contact Us</Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className='col-lg-4 col-md-4 col-sm-4 col-xs-12'>
+            <ul>
+              <li>
+                <Link to={`/terms`}>Terms &amp; Conditions</Link>
+              </li>
+
+              <li>
+                <Link to={`/privacy`}>Privacy Policy</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className='item' style={{ color: '#444' }}>
+          Copyright © 2020 clazzbuddy, Inc. All rights reserved.
+        </div>
+      </div> */}
+    </Footer>
+  );
+  /*   return (
     <div
       className='ui inverted vertical footer segment'
       style={{ background: '#f3fafd', color: '#333', fontSize: '8px' }}
@@ -89,7 +161,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  );
+  ); */
 };
 
 export default Footer;

@@ -46,13 +46,18 @@ public class UserGroupService {
 			return userGroupFromDB;
 		}
 
+		Users user = (Users) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		
 		userGroup.setCreatedDate(new Date().toString());
+		userGroup.setEnabled(true);
 		populateSchoolDetails(userGroup);
+		populateUserMembers(userGroup, user);
 		userGroupFromDB = mongoTemplate.insert(userGroup);
 
 		if (userGroup.getUserGroupMembers() != null) {
 			for (UserGroupMembers userId : userGroup.getUserGroupMembers()) {
-				Users user = userService.getUserDetails(userId.get_id());
+				user = userService.getUserDetails(userId.get_id());
 				if (user == null) {
 					throw new Exception("Not a valid creator user: " + userId);
 				}
@@ -65,6 +70,21 @@ public class UserGroupService {
 		}
 
 		return userGroupFromDB;
+	}
+	
+	private void populateUserMembers(UserGroup userGroup, Users user) {
+		List<UserGroupMembers> members  = new ArrayList<UserGroupMembers>();
+		
+		UserGroupMembers member = new UserGroupMembers();
+		member.set_id(user.get_id());
+		if (user.getName() == null) {
+			member.setName(user.getEmail());
+		} else {
+			member.setName(user.getName());
+		}
+		member.setRole("admin");
+		members.add(member);
+		userGroup.setUserGroupMembers(members);
 	}
 
 	private void populateSchoolDetails(UserGroup userGroup) throws Exception {
@@ -127,7 +147,8 @@ public class UserGroupService {
 		UserGroup userGroup = getUserGroupById(id);
 		
 		if (userGroup.getRole().equals("admin")) {
-			mongoTemplate.remove(userGroup);
+			userGroup.setEnabled(false);
+			mongoTemplate.save(userGroup);
 		} else {
 			throw new Exception("Only admin can delete the group");
 		}
@@ -150,6 +171,8 @@ public class UserGroupService {
 		
 
 		Query userGroupSearch = new Query();
+		userGroupSearch.addCriteria(Criteria.where("enabled").is(true));
+		
 		if (filter.getGroupKeyword() != null && filter.getSchoolName() != null) {
 			userGroupSearch.addCriteria(new Criteria()
 			        .orOperator(

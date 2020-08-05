@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Card, Menu, message, Tag, Button, Dropdown } from 'antd';
+import { Card, Menu, Tag, Button, Dropdown } from 'antd';
 import _ from 'lodash';
+import DeleteGroupModal from './modal/DeleteGroupModal';
 
 import {
   EditOutlined,
@@ -30,6 +31,7 @@ const GroupCard = ({
   deleteGroup
 }) => {
   const { Meta } = Card;
+  const [isRequestUpdated, setRequestUpdate] = useState(false);
 
   const requestToJoinUserGroupClickHandler = record => {
     requestToJoinUserGroup(
@@ -37,63 +39,30 @@ const GroupCard = ({
         groupId: record.id,
         role: 'member',
         requestorUserId: auth.user.email
+      },
+      record,
+      userGroup => {
+        console.log(userGroup);
+        //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
-      /*     groupId => {
-        window.location.pathname = '/group/' + groupId;
-      } */
     );
   };
 
-  const isLoggedInUserJoinedUserGroup = group => {
-    let isUserJoinedGroup = false;
-    let memberArr = [];
-    const userId = localStorage.getItem('userId');
-
-    if (group && group.userGroupMembers && group.userGroupMembers.length > 0) {
-      memberArr = group.userGroupMembers.filter(item => {
-        return item._id === userId;
-      });
+  const onClick = key => {
+    if (key === 'deletegroup') {
+      console.log('deletegroup');
+    } else if (key === 'editpost') {
     }
-    if (memberArr && memberArr.length > 0) {
-      //current user is already part of group
-      isUserJoinedGroup = true;
-    }
-    return isUserJoinedGroup;
   };
 
-  const isCurrentGroupRequestedGroup = (currentGroup, group) => {
-    let isGroupRequested = false;
-    let requestedGroupArr = [];
-    if (
-      group &&
-      group.requestedUserGroup &&
-      group.requestedUserGroup.length > 0
-    ) {
-      requestedGroupArr = group.requestedUserGroup.filter(
-        item => item.groupId === currentGroup.groupId
-      );
-    }
-
-    if (requestedGroupArr && requestedGroupArr.length > 0) {
-      //current user is already part of group
-      isGroupRequested = true;
-    }
-    return isGroupRequested;
-  };
-  const onClick = ({ key }) => {
-    deleteGroup(currentGroup.id, () => {
-      if (group.userGroup.length > 0) {
-        let redirectGroupId = group.userGroup[0].id;
-        window.location.href = `/dashboard/${redirectGroupId}`;
-      }
-    });
-  };
   const menu = (
     <Menu onClick={onClick}>
-      <Menu.Item key='1'>Delete Group</Menu.Item>
+      <Menu.Item key='deletegroup'>
+        {' '}
+        <DeleteGroupModal groupId={currentGroup.id} />
+      </Menu.Item>
     </Menu>
   );
-
   const acceptPendingInviteActionClick = record => {
     acceptUserGroupInvitation({
       groupId: record.id,
@@ -111,49 +80,47 @@ const GroupCard = ({
   );
 
   const groupActionMenu = (currentGroup, type) => {
+    debugger;
     if (currentGroup) {
       switch (type) {
-        case 'mygroup': {
+        case 'mygroup':
+        case 'discover':
           if (currentGroup.role === null) {
             //non members
             if (currentGroup.privacy === 'PUBLIC') {
               //display join button for public group
-              return [
-                null,
-                null,
+              return (
                 <Button
                   key={`${currentGroup.id}_join_btn`}
-                  type='link'
-                  style={{ marginRight: 16 }}
+                  className='btn-primary'
                   onClick={() =>
                     requestToJoinUserGroupClickHandler(currentGroup)
                   }
                 >
-                  {' '}
-                  Join
+                  {'Join'}
                 </Button>
-              ];
+              );
             } else {
               //display request button for private group
-              return [
-                null,
-                null,
+              return (
                 <Button
+                  className='btn-primary'
                   key={`${currentGroup.id}_request_btn`}
-                  type='link'
-                  style={{ marginRight: 16 }}
                   onClick={() =>
                     requestToJoinUserGroupClickHandler(currentGroup)
                   }
                 >
-                  {' '}
-                  Request
+                  {'Request'}
                 </Button>
-              ];
+              );
             }
           } else if (currentGroup.role === 'admin') {
             return (
-              <Dropdown overlay={menu} placement='bottomCenter'>
+              <Dropdown
+                overlay={menu}
+                placement='bottomCenter'
+                style={{ float: 'right' }}
+              >
                 <a
                   className='ant-dropdown-link'
                   onClick={e => e.preventDefault()}
@@ -164,26 +131,57 @@ const GroupCard = ({
             );
           } else if (currentGroup.role === 'member') {
             return null;
-          } else if (currentGroup.role === 'Pending Invitation') {
-            return <div>{'Pending Invitation'}</div>;
+          } else if (
+            currentGroup.role === 'Pending Invitation' ||
+            currentGroup.role === 'Pending Requests'
+          ) {
+            return <div>{currentGroup.role}</div>;
+          }
+        case 'pendingInvitedUserGroups': {
+          if (type === 'discover' && currentGroup.privacy === 'PRIVATE') {
+            return (
+              <Button
+                key={`${currentGroup.id}_pending_join_btn`}
+                className='btn-primary'
+                onClick={() => acceptPendingInviteActionClick(currentGroup)}
+              >
+                {'Request'}
+              </Button>
+            );
+          } else {
+            return (
+              <Button
+                key={`${currentGroup.id}_pending_join_btn`}
+                className='btn-primary'
+                onClick={() => acceptPendingInviteActionClick(currentGroup)}
+              >
+                {'Join'}
+              </Button>
+            );
           }
         }
-
-        case 'pendingInvitedUserGroups': {
-          return (
-            <Button
-              key={`${currentGroup.id}_pending_join_btn`}
-              type='link'
-              style={{ marginRight: 16 }}
-              onClick={() => acceptPendingInviteActionClick(currentGroup)}
-            >
-              Join
-            </Button>
-          );
-        }
-
         default:
-          return;
+          return null;
+      }
+    }
+  };
+
+  const getUserGroupRole = currentGroup => {
+    if (currentGroup.role === 'admin') {
+      return <Tag color={'blue'}>{currentGroup.role}</Tag>;
+    } else if (currentGroup.role === 'member') {
+      return <Tag color={'geekblue'}>{currentGroup.role}</Tag>;
+    } else if (currentGroup.role === 'y      hb youhkujhjmhjhkhvitation') {
+      return <Tag color={'green'}>{currentGroup.role}</Tag>;
+    }
+  };
+
+  const getUserGroupMemberCount = currentGroup => {
+    if (currentGroup && currentGroup.userGroupMembers) {
+      if (currentGroup.userGroupMembers.length <= 1) {
+        return `${currentGroup.userGroupMembers.length} member`;
+      } else if (currentGroup.userGroupMembers.length > 1) {
+        return `${currentGroup.userGroupMembers.length} members`;
       }
     }
   };
@@ -211,59 +209,82 @@ const GroupCard = ({
     }
   };
 
-  const getGroupMemberCount = currentGroup => {
+  const getGroupPrivacy = currentGroup => {
     if (
       currentGroup &&
       currentGroup.userGroupMembers &&
       currentGroup.userGroupMembers.length > 0
     ) {
       if (currentGroup.userGroupMembers.length === 1) {
-        return (
-          <div>
-            {getGroupPrivacyLabel(currentGroup.privacy)} &nbsp;
-            {currentGroup.userGroupMembers.length} member
-          </div>
-        );
+        return <div>{getGroupPrivacyLabel(currentGroup.privacy)}</div>;
       } else {
-        return (
-          <div>
-            {getGroupPrivacyLabel()} &nbsp;
-            {currentGroup.userGroupMembers.length} members
-          </div>
-        );
+        return <div>{getGroupPrivacyLabel()}</div>;
       }
     }
   };
 
   return (
-    <Card
-      key={`${currentGroup.id}_group-card`}
-      className='group-card'
-      style={{
-        width: '100%',
-        marginBottom: '1.25rem',
-        textAlign: 'left'
-      }}
-      bordered={false}
-      title={
-        <Link to={`/group/${currentGroup.id}`}>
-          <Meta
-            avatar={
-              currentGroup.isSchoolGroup === 'no' ? (
-                <i className='fas fa-users icon-group'></i>
-              ) : (
-                <i
-                  className='fas fa-school icon-group'
-                  title='school group'
-                ></i>
-              )
-            }
-            title={currentGroup.groupName}
-          ></Meta>
-        </Link>
-      }
-      extra={groupActionMenu(currentGroup, type)}
-    ></Card>
+    <Card key={index} className='discover-group-card'>
+      <Link to={`/group/${currentGroup.id}`}>
+        <Meta
+          avatar={
+            currentGroup.isSchoolGroup === 'no' ? (
+              <i
+                className='fas fa-users icon-group no-padding'
+                style={{ paddingRight: 0 }}
+              ></i>
+            ) : (
+              <i
+                className='fas fa-school icon-group no-padding'
+                title='school group'
+              ></i>
+            )
+          }
+          title={currentGroup.groupName}
+        ></Meta>
+      </Link>
+      <Meta
+        className='group-card-meta-privacy no-padding'
+        description={getGroupPrivacy(currentGroup)}
+      ></Meta>
+
+      <Meta
+        className='group-card-meta-count no-padding'
+        description={getUserGroupMemberCount(currentGroup)}
+      ></Meta>
+
+      <Meta
+        className='group-card-meta-role no-padding'
+        description={getUserGroupRole(currentGroup)}
+      ></Meta>
+      <Meta
+        className='group-card-meta-action group-action no-padding'
+        description={groupActionMenu(currentGroup, type)}
+      ></Meta>
+      {currentGroup.schoolName ? (
+        <Meta
+          className='group-card-meta-desc no-padding'
+          description={
+            currentGroup.schoolName
+              ? `School Name: ${currentGroup.schoolName}`
+              : ''
+          }
+        />
+      ) : (
+        ''
+      )}
+
+      {currentGroup.isGroupStatusUpdated ? (
+        <Meta
+          className='group-card-update-status-link no-padding'
+          description={
+            <Link to={`/group/${currentGroup.id}`}>Peek inside</Link>
+          }
+        />
+      ) : (
+        ''
+      )}
+    </Card>
   );
 };
 
@@ -278,6 +299,5 @@ const mapStateToProps = (state, ownProps) => ({
 
 export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
-  requestToJoinUserGroup,
-  deleteGroup
+  requestToJoinUserGroup
 })(GroupCard);

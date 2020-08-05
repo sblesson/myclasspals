@@ -164,16 +164,15 @@ export default function(state = initialState, action) {
         let currentRequestedGrp = payload.user.requestedUserGroup.filter(
           result => result.id === payload.currentGroup.id
         );
-        currentRequestedGrp.role = 'Pending Invitation';
+        currentRequestedGrp.role = 'Pending Requests';
 
         if (currentRequestedGrp) {
           state.searchResult.map(result => {
             if (result.id === payload.currentGroup.id) {
-              result.role = 'Pending Invitation';
+              result.role = 'Pending Requests';
               result.isGroupStatusUpdated = true;
             }
           });
-          console.log(state.searchResult);
         }
 
         return {

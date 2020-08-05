@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import GroupCard from './GroupCard';
 
 import CreateGroupModal from './modal/CreateGroupModal';
@@ -38,7 +38,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
       {group.loading ? (
         <Spinner />
       ) : (
-        <Content>
+        <Content className='container'>
           <div className='wrapper'>
             {group !== null ? (
               <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>

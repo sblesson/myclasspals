@@ -4,10 +4,10 @@ import { Link, Redirect } from 'react-router-dom';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import { Formik, ErrorMessage } from 'formik';
 import { Typography } from 'antd';
-import Landing from './Landing';
-import { setAlert } from '../../actions/alert';
-import { getuserbyregistrationid, register } from '../../actions/auth';
-import { authRedirect } from '../../utils/authRedirect';
+import Services from './Services';
+import { setAlert } from '../actions/alert';
+import { getuserbyregistrationid, register } from '../actions/auth';
+import { authRedirect } from '../utils/authRedirect';
 
 import PropTypes from 'prop-types';
 
@@ -172,7 +172,7 @@ const PendingRegistration = ({
   return (
     <Fragment>
       <div className='row' style={{ marginTop: '20px' }}>
-        <Landing />
+        <Services />
         <div className='col col-4' style={{ background: '#fff' }}>
           <Title className='form-title-text' level={4}>
             Create Your Account

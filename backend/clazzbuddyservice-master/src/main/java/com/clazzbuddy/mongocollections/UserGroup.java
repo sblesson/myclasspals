@@ -48,6 +48,8 @@ public class UserGroup {
 	
 	private String createdDate;
 	
+	private Boolean enabled;
+	
 	@Transient
 	private String role;
 	
@@ -233,6 +235,15 @@ public class UserGroup {
 	public void setGrade(String grade) {
 		this.grade = grade;
 	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
 
 	
 }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Spin } from 'antd';
 
 import PropTypes from 'prop-types';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import PostItem from '../posts/PostItem';
 import { searchPost } from '../../actions/post';
 

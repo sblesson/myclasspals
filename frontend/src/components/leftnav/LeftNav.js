@@ -1,10 +1,11 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import { Menu, Layout, Result } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import CreateGroupModal from '../groups/modal/CreateGroupModal';
+import { LeftCircleOutlined } from '@ant-design/icons';
 
 import './LeftNav.scss';
 
@@ -12,7 +13,10 @@ const LeftNav = ({ screen = '', id, group }) => {
   const { Sider } = Layout;
   let myGroups = [];
 
-  const [selectedMenuItem, setSelectedNavItem] = useState(['0']);
+  let groupName;
+  const [sideNavMenu, setSideNavMenu] = useState([]);
+  const [activeMenu, setActiveMenu] = useState(['0']);
+
   const [collapse, setCollapse] = useState(true);
   var currentPath = window.location.pathname;
   screen = currentPath.split('/')[1];
@@ -25,6 +29,9 @@ const LeftNav = ({ screen = '', id, group }) => {
   }
   useEffect(() => {
     window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
+    if (group && group.currentGroup && group.currentGroup.groupName) {
+      groupName = group.currentGroup.groupName;
+    }
   }, [group]);
 
   const getNavByScreen = screen => {
@@ -38,12 +45,21 @@ const LeftNav = ({ screen = '', id, group }) => {
           myGroups = group.userGroup.map(group => ({
             id: group.id,
             title: group.groupName,
-            value: group.id,
+            key: group.id,
             url: '/dashboard/' + group.id
           }));
           return myGroups;
         } else {
-          return null;
+          if (group && group.currentGroup && group.currentGroup.groupName) {
+            return [
+              {
+                id: group.currentGroup.id,
+                title: group.currentGroup.groupName,
+                key: group.currentGroup.id,
+                url: `/group/${group.currentGroup.id}`
+              }
+            ];
+          } else return null;
         }
       }
       case 'messages': {
@@ -55,7 +71,7 @@ const LeftNav = ({ screen = '', id, group }) => {
       case 'account':
         return [
           {
-            name: 'account',
+            key: 'account',
             title: 'Account Settings',
             icon: 'fas fa-user-cog',
             url: '/account'
@@ -66,42 +82,54 @@ const LeftNav = ({ screen = '', id, group }) => {
       case 'discovergroup':
         return [
           {
-            name: 'my_groups',
+            id: 'my_groups_0',
+            key: 'my_groups',
             title: 'My Groups',
             icon: 'fas fa-users',
             url: '/groups'
           },
           {
-            name: 'search_group',
+            id: 'search_group-1',
+            key: 'search_group',
             title: 'Discover Groups',
             icon: 'fas fa-search',
             url: '/discovergroup/'
           }
         ];
       case 'group':
-        return [
-          {
-            name: 'members',
-            title: 'Membership',
-            icon: 'fas fa-user-edit',
-            url: '/group/' + id + '/members'
-          },
-
-          {
-            name: 'about_group',
-            title: 'About',
-            //icon: 'fas fa-user-edit',
-            url: '/group/' + id + '/about'
-          }
-        ];
+        if (group && group.currentGroup && group.currentGroup.groupName) {
+          return [
+            {
+              id: group.currentGroup.id,
+              title: group.currentGroup.groupName,
+              name: group.currentGroup.groupName,
+              key: group.currentGroup.id,
+              url: `/group/${group.currentGroup.id}`
+            }
+          ];
+        } else return null;
 
       default:
         return null;
     }
   };
 
-  const sideNavMenu = getNavByScreen(screen);
-  console.log(sideNavMenu);
+  useEffect(() => {
+    let sm = getNavByScreen(screen);
+    setSideNavMenu(sm);
+
+    return () => {
+      setActiveMenu(['0']);
+    };
+  }, [screen]);
+
+  const handleLeftMenuClick = event => {
+    event.domEvent.stopPropagation();
+    console.log(activeMenu);
+    setActiveMenu([event.key]);
+    console.log(event);
+    console.log(activeMenu);
+  };
 
   return (
     <Fragment>
@@ -129,16 +157,30 @@ const LeftNav = ({ screen = '', id, group }) => {
           <Menu
             theme='light'
             mode='inline'
-            selectedKeys={selectedMenuItem}
-            defaultSelectedKeys={selectedMenuItem}
-            onClick={e => {
-              setSelectedNavItem([e.key]);
-            }}
+            selectedKeys={activeMenu}
+            defaultSelectedKeys={activeMenu}
+            onClick={event => handleLeftMenuClick(event)}
           >
             {sideNavMenu &&
-              sideNavMenu.length > 0 &&
+              sideNavMenu.length > 1 &&
               sideNavMenu.map((sideNavItem, index) => (
                 <Menu.Item key={index} icon={sideNavItem.icon}>
+                  {sideNavItem.title}
+                  <Link className='btn btn-light my-1' to={sideNavItem.url}>
+                    {sideNavItem.title}
+                  </Link>
+                </Menu.Item>
+              ))}
+            {/* TODO replace this code and fix actual issue, for one item in menu, it is not selected by default */}
+
+            {sideNavMenu &&
+              sideNavMenu.length === 1 &&
+              sideNavMenu.map((sideNavItem, index) => (
+                <Menu.Item
+                  key={index}
+                  icon={sideNavItem.icon}
+                  className='ant-menu-item-selected'
+                >
                   {sideNavItem.title}
                   <Link className='btn btn-light my-1' to={sideNavItem.url}>
                     {sideNavItem.title}

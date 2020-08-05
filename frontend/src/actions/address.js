@@ -14,6 +14,6 @@ export const getCityData = (searchTerm = '') => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    catchHandler(err, 'GET_CITY_DATA_ERROR');
+    catchHandler(err, 'Error occured when fetching city');
   }
 };

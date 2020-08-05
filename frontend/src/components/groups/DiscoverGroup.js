@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Spinner from '../../layout/Spinner';
+import Spinner from '../common/spinner/Spinner';
 import CreateGroupModal from './modal/CreateGroupModal';
 import { List, Card, Empty } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
@@ -9,7 +9,7 @@ import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompl
 
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
-import GroupCardtem from './GroupCardtem';
+import GroupCard from './GroupCard';
 
 import './DiscoverGroups.scss';
 
@@ -19,22 +19,11 @@ const DiscoverGroups = ({ group }) => {
       {!group ? (
         <Spinner />
       ) : (
-        <div>
-          <div
-            style={{
-              color: '#333',
-              textAlign: 'right',
-              fontWeight: 'normal',
-              marginBottom: 10
-         /*      marginBottom: '.2rem',
-              marginTop: '3rem',
-              marginRight: '3rem' */
-              //margin: '3rem auto 1.2rem auto'
-            }}
-          >
+        <div className='container'>
+          <div className='create-btn-wrapper'>
             <CreateGroupModal />
           </div>
-          <Card style={{ marginBottom: 30 }} bordered={false}>
+          <Card style={{ marginBottom: 10 }} bordered={false}>
             <AutoCompleteGroupSearch />
           </Card>
 
@@ -53,17 +42,14 @@ const DiscoverGroups = ({ group }) => {
                 onChange: page => {
                   console.log(page);
                 },
-                pageSize: 3
+                total: group.searchResult.length,
+                pageSize: 50,
+                hideOnSinglePage: true
               }}
               dataSource={group.searchResult}
-              //style={{ overflow: 'hidden' }}
               renderItem={item => (
-                <Card
-                  key={`${item.id}-card`}
-                  hoverable={true}
-                  bordered={group.searchTerm ? true : false}
-                >
-                  <GroupCardtem currentGroup={item} type='discover' />
+                <Card key={`${item.id}-card`} hoverable={true} bordered={false}>
+                  <GroupCard currentGroup={item} type='discover' />
                 </Card>
               )}
             />
