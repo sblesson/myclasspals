@@ -8,11 +8,20 @@ const GuestMenu = () => {
 
   return (
     <Menu mode='horizontal' defaultSelectedKeys={[selectedKey]}>
-      <Menu.Item key='register'>
-        <Link to='/register'>{'Sign Up'}</Link>
+      <Menu.Item key='home'>
+        <Link to='/'>{'Home'}</Link>
       </Menu.Item>
+      {/*       <Menu.Item key='register'>
+        <Link to='/register'>{'Sign Up'}</Link>
+      </Menu.Item> */}
       <Menu.Item key='login'>
         <Link to='/login'>{'Login'}</Link>
+      </Menu.Item>
+      <Menu.Item key='about'>
+        <Link to='/about-us'>{'About Us'}</Link>
+      </Menu.Item>
+      <Menu.Item key='contact'>
+        <Link to='/contact-us'>{'Contact Us'}</Link>
       </Menu.Item>
     </Menu>
   );

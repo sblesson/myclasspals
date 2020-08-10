@@ -10,7 +10,8 @@ import {
   message,
   Layout,
   Card,
-  List
+  List,
+  Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -345,8 +346,16 @@ const SingleGroup = ({
                           onChange: page => {
                             console.log(page);
                           },
-                          pageSize: 3
+                          total: group.currentGroup.userGroupMembers.length,
+                          pageSize: 50,
+                          hideOnSinglePage: true
                         }}
+                        /*       pagination={{
+                          onChange: page => {
+                            console.log(page);
+                          },
+                          pageSize: 3
+                        }} */
                       >
                         {group.currentGroup.userGroupMembers &&
                           group.currentGroup.userGroupMembers.length > 0 &&
@@ -366,13 +375,39 @@ const SingleGroup = ({
                       <TabPane tab='Waiting For Approvals' key='approvals'>
                         {group.currentGroup.pendingInvitations &&
                         group.currentGroup.pendingInvitations.length > 0 ? (
-                          <Table
-                            columns={pendingInvitationsColumns}
+                          <List
+                            itemLayout='vertical'
+                            size='small'
+                            header={'Pending Invitations'}
+                            pagination={{
+                              onChange: page => {
+                                console.log(page);
+                              },
+                              total:
+                                group.currentGroup.pendingInvitations.length,
+                              pageSize: 50,
+                              hideOnSinglePage: true
+                            }}
                             dataSource={group.currentGroup.pendingInvitations}
-                            rowKey='requestorUserId'
+                            renderItem={item => (
+                              <Card
+                                key={`${item.id}-pcard`}
+                                hoverable={true}
+                                bordered={false}
+                              >
+                                <GroupCard
+                                  currentGroup={item}
+                                  type='pending approvals'
+                                />
+                              </Card>
+                            )}
                           />
                         ) : (
-                          'There are no request waiting for approvals'
+                          <Empty
+                            description={
+                              'There are no request waiting for approvals'
+                            }
+                          />
                         )}
                       </TabPane>
                     ) : (
@@ -382,13 +417,39 @@ const SingleGroup = ({
                       <TabPane tab='Requested To Join' key='request'>
                         {group.currentGroup.requestedInvitations &&
                         group.currentGroup.requestedInvitations.length > 0 ? (
-                          <Table
-                            columns={requestToJoinColumn}
+                          <List
+                            itemLayout='vertical'
+                            size='small'
+                            header={'Pending Invitations'}
+                            pagination={{
+                              onChange: page => {
+                                console.log(page);
+                              },
+                              total:
+                                group.currentGroup.requestedInvitations.length,
+                              pageSize: 50,
+                              hideOnSinglePage: true
+                            }}
                             dataSource={group.currentGroup.requestedInvitations}
-                            rowKey='invitedUserId'
+                            renderItem={item => (
+                              <Card
+                                key={`${item.id}-rgcard`}
+                                hoverable={true}
+                                bordered={false}
+                              >
+                                <GroupCard
+                                  currentGroup={item}
+                                  type='pending approvals'
+                                />
+                              </Card>
+                            )}
                           />
                         ) : (
-                          'There are no request to join send from this group'
+                          <Empty
+                            description={
+                              'No pending invitations send by admin to join this group'
+                            }
+                          />
                         )}
                       </TabPane>
                     ) : (

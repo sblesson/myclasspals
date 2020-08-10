@@ -19,15 +19,8 @@ const DiscoverGroups = ({ group }) => {
       {!group ? (
         <Spinner />
       ) : (
-        <div>
-          <div
-            style={{
-              color: '#333',
-              textAlign: 'right',
-              fontWeight: 'normal',
-              marginBottom: 10
-            }}
-          >
+        <div className='container'>
+          <div className='create-btn-wrapper'>
             <CreateGroupModal />
           </div>
           <Card style={{ marginBottom: 10 }} bordered={false}>
@@ -49,7 +42,9 @@ const DiscoverGroups = ({ group }) => {
                 onChange: page => {
                   console.log(page);
                 },
-                pageSize: 3
+                total: group.searchResult.length,
+                pageSize: 50,
+                hideOnSinglePage: true
               }}
               dataSource={group.searchResult}
               renderItem={item => (

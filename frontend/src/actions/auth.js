@@ -203,7 +203,44 @@ export const register = (formData, callback) => async dispatch => {
   }
   callback(cancelTokenSrc);
 };
+// Register User
+export const contactUsMessage = (formData, callback) => async dispatch => {
+  let cancelTokenSrc = axios.CancelToken.source();
 
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify(formData);
+
+  try {
+    const res = await axios.post(`/user/contactusmessage`, body, config, {
+      cancelToken: cancelTokenSrc.token
+    });
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: res.data
+    });
+
+    if (res.data.exception) {
+      dispatch(setAlert(res.data.exception, 'error'));
+    } else {
+      const authRes = await axios.post(`/user/authenticate`, body, config, {
+        cancelToken: cancelTokenSrc.token
+      });
+      dispatch({
+        type: AUTH_SUCCESS,
+        payload: authRes.data
+      });
+      dispatch(getUser(formData.email));
+    }
+  } catch (err) {
+    catchHandler(err, 'REGISTER_FAIL');
+  }
+  callback(cancelTokenSrc);
+};
 // Change User Password
 export const changePassword = ({ email, password }) => async dispatch => {
   if (cancel !== undefined) cancel();

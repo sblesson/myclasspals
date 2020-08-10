@@ -1,8 +1,21 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Footer from './Footer';
+import Services from './AboutServices';
 
 const AboutUs = () => {
-  return <h1 className='large text-primary'>About Us</h1>;
+  return (
+    <div>
+      <div className='row'>
+        <div className='about-bg'></div>
+      </div>
+
+      <div className='row' style={{ marginTop: '20px' }}>
+        {' '}
+        <Services />
+      </div>
+      <Footer />
+    </div>
+  );
 };
 
 export default AboutUs;

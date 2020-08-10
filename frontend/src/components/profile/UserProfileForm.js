@@ -12,7 +12,7 @@ import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import AutoCompleteCitySeach from '../common/autocompletecitysearch/AutoCompleteCitySearch';
 
 import AutoCompleteSchoolSearch from '../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
-
+import './CreateProfile.scss';
 const UserAccountForm = ({
   auth,
   updateUser,
@@ -115,7 +115,7 @@ const UserAccountForm = ({
       validator={() => ({})}
       //validate={values => {}}
       render={() => (
-        <div style={{ flex: 1, padding: 10 }}>
+        <div className='profile-form-wrapper'>
           <Form
             className='form-wrapper'
             {...formItemLayout}

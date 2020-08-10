@@ -440,6 +440,9 @@ button {
 }
 
 /* Mobile Styles */
+.container {
+  margin-left: 1rem;
+}
 @media (max-width: 700px) {
   .container {
     margin-top: 8rem;
@@ -1088,6 +1091,14 @@ thead {
   background: url('./assets/images/hold.jpeg') center no-repeat;
   background-size: cover;
   height: 80vh;
+  width: 100%;
+  opacity: 0.9;
+  background-color: #333;
+}
+.about-bg {
+  background: url('./assets/images/about.jpg') center no-repeat;
+  background-size: cover;
+  height: 30vh;
   width: 100%;
   opacity: 0.9;
   background-color: #333;

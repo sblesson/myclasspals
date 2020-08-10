@@ -12,7 +12,10 @@ import OurStory from '../../landing/OurStory';
 import OurMission from '../../landing/OurMission';
 import FAQ from '../../landing/FAQ';
 import PrivacyPolicy from '../../landing/PrivacyPolicy';
+import TermsAndConditions from '../../landing/TermsAndConditions';
+
 import ContactUs from '../../landing/ContactUs';
+import AboutUs from '../../landing/AboutUs';
 
 import Help from '../../landing/Help';
 import Register from '../../landing/Register';
@@ -28,11 +31,6 @@ const DiscoverGroup = React.lazy(() => import('../groups/DiscoverGroup'));
 const SingleGroup = React.lazy(() => import('../groups/SingleGroup'));
 const AboutGroup = React.lazy(() => import('../groups/AboutGroup'));
 const SinglePost = React.lazy(() => import('../posts/SinglePost'));
-const TermsAndConditions = React.lazy(() =>
-  import('../../landing/TermsAndConditions')
-);
-const AboutUs = React.lazy(() => import('../../landing/AboutUs'));
-const Guidelines = React.lazy(() => import('../../landing/Guidelines'));
 
 const PendingRegistration = React.lazy(() =>
   import('../../landing/PendingRegistration')
@@ -52,9 +50,8 @@ const Routes = () => {
         <Route exact path='/faq' component={FAQ} />
         <Route exact path='/about-us' component={AboutUs} />
         <Route exact path='/contact-us' component={ContactUs} />
-        <Route exact path='/tandc' component={TermsAndConditions} />
-        <Route exact path='/privacy-policy' component={PrivacyPolicy} />
-        <Route exact path='/guidelines' component={Guidelines} />
+        <Route exact path='/terms' component={TermsAndConditions} />
+        <Route exact path='/privacy' component={PrivacyPolicy} />
         <Route exact path='/help' component={Help} />
         <Route exact path='/401' component={Page403} />
         <Route exact path='/403' component={Page403} />

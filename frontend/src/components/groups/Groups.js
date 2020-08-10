@@ -38,7 +38,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
       {group.loading ? (
         <Spinner />
       ) : (
-        <Content>
+        <Content className='container'>
           <div className='wrapper'>
             {group !== null ? (
               <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>

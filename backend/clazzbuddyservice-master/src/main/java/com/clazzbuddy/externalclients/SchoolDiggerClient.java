@@ -15,7 +15,7 @@ import com.clazzbuddy.mongocollections.School;
 @Component
 public class SchoolDiggerClient {
 
-	private final String REST_URI = "https://api.schooldigger.com/v1.2/autocomplete/schools?q=${Search}&appID=02e5e1fb&appKey=516f6dd0da01a186ffedea905bec1041";
+	private final String REST_URI = "arm/v1.2/autocomplete/schools?q=${Search}&appID=02e5e1fb&appKey=516f6dd0da01a186ffedea905bec1041";
 
 	private Client client = ClientBuilder.newClient();
 

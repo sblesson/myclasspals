@@ -8,6 +8,7 @@ import { login } from '../actions/auth';
 import Services from './Services';
 import { authRedirect } from '../utils/authRedirect';
 import PropTypes from 'prop-types';
+import Footer from './Footer';
 
 const Login = ({ login, auth, history }) => {
   const [componentSize, setComponentSize] = useState('small');
@@ -128,6 +129,7 @@ const Login = ({ login, auth, history }) => {
         {' '}
         <Services />
       </div>
+      <Footer />
     </div>
   );
 };
