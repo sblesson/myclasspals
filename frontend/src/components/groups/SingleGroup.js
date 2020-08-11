@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Spinner from '../common/spinner/Spinner';
+import { Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
@@ -303,7 +303,7 @@ const SingleGroup = ({
   return (
     <div>
       {loading ? (
-        <Spinner />
+        <Spin />
       ) : (
         <Layout>
           <Content>
