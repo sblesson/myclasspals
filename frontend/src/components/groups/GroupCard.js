@@ -135,7 +135,7 @@ const GroupCard = ({
             currentGroup.role === 'Pending Invitation' ||
             currentGroup.role === 'Pending Requests'
           ) {
-            return <div>{currentGroup.role}</div>;
+            return <Tag color='green'>{currentGroup.role}</Tag>;
           }
         case 'pendingInvitedUserGroups': {
           if (type === 'discover' && currentGroup.privacy === 'PRIVATE') {

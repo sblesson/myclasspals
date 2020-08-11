@@ -6,7 +6,6 @@ import CreateGroupModal from './modal/CreateGroupModal';
 import { List, Card, Empty } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
 import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
-
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
 import GroupCard from './GroupCard';

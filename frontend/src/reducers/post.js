@@ -1,5 +1,4 @@
 import {
-  GET_POSTS,
   POST_ERROR,
   UPDATE_LIKES,
   DELETE_POST,
@@ -11,7 +10,6 @@ import {
   REMOVE_COMMENT_SINGLE_POST,
   GET_POST_CATEGORIES,
   REMOVE_COMMENT_ERROR,
-  SEARCH_POST_BY_GROUP_ID,
   SEARCH_POST,
   SEND_PRIVATE_MESSAGE,
   GET_POST_CATEGORIES_ERROR,
@@ -33,24 +31,11 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_POSTS:
-      //check why we need it
-      state.posts = payload;
-      return {
-        ...state,
-        posts: payload,
-        loading: false
-      };
-    case SEARCH_POST_BY_GROUP_ID:
-      return {
-        ...state,
-        posts: payload,
-        loading: false
-      };
     case SEARCH_POST:
       return {
         ...state,
-        posts: payload,
+        posts: payload.post,
+        totalPostCount: payload.totalPostCount,
         loading: false
       };
     case GET_PRIVATE_MESSAGES:

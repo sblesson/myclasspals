@@ -1,15 +1,25 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:8080';
+const { REACT_APP_BACKEND_URL, REACT_APP_STAGE } = process.env;
+console.log(process.env);
+let url;
+if (REACT_APP_STAGE === 'dev') {
+  axios.defaults.baseURL = 'http://localhost:8080';
+}
+
+if (REACT_APP_STAGE === 'prod') {
+  axios.defaults.baseURL = REACT_APP_BACKEND_URL;
+}
+
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-export const setInterceptors = store => {
-  axios.interceptors.response.use(response => {
+export const setInterceptors = (store) => {
+  axios.interceptors.response.use((response) => {
     return response;
   });
 };
 
-export const setAuthToken = token => {
+export const setAuthToken = (token) => {
   if (token) {
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 

@@ -100,7 +100,7 @@ export const getAllGroups = userId => async dispatch => {
   }
 };
 // Get all userGroups
-export const getGroupAutoComplete = key => async dispatch => {
+export const getGroupAutoComplete = (key, callback) => async dispatch => {
   try {
     const response = await axios.get('/usergroup/groupautocomplete?key=' + key);
 
@@ -108,6 +108,7 @@ export const getGroupAutoComplete = key => async dispatch => {
       type: GET_GROUP_AUTO_COMPLETE,
       payload: response.data
     });
+    callback(response.data);
   } catch (err) {
     catchHandler(err, GET_GROUP_AUTO_COMPLETE_ERROR);
   }
@@ -300,13 +301,15 @@ export const approveUserGroupRequest = requestData => async dispatch => {
       config
     );
 
+    let currentGroup = res.data.user.userGroup.find(
+      request => request.id === requestData.groupId
+    );
     dispatch({
       type: APPROVE_GROUP_REQUEST,
-      payload: res
+      payload: { user: res.data.user, currentGroup: currentGroup }
     });
 
     dispatch(setAlert('User added to group', 'success'));
-    getGroupDetails(requestData.groupId);
   } catch (err) {
     catchHandler(err, APPROVE_GROUP_REQUEST_ERROR);
   }

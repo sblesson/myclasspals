@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import _ from 'lodash';
 
@@ -17,12 +18,20 @@ const SearchPost = ({ searchPost, post, group }) => {
     }
   };
 
+  const handleOnEnter = event => {
+    if (event && event.currentTarget && event.currentTarget.defaultValue) {
+      fetchPost(event.currentTarget.defaultValue);
+    }
+  };
+
   return (
     <Search
       placeholder={`Search posts from ${group.currentGroup.groupName}`}
-      size='large'
-      onPressEnter={fetchPost}
+      prefix={<SearchOutlined />}
+      size='small'
+      onPressEnter={handleOnEnter}
       onSearch={fetchPost}
+      allowClear
     />
   );
 };

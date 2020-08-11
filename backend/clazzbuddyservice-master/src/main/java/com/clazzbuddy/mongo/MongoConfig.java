@@ -37,7 +37,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
 		if (!mongoconnection.equals("localhost")) {
 			MongoClientURI uri = new MongoClientURI(
-				    "mongodb+srv://clazz:buddy@cluster0.5ticx.mongodb.net/clazzbuddy?retryWrites=true&w=majority");
+				    "mongodb+srv://clazz:buddy@cluster0.csbtm.mongodb.net/clazzbuddy?retryWrites=true&w=majority");
 			return new MongoClient(uri);
 		} else {
 		

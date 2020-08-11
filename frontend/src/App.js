@@ -21,7 +21,7 @@ import './App.scss';
 import { initGA } from './utils/gaTracking';
 
 const App = () => {
-  const { Header, Content, Footer } = Layout;
+  const {  Content } = Layout;
   setInterceptors(store);
 
   useEffect(() => {
@@ -34,15 +34,7 @@ const App = () => {
       <PersistGate persistor={persistor}>
         <Router>
           <Layout>
-            <Header
-              style={{
-                position: 'fixed',
-                zIndex: 1,
-                width: '100%'
-              }}
-            >
-              <TopNavbar />
-            </Header>
+            <TopNavbar />
 
             <Layout className='main-container'>
               <LeftNav />

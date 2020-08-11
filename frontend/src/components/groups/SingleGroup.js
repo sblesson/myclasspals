@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Spinner from '../common/spinner/Spinner';
+import { Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
@@ -23,6 +23,7 @@ import AboutGroup from './AboutGroup';
 import SearchPost from '../common/searchPost/SearchPost';
 import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
+import MemberRequest from './MemberRequest';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 import DiscoverGroup from './DiscoverGroup';
@@ -180,78 +181,6 @@ const SingleGroup = ({
     }
   ];
 
-  const onClickPendingInvitation = () => {};
-
-  //TODO check if you are admin, creator or member and decide menu actions
-  const pendingInvitationsMenu = (
-    <Menu onClick={onClickPendingInvitation}>
-      <Menu.Item key='1'>Approve</Menu.Item>
-      <Menu.Item key='2'>Decline</Menu.Item>
-    </Menu>
-  );
-
-  const approveUserGroupRequestClick = record => {
-    approveUserGroupRequest({
-      groupId: record.groupId,
-      role: record.role,
-      requestorUserId: record.requestorUserId
-    });
-  };
-
-  const declineUserGroupRequestClick = record => {};
-
-  const requestToJoinColumn = [
-    {
-      title: 'Name',
-      dataIndex: 'invitedUserId',
-      key: 'invitedUserId',
-      render: text => <a>{text}</a>
-    }
-  ];
-
-  const pendingInvitationsColumns = [
-    {
-      title: 'Requested Users',
-      dataIndex: 'requestorUserId',
-      key: 'requestorUserId',
-      render: text => <a>{text}</a>
-    },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-      render: role => (
-        <span>
-          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role}
-          </Tag>
-        </span>
-      )
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (text, record, index) => (
-        <div>
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => approveUserGroupRequestClick(record)}
-          >
-            Approve
-          </Button>
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => declineUserGroupRequestClick(record)}
-          >
-            Decline
-          </Button>
-        </div>
-      )
-    }
-  ];
-
   const acceptPendingInviteActionClick = currentGroup => {
     acceptUserGroupInvitation({
       groupId: currentGroup.id,
@@ -303,7 +232,7 @@ const SingleGroup = ({
   return (
     <div>
       {loading ? (
-        <Spinner />
+        <Spin />
       ) : (
         <Layout>
           <Content>
@@ -350,12 +279,6 @@ const SingleGroup = ({
                           pageSize: 50,
                           hideOnSinglePage: true
                         }}
-                        /*       pagination={{
-                          onChange: page => {
-                            console.log(page);
-                          },
-                          pageSize: 3
-                        }} */
                       >
                         {group.currentGroup.userGroupMembers &&
                           group.currentGroup.userGroupMembers.length > 0 &&
@@ -372,13 +295,14 @@ const SingleGroup = ({
                     </TabPane>
 
                     {group.currentGroup.role === 'admin' ? (
-                      <TabPane tab='Waiting For Approvals' key='approvals'>
+                      <TabPane tab='Member Request' key='approvals'>
                         {group.currentGroup.pendingInvitations &&
                         group.currentGroup.pendingInvitations.length > 0 ? (
                           <List
                             itemLayout='vertical'
                             size='small'
-                            header={'Pending Invitations'}
+                            header={`${group.currentGroup.pendingInvitations.length} 
+                                member request pending`}
                             pagination={{
                               onChange: page => {
                                 console.log(page);
@@ -389,24 +313,11 @@ const SingleGroup = ({
                               hideOnSinglePage: true
                             }}
                             dataSource={group.currentGroup.pendingInvitations}
-                            renderItem={item => (
-                              <Card
-                                key={`${item.id}-pcard`}
-                                hoverable={true}
-                                bordered={false}
-                              >
-                                <GroupCard
-                                  currentGroup={item}
-                                  type='pending approvals'
-                                />
-                              </Card>
-                            )}
+                            renderItem={item => <MemberRequest member={item} />}
                           />
                         ) : (
                           <Empty
-                            description={
-                              'There are no request waiting for approvals'
-                            }
+                            description={'There are no member request pending'}
                           />
                         )}
                       </TabPane>

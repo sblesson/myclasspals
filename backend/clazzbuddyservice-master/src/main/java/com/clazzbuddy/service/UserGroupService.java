@@ -159,6 +159,7 @@ public class UserGroupService {
 
 	public List<UserGroup> getUserGroups(String key) {
 		Query userGroupSearch = new Query();
+		userGroupSearch.addCriteria(Criteria.where("enabled").is(true));
 		userGroupSearch.addCriteria(Criteria.where("groupName").regex("^" + key));
 		List<UserGroup> userGroups = mongoTemplate.find(userGroupSearch, UserGroup.class);
 		return userGroups;
