@@ -1,9 +1,7 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
-
 import PropTypes from 'prop-types';
-import Spinner from '../common/spinner/Spinner';
 import PostItem from '../posts/PostItem';
 import { searchPost } from '../../actions/post';
 
@@ -12,8 +10,10 @@ import {
   List,
   AutoSizer,
   CellMeasurer,
-  CellMeasurerCache
+  CellMeasurerCache,
+  WindowScroller
 } from 'react-virtualized';
+import 'react-virtualized/styles.css'; // only needs to be imported once
 
 const Posts = ({ groupId, searchPost, post: { posts } }) => {
   const isCurrent = useRef(true);
@@ -68,60 +68,69 @@ const Posts = ({ groupId, searchPost, post: { posts } }) => {
   };
 
   return (
-    <Fragment>
-      <div style={{ width: '100%', height: '100vh' }}>
-        <InfiniteLoader
-          isRowLoaded={isRowLoaded}
-          loadMoreRows={handleInfiniteOnLoad}
-          rowCount={MAX_FEED_COUNT}
-          minimumBatchSize={3}
-        >
-          {({ onRowsRendered, registerChild }) => (
-            <AutoSizer>
-              {({ width, height }) => (
-                <List
-                  width={width}
-                  height={height}
-                  onRowsRendered={onRowsRendered}
-                  ref={registerChild}
-                  rowHeight={cache.current.rowHeight}
-                  deferredMeasurementCache={cache.current}
-                  rowCount={posts.length}
-                  rowRenderer={({ key, index, style, parent }) => {
-                    const post = posts[index];
-                    return (
-                      <CellMeasurer
-                        key={key}
-                        cache={cache.current}
-                        parent={parent}
-                        columnIndex={0}
-                        rowIndex={index}
-                      >
-                        <div style={style}>
-                          {isLoading && hasMorePosts && (
-                            <div>
-                              <Spin />
-                            </div>
-                          )}
-                          {post ? (
-                            <PostItem
-                              style={{ marginBottom: '1rem' }}
-                              post={post}
-                            />
-                          ) : (
-                            ''
-                          )}
-                        </div>
-                      </CellMeasurer>
-                    );
-                  }}
-                />
-              )}
-            </AutoSizer>
-          )}
-        </InfiniteLoader>
-      </div>
-    </Fragment>
+    <div className='infinite-scroll-wrapper'>
+      <InfiniteLoader
+        isRowLoaded={isRowLoaded}
+        loadMoreRows={handleInfiniteOnLoad}
+        rowCount={MAX_FEED_COUNT}
+        threshold={10}
+      >
+        {({ onRowsRendered, registerChild }) => (
+          <WindowScroller>
+            {({ height, isScrolling, scrollTop }) => (
+              <AutoSizer disableHeight>
+                {({ width }) => (
+                  <List
+                    autoHeight
+                    scrollTop={scrollTop}
+                    width={width}
+                    height={height}
+                    onRowsRendered={onRowsRendered}
+                    ref={registerChild}
+                    rowHeight={cache.current.rowHeight}
+                    deferredMeasurementCache={cache.current}
+                    rowCount={posts.length}
+                    rowRenderer={({ key, index, parent }) => {
+                      const post = posts[index];
+                      return (
+                        <CellMeasurer
+                          key={key}
+                          cache={cache.current}
+                          parent={parent}
+                          columnIndex={0}
+                          rowIndex={index}
+                          width={width}
+                        >
+                          {({ measure }) => {
+                            return (
+                              <div onLoad={measure}>
+                                {/*     {isLoading && hasMorePosts && (
+                                  <div>
+                                    <Spin />
+                                  </div>
+                                )} */}
+                                {post ? (
+                                  <PostItem
+                                    style={{ marginBottom: '1rem' }}
+                                    post={post}
+                                  />
+                                ) : (
+                                  ''
+                                )}
+                              </div>
+                            );
+                          }}
+                        </CellMeasurer>
+                      );
+                    }}
+                  />
+                )}
+              </AutoSizer>
+            )}
+          </WindowScroller>
+        )}
+      </InfiniteLoader>
+    </div>
   );
 };
 

@@ -1,8 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Menu, Layout, Divider, Empty } from 'antd';
-import Spinner from '../common/spinner/Spinner';
+import { Menu, Layout, Divider, Empty, Spin } from 'antd';
 import {
   getPrivateMessages,
   getPost,
@@ -105,7 +104,7 @@ const Messages = ({
   return (
     <Fragment>
       {loading ? (
-        <Spinner />
+        <Spin />
       ) : (
         <Layout>
           {messages && messages.length > 0 ? (
