@@ -67,6 +67,7 @@ RUN mkdir -p /classbuddynodeserver
 COPY frontend/public /classbuddynodeserver/public
 COPY frontend/src /classbuddynodeserver/src
 COPY frontend/package.json /classbuddynodeserver/package.json
+COPY frontend/.env /classbuddynodeserver/.env
 COPY nodeinstall.sh /classbuddynodeserver/nodeinstall.sh
 
 

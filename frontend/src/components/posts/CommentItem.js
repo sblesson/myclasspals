@@ -2,30 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
-import { Avatar, Button, Dropdown, Menu, List } from 'antd';
+import { Avatar, Card, Dropdown, Menu, List } from 'antd';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
 import DeleteCommentModal from './modal/DeletePostModal';
 import { EllipsisOutlined } from '@ant-design/icons';
+import './PostItem.scss';
 
 const CommentItem = ({
   postId,
-  comment: {
-    _id,
-    message,
-    userName,
-    userId,
-    avatar,
-    user,
-    postedDate,
-    subject
-  },
+  comment: { _id, message, userName, userId, avatar, postedDate, subject },
   isSinglePost
 }) => {
-  const firstLetterUserName = userName => {
-    if (typeof userName !== 'string') return '';
-    return userName.charAt(0).toUpperCase();
-  };
+  const { Meta } = Card;
+
   const menu = (
     <Menu>
       <Menu.Item key='deletepost'>
@@ -50,19 +40,27 @@ const CommentItem = ({
         </Dropdown>
       ]}
     >
-      <List.Item.Meta
+      <Meta
         avatar={
-          <Link to={`/profile/${_id}/${userId}`}>
-            <Avatar className='avatar-icon' size='small'>
-              {userId.charAt(0)}
-            </Avatar>
-          </Link>
+          <Avatar className='avatar-icon' size='small'>
+            {userId.charAt(0)}
+          </Avatar>
         }
-        title={subject}
         description={
-          <Ellipsis length={200} tooltip>
-            {message}
-          </Ellipsis>
+          <div>
+            <Link to={`/profile/${postId}/${userId}`}>
+              <span className='feed-author-title'>{userName}</span>
+            </Link>
+            <div className='feed-author-time'>
+              <Moment fromNow ago>
+                {postedDate}
+              </Moment>
+              {' ago'}
+            </div>
+            <Ellipsis length={200} tooltip>
+              {message}
+            </Ellipsis>
+          </div>
         }
       />
     </List.Item>

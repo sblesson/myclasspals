@@ -10,26 +10,7 @@
   margin: 0.5rem 0;
   background: var(--main-body-bg-color);
 }
-.comment-author {
-  display: inline-block;
-  flex-grow: 1;
-  flex-basis: 0;
-  margin-left: 0.5em;
-  overflow: hidden;
-  vertical-align: middle;
-  &-title {
-    //font-weight: 500;
-    color: var(--color-primary-text);
-    line-height: 1.5;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  &-time {
-    font-size: 8px;
-    color: var(--font-color-3);
-  }
-}
+
 .comment-title {
   font-weight: 500;
   color: var(--color-primary-text);

@@ -280,9 +280,9 @@ public class UserController {
 
 	@PostMapping(value = "/acceptusergrouprequest", produces = { "application/json" })
 	public CommonResult acceptGroupRquest(@RequestBody GroupInvitationAction groupInvitationAction) {
-		CommonResult result = new CommonResult();
+		UserResult result = new UserResult();
 		try {
-			userService.acceptGroupRequest(groupInvitationAction);
+			result.setUser(userService.acceptGroupRequest(groupInvitationAction));
 		} catch (Exception e) {
 			result.setErrorCode(1);
 			result.setException(e.toString());

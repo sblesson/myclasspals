@@ -16,7 +16,7 @@ const Login = ({ login, auth, history }) => {
 
   const { Title, Text } = Typography;
 
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -24,22 +24,22 @@ const Login = ({ login, auth, history }) => {
     labelCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
+      md: { span: 20 },
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
-    }
+      md: { span: 20 },
+    },
   };
 
   const yourInfo = (
     <Formik
       initialValues={{
         email: '',
-        password: ''
+        password: '',
       }}
-      onSubmit={values => {
+      onSubmit={(values) => {
         setIsLoadingSignInBtn(true);
         login({ email: values.email, password: values.password }, () => {
           setIsLoadingSignInBtn(false);
@@ -55,7 +55,7 @@ const Login = ({ login, auth, history }) => {
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             <FormItem
@@ -98,7 +98,7 @@ const Login = ({ login, auth, history }) => {
           style={{
             float: 'right',
             paddingTop: '3rem',
-            marginRight: '3rem'
+            marginRight: '3rem',
           }}
         >
           <h2>Join School Community</h2>
@@ -114,12 +114,15 @@ const Login = ({ login, auth, history }) => {
               background: '#f0f0f0',
               marginTop: '1rem',
               padding: '1rem 0 2rem 2rem',
-              width: '70%'
+              width: '70%',
             }}
           >
             {yourInfo}
             <Text className='form-info-text'>
-              Don't have an account? <Link to='/register'>Sign Up</Link>
+              Don't have an account?{' '}
+              <Link to='/register' className='link'>
+                Sign Up
+              </Link>
             </Text>
           </div>
         </div>
@@ -136,12 +139,12 @@ const Login = ({ login, auth, history }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { login })(Login);

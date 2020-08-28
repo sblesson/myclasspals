@@ -1,6 +1,8 @@
 @import '../../styles/abstracts/mixins';
 
 .feed {
+  margin-bottom: 0.2rem;
+  width: '100%' !important;
   .single-feed-card {
     margin-left: 3rem !important;
     margin-top: 0rem !important;
@@ -16,6 +18,11 @@
     @include respond(big-desktop) {
       width: 60%;
     }
+  }
+  .comment-count-text {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.2rem;
+    display: inline-block;
   }
 
   .ant-card-head {

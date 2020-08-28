@@ -7,40 +7,41 @@ import {
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CLEAR_PROFILE,
-  ACCOUNT_DELETED
+  ACCOUNT_DELETED,
 } from './types';
 
 // Get profile by ID
-export const getProfileById = userId => async dispatch => {
+export const getProfileById = (userId) => async (dispatch) => {
   try {
     const userResp = await axios.get('/user/getuserdetails?user=' + userId);
     dispatch({
       type: GET_PROFILE,
-      payload: userResp.data
+      payload: userResp.data,
     });
   } catch (err) {
     catchHandler(err, PROFILE_ERROR);
+    dispatch({
+      type: PROFILE_ERROR,
+    });
   }
 };
 
 // Create or update profile
-export const updateProfile = (
-  formData,
-  history,
-  edit = false
-) => async dispatch => {
+export const updateProfile = (formData, history, edit = false) => async (
+  dispatch
+) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
 
     const res = await axios.put('/user/updateuser', formData, config);
 
     dispatch({
       type: UPDATE_PROFILE,
-      payload: res.data
+      payload: res.data,
     });
 
     dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
@@ -54,7 +55,7 @@ export const updateProfile = (
 };
 
 // Delete account & profile
-export const deleteAccount = () => async dispatch => {
+export const deleteAccount = () => async (dispatch) => {
   try {
     await axios.delete('/user/deleteUser');
 

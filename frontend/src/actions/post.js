@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { setAlert, catchHandler } from './alert';
 import {
-  GET_POSTS,
   GET_POST_CATEGORIES,
   POST_ERROR,
   UPDATE_LIKES,
@@ -14,7 +13,6 @@ import {
   REMOVE_COMMENT_SINGLE_POST,
   REMOVE_COMMENT_ERROR,
   SEND_PRIVATE_MESSAGE,
-  SEARCH_POST_BY_GROUP_ID,
   SEARCH_POST,
   GET_PRIVATE_MESSAGES,
   GET_POST_CATEGORIES_ERROR,
@@ -71,7 +69,7 @@ export const searchPost = (requestObj, callback) => async dispatch => {
     });
     dispatch({
       type: SEARCH_POST,
-      payload: res.data.post
+      payload: res.data
     });
     console.log(res.data);
     callback(res.data.post, cancel);

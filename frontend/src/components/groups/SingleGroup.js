@@ -11,7 +11,7 @@ import {
   Layout,
   Card,
   List,
-  Empty
+  Empty,
 } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -23,6 +23,8 @@ import AboutGroup from './AboutGroup';
 import SearchPost from '../common/searchPost/SearchPost';
 import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
+import MemberRequest from './MemberRequest';
+import PendingInvitations from './PendingInvitations';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 import DiscoverGroup from './DiscoverGroup';
@@ -34,7 +36,7 @@ import {
   declineUserGroupRequest,
   changeGroupUserRole,
   deleteGroup,
-  acceptUserGroupInvitation
+  acceptUserGroupInvitation,
 } from '../../actions/group';
 import './GroupCard.scss';
 
@@ -46,7 +48,7 @@ const SingleGroup = ({
   acceptUserGroupInvitation,
   match,
   auth,
-  history
+  history,
 }) => {
   const { Meta } = Card;
   const { Content, Sider } = Layout;
@@ -72,7 +74,7 @@ const SingleGroup = ({
       //user clicked on another group from dashboard leftnav groups menu,
       //get groupId from params
       if (isCurrent.current) {
-        getGroupDetails(groupId, cancelTokenSrc => {
+        getGroupDetails(groupId, (cancelTokenSrc) => {
           cancelTokenSrc.cancel();
         });
       }
@@ -148,119 +150,47 @@ const SingleGroup = ({
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a>{text}</a>
+      render: (text) => <a>{text}</a>,
     },
     {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      render: role => (
+      render: (role) => (
         <span>
           <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
             {role}
           </Tag>
         </span>
-      )
+      ),
     },
     {
       title: 'Description',
       dataIndex: 'description',
-      key: 'description'
+      key: 'description',
     },
     {
       title: '',
       key: 'action',
       render: (text, record) => (
         <Dropdown overlay={membersMenu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+          <a className='ant-dropdown-link' onClick={(e) => e.preventDefault()}>
             <DownOutlined />
           </a>
         </Dropdown>
-      )
-    }
-  ];
-
-  const onClickPendingInvitation = () => {};
-
-  //TODO check if you are admin, creator or member and decide menu actions
-  const pendingInvitationsMenu = (
-    <Menu onClick={onClickPendingInvitation}>
-      <Menu.Item key='1'>Approve</Menu.Item>
-      <Menu.Item key='2'>Decline</Menu.Item>
-    </Menu>
-  );
-
-  const approveUserGroupRequestClick = record => {
-    approveUserGroupRequest({
-      groupId: record.groupId,
-      role: record.role,
-      requestorUserId: record.requestorUserId
-    });
-  };
-
-  const declineUserGroupRequestClick = record => {};
-
-  const requestToJoinColumn = [
-    {
-      title: 'Name',
-      dataIndex: 'invitedUserId',
-      key: 'invitedUserId',
-      render: text => <a>{text}</a>
-    }
-  ];
-
-  const pendingInvitationsColumns = [
-    {
-      title: 'Requested Users',
-      dataIndex: 'requestorUserId',
-      key: 'requestorUserId',
-      render: text => <a>{text}</a>
+      ),
     },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-      render: role => (
-        <span>
-          <Tag color={role === 'admin' ? 'geekblue' : 'green'} key={role}>
-            {role}
-          </Tag>
-        </span>
-      )
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (text, record, index) => (
-        <div>
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => approveUserGroupRequestClick(record)}
-          >
-            Approve
-          </Button>
-          <Button
-            type='link'
-            style={{ marginRight: 16 }}
-            onClick={() => declineUserGroupRequestClick(record)}
-          >
-            Decline
-          </Button>
-        </div>
-      )
-    }
   ];
 
-  const acceptPendingInviteActionClick = currentGroup => {
+  const acceptPendingInviteActionClick = (currentGroup) => {
     acceptUserGroupInvitation({
       groupId: currentGroup.id,
       role: 'member',
-      invitedUserId: auth.user.email
+      invitedUserId: auth.user.email,
     });
   };
 
-  const isUserInPendingRequestedInvitations = currentGroup => {
+  const isUserInPendingRequestedInvitations = (currentGroup) => {
     let found = false;
     if (
       currentGroup &&
@@ -268,14 +198,14 @@ const SingleGroup = ({
       currentGroup.requestedInvitations.length > 0
     ) {
       found = currentGroup.requestedInvitations.find(
-        request => request.invitedUserId === auth.user.email
+        (request) => request.invitedUserId === auth.user.email
       );
     }
     message.config({
       top: 140,
       duration: 5,
       maxCount: 3,
-      rtl: true
+      rtl: true,
     });
     if (found) {
       return (
@@ -290,7 +220,7 @@ const SingleGroup = ({
     } else return <InviteUsersToGroupModal />;
   };
 
-  const getUserGroupMemberCount = currentGroup => {
+  const getUserGroupMemberCount = (currentGroup) => {
     if (currentGroup && currentGroup.userGroupMembers) {
       if (currentGroup.userGroupMembers.length <= 1) {
         return `${currentGroup.userGroupMembers.length} member`;
@@ -343,19 +273,13 @@ const SingleGroup = ({
                         itemLayout='vertical'
                         size='large'
                         pagination={{
-                          onChange: page => {
+                          onChange: (page) => {
                             console.log(page);
                           },
                           total: group.currentGroup.userGroupMembers.length,
                           pageSize: 50,
-                          hideOnSinglePage: true
+                          hideOnSinglePage: true,
                         }}
-                        /*       pagination={{
-                          onChange: page => {
-                            console.log(page);
-                          },
-                          pageSize: 3
-                        }} */
                       >
                         {group.currentGroup.userGroupMembers &&
                           group.currentGroup.userGroupMembers.length > 0 &&
@@ -372,41 +296,31 @@ const SingleGroup = ({
                     </TabPane>
 
                     {group.currentGroup.role === 'admin' ? (
-                      <TabPane tab='Waiting For Approvals' key='approvals'>
+                      <TabPane tab='Member Request' key='approvals'>
                         {group.currentGroup.pendingInvitations &&
                         group.currentGroup.pendingInvitations.length > 0 ? (
                           <List
                             itemLayout='vertical'
                             size='small'
-                            header={'Pending Invitations'}
+                            header={`${group.currentGroup.pendingInvitations.length} 
+                                member request pending`}
                             pagination={{
-                              onChange: page => {
+                              onChange: (page) => {
                                 console.log(page);
                               },
                               total:
                                 group.currentGroup.pendingInvitations.length,
                               pageSize: 50,
-                              hideOnSinglePage: true
+                              hideOnSinglePage: true,
                             }}
                             dataSource={group.currentGroup.pendingInvitations}
-                            renderItem={item => (
-                              <Card
-                                key={`${item.id}-pcard`}
-                                hoverable={true}
-                                bordered={false}
-                              >
-                                <GroupCard
-                                  currentGroup={item}
-                                  type='pending approvals'
-                                />
-                              </Card>
+                            renderItem={(item) => (
+                              <MemberRequest member={item} />
                             )}
                           />
                         ) : (
                           <Empty
-                            description={
-                              'There are no request waiting for approvals'
-                            }
+                            description={'There are no member request pending'}
                           />
                         )}
                       </TabPane>
@@ -414,34 +328,26 @@ const SingleGroup = ({
                       ''
                     )}
                     {group.currentGroup.role === 'admin' ? (
-                      <TabPane tab='Requested To Join' key='request'>
+                      <TabPane tab='Pending Invitations' key='request'>
                         {group.currentGroup.requestedInvitations &&
                         group.currentGroup.requestedInvitations.length > 0 ? (
                           <List
                             itemLayout='vertical'
                             size='small'
-                            header={'Pending Invitations'}
+                            header={`${group.currentGroup.requestedInvitations.length} 
+                              pending invitations`}
                             pagination={{
-                              onChange: page => {
+                              onChange: (page) => {
                                 console.log(page);
                               },
                               total:
                                 group.currentGroup.requestedInvitations.length,
                               pageSize: 50,
-                              hideOnSinglePage: true
+                              hideOnSinglePage: true,
                             }}
                             dataSource={group.currentGroup.requestedInvitations}
-                            renderItem={item => (
-                              <Card
-                                key={`${item.id}-rgcard`}
-                                hoverable={true}
-                                bordered={false}
-                              >
-                                <GroupCard
-                                  currentGroup={item}
-                                  type='pending approvals'
-                                />
-                              </Card>
+                            renderItem={(item) => (
+                              <PendingInvitations member={item} />
                             )}
                           />
                         ) : (
@@ -471,17 +377,17 @@ const SingleGroup = ({
 };
 
 SingleGroup.propTypes = {
-  getGroupDetails: PropTypes.func.isRequired
+  getGroupDetails: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   group: state.group,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
   getGroupDetails,
   declineUserGroupRequest,
   approveUserGroupRequest,
-  acceptUserGroupInvitation
+  acceptUserGroupInvitation,
 })(SingleGroup);

@@ -12,7 +12,7 @@ const UserMenu = ({ logout }) => {
   let selectedKey = window.location.pathname.split('/')[1];
   selectedKey = selectedKey ? selectedKey : 'dashboard';
   return (
-    <Menu mode='horizontal' defaultSelectedKeys={[selectedKey]}>
+    <Menu mode='horizontal' theme='light' defaultSelectedKeys={[selectedKey]}>
       <Menu.Item key='dashboard'>
         <Link to='/dashboard'>{'Home'}</Link>
       </Menu.Item>

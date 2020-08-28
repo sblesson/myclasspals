@@ -6,27 +6,26 @@ import CreateGroupModal from './modal/CreateGroupModal';
 import { List, Card, Empty } from 'antd';
 import GroupFilterPanel from '../common/filterpanel/GroupFilterPanel';
 import AutoCompleteGroupSearch from '../common/autocompletegroupsearch/AutoCompleteGroupSearch';
-
 import { searchGroup, searchGroupWithFilters } from '../../actions/group';
 
 import GroupCard from './GroupCard';
 
 import './DiscoverGroups.scss';
 
-const DiscoverGroups = ({ group }) => {
+const DiscoverGroups = ({ group, newRegistration }) => {
   return (
     <Fragment>
       {!group ? (
         <Spinner />
       ) : (
-        <div className='container'>
+        <div className={`${newRegistration ? '' : 'wrapper group-page'}`}>
+          {' '}
           <div className='create-btn-wrapper'>
             <CreateGroupModal />
           </div>
           <Card style={{ marginBottom: 10 }} bordered={false}>
             <AutoCompleteGroupSearch />
           </Card>
-
           {group !== null &&
           group.searchResult &&
           group.searchResult.length > 0 ? (
@@ -39,15 +38,15 @@ const DiscoverGroups = ({ group }) => {
                   : 'Groups near you'
               }
               pagination={{
-                onChange: page => {
+                onChange: (page) => {
                   console.log(page);
                 },
                 total: group.searchResult.length,
                 pageSize: 50,
-                hideOnSinglePage: true
+                hideOnSinglePage: true,
               }}
               dataSource={group.searchResult}
-              renderItem={item => (
+              renderItem={(item) => (
                 <Card key={`${item.id}-card`} hoverable={true} bordered={false}>
                   <GroupCard currentGroup={item} type='discover' />
                 </Card>
@@ -69,14 +68,14 @@ const DiscoverGroups = ({ group }) => {
 };
 
 DiscoverGroups.propTypes = {
-  searchGroup: PropTypes.func.isRequired
+  searchGroup: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  group: state.group
+const mapStateToProps = (state) => ({
+  group: state.group,
 });
 
 export default connect(mapStateToProps, {
   searchGroup,
-  searchGroupWithFilters
+  searchGroupWithFilters,
 })(DiscoverGroups);

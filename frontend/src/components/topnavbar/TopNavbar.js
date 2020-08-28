@@ -1,55 +1,36 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { Layout } from 'antd';
+
 import { connect } from 'react-redux';
 import UserMenu from './UserMenu';
 import GuestMenu from './GuestMenu';
-import { Drawer, Button } from 'antd';
 import './TopNavbar.scss';
 import logo from '../../assets/images/cblogo.png';
 
-const TopNavbar = ({ auth: { isAuthenticated, loading, user } }) => {
-  const [visible, setVisible] = useState(false);
-
-  const showDrawer = () => {
-    setVisible(true);
-  };
-
-  const onClose = () => {
-    setVisible(false);
-  };
+const TopNavbar = ({ auth: { isAuthenticated } }) => {
+  const { Header } = Layout;
 
   return (
-    <nav className='menuBar'>
-      <div className='logo'>
-        <a href=''>
-          {' '}
-          {/*           <img src={logo} alt='classbuddy logo' />
-           */}{' '}
-        </a>
+    <Header
+      style={{
+        position: 'fixed',
+        zIndex: 1,
+        width: '100%',
+      }}
+      className='top-menu'
+    >
+      <div className='logo float-left'>
+        <span className='logo-text'>clazzbuddy</span>
       </div>
-      <div className='menuCon'>
-        <div className='leftMenu'></div>
-        <div className='rightMenu'>
-          {isAuthenticated ? <UserMenu /> : <GuestMenu />}
-        </div>
-        {/*     <Button className='barsMenu' type='primary' onClick={showDrawer}>
-          <span className='barsBtn'></span>
-        </Button>
-        <Drawer
-          title='Basic Drawer'
-          placement='right'
-          closable={false}
-          onClose={onClose}
-          visible={visible}
-        >
-          {isAuthenticated ? <UserMenu /> : <GuestMenu />}
-        </Drawer> */}
+      <div className='float-right'>
+        {isAuthenticated ? <UserMenu /> : <GuestMenu />}
       </div>
-    </nav>
+    </Header>
   );
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {})(TopNavbar);

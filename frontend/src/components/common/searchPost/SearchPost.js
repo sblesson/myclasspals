@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import _ from 'lodash';
 
@@ -8,7 +9,7 @@ import { searchPost } from '../../../actions/post';
 const SearchPost = ({ searchPost, post, group }) => {
   const { Search } = Input;
 
-  const fetchPost = searchTerm => {
+  const fetchPost = (searchTerm) => {
     if (searchTerm) {
       let debounced = _.debounce(() => {
         searchPost({ keyword: searchTerm, groupId: group.currentGroup.id });
@@ -17,17 +18,24 @@ const SearchPost = ({ searchPost, post, group }) => {
     }
   };
 
+  const handleOnEnter = (event) => {
+    if (event && event.currentTarget && event.currentTarget.defaultValue) {
+      fetchPost(event.currentTarget.defaultValue);
+    }
+  };
+
   return (
     <Search
       placeholder={`Search posts from ${group.currentGroup.groupName}`}
-      size='large'
-      onPressEnter={fetchPost}
+      size='small'
+      onPressEnter={handleOnEnter}
       onSearch={fetchPost}
+      allowClear
     />
   );
 };
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   post: state.post,
-  group: state.group
+  group: state.group,
 });
 export default connect(mapStateToProps, { searchPost })(SearchPost);

@@ -12,7 +12,7 @@ const Profile = ({
   getProfileById,
   profile: { profile, loading },
   auth,
-  match
+  match,
 }) => {
   useEffect(() => {
     getProfileById(match.params.userId);
@@ -21,7 +21,21 @@ const Profile = ({
   return (
     <Fragment>
       {profile === null || loading ? (
-        <Spinner />
+        <Fragment>
+          <Link
+            to={`/dashboard/${match.params.id}`}
+            style={{
+              fontSize: '1rem',
+              marginLeft: '1rem',
+              marginTop: '1rem',
+              cursor: 'pointer',
+              display: 'inline-block',
+            }}
+          >
+            <LeftCircleOutlined />
+          </Link>
+          'No User Details Found'
+        </Fragment>
       ) : (
         <Fragment>
           <Link
@@ -31,7 +45,7 @@ const Profile = ({
               marginLeft: '1rem',
               marginTop: '1rem',
               cursor: 'pointer',
-              display: 'inline-block'
+              display: 'inline-block',
             }}
           >
             <LeftCircleOutlined />
@@ -46,12 +60,12 @@ const Profile = ({
 Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   profile: state.profile,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getProfileById })(Profile);
