@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import com.clazzbuddy.mongocollections.Post;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.restmodel.PostSearchQuery;
+import com.clazzbuddy.restmodel.PostSearchResult;
 
 @Component
 public class PostMessageService {
@@ -81,8 +82,9 @@ public class PostMessageService {
 		return mongoTemplate.findOne(postById, Post.class);
 	}
 
-	public List<Post> searchPost(PostSearchQuery postSearchQuery) {
+	public PostSearchResult searchPost(PostSearchQuery postSearchQuery) {
 
+		PostSearchResult postSearchResult= new PostSearchResult();
 		Query postListQuery = new Query();
 		if (postSearchQuery.getKeyword() != null) {
 			postListQuery.addCriteria(new Criteria()
@@ -140,7 +142,9 @@ public class PostMessageService {
 			postListQuery.limit(postSearchQuery.getEndIndex() - postSearchQuery.getStartIndex());
 		}
 		List<Post> posts = mongoTemplate.find(postListQuery, Post.class);
-		return posts;
+		postSearchResult.setPost(posts);
+		postSearchResult.setTotalPostCount(mongoTemplate.count(postListQuery, Post.class)); 
+		return postSearchResult;
 
 	}
 }

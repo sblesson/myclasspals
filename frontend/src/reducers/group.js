@@ -205,6 +205,7 @@ export default function(state = initialState, action) {
     case APPROVE_GROUP_REQUEST:
       return {
         ...state,
+        currentGroup: payload.currentGroup,
         userGroup: payload.user.userGroup,
         pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
         requestedUserGroup: payload.user.requestedUserGroup,

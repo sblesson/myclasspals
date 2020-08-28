@@ -3,6 +3,7 @@ package com.clazzbuddy.externalclients;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Random;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -20,7 +21,6 @@ public class SchoolDiggerClient {
 	private Client client = ClientBuilder.newClient();
 
 	public List<School> getSchoolList(String searchKey) throws Exception {
-		;
 
 		String url = REST_URI.replace("${Search}", URLEncoder.encode(searchKey,"UTF-8"));
 		SchoolDiggerResult diggerResult = client.target(url).request(MediaType.APPLICATION_JSON).get(SchoolDiggerResult.class);

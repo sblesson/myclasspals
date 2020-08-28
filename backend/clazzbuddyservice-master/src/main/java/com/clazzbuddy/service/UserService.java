@@ -359,7 +359,7 @@ public class UserService implements UserDetailsService{
 		}
 	}
 
-	public void acceptGroupRequest(GroupInvitationAction action) throws Exception {
+	public Users acceptGroupRequest(GroupInvitationAction action) throws Exception {
 
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 
@@ -401,6 +401,9 @@ public class UserService implements UserDetailsService{
 
 			mongoTemplate.save(invitedUser);
 			mongoTemplate.save(userGroup);
+			return invitedUser;
+		} else {
+			throw new Exception("action should be REQUEST_ACCEPT. it is " + action.getAction());
 		}
 	}
 

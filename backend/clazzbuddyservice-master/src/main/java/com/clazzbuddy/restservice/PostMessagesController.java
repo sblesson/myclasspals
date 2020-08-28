@@ -68,10 +68,10 @@ public class PostMessagesController {
 	
 	@PostMapping(value="/searchpost", produces={"application/json"})
 	public CommonResult getPosts(@RequestBody PostSearchQuery postSearchQuery) {
-		PostSearchResult result = new PostSearchResult();
+		PostSearchResult result = null;
 		
 		try {
-			result.setPost(postService.searchPost(postSearchQuery));
+			result = postService.searchPost(postSearchQuery);
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

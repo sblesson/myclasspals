@@ -1,5 +1,36 @@
 @import '../../styles/abstracts/variables';
 
+.hideOnMobile {
+  display: none !important;
+}
+@media only screen and (min-width: 768px) {
+  .hideOnMobile {
+    display: block !important;
+  }
+}
+
+.displayOnDesktop {
+  display: block !important;
+}
+
+.displayOnMobile {
+  display: block !important;
+}
+.barsMenu {
+  background: var(--bg-primary-btn) !important;
+  border: var(--bg-primary-btn) !important;
+  top: 1rem;
+  left: 0.625rem;
+  &:focus,
+  &:hover {
+    background: (--bg-gradient1) !important;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .hideOnDesktop {
+    display: none !important;
+  }
+}
 .leftnav-sidebar {
   .ant-menu-vertical {
     border-right: none;

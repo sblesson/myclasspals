@@ -17,20 +17,6 @@ const AutoCompleteGroupSearch = ({
   group
 }) => {
   const { Option, OptGroup } = Select;
-  const [searchValue, setSearchValue] = useState('');
-
-  const handleGroupSearch = searchTerm => {
-    if (searchTerm) {
-      var debounced = _.debounce(() => {
-        getGroupAutoComplete(searchTerm, () => {
-          setSearchValue(searchValue);
-        });
-      }, 100);
-      //if (isCurrent.current) {
-      debounced();
-      //}
-    }
-  };
 
   const children =
     group &&
@@ -70,50 +56,28 @@ const AutoCompleteGroupSearch = ({
       );
     });
 
-  const onGroupChange = (value, action) => {
-    if (
-      group &&
-      group.autoCompleteSearchResult &&
-      group.autoCompleteSearchResult.length > 0
-    ) {
-      setSearchValue(value);
-      group.searchTerm = value;
-    }
-  };
-  const onGroupSelect = selectedSearchTerm => {
-    if (selectedSearchTerm) {
-      let selectedSearch = selectedSearchTerm.split(',')[0];
-      searchGroupWithFilters({ groupKeyword: selectedSearch });
+  const handleSearch = searchTerm => {
+    if (searchTerm) {
+      getGroupAutoComplete(searchTerm);
     }
   };
 
-  const Complete = () => (
-    <div>
-      <div>
-        <label className='auto-complete-label' title='Find your group'>
-          {'Search your group'}
-        </label>
-      </div>
-      <AutoComplete
-        name='groupSearchTerm'
-        style={{
-          width: '100%'
-        }}
-        value={searchValue}
-        placeholder={'Type school name or group name'}
-        onSearch={handleGroupSearch}
-        onChange={onGroupChange}
-        onSelect={onGroupSelect}
-        notFoundContent={group.loading ? <Spin size='small' /> : null}
-        defaultOpen={false}
-      >
-        {children}
-      </AutoComplete>
-    </div>
-  );
+  const onSelect = value => {
+    console.log('onSelect', value);
+  };
 
   return (
-    <Fragment> {group && group.loading ? <Spinner /> : <Complete />}</Fragment>
+    <AutoComplete
+      //dropdownMatchSelectWidth={252}
+      style={{
+        width: '100%'
+      }}
+      placeholder={'Type school name or group name'}
+      onSelect={onSelect}
+      onSearch={handleSearch}
+    >
+      {children}
+    </AutoComplete>
   );
 };
 const mapStateToProps = state => ({

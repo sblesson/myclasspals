@@ -6,6 +6,7 @@ import com.clazzbuddy.mongocollections.Post;
 
 public class PostSearchResult extends CommonResult{
 
+	private long totalPostCount;
 	private List<Post> post;
 
 	public List<Post> getPost() {
@@ -14,5 +15,13 @@ public class PostSearchResult extends CommonResult{
 
 	public void setPost(List<Post> post) {
 		this.post = post;
+	}
+
+	public long getTotalPostCount() {
+		return totalPostCount;
+	}
+
+	public void setTotalPostCount(long totalPostCount) {
+		this.totalPostCount = totalPostCount - 1;
 	}
 }
