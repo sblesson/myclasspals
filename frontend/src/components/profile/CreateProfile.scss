@@ -3,7 +3,13 @@
 .create-profile-wrapper {
   //background-color: white;
   width: 60vw;
-  background: var(--bg-profile);
+  //background: var(--bg-profile);
+  background: #fff;
+
+  -webkit-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+
   border: 1px solid var(--bg-profile);
   padding: 2rem 4rem;
   min-height: calc(100vh - 20rem);

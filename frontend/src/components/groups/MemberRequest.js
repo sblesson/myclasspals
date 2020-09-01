@@ -11,17 +11,20 @@ import {
   Dropdown,
   List,
   Avatar,
-  Comment
+  Comment,
+  Typography,
 } from 'antd';
 
 import { approveUserGroupRequest } from '../../actions/group';
 
 const MemberRequest = ({ member, approveUserGroupRequest }) => {
-  const approveUserGroupRequestClick = record => {
+  const { Text } = Typography;
+
+  const approveUserGroupRequestClick = (record) => {
     approveUserGroupRequest({
       groupId: record.groupId,
       role: record.role,
-      requestorUserId: record.requestorUserId
+      requestorUserId: record.requestorUserId,
     });
   };
 
@@ -36,9 +39,13 @@ const MemberRequest = ({ member, approveUserGroupRequest }) => {
           }
           key={member.requestorUserId}
           author={
-            <Link to={`/profile/${member.groupId}/${member.requestorUserId}`}>
-              {member.requestorUserId}
-            </Link>
+            member.role === 'admin' ? (
+              <Link to={`/profile/${member.groupId}/${member.requestorUserId}`}>
+                {member.requestorUserId}
+              </Link>
+            ) : (
+              <Text>{member.requestorUserId}</Text>
+            )
           }
           content={
             member.role ? (
@@ -60,9 +67,9 @@ const MemberRequest = ({ member, approveUserGroupRequest }) => {
 };
 
 MemberRequest.propTypes = {
-  member: PropTypes.object.isRequired
+  member: PropTypes.object.isRequired,
 };
 
 export default connect(null, {
-  approveUserGroupRequest
+  approveUserGroupRequest,
 })(MemberRequest);

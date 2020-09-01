@@ -11,22 +11,22 @@ import {
   AutoSizer,
   CellMeasurer,
   CellMeasurerCache,
-  WindowScroller
+  WindowScroller,
 } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 
 const Posts = ({
   groupId,
   searchPost,
-  post: { posts, totalPostCount, loading }
+  post: { posts, totalPostCount, loading },
 }) => {
   const MAX_FEED_COUNT = totalPostCount;
   useEffect(() => {
     searchPost(
       {
-        groupId: groupId
+        groupId: groupId,
       },
-      cancel => {
+      (cancel) => {
         cancel();
       }
     );
@@ -40,12 +40,12 @@ const Posts = ({
         size='small'
         dataSource={posts}
         pagination={{
-          onChange: page => {
+          onChange: (page) => {
             console.log(page);
           },
           total: MAX_FEED_COUNT,
           pageSize: 50,
-          hideOnSinglePage: true
+          hideOnSinglePage: true,
         }}
         renderItem={(item, index) => (
           <List.Item key={index}>
@@ -60,11 +60,11 @@ const Posts = ({
 Posts.propTypes = {
   groupId: PropTypes.string.isRequired,
   searchPost: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  post: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  post: state.post
+const mapStateToProps = (state) => ({
+  post: state.post,
 });
 
 export default connect(mapStateToProps, { searchPost })(Posts);

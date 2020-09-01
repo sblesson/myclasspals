@@ -9,7 +9,7 @@ import { searchPost } from '../../../actions/post';
 const SearchPost = ({ searchPost, post, group }) => {
   const { Search } = Input;
 
-  const fetchPost = searchTerm => {
+  const fetchPost = (searchTerm) => {
     if (searchTerm) {
       let debounced = _.debounce(() => {
         searchPost({ keyword: searchTerm, groupId: group.currentGroup.id });
@@ -18,7 +18,7 @@ const SearchPost = ({ searchPost, post, group }) => {
     }
   };
 
-  const handleOnEnter = event => {
+  const handleOnEnter = (event) => {
     if (event && event.currentTarget && event.currentTarget.defaultValue) {
       fetchPost(event.currentTarget.defaultValue);
     }
@@ -27,7 +27,6 @@ const SearchPost = ({ searchPost, post, group }) => {
   return (
     <Search
       placeholder={`Search posts from ${group.currentGroup.groupName}`}
-      prefix={<SearchOutlined />}
       size='small'
       onPressEnter={handleOnEnter}
       onSearch={fetchPost}
@@ -35,8 +34,8 @@ const SearchPost = ({ searchPost, post, group }) => {
     />
   );
 };
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   post: state.post,
-  group: state.group
+  group: state.group,
 });
 export default connect(mapStateToProps, { searchPost })(SearchPost);

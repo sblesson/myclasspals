@@ -11,14 +11,15 @@ import {
   Dropdown,
   List,
   Avatar,
-  Comment
+  Comment,
+  Typography,
 } from 'antd';
 
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import {
   acceptUserGroupInvitation,
   declineUserGroupRequest,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
 } from '../../actions/group';
 
 const UserCard = ({
@@ -30,26 +31,27 @@ const UserCard = ({
   auth,
   acceptUserGroupInvitation,
   declineUserGroupRequest,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
 }) => {
   const { Meta } = Card;
+  const { Text } = Typography;
 
-  const requestToJoinUserGroupClickHandler = record => {
+  const requestToJoinUserGroupClickHandler = (record) => {
     requestToJoinUserGroup({
       groupId: record.id,
       role: 'member',
       requestorUserId: auth.user.email,
-      origin: 'discovergroup'
+      origin: 'discovergroup',
     });
   };
 
-  const isLoggedInUserJoinedUserGroup = group => {
+  const isLoggedInUserJoinedUserGroup = (group) => {
     let isUserJoinedGroup = false;
     let memberArr = [];
     const userId = localStorage.getItem('userId');
 
     if (group && group.userGroupMembers && group.userGroupMembers.length > 0) {
-      memberArr = group.userGroupMembers.filter(item => {
+      memberArr = group.userGroupMembers.filter((item) => {
         return item._id === userId;
       });
     }
@@ -70,11 +72,11 @@ const UserCard = ({
     </Menu>
   );
 
-  const acceptPendingInviteActionClick = record => {
+  const acceptPendingInviteActionClick = (record) => {
     acceptUserGroupInvitation({
       groupId: record.id,
       role: 'member',
-      invitedUserId: auth.user.email
+      invitedUserId: auth.user.email,
     });
   };
 
@@ -88,9 +90,13 @@ const UserCard = ({
         }
         key={user._id}
         author={
-          <Link to={`/profile/${currentGroup.id}/${user._id}`}>
-            {user.name}
-          </Link>
+          user.role === 'admin' ? (
+            <Link to={`/profile/${currentGroup.id}/${user._id}`}>
+              {user.name}
+            </Link>
+          ) : (
+            <Text>{user.name}</Text>
+          )
         }
         content={
           user.role ? (
@@ -110,15 +116,15 @@ const UserCard = ({
 };
 
 UserCard.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
   declineUserGroupRequest,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
 })(UserCard);

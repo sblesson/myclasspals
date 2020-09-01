@@ -20,7 +20,7 @@ import {
   GET_GROUP_AUTO_COMPLETE,
   GET_GROUP_AUTO_COMPLETE_ERROR,
   CLEAR_AUTOCOMPLETE_GROUP_SEARCH,
-  DELETE_GROUP
+  DELETE_GROUP,
 } from '../actions/types';
 
 const initialState = {
@@ -38,16 +38,16 @@ const initialState = {
   redirect: false,
   searchTerm: '',
   isGroupStatusUpdated: false,
-  isRequestUserGroupSuccess: false
+  isRequestUserGroupSuccess: false,
 };
 
-const isLoggedInUserGroupAdmin = userGroupMembers => {
+const isLoggedInUserGroupAdmin = (userGroupMembers) => {
   let memberAdmin = null;
 
   const userId = localStorage.getItem('userId');
 
   if (userGroupMembers && userGroupMembers.length > 0) {
-    memberAdmin = userGroupMembers.filter(item => {
+    memberAdmin = userGroupMembers.filter((item) => {
       return item._id === userId && item.role === 'admin';
     });
   }
@@ -57,7 +57,7 @@ const isLoggedInUserGroupAdmin = userGroupMembers => {
   return false;
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -79,14 +79,14 @@ export default function(state = initialState, action) {
             ? payload.requestedUserGroup
             : [],
 
-        loading: false
+        loading: false,
       };
     case ADD_GROUP:
       return {
         ...state,
         userGroup: [...state.userGroup, payload.userGroup],
         newGroup: payload.userGroup,
-        loading: false
+        loading: false,
       };
     case UPDATE_GROUP:
       return {
@@ -94,7 +94,7 @@ export default function(state = initialState, action) {
         groups: [payload.userGroup, ...state.groups],
         userGroup: payload.userGroup,
         newGroup: payload.userGroup,
-        loading: false
+        loading: false,
       };
 
     case GET_ALL_GROUPS:
@@ -104,34 +104,34 @@ export default function(state = initialState, action) {
         loading: false,
         userGroup: payload.userGroup,
         pendingInvitedUserGroups: payload.pendingInvitedUserGroups,
-        requestedUserGroup: payload.requestedUserGroup
+        requestedUserGroup: payload.requestedUserGroup,
       };
     case SEARCH_ALL_GROUP:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        searchResult: payload.userGroupList
+        searchResult: payload.userGroupList,
       };
     case SEARCH_GROUP_WITH_FILTERS:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        searchResult: payload.userGroupList
+        searchResult: payload.userGroupList,
       };
     case GET_GROUP_AUTO_COMPLETE:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        autoCompleteSearchResult: payload
+        autoCompleteSearchResult: payload,
       };
     case CLEAR_AUTOCOMPLETE_GROUP_SEARCH:
       return {
         ...state,
         loading: false,
-        autoCompleteSearchResult: []
+        autoCompleteSearchResult: [],
       };
 
     case GET_GROUP:
@@ -142,13 +142,13 @@ export default function(state = initialState, action) {
         currentGroup: payload,
         isAuthenticated: true,
         loading: false,
-        isGroupAdmin: isLoggedInUserGroupAdmin(payload.userGroupMembers)
+        isGroupAdmin: isLoggedInUserGroupAdmin(payload.userGroupMembers),
       };
     case INVITE_TO_GROUP:
       return {
         ...state,
         currentGroup: payload.userGroup,
-        loading: false
+        loading: false,
       };
     case ACCEPT_USER_GROUP:
       return {
@@ -157,17 +157,17 @@ export default function(state = initialState, action) {
         userGroup: payload.user.userGroup,
         pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
         requestedUserGroup: payload.user.requestedUserGroup,
-        loading: false
+        loading: false,
       };
     case REQUEST_JOIN_USER_GROUP:
       if (payload.currentGroup.privacy === 'PRIVATE') {
         let currentRequestedGrp = payload.user.requestedUserGroup.filter(
-          result => result.id === payload.currentGroup.id
+          (result) => result.id === payload.currentGroup.id
         );
         currentRequestedGrp.role = 'Pending Requests';
 
         if (currentRequestedGrp) {
-          state.searchResult.map(result => {
+          state.searchResult.map((result) => {
             if (result.id === payload.currentGroup.id) {
               result.role = 'Pending Requests';
               result.isGroupStatusUpdated = true;
@@ -179,14 +179,14 @@ export default function(state = initialState, action) {
           ...state,
           requestedUserGroup: payload.user.requestedUserGroup,
           loading: false,
-          isRequestUserGroupSuccess: true
+          isRequestUserGroupSuccess: true,
         };
       } else {
         let currentRequestedGrp = payload.user.userGroup.filter(
-          result => result.id === payload.currentGroup.id
+          (result) => result.id === payload.currentGroup.id
         );
         if (currentRequestedGrp) {
-          state.searchResult.map(result => {
+          state.searchResult.map((result) => {
             if (result.id === payload.currentGroup.id) {
               result.role = 'member';
               result.isGroupStatusUpdated = true;
@@ -198,7 +198,7 @@ export default function(state = initialState, action) {
           ...state,
           userGroup: payload.user.userGroup,
           loading: false,
-          isRequestUserGroupSuccess: true
+          isRequestUserGroupSuccess: true,
         };
       }
 
@@ -209,19 +209,30 @@ export default function(state = initialState, action) {
         userGroup: payload.user.userGroup,
         pendingInvitedUserGroups: payload.user.pendingInvitedUserGroups,
         requestedUserGroup: payload.user.requestedUserGroup,
-        loading: false
+        loading: false,
       };
     case CHANGE_GROUP_USER_ROLE:
       return {
         ...state,
         //group: [payload, ...state.groupName],
-        loading: false
+        loading: false,
+      };
+
+    case 'CLEAR_AUTOCOMPLETE_GROUP_SEARCH':
+      return {
+        ...state,
+        autoCompleteSearchResult: [],
+      };
+    case 'CLEAR_GROUP_SEARCH':
+      return {
+        ...state,
+        searchResult: [],
       };
     case DELETE_GROUP:
       return {
         ...state,
-        userGroup: state.userGroup.filter(group => group.id !== payload),
-        loading: false
+        userGroup: state.userGroup.filter((group) => group.id !== payload),
+        loading: false,
       };
 
     default:

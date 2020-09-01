@@ -1,6 +1,6 @@
 import React from 'react';
 import Footer from './Footer';
-import Services from './AboutServices';
+import AboutServices from './AboutServices';
 
 const AboutUs = () => {
   return (
@@ -11,7 +11,7 @@ const AboutUs = () => {
 
       <div className='row' style={{ marginTop: '20px' }}>
         {' '}
-        <Services />
+        <AboutServices />
       </div>
       <Footer />
     </div>
