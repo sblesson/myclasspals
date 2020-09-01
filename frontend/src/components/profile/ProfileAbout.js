@@ -28,10 +28,10 @@ const ProfileAbout = ({ profile: { email, userGroup, name } }) => {
       //cleanup
     };
   }, [userGroup]);
-  const publicGroupItems = publicGroup.map(item => (
+  const publicGroupItems = publicGroup.map((item) => (
     <div key={`public-${item.id}`}>{item.groupName}</div>
   ));
-  const privateGroupItems = privateGroup.map(item => (
+  const privateGroupItems = privateGroup.map((item) => (
     <div key={`private-${item.id}`}>{item.groupName}</div>
   ));
   return (
@@ -39,7 +39,7 @@ const ProfileAbout = ({ profile: { email, userGroup, name } }) => {
       className='profile-card'
       title={
         <Ellipsis length={80} tooltip>
-          {email}
+          {email ? email : ''}
         </Ellipsis>
       }
       extra={<PrivateMessageModal toAddress={email} />}
@@ -68,7 +68,7 @@ const ProfileAbout = ({ profile: { email, userGroup, name } }) => {
 };
 
 ProfileAbout.propTypes = {
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
 export default ProfileAbout;

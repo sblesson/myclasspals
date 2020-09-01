@@ -3,6 +3,8 @@
 @import 'styles/modal';
 @import 'styles/abstracts/variables';
 @import 'styles/abstracts/mixins';
+@import 'styles/abstracts/include-media';
+
 @import url('https://fonts.googleapis.com/css?family=Comfortaa|Nanum+Pen+Script&display=swap');
 
 //font-family: 'Comfortaa', cursive;
@@ -365,11 +367,6 @@ button {
 }
 
 /* Landing Page */
-.landing {
-  position: relative;
-  background: url('./img/show.png') no-repeat center center/cover;
-  height: 100vh;
-}
 
 .landing-inner {
   color: #1d1d1d;
@@ -960,6 +957,10 @@ thead {
 .ant-btn-link {
   color: var(--primary-link-color) !important;
 }
+.link {
+  color: var(--primary-link-color) !important;
+  font-weight: 500;
+}
 .ant-tabs-top-bar {
   background: #fff;
   padding: 0.5rem 1.5rem 1rem 1rem;
@@ -1031,24 +1032,92 @@ thead {
 }
 
 .wrapper {
-  @include respond(phone) {
-    font-size: 56.25%;
-    width: 100%;
-  }
-  @include respond(tab-port) {
+  // if the breakpoint is less than or equal to 360px
+  @include media('<=phone') {
     width: 90%;
   }
-  @include respond(tab-land) {
-    font-size: 56.25%;
+  // if the breakpoint is greater than 360px and less than or eqaul to 425px
+  @include media('>phone', '<=425px') {
+    width: 80%;
+  }
+
+  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  @include media('>425px', '<=tablet') {
     width: 70%;
   }
-  @include respond(big-desktop) {
+
+  // if the screen is going to be greater than 768px and less than 1366px
+  @include media('>tablet', '<desktop') {
     width: 70%;
   }
-  background: var(--bg-profile);
-  margin: 1rem;
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    width: 70%;
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    width: 60%;
+  }
+  background-color: transparent;
+  //background: var(--bg-profile);
+  margin-top: 1.5rem;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+  margin-right: 1rem;
   padding: 2rem;
   width: 70%;
+  -webkit-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+}
+
+.landing-container {
+  margin: 2rem;
+  padding: 2rem;
+  width: 40%;
+  float: right;
+
+  // if the breakpoint is less than or equal to 360px
+  @include media('<=phone') {
+    width: 80%;
+  }
+  // if the breakpoint is greater than 360px and less than or eqaul to 425px
+  @include media('>phone', '<=425px') {
+    width: 80%;
+  }
+
+  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  @include media('>425px', '<=tablet') {
+    width: 60%;
+  }
+
+  // if the screen is going to be greater than 768px and less than 1366px
+  @include media('>tablet', '<desktop') {
+    width: 40%;
+  }
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    width: 40%;
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    width: 30%;
+    margin-right: 3rem;
+  }
+}
+.landing-form-wrapper {
+  background-color: #f0f0f0;
+  padding: 2rem;
+}
+.contact-wrapper {
+  background: '#fff';
+  padding: 2rem;
+
+  -webkit-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
 }
 
 .ant-dropdown-link {
@@ -1062,6 +1131,19 @@ thead {
 
 .ant-pagination-item-active {
   border-color: var(--bg-primary-btn);
+}
+
+.about-page {
+  .service-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 0;
+    position: relative;
+    font-size: 0.7rem;
+  }
 }
 
 .service-container {
@@ -1088,34 +1170,39 @@ thead {
   width: 40%;
 }
 .landing-bg {
-  background: url('./assets/images/hold.jpeg') center no-repeat;
+  background: url('./assets/images/landing-bg.jpeg') center no-repeat;
   background-size: cover;
-  height: 80vh;
+  height: 30rem;
   width: 100%;
   opacity: 0.9;
-  background-color: #333;
+  background-color: #fff;
+  -webkit-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+  box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
 }
 .about-bg {
-  background: url('./assets/images/about.jpg') center no-repeat;
+  background: url('./assets/images/we.jpg') center no-repeat;
   background-size: cover;
-  height: 30vh;
+  height: 30rem;
   width: 100%;
   opacity: 0.9;
   background-color: #333;
 }
 .service-one {
-  background: url('https://images.unsplash.com/photo-1581094648468-20624f9c771a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80')
-    center;
+  background: url('./assets/images/find.png') top no-repeat;
+  background-size: cover;
 }
 
 .service-two {
-  background: url('https://images.unsplash.com/photo-1581091870619-835cee86e759?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80')
-    center;
+  background: url('./assets/images/together.jpg') center no-repeat;
+  background-size: cover;
+
+  //background: url('https://images.unsplash.com/photo-1581094648468-20624f9c771a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80');
 }
 
 .service-three {
-  background: url('https://images.unsplash.com/photo-1427751840561-9852520f8ce8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=755&q=80')
-    center;
+  background: url('./assets/images/comm-friends.jpg') center no-repeat;
+  background-size: cover;
 }
 
 .App {
@@ -1162,4 +1249,9 @@ thead {
   margin-left: 8px !important;
   text-transform: capitalize;
   vertical-align: 'middle';
+}
+
+@font-face {
+  font-family: Norther-Lights;
+  src: url(./assets/fonts/Northern-Lights.ttf);
 }

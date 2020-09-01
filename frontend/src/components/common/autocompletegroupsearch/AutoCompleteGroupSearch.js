@@ -1,33 +1,42 @@
-import React, { Fragment, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Spin, Select, AutoComplete, Input } from 'antd';
 import _ from 'lodash';
 import Spinner from '../spinner/Spinner';
 import { SearchOutlined } from '@ant-design/icons';
 import { Form, FormItem } from 'formik-antd';
+
 import {
   getGroupAutoComplete,
-  searchGroupWithFilters
+  searchGroupWithFilters,
+  clearAutoCompleteGroupSearchResult,
+  clearGroupSearchResult,
 } from '../../../actions/group';
 import './AutoCompleteGroupSearch.scss';
 
 const AutoCompleteGroupSearch = ({
   getGroupAutoComplete,
+  clearAutoCompleteGroupSearchResult,
   searchGroupWithFilters,
-  group
+  group,
 }) => {
   const { Option, OptGroup } = Select;
+
+  useEffect(() => {
+    clearAutoCompleteGroupSearchResult();
+    clearGroupSearchResult();
+  }, []);
 
   const children =
     group &&
     group.autoCompleteSearchResult &&
     group.autoCompleteSearchResult.length > 0 &&
-    group.autoCompleteSearchResult.map(item => {
+    group.autoCompleteSearchResult.map((item) => {
       return (
         <OptGroup label={item.label} key={item.label}>
           {item.options &&
             item.options.length > 0 &&
-            item.options.map(dataOption => {
+            item.options.map((dataOption) => {
               if (dataOption) {
                 return (
                   <Option key={dataOption} value={dataOption}>
@@ -42,7 +51,7 @@ const AutoCompleteGroupSearch = ({
                           marginLeft: '.5rem',
                           paddingTop: '.3rem',
                           fontSize: '.8rem',
-                          display: 'inline-block'
+                          display: 'inline-block',
                         }}
                       >
                         {dataOption}
@@ -56,34 +65,41 @@ const AutoCompleteGroupSearch = ({
       );
     });
 
-  const handleSearch = searchTerm => {
+  const handleSearch = (searchTerm) => {
     if (searchTerm) {
       getGroupAutoComplete(searchTerm);
     }
   };
 
-  const onSelect = value => {
-    console.log('onSelect', value);
+  const onGroupSelect = (selectedSearchTerm) => {
+    if (selectedSearchTerm) {
+      let selectedSearch = selectedSearchTerm.split(',')[0];
+      searchGroupWithFilters({
+        groupKeyword: selectedSearch,
+        schoolName: selectedSearch,
+      });
+    }
   };
 
   return (
     <AutoComplete
       //dropdownMatchSelectWidth={252}
       style={{
-        width: '100%'
+        width: '100%',
       }}
       placeholder={'Type school name or group name'}
-      onSelect={onSelect}
+      onSelect={onGroupSelect}
       onSearch={handleSearch}
     >
       {children}
     </AutoComplete>
   );
 };
-const mapStateToProps = state => ({
-  group: state.group
+const mapStateToProps = (state) => ({
+  group: state.group,
 });
 export default connect(mapStateToProps, {
   searchGroupWithFilters,
-  getGroupAutoComplete
+  getGroupAutoComplete,
+  clearAutoCompleteGroupSearchResult,
 })(AutoCompleteGroupSearch);

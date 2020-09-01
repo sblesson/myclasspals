@@ -15,11 +15,13 @@ const TopNavbar = ({ auth: { isAuthenticated } }) => {
       style={{
         position: 'fixed',
         zIndex: 1,
-        width: '100%'
+        width: '100%',
       }}
       className='top-menu'
     >
-      <div className='logo float-left' />
+      <div className='logo float-left'>
+        <span className='logo-text'>clazzbuddy</span>
+      </div>
       <div className='float-right'>
         {isAuthenticated ? <UserMenu /> : <GuestMenu />}
       </div>
@@ -27,8 +29,8 @@ const TopNavbar = ({ auth: { isAuthenticated } }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {})(TopNavbar);

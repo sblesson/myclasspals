@@ -16,7 +16,7 @@ const Login = ({ login, auth, history }) => {
 
   const { Title, Text } = Typography;
 
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -24,22 +24,22 @@ const Login = ({ login, auth, history }) => {
     labelCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
+      md: { span: 20 },
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
-    }
+      md: { span: 20 },
+    },
   };
 
   const yourInfo = (
     <Formik
       initialValues={{
         email: '',
-        password: ''
+        password: '',
       }}
-      onSubmit={values => {
+      onSubmit={(values) => {
         setIsLoadingSignInBtn(true);
         login({ email: values.email, password: values.password }, () => {
           setIsLoadingSignInBtn(false);
@@ -55,7 +55,7 @@ const Login = ({ login, auth, history }) => {
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             <FormItem
@@ -93,14 +93,7 @@ const Login = ({ login, auth, history }) => {
   return (
     <div>
       <div className='landing-bg'>
-        <div
-          className='service-description'
-          style={{
-            float: 'right',
-            paddingTop: '3rem',
-            marginRight: '3rem'
-          }}
-        >
+        <div className='landing-container'>
           <h2>Join School Community</h2>
           <div>
             This is the place where families come together to keep discuss
@@ -109,23 +102,18 @@ const Login = ({ login, auth, history }) => {
             knowledge, discuss new topics, make new friends, schedule playdate
             and many more ...
           </div>
-          <div
-            style={{
-              background: '#f0f0f0',
-              marginTop: '1rem',
-              padding: '1rem 0 2rem 2rem',
-              width: '70%'
-            }}
-          >
+          <div className='landing-form-wrapper'>
             {yourInfo}
             <Text className='form-info-text'>
-              Don't have an account? <Link to='/register'>Sign Up</Link>
+              Don't have an account?{' '}
+              <Link to='/register' className='link'>
+                Sign Up
+              </Link>
             </Text>
           </div>
         </div>
       </div>
-      <div className='row'></div>
-      <div className='row' style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '20px' }}>
         {' '}
         <Services />
       </div>
@@ -136,12 +124,12 @@ const Login = ({ login, auth, history }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { login })(Login);

@@ -1,17 +1,17 @@
 import React from 'react';
 import Footer from './Footer';
-import Services from './AboutServices';
+import AboutServices from './AboutServices';
 
 const AboutUs = () => {
   return (
-    <div>
+    <div className='about-page'>
       <div className='row'>
         <div className='about-bg'></div>
       </div>
 
       <div className='row' style={{ marginTop: '20px' }}>
         {' '}
-        <Services />
+        <AboutServices />
       </div>
       <Footer />
     </div>

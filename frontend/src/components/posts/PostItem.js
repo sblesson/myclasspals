@@ -11,10 +11,11 @@ import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import {
   EditOutlined,
   EllipsisOutlined,
-  SettingOutlined
+  SettingOutlined,
 } from '@ant-design/icons';
 import { deletePost } from '../../actions/post';
 import DeletePostModal from './modal/DeletePostModal';
+import { MessageOutlined } from '@ant-design/icons';
 
 import './PostItem.scss';
 
@@ -32,22 +33,22 @@ const PostItem = ({
     thanks,
     groupId,
     comments,
-    postedDate
+    postedDate,
   },
   showActions,
   showAllComments,
-  isSinglePost
+  isSinglePost,
 }) => {
   const { Paragraph } = Typography;
 
   const { Meta } = Card;
 
-  const firstLetterUserName = userName => {
+  const firstLetterUserName = (userName) => {
     if (typeof userName !== 'string') return '';
     return userName.charAt(0).toUpperCase();
   };
 
-  const onClick = key => {
+  const onClick = (key) => {
     if (key === 'deletepost') {
     } else if (key === 'editpost') {
     }
@@ -67,7 +68,7 @@ const PostItem = ({
       itemLayout='horizontal'
       dataSource={comments}
       style={{ overflow: 'hidden' }}
-      renderItem={comment => (
+      renderItem={(comment) => (
         <CommentItem
           key={comment._id}
           comment={comment}
@@ -78,6 +79,17 @@ const PostItem = ({
       )}
     />
   );
+  const IconText = ({ icon, text }) => (
+    <Link to={`/posts/${_id}/${groupId}`}>
+      {' '}
+      {React.createElement(icon)}{' '}
+      <span className='comment-count-text'>
+        {comments.length > 1
+          ? `${comments.length} comments`
+          : `${comments.length} comment`}
+      </span>
+    </Link>
+  );
 
   const lastThreeComments = comments !== null &&
     comments &&
@@ -86,7 +98,7 @@ const PostItem = ({
         itemLayout='horizontal'
         dataSource={comments.slice(-3)}
         style={{ overflow: 'hidden' }}
-        renderItem={comment => (
+        renderItem={(comment) => (
           <CommentItem
             key={comment._id}
             comment={comment}
@@ -123,7 +135,10 @@ const PostItem = ({
         }
         extra={
           <Dropdown overlay={menu} placement='bottomCenter'>
-            <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+            <a
+              className='ant-dropdown-link'
+              onClick={(e) => e.preventDefault()}
+            >
               <EllipsisOutlined />
             </a>
           </Dropdown>
@@ -142,6 +157,11 @@ const PostItem = ({
           {message}
         </Paragraph>
 
+        {comments && comments.length > 0 ? (
+          <IconText icon={MessageOutlined} key='list-vertical-message' />
+        ) : (
+          ''
+        )}
         {showActions && (
           <div style={{ marginBottom: '2rem' }}>
             {showAllComments ? allComments : lastThreeComments}
@@ -162,17 +182,17 @@ const PostItem = ({
 PostItem.defaultProps = {
   showActions: true,
   showAllComments: false,
-  isSinglePost: false
+  isSinglePost: false,
 };
 
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,
   showActions: PropTypes.bool,
-  showAllComments: PropTypes.bool
+  showAllComments: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {})(PostItem);

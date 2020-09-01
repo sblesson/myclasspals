@@ -55,7 +55,7 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
     }
   }, [group]);
 
-  const getNavByScreen = screen => {
+  const getNavByScreen = (screen) => {
     switch (screen) {
       case 'dashboard':
       case 'profile':
@@ -63,11 +63,11 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
         if (myGroups && myGroups.length > 0) {
           return myGroups;
         } else if (group && group.userGroup && group.userGroup.length > 0) {
-          myGroups = group.userGroup.map(group => ({
+          myGroups = group.userGroup.map((group) => ({
             id: group.id,
             title: group.groupName,
             key: group.id,
-            url: '/dashboard/' + group.id
+            url: '/dashboard/' + group.id,
           }));
           return myGroups;
         } else {
@@ -77,8 +77,8 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
                 id: group.currentGroup.id,
                 title: group.currentGroup.groupName,
                 key: group.currentGroup.id,
-                url: `/group/${group.currentGroup.id}`
-              }
+                url: `/group/${group.currentGroup.id}`,
+              },
             ];
           } else return null;
         }
@@ -95,8 +95,8 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
             key: 'account',
             title: 'Account Settings',
             icon: 'fas fa-user-cog',
-            url: '/account'
-          }
+            url: '/account',
+          },
         ];
 
       case 'groups':
@@ -107,15 +107,15 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
             key: 'my_groups',
             title: 'My Groups',
             icon: 'fas fa-users',
-            url: '/groups'
+            url: '/groups',
           },
           {
             id: 'search_group-1',
             key: 'search_group',
             title: 'Discover Groups',
             icon: 'fas fa-search',
-            url: '/discovergroup/'
-          }
+            url: '/discovergroup/',
+          },
         ];
       case 'group':
         if (group && group.currentGroup && group.currentGroup.groupName) {
@@ -125,8 +125,8 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
               title: group.currentGroup.groupName,
               name: group.currentGroup.groupName,
               key: group.currentGroup.id,
-              url: `/group/${group.currentGroup.id}`
-            }
+              url: `/group/${group.currentGroup.id}`,
+            },
           ];
         } else return null;
 
@@ -144,7 +144,7 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
     };
   }, [screen]);
 
-  const handleLeftMenuClick = event => {
+  const handleLeftMenuClick = (event) => {
     event.domEvent.stopPropagation();
     setActiveMenu([event.key]);
   };
@@ -187,7 +187,7 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
             mode='inline'
             selectedKeys={activeMenu}
             defaultSelectedKeys={activeMenu}
-            onClick={event => handleLeftMenuClick(event)}
+            onClick={(event) => handleLeftMenuClick(event)}
           >
             {sideNavMenu &&
               sideNavMenu.length > 0 &&
@@ -229,7 +229,7 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
               mode='inline'
               selectedKeys={activeMenu}
               defaultSelectedKeys={activeMenu}
-              onClick={event => handleLeftMenuClick(event)}
+              onClick={(event) => handleLeftMenuClick(event)}
             >
               <Menu.Item key='dashboard'>
                 <Link to='/dashboard'>{'Home'}</Link>
@@ -283,10 +283,10 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     categories: state.post.categories,
-    group: state.group
+    group: state.group,
   };
 };
 

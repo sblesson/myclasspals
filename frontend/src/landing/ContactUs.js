@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
-import { Typography, Text } from 'antd';
+import { Typography, Result } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import Services from './Services';
 import Footer from './Footer';
@@ -13,10 +13,12 @@ import PropTypes from 'prop-types';
 
 const ContactUs = ({ setAlert, contactUsMessage }) => {
   const [componentSize, setComponentSize] = useState('small');
+  const [isResultVisible, setIsResultVisible] = useState(false);
+
   const { Title, Text } = Typography;
   const [isLoadingSignUpBtn, setIsLoadingSignUpBtn] = useState(false);
 
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -24,13 +26,13 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
     labelCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
+      md: { span: 20 },
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
-    }
+      md: { span: 20 },
+    },
   };
 
   const yourInfo = (
@@ -38,23 +40,20 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
       initialValues={{
         email: '',
         name: '',
-        message: ''
+        message: '',
       }}
-      onSubmit={values => {
+      onSubmit={(values) => {
         setIsLoadingSignUpBtn(true);
-        if (values.password !== values.password2) {
-          setAlert('Passwords do not match', 'danger');
-          setIsLoadingSignUpBtn(false);
-        } else {
-          contactUsMessage(
-            { email: values.email, name: values.name, message: values.message },
-            cancelTokenSrc => {
-              setIsLoadingSignUpBtn(false);
-              console.log(cancelTokenSrc);
-              cancelTokenSrc.cancel();
-            }
-          );
-        }
+
+        contactUsMessage(
+          { email: values.email, name: values.name, message: values.message },
+          (cancelTokenSrc) => {
+            setIsLoadingSignUpBtn(false);
+            console.log(cancelTokenSrc);
+            cancelTokenSrc.cancel();
+          }
+        );
+        setIsResultVisible(true);
       }}
       validator={() => ({})}
       //validate={values => {}}
@@ -65,7 +64,7 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             <FormItem
@@ -111,6 +110,36 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
 
   return (
     <div>
+      <div className='row'>
+        <div
+          style={{
+            margin: '3rem auto',
+            width: '40%',
+          }}
+        >
+          {isResultVisible ? (
+            <Result
+              status='success'
+              title='Your request has been sent!'
+              subTitle='We really appreciate your valuable input. One of our representatives will contact you shortly'
+            />
+          ) : (
+            <div className='contact-wrapper'>
+              <h2>Contact Us</h2>
+
+              {yourInfo}
+              <Text className='form-info-text'>
+                Don't have an account? <Link to='/register'>Sign Up</Link>
+              </Text>
+            </div>
+          )}
+        </div>
+      </div>
+      <Footer />
+    </div>
+
+    /* 
+    <div>
       <div className='landing-bg'>
         <div
           className='service-description'
@@ -138,18 +167,18 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
         </div>
       </div>
       <Footer />
-    </div>
+    </div> */
   );
 };
 
 ContactUs.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  contactUsMessage: PropTypes.func.isRequired
+  contactUsMessage: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.school.isLoading
+  isLoading: state.school.isLoading,
 });
 
 export default connect(mapStateToProps, { setAlert, contactUsMessage })(

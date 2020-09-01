@@ -16,7 +16,7 @@ const Register = ({ setAlert, register, auth, history }) => {
   const { Title, Text } = Typography;
   const [isLoadingSignUpBtn, setIsLoadingSignUpBtn] = useState(false);
 
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -24,13 +24,13 @@ const Register = ({ setAlert, register, auth, history }) => {
     labelCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
+      md: { span: 20 },
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
-    }
+      md: { span: 20 },
+    },
   };
 
   const yourInfo = (
@@ -38,9 +38,9 @@ const Register = ({ setAlert, register, auth, history }) => {
       initialValues={{
         email: '',
         password: '',
-        password2: ''
+        password2: '',
       }}
-      onSubmit={values => {
+      onSubmit={(values) => {
         setIsLoadingSignUpBtn(true);
         if (values.password !== values.password2) {
           setAlert('Passwords do not match', 'danger');
@@ -48,7 +48,7 @@ const Register = ({ setAlert, register, auth, history }) => {
         } else {
           register(
             { email: values.email, password: values.password },
-            cancelTokenSrc => {
+            (cancelTokenSrc) => {
               setIsLoadingSignUpBtn(false);
               console.log(cancelTokenSrc);
               cancelTokenSrc.cancel();
@@ -66,7 +66,7 @@ const Register = ({ setAlert, register, auth, history }) => {
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             <FormItem
@@ -117,37 +117,27 @@ const Register = ({ setAlert, register, auth, history }) => {
     <div>
       <div className='landing-bg'>
         <div
-          className='service-description'
-          style={{
+          className='landing-container'
+          /*    style={{
             float: 'right',
             paddingTop: '2rem',
-            marginRight: '3rem'
-          }}
+            marginRight: '3rem',
+          }} */
         >
           <h2>Join School Community</h2>
-          <div>
-            This is the place where families come together to keep discuss
-            school events, question on homework, meeting other families in
-            school. Families in school can help one another, share their
-            knowledge, discuss new topics, make new friends, schedule playdate
-            and many more ...
-          </div>
-          <div
-            style={{
-              background: '#f0f0f0',
-              marginTop: '1rem',
-              padding: '1rem 0 2rem 2rem',
-              width: '70%'
-            }}
-          >
+
+          <div className='landing-form-wrapper'>
             {yourInfo}
             <Text className='form-info-text'>
-              Already have an account? <Link to='/login'>Sign In</Link>
+              Already have an account?{' '}
+              <Link to='/login' className='link'>
+                Sign In
+              </Link>
             </Text>
           </div>
         </div>
       </div>
-      <div className='row' style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '20px' }}>
         {' '}
         <Services />
       </div>
@@ -159,13 +149,13 @@ const Register = ({ setAlert, register, auth, history }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   isLoading: state.school.isLoading,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { setAlert, register })(Register);

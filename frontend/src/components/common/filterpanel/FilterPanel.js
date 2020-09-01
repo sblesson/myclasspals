@@ -12,7 +12,7 @@ const FilterPanel = ({
   categories,
   group,
   searchPost,
-  post: { posts, loading }
+  post: { posts, loading },
 }) => {
   const [filterPanel, showFilterPanel] = useState(false);
   const [dateFilterSelected, setDateFilterSelected] = useState(null);
@@ -23,7 +23,7 @@ const FilterPanel = ({
   const toggleFilterPanel = () => showFilterPanel(!filterPanel);
 
   let [filterObjectSelected, setFilterObjectSelected] = useState({
-    groupId: null
+    groupId: null,
   });
 
   let groupId;
@@ -31,7 +31,7 @@ const FilterPanel = ({
     if (group.currentGroup && group.currentGroup.id) {
       groupId = group.currentGroup.id;
       setFilterObjectSelected({
-        groupId: groupId
+        groupId: groupId,
       });
     }
   }, [group.currentGroup]);
@@ -41,63 +41,46 @@ const FilterPanel = ({
     'Today',
     'This week',
     'This month',
-    'This year'
+    'This year',
   ];
-  const getUTCDate = item => {
-    let dateFilterLessThan = moment()
-        .utc()
-        .format(),
+  const getUTCDate = (item) => {
+    let dateFilterLessThan = moment().utc().format(),
       dateFilterGreaterThan = null;
 
     switch (item) {
       case 'Last hour':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('hour')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('hour').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'Today':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('day')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('day').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'This week':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('week')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('week').format();
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'This month':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('month')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('month').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'This year':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('year')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('year').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
     }
   };
@@ -150,7 +133,7 @@ const FilterPanel = ({
         filterObjectSelected.catagoryId = item;
       } else {
         filterObjectSelected = Object.assign(filterObjectSelected, {
-          catagoryId: item
+          catagoryId: item,
         });
       }
     } else {
@@ -185,12 +168,13 @@ const FilterPanel = ({
             <div className='col-xs-1 col-sm-1 col-md-6 col-lg-6'>
               <List
                 size='small'
+                style={{ background: 'transparent' }}
                 header={<div>DATE</div>}
                 bordered
                 dataSource={dateFilters}
-                renderItem={item => (
+                renderItem={(item) => (
                   <List.Item
-                    onClick={event => handleDateFilterClick(item, event)}
+                    onClick={(event) => handleDateFilterClick(item, event)}
                     className={dateFilterSelected === item ? ' selected' : ''}
                   >
                     {item}
@@ -198,7 +182,9 @@ const FilterPanel = ({
                       <svg
                         className='svg-icon'
                         viewBox='0 0 20 20'
-                        onClick={event => removeDateFilterHandler(item, event)}
+                        onClick={(event) =>
+                          removeDateFilterHandler(item, event)
+                        }
                       >
                         <path
                           fill='none'
@@ -217,9 +203,9 @@ const FilterPanel = ({
                   header={<div>CATEGORY</div>}
                   bordered
                   dataSource={categories}
-                  renderItem={item => (
+                  renderItem={(item) => (
                     <List.Item
-                      onClick={event =>
+                      onClick={(event) =>
                         handlePostCategoryFilterClick(item.title, event)
                       }
                       className={
@@ -231,7 +217,7 @@ const FilterPanel = ({
                         <svg
                           className='svg-icon'
                           viewBox='0 0 20 20'
-                          onClick={event =>
+                          onClick={(event) =>
                             removeCategoryFilterHandler(item, event)
                           }
                         >
@@ -253,9 +239,9 @@ const FilterPanel = ({
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   post: state.post,
-  group: state.group
+  group: state.group,
 });
 
 export default connect(mapStateToProps, { searchPost })(FilterPanel);
