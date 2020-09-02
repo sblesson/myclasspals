@@ -2,6 +2,9 @@
 @import '../../styles/abstracts/variables';
 
 /* Posts Page */
+.feed-list-item.ant-list-item {
+  border-bottom: none;
+}
 .post-form .post-form-header {
   background: var(--primary-color);
   padding: 0.5rem;
