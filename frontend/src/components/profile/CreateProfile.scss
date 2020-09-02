@@ -1,4 +1,4 @@
-@import '../../styles/abstracts/mixins';
+@import '../../styles/abstracts/include-media';
 
 .create-profile-wrapper {
   //background-color: white;
@@ -14,23 +14,35 @@
   padding: 2rem 4rem;
   min-height: calc(100vh - 20rem);
   margin: 6rem auto;
-  @include respond(phone) {
+  // if the breakpoint is less than or equal to 360px
+  @include media('<=phone') {
     font-size: 56.25%;
-    width: 90% !important;
-    margin: 80vw 2rem;
-  }
-  @include respond(tab-port) {
     width: 90%;
-    margin: 2rem 2rem;
-    width: 80vw !important;
   }
-  @include respond(tab-land) {
-    font-size: 56.25%;
-    width: 60vw !important;
+  // if the breakpoint is greater than 360px and less than or eqaul to 425px
+  @include media('>phone', '<=425px') {
+    width: 90%;
   }
-  @include respond(big-desktop) {
-    width: 60vw !important;
+
+  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  @include media('>425px', '<=tablet') {
+    width: 70%;
   }
+
+  // if the screen is going to be greater than 768px and less than 1366px
+  @include media('>tablet', '<desktop') {
+    width: 70%;
+  }
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    width: 60%;
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    width: 60%;
+  }
+
   .profile-form-wrapper {
     margin: 1rem 2rem 0;
   }

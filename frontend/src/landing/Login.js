@@ -93,14 +93,7 @@ const Login = ({ login, auth, history }) => {
   return (
     <div>
       <div className='landing-bg'>
-        <div
-          className='service-description'
-          style={{
-            float: 'right',
-            paddingTop: '3rem',
-            marginRight: '3rem',
-          }}
-        >
+        <div className='landing-container'>
           <h2>Join School Community</h2>
           <div>
             This is the place where families come together to keep discuss
@@ -109,14 +102,7 @@ const Login = ({ login, auth, history }) => {
             knowledge, discuss new topics, make new friends, schedule playdate
             and many more ...
           </div>
-          <div
-            style={{
-              background: '#f0f0f0',
-              marginTop: '1rem',
-              padding: '1rem 0 2rem 2rem',
-              width: '70%',
-            }}
-          >
+          <div className='landing-form-wrapper'>
             {yourInfo}
             <Text className='form-info-text'>
               Don't have an account?{' '}
@@ -127,8 +113,7 @@ const Login = ({ login, auth, history }) => {
           </div>
         </div>
       </div>
-      <div className='row'></div>
-      <div className='row' style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '20px' }}>
         {' '}
         <Services />
       </div>
