@@ -24,11 +24,11 @@ import SearchPost from '../common/searchPost/SearchPost';
 import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
 import MemberRequest from './MemberRequest';
-import PendingInvitations from './PendingInvitations';
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 import DiscoverGroup from './DiscoverGroup';
 import CreateGroupModal from './modal/CreateGroupModal';
+import { searchPost } from '../../actions/post';
 
 import {
   getGroupDetails,
@@ -49,6 +49,7 @@ const SingleGroup = ({
   match,
   auth,
   history,
+  searchPost,
 }) => {
   const { Meta } = Card;
   const { Content, Sider } = Layout;
@@ -77,6 +78,14 @@ const SingleGroup = ({
         getGroupDetails(groupId, (cancelTokenSrc) => {
           cancelTokenSrc.cancel();
         });
+        searchPost(
+          {
+            groupId: groupId,
+          },
+          (cancel) => {
+            cancel();
+          }
+        );
       }
     }
 
@@ -259,7 +268,7 @@ const SingleGroup = ({
                         <SearchPost />
                         <PostFilterPanel />
                       </div>
-                      <Posts groupId={group.currentGroup.id} />
+                      <Posts />
                     </TabPane>
                     <TabPane tab='Members' key='members'>
                       <Meta
@@ -328,14 +337,13 @@ const SingleGroup = ({
                       ''
                     )}
                     {group.currentGroup.role === 'admin' ? (
-                      <TabPane tab='Pending Invitations' key='request'>
+                      <TabPane tab='Requested To Join' key='request'>
                         {group.currentGroup.requestedInvitations &&
                         group.currentGroup.requestedInvitations.length > 0 ? (
                           <List
                             itemLayout='vertical'
                             size='small'
-                            header={`${group.currentGroup.requestedInvitations.length} 
-                              pending invitations`}
+                            header={'Pending Invitations'}
                             pagination={{
                               onChange: (page) => {
                                 console.log(page);
@@ -347,7 +355,16 @@ const SingleGroup = ({
                             }}
                             dataSource={group.currentGroup.requestedInvitations}
                             renderItem={(item) => (
-                              <PendingInvitations member={item} />
+                              <Card
+                                key={`${item.id}-rgcard`}
+                                hoverable={true}
+                                bordered={false}
+                              >
+                                <GroupCard
+                                  currentGroup={item}
+                                  type='pending approvals'
+                                />
+                              </Card>
                             )}
                           />
                         ) : (
@@ -390,4 +407,5 @@ export default connect(mapStateToProps, {
   declineUserGroupRequest,
   approveUserGroupRequest,
   acceptUserGroupInvitation,
+  searchPost,
 })(SingleGroup);

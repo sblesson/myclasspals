@@ -35,9 +35,9 @@ const AboutServices = () => {
             <div className='service-description'>
               <h3>Our Values</h3>
               <ul>
-                <li>We Care </li> <li>Empower</li> <li>Team of trust </li>{' '}
-                <li>We commit and deliver</li>
-                <li>User focused </li>
+                <li>We make impact</li> <li>We are brave</li>{' '}
+                <li>We are a team of trust </li> <li>We commit and deliver</li>
+                <li>We are user focused </li>
               </ul>
             </div>
           </div>

@@ -9,13 +9,13 @@ import DeleteGroupModal from './modal/DeleteGroupModal';
 import {
   EditOutlined,
   EllipsisOutlined,
-  SettingOutlined
+  SettingOutlined,
 } from '@ant-design/icons';
 
 import {
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
-  deleteGroup
+  deleteGroup,
 } from '../../actions/group';
 
 import './GroupCard.scss';
@@ -28,27 +28,27 @@ const GroupCard = ({
   group,
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
-  deleteGroup
+  deleteGroup,
 }) => {
   const { Meta } = Card;
   const [isRequestUpdated, setRequestUpdate] = useState(false);
 
-  const requestToJoinUserGroupClickHandler = record => {
+  const requestToJoinUserGroupClickHandler = (record) => {
     requestToJoinUserGroup(
       {
         groupId: record.id,
         role: 'member',
-        requestorUserId: auth.user.email
+        requestorUserId: auth.user.email,
       },
       record,
-      userGroup => {
+      (userGroup) => {
         console.log(userGroup);
         //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
     );
   };
 
-  const onClick = key => {
+  const onClick = (key) => {
     if (key === 'deletegroup') {
       console.log('deletegroup');
     } else if (key === 'editpost') {
@@ -63,24 +63,23 @@ const GroupCard = ({
       </Menu.Item>
     </Menu>
   );
-  const acceptPendingInviteActionClick = record => {
+  const acceptPendingInviteActionClick = (record) => {
     acceptUserGroupInvitation({
       groupId: record.id,
       role: 'member',
-      invitedUserId: auth.user.email
+      invitedUserId: auth.user.email,
     });
   };
 
   const adminMemberActionMenu = (
     <Dropdown overlay={menu} placement='bottomCenter'>
-      <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+      <a className='ant-dropdown-link' onClick={(e) => e.preventDefault()}>
         <EllipsisOutlined />
       </a>
     </Dropdown>
   );
 
   const groupActionMenu = (currentGroup, type) => {
-    debugger;
     if (currentGroup) {
       switch (type) {
         case 'mygroup':
@@ -123,7 +122,7 @@ const GroupCard = ({
               >
                 <a
                   className='ant-dropdown-link'
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   <EllipsisOutlined />
                 </a>
@@ -166,7 +165,7 @@ const GroupCard = ({
     }
   };
 
-  const getUserGroupRole = currentGroup => {
+  const getUserGroupRole = (currentGroup) => {
     if (currentGroup.role === 'admin') {
       return <Tag color={'blue'}>{currentGroup.role}</Tag>;
     } else if (currentGroup.role === 'member') {
@@ -176,7 +175,7 @@ const GroupCard = ({
     }
   };
 
-  const getUserGroupMemberCount = currentGroup => {
+  const getUserGroupMemberCount = (currentGroup) => {
     if (currentGroup && currentGroup.userGroupMembers) {
       if (currentGroup.userGroupMembers.length <= 1) {
         return `${currentGroup.userGroupMembers.length} member`;
@@ -186,7 +185,7 @@ const GroupCard = ({
     }
   };
 
-  const getGroupPrivacyLabel = privacy => {
+  const getGroupPrivacyLabel = (privacy) => {
     if (privacy) {
       let groupPrivacy = privacy.toLowerCase();
       groupPrivacy = _.startCase(groupPrivacy);
@@ -209,7 +208,7 @@ const GroupCard = ({
     }
   };
 
-  const getGroupPrivacy = currentGroup => {
+  const getGroupPrivacy = (currentGroup) => {
     if (
       currentGroup &&
       currentGroup.userGroupMembers &&
@@ -289,15 +288,15 @@ const GroupCard = ({
 };
 
 GroupCard.propTypes = {
-  currentGroup: PropTypes.object.isRequired
+  currentGroup: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   auth: state.auth,
-  group: state.group
+  group: state.group,
 });
 
 export default connect(mapStateToProps, {
   acceptUserGroupInvitation,
-  requestToJoinUserGroup
+  requestToJoinUserGroup,
 })(GroupCard);

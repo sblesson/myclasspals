@@ -4,7 +4,7 @@ import AboutServices from './AboutServices';
 
 const AboutUs = () => {
   return (
-    <div>
+    <div className='about-page'>
       <div className='row'>
         <div className='about-bg'></div>
       </div>
