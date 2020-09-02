@@ -24,11 +24,13 @@ import SearchPost from '../common/searchPost/SearchPost';
 import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
 import MemberRequest from './MemberRequest';
-import PendingInvitations from './PendingInvitations';
+import PendingRequests from './PendingRequests';
+
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 import DiscoverGroup from './DiscoverGroup';
 import CreateGroupModal from './modal/CreateGroupModal';
+import { searchPost } from '../../actions/post';
 
 import {
   getGroupDetails,
@@ -49,6 +51,7 @@ const SingleGroup = ({
   match,
   auth,
   history,
+  searchPost,
 }) => {
   const { Meta } = Card;
   const { Content, Sider } = Layout;
@@ -77,6 +80,14 @@ const SingleGroup = ({
         getGroupDetails(groupId, (cancelTokenSrc) => {
           cancelTokenSrc.cancel();
         });
+        searchPost(
+          {
+            groupId: groupId,
+          },
+          (cancel) => {
+            cancel();
+          }
+        );
       }
     }
 
@@ -259,7 +270,7 @@ const SingleGroup = ({
                         <SearchPost />
                         <PostFilterPanel />
                       </div>
-                      <Posts groupId={group.currentGroup.id} />
+                      <Posts />
                     </TabPane>
                     <TabPane tab='Members' key='members'>
                       <Meta
@@ -335,7 +346,7 @@ const SingleGroup = ({
                             itemLayout='vertical'
                             size='small'
                             header={`${group.currentGroup.requestedInvitations.length} 
-                              pending invitations`}
+                            pending invitations`}
                             pagination={{
                               onChange: (page) => {
                                 console.log(page);
@@ -347,13 +358,13 @@ const SingleGroup = ({
                             }}
                             dataSource={group.currentGroup.requestedInvitations}
                             renderItem={(item) => (
-                              <PendingInvitations member={item} />
+                              <PendingRequests member={item} />
                             )}
                           />
                         ) : (
                           <Empty
                             description={
-                              'No pending invitations send by admin to join this group'
+                              'No pending invitations to join this group'
                             }
                           />
                         )}
@@ -390,4 +401,5 @@ export default connect(mapStateToProps, {
   declineUserGroupRequest,
   approveUserGroupRequest,
   acceptUserGroupInvitation,
+  searchPost,
 })(SingleGroup);

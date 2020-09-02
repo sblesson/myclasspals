@@ -21,7 +21,10 @@ const AboutServices = () => {
               </div>
             </div>
           </div>
-          <div className='service-container' style={{ width: '100%' }}>
+          <div
+            className='service-container'
+            style={{ width: '100%', marginBottom: '3rem' }}
+          >
             <div className='service-description'>
               <h3>Our Mission</h3>
               <div>
@@ -31,16 +34,16 @@ const AboutServices = () => {
             </div>
           </div>
 
-          <div className='service-container' style={{ width: '100%' }}>
+          {/*           <div className='service-container' style={{ width: '100%' }}>
             <div className='service-description'>
               <h3>Our Values</h3>
               <ul>
-                <li>We Care </li> <li>Empower</li> <li>Team of trust </li>{' '}
-                <li>We commit and deliver</li>
-                <li>User focused </li>
+                <li>We make impact</li> <li>We are brave</li>{' '}
+                <li>We are a team of trust </li> <li>We commit and deliver</li>
+                <li>We are user focused </li>
               </ul>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

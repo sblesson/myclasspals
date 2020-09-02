@@ -45,40 +45,19 @@ ADD clazzvilla-server.conf    /etc/supervisor/conf.d/clazzvilla-server.conf
 
 COPY backend/clazzbuddyservice-master/target/*.jar /classbuddyserver/lib 
 
-RUN apt-get update && \
-	apt-get install -y gnupg && \
-	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
-	echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
-	apt-get update && \
-	ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime && \
-	apt-get install -y mongodb-org && \
-	mkdir -p /data/db;
-
-COPY backend/mongoscript.sh /classbuddyserver/mongoscript.sh
-COPY backend/mongo.sql  /classbuddyserver/mongo.sql
-RUN chmod 777 /classbuddyserver/mongoscript.sh && \
-   /classbuddyserver/mongoscript.sh
-
-
-ADD mongo.conf    /etc/supervisor/conf.d/mongo.conf
 
 RUN mkdir -p /classbuddynodeserver/log
 RUN mkdir -p /classbuddynodeserver
-COPY frontend/public /classbuddynodeserver/public
-COPY frontend/src /classbuddynodeserver/src
-COPY frontend/package.json /classbuddynodeserver/package.json
-COPY frontend/.env /classbuddynodeserver/.env
-COPY nodeinstall.sh /classbuddynodeserver/nodeinstall.sh
+COPY frontend/build /classbuddynodeserver/build
 
 
 RUN apt-get update && \
 	curl -sL https://deb.nodesource.com/setup_10.x -o /var/tmp/nodesource_setup.sh && \
 	bash /var/tmp/nodesource_setup.sh && \
 	apt-get install -y nodejs && \
-	apt install -y build-essential;
+	apt install -y build-essential && \
+        npm install -g serve;
 
-RUN chmod 777 /classbuddynodeserver/nodeinstall.sh && \
-   /classbuddynodeserver/nodeinstall.sh
    
 ADD clazzvilla-node.conf   /etc/supervisor/conf.d/clazzvilla-node.conf
 

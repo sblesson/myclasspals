@@ -117,29 +117,16 @@ const Register = ({ setAlert, register, auth, history }) => {
     <div>
       <div className='landing-bg'>
         <div
-          className='service-description'
-          style={{
+          className='landing-container'
+          /*    style={{
             float: 'right',
             paddingTop: '2rem',
             marginRight: '3rem',
-          }}
+          }} */
         >
           <h2>Join School Community</h2>
-          <div>
-            This is the place where families come together to keep discuss
-            school events, question on homework, meeting other families in
-            school. Families in school can help one another, share their
-            knowledge, discuss new topics, make new friends, schedule playdate
-            and many more ...
-          </div>
-          <div
-            style={{
-              background: '#f0f0f0',
-              marginTop: '1rem',
-              padding: '1rem 0 2rem 2rem',
-              width: '70%',
-            }}
-          >
+
+          <div id='sign-up-form' className='landing-form-wrapper'>
             {yourInfo}
             <Text className='form-info-text'>
               Already have an account?{' '}
@@ -150,7 +137,7 @@ const Register = ({ setAlert, register, auth, history }) => {
           </div>
         </div>
       </div>
-      <div className='row' style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '20px' }}>
         {' '}
         <Services />
       </div>

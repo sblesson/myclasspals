@@ -3,6 +3,8 @@
 @import 'styles/modal';
 @import 'styles/abstracts/variables';
 @import 'styles/abstracts/mixins';
+@import 'styles/abstracts/include-media';
+
 @import url('https://fonts.googleapis.com/css?family=Comfortaa|Nanum+Pen+Script&display=swap');
 
 //font-family: 'Comfortaa', cursive;
@@ -1030,19 +1032,32 @@ thead {
 }
 
 .wrapper {
-  @include respond(phone) {
-    font-size: 56.25%;
-    width: 100%;
-  }
-  @include respond(tab-port) {
+  // if the breakpoint is less than or equal to 360px
+  @include media('<=phone') {
     width: 90%;
   }
-  @include respond(tab-land) {
-    font-size: 56.25%;
+  // if the breakpoint is greater than 360px and less than or eqaul to 425px
+  @include media('>phone', '<=425px') {
+    width: 80%;
+  }
+
+  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  @include media('>425px', '<=tablet') {
     width: 70%;
   }
-  @include respond(big-desktop) {
+
+  // if the screen is going to be greater than 768px and less than 1366px
+  @include media('>tablet', '<desktop') {
     width: 70%;
+  }
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    width: 70%;
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    width: 60%;
   }
   background-color: transparent;
   //background: var(--bg-profile);
@@ -1057,6 +1072,45 @@ thead {
   box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
 }
 
+.landing-container {
+  margin: 2rem;
+  padding: 2rem;
+  width: 40%;
+  float: right;
+
+  // if the breakpoint is less than or equal to 360px
+  @include media('<=phone') {
+    width: 80%;
+  }
+  // if the breakpoint is greater than 360px and less than or eqaul to 425px
+  @include media('>phone', '<=425px') {
+    width: 80%;
+  }
+
+  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  @include media('>425px', '<=tablet') {
+    width: 60%;
+  }
+
+  // if the screen is going to be greater than 768px and less than 1366px
+  @include media('>tablet', '<desktop') {
+    width: 40%;
+  }
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    width: 40%;
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    width: 30%;
+    margin-right: 3rem;
+  }
+}
+.landing-form-wrapper {
+  background-color: #f0f0f0;
+  padding: 2rem;
+}
 .contact-wrapper {
   background: '#fff';
   padding: 2rem;
@@ -1077,6 +1131,19 @@ thead {
 
 .ant-pagination-item-active {
   border-color: var(--bg-primary-btn);
+}
+
+.about-page {
+  .service-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 0;
+    position: relative;
+    font-size: 0.7rem;
+  }
 }
 
 .service-container {
@@ -1130,7 +1197,7 @@ thead {
   background: url('./assets/images/together.jpg') center no-repeat;
   background-size: cover;
 
-  //background: url('https://images.unsplash.com/photo-1581094648468-20624f9c771a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80')
+  //background: url('https://images.unsplash.com/photo-1581094648468-20624f9c771a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80');
 }
 
 .service-three {
@@ -1187,4 +1254,41 @@ thead {
 @font-face {
   font-family: Norther-Lights;
   src: url(./assets/fonts/Northern-Lights.ttf);
+}
+
+.hideOnMobile {
+  display: none !important;
+}
+@media only screen and (min-width: 768px) {
+  .hideOnMobile {
+    display: block !important;
+  }
+}
+
+.displayOnDesktop {
+  display: block !important;
+}
+
+.displayOnMobile {
+  display: block !important;
+}
+.barsMenu {
+  background: var(--bg-primary-btn) !important;
+  border: var(--bg-primary-btn) !important;
+  top: 0.6rem;
+  left: 0.625rem;
+  &:focus,
+  &:hover {
+    background: (--bg-gradient1) !important;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .hideOnDesktop {
+    display: none !important;
+  }
+}
+
+.barsMenuLeftDrawer {
+  right: 15rem;
+  top: 0.4rem;
 }

@@ -12,30 +12,32 @@ const UserMenu = ({ logout }) => {
   let selectedKey = window.location.pathname.split('/')[1];
   selectedKey = selectedKey ? selectedKey : 'dashboard';
   return (
-    <Menu mode='horizontal' theme='light' defaultSelectedKeys={[selectedKey]}>
-      <Menu.Item key='dashboard'>
-        <Link to='/dashboard'>{'Home'}</Link>
-      </Menu.Item>
-      <Menu.Item key='groups'>
-        <Link to='/groups'>{'Groups'}</Link>
-      </Menu.Item>
-      <Menu.Item key='messages'>
-        <Link to='/messages'>{'Message'}</Link>
-      </Menu.Item>
-      <SubMenu title={<span>User</span>}>
-        <Menu.Item key='account'>
-          {' '}
-          <Link to='/account'>{'Account'}</Link>
+    <div className='float-right'>
+      <Menu mode='horizontal' theme='light' defaultSelectedKeys={[selectedKey]}>
+        <Menu.Item key='dashboard'>
+          <Link to='/dashboard'>{'Home'}</Link>
         </Menu.Item>
-        <Menu.Item key='logout' onClick={logout}>
-          Log out
+        <Menu.Item key='groups'>
+          <Link to='/groups'>{'Groups'}</Link>
         </Menu.Item>
-      </SubMenu>
-    </Menu>
+        <Menu.Item key='messages'>
+          <Link to='/messages'>{'Message'}</Link>
+        </Menu.Item>
+        <SubMenu title={<span>User</span>}>
+          <Menu.Item key='account'>
+            {' '}
+            <Link to='/account'>{'Account'}</Link>
+          </Menu.Item>
+          <Menu.Item key='logout' onClick={logout}>
+            Log out
+          </Menu.Item>
+        </SubMenu>
+      </Menu>
+    </div>
   );
 };
 UserMenu.propTypes = {
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
 };
 
 export default connect(null, { logout })(UserMenu);

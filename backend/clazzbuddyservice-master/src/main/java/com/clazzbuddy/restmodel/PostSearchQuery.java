@@ -8,7 +8,7 @@ public class PostSearchQuery {
 
 	private String groupId;
 
-	private String catagoryId;
+	private String categoryId;
 
 	private Boolean isPrivate;
 
@@ -52,11 +52,11 @@ public class PostSearchQuery {
 	}
 
 	public String getCatagoryId() {
-		return catagoryId;
+		return categoryId;
 	}
 
-	public void setCatagoryId(String catagoryId) {
-		this.catagoryId = catagoryId;
+	public void setCatagoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public String getGroupId() {

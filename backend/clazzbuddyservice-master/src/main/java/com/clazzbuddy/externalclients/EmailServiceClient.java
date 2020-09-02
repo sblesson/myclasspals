@@ -38,8 +38,8 @@ public class EmailServiceClient {
 		userRegDetails.setService_id(serviceId);
 		userRegDetails.setTemplate_id(signupEmailTemplate);
 		Map<String, String> templateParams = new HashMap<>();
-		templateParams.put("email", email);
-		templateParams.put("name", email);
+		templateParams.put("useremail", email);
+		templateParams.put("username", email);
 		templateParams.put("token", id);
 		userRegDetails.setTemplate_params(templateParams);
 	

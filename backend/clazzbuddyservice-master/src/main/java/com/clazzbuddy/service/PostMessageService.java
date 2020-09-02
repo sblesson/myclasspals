@@ -107,7 +107,7 @@ public class PostMessageService {
 			postListQuery.addCriteria(Criteria.where("groupId").is(postSearchQuery.getGroupId()));
 		}
 		if (postSearchQuery.getCatagoryId() != null) {
-			postListQuery.addCriteria(Criteria.where("catagoryId").is(postSearchQuery.getCatagoryId()));
+			postListQuery.addCriteria(Criteria.where("categoryId").is(postSearchQuery.getCatagoryId()));
 		}
 		if (postSearchQuery.getDateFilterGreaterThan() != null && postSearchQuery.getDateFilterLessThan() != null) {
 			postListQuery.addCriteria(new Criteria().andOperator(
