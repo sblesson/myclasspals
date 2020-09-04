@@ -22,9 +22,7 @@ const TopNavbar = ({ auth: { isAuthenticated } }) => {
       <div className='logo float-left'>
         <span className='logo-text'>clazzbuddy</span>
       </div>
-      <div className='float-right'>
-        {isAuthenticated ? <UserMenu /> : <GuestMenu />}
-      </div>
+      {isAuthenticated ? <UserMenu /> : <GuestMenu />}
     </Header>
   );
 };

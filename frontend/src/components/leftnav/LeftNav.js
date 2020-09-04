@@ -5,10 +5,8 @@ import Spinner from '../common/spinner/Spinner';
 import { Menu, Layout, Result, Drawer, Button } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import CreateGroupModal from '../groups/modal/CreateGroupModal';
-import { LeftCircleOutlined } from '@ant-design/icons';
 import UserMenu from '../topnavbar/UserMenu';
-import { MenuOutlined } from '@ant-design/icons';
-
+import { MenuOutlined, SettingOutlined } from '@ant-design/icons';
 import './LeftNav.scss';
 import { logout } from '../../actions/auth';
 
@@ -94,7 +92,7 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
           {
             key: 'account',
             title: 'Account Settings',
-            icon: 'fas fa-user-cog',
+            icon: <SettingOutlined />,
             url: '/account',
           },
         ];
@@ -149,14 +147,8 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
     setActiveMenu([event.key]);
   };
 
-  const onCollapse = (collapsed, type) => {
-    console.log(collapsed);
-    console.log(type);
-
-    setSidebarCollapsed(collapsed);
-  };
-  const showDrawer = () => {
-    setSidebarCollapsed(true);
+  const toggleDrawer = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
   };
 
   const onCloseDrawer = () => {
@@ -207,7 +199,7 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
         <div>
           <Button
             type='primary'
-            onClick={showDrawer}
+            onClick={toggleDrawer}
             className={
               windowSize <= mobileBreakPoint
                 ? 'displayOnMobile barsMenu'
