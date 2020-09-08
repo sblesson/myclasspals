@@ -1,0 +1,4 @@
+[program:classbuddynodeserver]
+directory=/classbuddynodeserver
+command=npm run start
+stdout_logfile=/classbuddynodeserver/log/stdout.log

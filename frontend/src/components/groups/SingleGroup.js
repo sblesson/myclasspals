@@ -24,6 +24,8 @@ import SearchPost from '../common/searchPost/SearchPost';
 import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';
 import MemberRequest from './MemberRequest';
+import PendingRequests from './PendingRequests';
+
 import PostModal from '../posts/modal/PostModal';
 import Posts from '../posts/Posts';
 import DiscoverGroup from './DiscoverGroup';
@@ -337,13 +339,14 @@ const SingleGroup = ({
                       ''
                     )}
                     {group.currentGroup.role === 'admin' ? (
-                      <TabPane tab='Requested To Join' key='request'>
+                      <TabPane tab='Pending Invitations' key='request'>
                         {group.currentGroup.requestedInvitations &&
                         group.currentGroup.requestedInvitations.length > 0 ? (
                           <List
                             itemLayout='vertical'
                             size='small'
-                            header={'Pending Invitations'}
+                            header={`${group.currentGroup.requestedInvitations.length} 
+                            pending invitations`}
                             pagination={{
                               onChange: (page) => {
                                 console.log(page);
@@ -355,22 +358,13 @@ const SingleGroup = ({
                             }}
                             dataSource={group.currentGroup.requestedInvitations}
                             renderItem={(item) => (
-                              <Card
-                                key={`${item.id}-rgcard`}
-                                hoverable={true}
-                                bordered={false}
-                              >
-                                <GroupCard
-                                  currentGroup={item}
-                                  type='pending approvals'
-                                />
-                              </Card>
+                              <PendingRequests member={item} />
                             )}
                           />
                         ) : (
                           <Empty
                             description={
-                              'No pending invitations send by admin to join this group'
+                              'No pending invitations to join this group'
                             }
                           />
                         )}

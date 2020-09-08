@@ -8,12 +8,7 @@ import moment from 'moment';
 import { List } from 'antd';
 import './FilterPanel.scss';
 
-const FilterPanel = ({
-  categories,
-  group,
-  searchPost,
-  post: { posts, loading },
-}) => {
+const FilterPanel = ({ group, searchPost, post: { categories } }) => {
   const [filterPanel, showFilterPanel] = useState(false);
   const [dateFilterSelected, setDateFilterSelected] = useState(null);
 
@@ -129,16 +124,16 @@ const FilterPanel = ({
       //filter already exist
 
       //check if categoryId exist, then update it else create new
-      if (filterObjectSelected.catagoryId) {
-        filterObjectSelected.catagoryId = item;
+      if (filterObjectSelected.categoryId) {
+        filterObjectSelected.categoryId = item;
       } else {
         filterObjectSelected = Object.assign(filterObjectSelected, {
-          catagoryId: item,
+          categoryId: item,
         });
       }
     } else {
       //first time filter add group and categoryId
-      setFilterObjectSelected({ groupId: groupId, catagoryId: item });
+      setFilterObjectSelected({ groupId: groupId, categoryId: item });
     }
 
     searchPost(filterObjectSelected);
@@ -147,7 +142,7 @@ const FilterPanel = ({
   const removeCategoryFilterHandler = (item, event) => {
     event.stopPropagation();
 
-    if (filterObjectSelected.catagoryId) delete filterObjectSelected.catagoryId;
+    if (filterObjectSelected.categoryId) delete filterObjectSelected.categoryId;
 
     setCategoryFilterSelected(null);
 

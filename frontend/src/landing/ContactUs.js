@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
@@ -109,65 +109,27 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
   );
 
   return (
-    <div>
-      <div className='row'>
-        <div
-          style={{
-            margin: '3rem auto',
-            width: '40%',
-          }}
-        >
-          {isResultVisible ? (
-            <Result
-              status='success'
-              title='Your request has been sent!'
-              subTitle='We really appreciate your valuable input. One of our representatives will contact you shortly'
-            />
-          ) : (
-            <div className='contact-wrapper'>
-              <h2>Contact Us</h2>
+    <Fragment>
+      <div>
+        {isResultVisible ? (
+          <Result
+            status='success'
+            title='Your request has been sent!'
+            subTitle='We really appreciate your valuable input. One of our representatives will contact you shortly'
+          />
+        ) : (
+          <div className='contact-wrapper'>
+            <h2>Contact Us</h2>
 
-              {yourInfo}
-              <Text className='form-info-text'>
-                Don't have an account? <Link to='/register'>Sign Up</Link>
-              </Text>
-            </div>
-          )}
-        </div>
-      </div>
-      <Footer />
-    </div>
-
-    /* 
-    <div>
-      <div className='landing-bg'>
-        <div
-          className='service-description'
-          style={{
-            float: 'right',
-            paddingTop: '2rem',
-            marginRight: '3rem'
-          }}
-        >
-          <h2>Contact Us</h2>
-          <div>Share your thoughts, concerns, feedback ...</div>
-          <div
-            style={{
-              background: '#f0f0f0',
-              marginTop: '1rem',
-              padding: '1rem 0 2rem 2rem',
-              width: '70%'
-            }}
-          >
             {yourInfo}
             <Text className='form-info-text'>
               Don't have an account? <Link to='/register'>Sign Up</Link>
             </Text>
           </div>
-        </div>
+        )}
       </div>
       <Footer />
-    </div> */
+    </Fragment>
   );
 };
 
