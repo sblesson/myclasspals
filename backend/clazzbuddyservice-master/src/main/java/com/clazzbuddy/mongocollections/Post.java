@@ -15,7 +15,7 @@ public class Post {
 
 	private Date postedDate;
 
-	private String catagoryId;
+	private String categoryId;
 
 	private String subject;
 
@@ -109,13 +109,7 @@ public class Post {
 		this.endUserName = endUserName;
 	}
 
-	public String getCatagoryId() {
-		return catagoryId;
-	}
 
-	public void setCatagoryId(String catagoryId) {
-		this.catagoryId = catagoryId;
-	}
 
 	public Date getPostedDate() {
 		return postedDate;
@@ -139,6 +133,14 @@ public class Post {
 
 	public void setIsComment(Boolean isComment) {
 		this.isComment = isComment;
+	}
+
+	public String getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 
 }

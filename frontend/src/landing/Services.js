@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Services = () => {
   return (
@@ -21,8 +22,7 @@ const Services = () => {
           <div className='service-description'>
             <h3>Together Is Better</h3>
             <div>
-              Challenging times can always bring us closer. You are not alone,
-              your community is there to support you. Join the network.
+              Challenging times can bring us closer. Join your school community.
             </div>
           </div>
           <div className='services-card service-two'></div>

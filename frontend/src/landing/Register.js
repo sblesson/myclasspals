@@ -126,7 +126,7 @@ const Register = ({ setAlert, register, auth, history }) => {
         >
           <h2>Join School Community</h2>
 
-          <div className='landing-form-wrapper'>
+          <div id='sign-up-form' className='landing-form-wrapper'>
             {yourInfo}
             <Text className='form-info-text'>
               Already have an account?{' '}
