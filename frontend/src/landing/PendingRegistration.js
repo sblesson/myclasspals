@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import { Formik, ErrorMessage } from 'formik';
 import { Typography } from 'antd';
-import Services from './Services';
+import Footer from './Footer';
 import { setAlert } from '../actions/alert';
 import { getuserbyregistrationid, register } from '../actions/auth';
 import { authRedirect } from '../utils/authRedirect';
@@ -17,7 +17,7 @@ const PendingRegistration = ({
   register,
   auth,
   history,
-  match
+  match,
 }) => {
   const { Title, Text } = Typography;
   const [regId, setRegId] = useState('');
@@ -42,7 +42,7 @@ const PendingRegistration = ({
   const [formData, setFormData] = useState({
     name: '',
     password: '',
-    password2: ''
+    password2: '',
   });
 
   const { name, password, password2 } = formData;
@@ -53,16 +53,16 @@ const PendingRegistration = ({
     labelCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
+      md: { span: 20 },
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      md: { span: 20 }
-    }
+      md: { span: 20 },
+    },
   };
 
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -72,9 +72,9 @@ const PendingRegistration = ({
         name: '',
         email: '',
         password: '',
-        password2: ''
+        password2: '',
       }}
-      onSubmit={values => {
+      onSubmit={(values) => {
         setIsLoadingSignUpBtn(true);
         if (values.password !== values.password2) {
           setAlert('Passwords do not match', 'error');
@@ -89,9 +89,9 @@ const PendingRegistration = ({
                   name: values.name,
                   email,
                   password: values.password,
-                  regId
+                  regId,
                 },
-                cancelTokenSrc => {
+                (cancelTokenSrc) => {
                   setIsLoadingSignUpBtn(false);
                   cancelTokenSrc.cancel();
                   authRedirect(auth, history);
@@ -102,7 +102,7 @@ const PendingRegistration = ({
                 {
                   name: values.name,
                   email,
-                  password: values.password
+                  password: values.password,
                 },
                 () => {
                   setIsLoadingSignUpBtn(false);
@@ -122,7 +122,7 @@ const PendingRegistration = ({
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             <FormItem
@@ -171,18 +171,25 @@ const PendingRegistration = ({
 
   return (
     <Fragment>
-      <div className='row' style={{ marginTop: '20px' }}>
-        <Services />
-        <div className='col col-4' style={{ background: '#fff' }}>
-          <Title className='form-title-text' level={4}>
-            Create Your Account
-          </Title>
+      <div className='pending-registration-wrapper'>
+        <div className='landing-text'>
+          <h2 style={{ fontSize: '1.6rem' }}>Join your school community</h2>
+          <h4 style={{ fontSize: '.8rem' }}>
+            Together is better, ask for help, offer help, schedule playdate ...
+          </h4>
+        </div>
+        <div className='landing-form-wrapper'>
+          <h2>Sign-Up</h2>
           {yourInfo}
           <Text className='form-info-text'>
-            Already have an account? <Link to='/login'>Sign In</Link>
+            Already have an account?{' '}
+            <Link to='/login' className='link'>
+              Sign In
+            </Link>
           </Text>
         </div>
       </div>
+      <Footer />
     </Fragment>
   );
 };
@@ -190,16 +197,16 @@ const PendingRegistration = ({
 PendingRegistration.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth,
-  isLoading: state.school.isLoading
+  isLoading: state.school.isLoading,
 });
 
 export default connect(mapStateToProps, {
   setAlert,
   getuserbyregistrationid,
-  register
+  register,
 })(PendingRegistration);

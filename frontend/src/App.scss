@@ -1155,17 +1155,37 @@ thead {
 
 .landing-wrapper {
   width: 100%;
-  -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  height: 95vh;
+  height: 85vh;
   background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+
+  // if the screen is going to be greater than 768px and less than 1366px
+  @include media('>tablet', '<desktop') {
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+  }
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+  }
+}
+
+.pending-registration-wrapper {
+  width: 100%;
+  height: 85vh;
+  background: #e0f5f6;
 }
 
 .login-wrapper {
   width: 100%;
-  -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  height: 95vh;
+  margin-top: 2rem;
+  height: 80vh;
   background: url('./assets/images/login_community.jpeg') left center no-repeat;
   background-size: contain;
 }
@@ -1305,7 +1325,7 @@ thead {
 }
 
 .about-bg {
-  background: url('./assets/images/about.jpeg') center no-repeat;
+  background: url('./assets/images/about_team.jpeg') center no-repeat;
   background-size: contain;
   height: 200px;
   width: 100%;

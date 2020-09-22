@@ -4,7 +4,6 @@ import { Link, Redirect } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
 import { Typography, Text } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
-import Services from './Services';
 import Footer from './Footer';
 import { setAlert } from '../actions/alert';
 import { register } from '../actions/auth';
@@ -121,7 +120,8 @@ const Register = ({ setAlert, register, auth, history }) => {
             Connect with families in school
           </h2>
           <h4 style={{ fontSize: '.8rem' }}>
-            Discuss question on homework, events, schedule playdate etc...
+            Let's support one another, ask questions, schedule playdate, share
+            your wisdom ...{' '}
           </h4>
         </div>
         <div className='landing-form-wrapper'>
