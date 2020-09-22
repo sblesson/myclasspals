@@ -1,0 +1,147 @@
+@import '../styles/abstracts/include-media';
+
+.landing-wrapper {
+  width: 100%;
+  height: 85vh;
+
+  //background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+  //background-image: linear-gradient(-90deg, #42d5a1, #0cadc5);
+  //background-image: linear-gradient(-90deg, var(--bg-gradient2), #0cadc5);
+
+  /*   background-image: linear-gradient(
+    90deg,
+    var(--bg-gradient1),
+    var(--bg-gradient2)
+  ) !important; */
+
+  // if the screen is going to be greater than 768px and less than 1366px
+
+  @include media('<=phone') {
+    background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+  }
+  // if the breakpoint is greater than 360px and less than or eqaul to 425px
+  @include media('>phone', '<=425px') {
+    background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+  }
+
+  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  @include media('>425px', '<=tablet') {
+    background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+  }
+  @include media('>tablet', '<desktop') {
+    background-image: linear-gradient(
+      160deg,
+      #0cadc5 0%,
+      #80d0c7 100%
+    ) !important;
+    /*    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); */
+  }
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    background-image: linear-gradient(
+      160deg,
+      #0cadc5 0%,
+      #80d0c7 100%
+    ) !important;
+    /*   -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); */
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    background-image: linear-gradient(
+      160deg,
+      #0cadc5 0%,
+      #80d0c7 100%
+    ) !important;
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+  }
+  .landing-text {
+    text-align: center;
+    margin: auto;
+    padding: 1rem;
+    width: 50%;
+
+    h2 {
+      color: white;
+      font-size: 2rem !important;
+      text-align: left;
+      // if the breakpoint is less than or equal to 360px
+      @include media('<=phone') {
+        font-size: 1rem !important;
+      }
+      // if the breakpoint is greater than 360px and less than or eqaul to 425px
+      @include media('>phone', '<=425px') {
+        font-size: 1rem !important;
+      }
+
+      // if the screen is going to be greater than 425px and less than or eqaul to 768px
+      @include media('>425px', '<=tablet') {
+        font-size: 1rem !important;
+      }
+    }
+
+    .landing-text-info {
+      font-size: 1rem;
+      color: white;
+      text-align: left;
+      margin-bottom: 0.2rem;
+      // if the breakpoint is less than or equal to 360px
+      @include media('<=phone') {
+        font-size: 0.6rem;
+      }
+      // if the breakpoint is greater than 360px and less than or eqaul to 425px
+      @include media('>phone', '<=425px') {
+        font-size: 0.6rem;
+      }
+
+      // if the screen is going to be greater than 425px and less than or eqaul to 768px
+      @include media('>425px', '<=tablet') {
+        font-size: 0.8rem;
+      }
+    }
+
+    .landing-text-info-user {
+      font-size: 0.8rem;
+      color: #fff;
+      text-align: left;
+      // if the breakpoint is less than or equal to 360px
+      @include media('<=phone') {
+        font-size: 0.4rem !important;
+      }
+      // if the breakpoint is greater than 360px and less than or eqaul to 425px
+      @include media('>phone', '<=425px') {
+        font-size: 0.4rem !important;
+      }
+
+      // if the screen is going to be greater than 425px and less than or eqaul to 768px
+      @include media('>425px', '<=tablet') {
+        font-size: 0.6rem !important;
+      }
+    }
+    // if the screen is going to be greater than 768px and less than 1366px
+    @include media('>tablet', '<desktop') {
+      position: absolute;
+      top: 30%;
+      left: 30%;
+      transform: translate(-50%, -50%);
+    }
+    // if the screen is going to be greater than or equal to 1366px
+    @include media('>=desktop') {
+      position: absolute;
+      top: 30%;
+      left: 30%;
+      transform: translate(-50%, -50%);
+    }
+
+    // if the screen is going to be greater than or equal to 1920px
+    @include media('>=LGdesktop', 'retina2x') {
+      position: absolute;
+      top: 30%;
+      left: 30%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

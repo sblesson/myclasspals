@@ -5,7 +5,7 @@ import { Menu, Layout, Divider, Empty, Spin } from 'antd';
 import {
   getPrivateMessages,
   getPost,
-  addMessageReply
+  addMessageReply,
 } from '../../actions/post';
 import PrivateMessageModal from './modal/PrivateMessageModal';
 import {
@@ -16,7 +16,7 @@ import {
   Input,
   Card,
   Dropdown,
-  Avatar
+  Avatar,
 } from 'antd';
 import DeletePostModal from '../posts/modal/DeletePostModal';
 import { EllipsisOutlined } from '@ant-design/icons';
@@ -29,7 +29,7 @@ const Messages = ({
   addMessageReply,
   post: { messages, loading, currentPost },
   auth,
-  history
+  history,
 }) => {
   const { Sider, Content } = Layout;
 
@@ -37,7 +37,7 @@ const Messages = ({
 
   const [chatFormData, setChatForm] = useState({
     submitting: false,
-    value: ''
+    value: '',
   });
   useEffect(() => {
     if (auth && auth.user && auth.user.email) {
@@ -72,14 +72,14 @@ const Messages = ({
     history.push(redirectUrl);
   };
 
-  const onChatSubmit = event => {
+  const onChatSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
     const formData = {
       message: chatFormData.value,
       endUserId: messagePanelSelected.endUserId,
-      subject: messagePanelSelected.subject
+      subject: messagePanelSelected.subject,
     };
 
     setChatForm({ ...chatFormData, ['submitting']: true });
@@ -87,7 +87,7 @@ const Messages = ({
     addMessageReply(messagePanelSelected._id, formData);
   };
 
-  const onChangeChatMessage = event => {
+  const onChangeChatMessage = (event) => {
     event.preventDefault();
     setChatForm({ ...chatFormData, ['value']: event.target.value });
   };
@@ -114,7 +114,7 @@ const Messages = ({
                 height: '100vh',
                 position: 'fixed',
                 left: '50',
-                right: '10'
+                right: '10',
               }}
               className='message-inbox-list'
             >
@@ -125,9 +125,9 @@ const Messages = ({
                 //className='message-list'
                 itemLayout='horizontal'
                 dataSource={messages}
-                renderItem={message => (
+                renderItem={(message) => (
                   <List.Item
-                    onClick={event => handleMessageItemClick(message, event)}
+                    onClick={(event) => handleMessageItemClick(message, event)}
                     className={
                       messagePanelSelected === message ? ' selected' : ''
                     }
@@ -166,7 +166,7 @@ const Messages = ({
             style={{
               marginLeft: 200,
               marginTop: '24',
-              overflow: 'initial'
+              overflow: 'initial',
             }}
           >
             {currentPost ? (
@@ -232,7 +232,7 @@ const Messages = ({
                         <TextArea
                           name='reply'
                           className='input-block-level form-control'
-                          onChange={e => onChangeChatMessage(e)}
+                          onChange={(e) => onChangeChatMessage(e)}
                           placeholder='Type a message'
                           value={chatFormData.value}
                         />
@@ -264,16 +264,16 @@ const Messages = ({
 
 Messages.propTypes = {
   getPrivateMessages: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  post: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   post: state.post,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
   getPrivateMessages,
   getPost,
-  addMessageReply
+  addMessageReply,
 })(Messages);

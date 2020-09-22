@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-export const getGroupPrivacyLabel = privacy => {
+export const getGroupPrivacyLabel = (privacy) => {
   if (privacy) {
     let groupPrivacy = privacy.toLowerCase();
     groupPrivacy = _.startCase(groupPrivacy);

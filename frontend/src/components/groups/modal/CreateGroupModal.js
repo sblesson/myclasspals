@@ -39,7 +39,7 @@ const CreateGroupModal = () => {
     setComponentSize(size);
   };
 
-  const handleStepChange = current => {
+  const handleStepChange = (current) => {
     //current = current + 1;
     setCurrentStep(current);
     if (current == 3) {
@@ -58,7 +58,7 @@ const CreateGroupModal = () => {
           current={current}
           setModal={setModalVisibility}
         />
-      )
+      ),
     },
     {
       title: 'Invite New Members',
@@ -70,7 +70,7 @@ const CreateGroupModal = () => {
           isNewGroup={true}
           setModal={setModalVisibility}
         />
-      )
+      ),
     },
     {
       title: 'About Group',
@@ -82,8 +82,8 @@ const CreateGroupModal = () => {
           isNewGroup={true}
           setModal={setModalVisibility}
         />
-      )
-    }
+      ),
+    },
   ];
 
   return (

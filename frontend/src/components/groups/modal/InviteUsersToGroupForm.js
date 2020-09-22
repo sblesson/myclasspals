@@ -20,14 +20,14 @@ const InviteUsersToGroupForm = ({
   current,
   onStepChange,
   isNewGroup,
-  setModal
+  setModal,
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
   };
 
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -38,12 +38,12 @@ const InviteUsersToGroupForm = ({
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 8 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
-    }
+      sm: { span: 16 },
+    },
   };
 
   return (
@@ -54,7 +54,7 @@ const InviteUsersToGroupForm = ({
           <Button
             type='link'
             style={{ float: 'right' }}
-            onClick={e => goToNextStep(e, current)}
+            onClick={(e) => goToNextStep(e, current)}
           >
             Skip
           </Button>
@@ -66,7 +66,7 @@ const InviteUsersToGroupForm = ({
 
       <Formik
         initialValues={{
-          invitedUsers: ''
+          invitedUsers: '',
         }}
         onSubmit={(values, actions) => {
           if (values.usersSelect && values.invitedUsers) {
@@ -100,7 +100,7 @@ const InviteUsersToGroupForm = ({
               {...formItemLayout}
               layout='vertical'
               initialValues={{
-                size: componentSize
+                size: componentSize,
               }}
             >
               {' '}
@@ -143,14 +143,14 @@ const InviteUsersToGroupForm = ({
 };
 
 InviteUsersToGroupForm.propTypes = {
-  inviteToJoinUserGroup: PropTypes.func.isRequired
+  inviteToJoinUserGroup: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = state => ({
-  group: state.group
+const mapDispatchToProps = (state) => ({
+  group: state.group,
 });
 
 export default connect(mapDispatchToProps, {
   inviteToJoinUserGroup,
-  mapDispatchToProps
+  mapDispatchToProps,
 })(withRouter(InviteUsersToGroupForm));

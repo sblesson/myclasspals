@@ -4,12 +4,13 @@ import { Link, Redirect } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
 import { Typography, Text } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
-import Services from './Services';
 import Footer from './Footer';
 import { setAlert } from '../actions/alert';
 import { register } from '../actions/auth';
 import { authRedirect } from '../utils/authRedirect';
 import PropTypes from 'prop-types';
+import KeyReasons from './Features';
+import './Register.scss';
 
 const Register = ({ setAlert, register, auth, history }) => {
   const [componentSize, setComponentSize] = useState('small');
@@ -117,12 +118,20 @@ const Register = ({ setAlert, register, auth, history }) => {
     <Fragment>
       <div className='landing-wrapper'>
         <div className='landing-text'>
-          <h2 style={{ fontSize: '1.6rem' }}>
-            Connect with families in school
+          <h2>
+            Clazzbuddy connects parents and families in school to build amazing
+            communities
           </h2>
-          <h4 style={{ fontSize: '.8rem' }}>
-            Discuss question on homework, events, schedule playdate etc...
-          </h4>
+          <p className='font-italic landing-text-info'>
+            “So thankful to the platform for a deeper meaningful way to connect
+            with school families!”{' '}
+          </p>
+          <p
+            className='landing-text-info-user'
+            style={{ fontSize: '.8rem', color: '#fff', textAlign: 'left' }}
+          >
+            <i>- Parent</i>
+          </p>
         </div>
         <div className='landing-form-wrapper'>
           <h2>Sign-Up</h2>
@@ -135,6 +144,7 @@ const Register = ({ setAlert, register, auth, history }) => {
           </Text>
         </div>
       </div>
+      <KeyReasons />
       <Footer />
     </Fragment>
   );

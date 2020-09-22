@@ -17,7 +17,7 @@ const PrivateMessageModal = ({
   history,
   auth,
   toAddress,
-  noMessagesFound
+  noMessagesFound,
 }) => {
   const [componentSize, setComponentSize] = useState('small');
 
@@ -35,14 +35,14 @@ const PrivateMessageModal = ({
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 8 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
-    }
+      sm: { span: 16 },
+    },
   };
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -58,21 +58,21 @@ const PrivateMessageModal = ({
         name: 'xxx.png',
         status: 'done',
         response: 'Server Error 500', // custom error message to show
-        url: 'http://www.baidu.com/xxx.png'
+        url: 'http://www.baidu.com/xxx.png',
       },
       {
         uid: '2',
         name: 'yyy.png',
         status: 'done',
-        url: 'http://www.baidu.com/yyy.png'
+        url: 'http://www.baidu.com/yyy.png',
       },
       {
         uid: '3',
         name: 'zzz.png',
         status: 'error',
         response: 'Server Error 500', // custom error message to show
-        url: 'http://www.baidu.com/zzz.png'
-      }
+        url: 'http://www.baidu.com/zzz.png',
+      },
     ],
     showUploadList: {
       showDownloadIcon: true,
@@ -80,10 +80,10 @@ const PrivateMessageModal = ({
       showRemoveIcon: true,
       removeIcon: (
         <StarOutlined
-          onClick={e => console.log(e, 'custom removeIcon event')}
+          onClick={(e) => console.log(e, 'custom removeIcon event')}
         />
-      )
-    }
+      ),
+    },
   };
 
   const MessageForm = (
@@ -93,7 +93,7 @@ const PrivateMessageModal = ({
         endUserId: toAddress ? toAddress : '',
         subject: '',
         message: '',
-        isPrivate: true
+        isPrivate: true,
       }}
       onSubmit={(values, actions) => {
         sendPrivateMessage(values);
@@ -108,7 +108,7 @@ const PrivateMessageModal = ({
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             {toAddress ? (
@@ -224,15 +224,15 @@ const PrivateMessageModal = ({
 };
 
 PrivateMessageModal.propTypes = {
-  sendPrivateMessage: PropTypes.func.isRequired
+  sendPrivateMessage: PropTypes.func.isRequired,
 };
-const mapDispatchToProps = state => ({
+const mapDispatchToProps = (state) => ({
   hideModal: state.hideModal,
   currentGroup: state.group.currentGroup,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapDispatchToProps, {
   sendPrivateMessage,
-  mapDispatchToProps
+  mapDispatchToProps,
 })(withRouter(PrivateMessageModal));

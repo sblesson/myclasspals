@@ -47,7 +47,8 @@ This project is licensed under the MIT License
 Create docker container
 Go to java server base dir
 mvn clean install
-docker build . --tag clazzvilla
+docker build . --tag blessonpaul/clazzbuddy
+docker push blessonpaul/clazzbuddy
 
 Run docker container
 docker run -d -p 3000:3000 -p 5000:5000 -p 8080:8080 clazzvilla:1.0

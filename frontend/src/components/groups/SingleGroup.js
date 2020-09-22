@@ -218,17 +218,9 @@ const SingleGroup = ({
       maxCount: 3,
       rtl: true,
     });
-    if (found) {
-      return (
-        <Button
-          className='ant-btn btn-primary'
-          style={{ marginRight: 16 }}
-          onClick={() => acceptPendingInviteActionClick(currentGroup)}
-        >
-          Join
-        </Button>
-      );
-    } else return <InviteUsersToGroupModal />;
+    if (!found) {
+      return <InviteUsersToGroupModal />;
+    }
   };
 
   const getUserGroupMemberCount = (currentGroup) => {

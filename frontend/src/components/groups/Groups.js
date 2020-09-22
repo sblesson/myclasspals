@@ -27,7 +27,7 @@ const Groups = ({ getAllGroups, group, auth }) => {
 
   const handleTabChange = (e, { activeIndex }) => setActiveIndex(activeIndex);
 
-  const handlePageChange = e => {
+  const handlePageChange = (e) => {
     setActiveIndex(e.target.value);
   };
 
@@ -106,14 +106,14 @@ const Groups = ({ getAllGroups, group, auth }) => {
 };
 
 Groups.propTypes = {
-  getAllGroups: PropTypes.func.isRequired
+  getAllGroups: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   group: state.group,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
-  getAllGroups
+  getAllGroups,
 })(Groups);
