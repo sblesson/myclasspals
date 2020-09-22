@@ -37,9 +37,6 @@ const GuestMenu = () => {
         <Menu.Item key='home'>
           <Link to='/'>{'Home'}</Link>
         </Menu.Item>
-        {/*       <Menu.Item key='register'>
-  <Link to='/register'>{'Sign Up'}</Link>
-</Menu.Item> */}
         <Menu.Item key='login'>
           <Link to='/login'>{'Login'}</Link>
         </Menu.Item>
@@ -71,7 +68,7 @@ const GuestMenu = () => {
       {windowSize <= mobileBreakPoint && (
         <Drawer
           placement='right'
-          closable={false}
+          closable={true}
           mask={false}
           onClose={onCloseDrawer}
           visible={sidebarCollapsed}
