@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import UserMenu from './UserMenu';
 import GuestMenu from './GuestMenu';
 import './TopNavbar.scss';
-import logo from '../../assets/images/cblogo.png';
 
 const TopNavbar = ({ auth: { isAuthenticated } }) => {
   const { Header } = Layout;

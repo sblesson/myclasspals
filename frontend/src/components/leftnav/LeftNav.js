@@ -210,7 +210,7 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
           </Button>
           <Drawer
             placement='right'
-            closable={false}
+            closable={true}
             mask={false}
             onClose={onCloseDrawer}
             visible={sidebarCollapsed}
@@ -251,22 +251,6 @@ const LeftNav = ({ screen = '', id, group, logout }) => {
                     </Link>
                   </Menu.Item>
                 ))}
-              {/* TODO replace this code and fix actual issue, for one item in menu, it is not selected by default */}
-
-              {/*             {sideNavMenu &&
-              sideNavMenu.length === 1 &&
-              sideNavMenu.map((sideNavItem, index) => (
-                <Menu.Item
-                  key={index}
-                  icon={sideNavItem.icon}
-                  className='ant-menu-item-selected'
-                >
-                  {sideNavItem.title}
-                  <Link className='btn btn-light my-1' to={sideNavItem.url}>
-                    {sideNavItem.title}
-                  </Link>
-                </Menu.Item>
-              ))} */}
             </Menu>
           </Drawer>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { Fragment, useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
@@ -91,34 +91,25 @@ const Login = ({ login, auth, history }) => {
   );
 
   return (
-    <div>
-      <div className='landing-bg'>
-        <div className='landing-container'>
-          <h2>Join School Community</h2>
-          <div>
-            This is the place where families come together to keep discuss
-            school events, question on homework, meeting other families in
-            school. Families in school can help one another, share their
-            knowledge, discuss new topics, make new friends, schedule playdate
-            and many more ...
-          </div>
-          <div className='landing-form-wrapper'>
-            {yourInfo}
-            <Text className='form-info-text'>
-              Don't have an account?{' '}
-              <Link to='/register' className='link'>
-                Sign Up
-              </Link>
-            </Text>
-          </div>
+    <Fragment>
+      <div className='login-wrapper'>
+        <div className='landing-text'>
+          <h2 style={{ fontSize: '1.6rem' }}>Join your buddies</h2>
+          <h4 style={{ fontSize: '.8rem' }}>Together is better!</h4>
+        </div>
+        <div className='landing-form-wrapper'>
+          <h2>Sign-In</h2>
+          {yourInfo}
+          <Text className='form-info-text'>
+            Don't have an account?{' '}
+            <Link to='/register' className='link'>
+              Sign Up
+            </Link>
+          </Text>
         </div>
       </div>
-      <div style={{ marginTop: '20px' }}>
-        {' '}
-        <Services />
-      </div>
       <Footer />
-    </div>
+    </Fragment>
   );
 };
 
