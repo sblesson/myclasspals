@@ -13,22 +13,22 @@ const CommentForm = ({
   userName,
   isSinglePost,
   addComment,
-  addCommentToSinglePost
+  addCommentToSinglePost,
 }) => {
   const [formData, setFormData] = useState({
     message: '',
     groupId: groupId,
     userId: userId,
-    userName: userName
+    userName: userName,
   });
 
   const [text, setText] = useState('');
-  const keyPress = e => {
+  const keyPress = (e) => {
     if (e.keyCode == 13) {
       onChatFormSubmit(e);
     }
   };
-  const onChatFormSubmit = e => {
+  const onChatFormSubmit = (e) => {
     e.preventDefault();
     if (formData.message) {
       if (isSinglePost) {
@@ -42,7 +42,7 @@ const CommentForm = ({
   return (
     <div className='comment-form'>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           onChatFormSubmit(e);
         }}
       >
@@ -52,11 +52,10 @@ const CommentForm = ({
           rows='2'
           placeholder='Write a comment...'
           value={formData.message}
-          
-          onChange={e =>
+          onChange={(e) =>
             setFormData({ ...formData, [e.target.name]: e.target.value })
           }
-          onKeyDown={e =>
+          onKeyDown={(e) =>
             setFormData({ ...formData, [e.target.name]: e.target.value })
           }
           required
@@ -78,7 +77,7 @@ const CommentForm = ({
 CommentForm.propTypes = {
   isSinglePost: PropTypes.bool.isRequired,
   addComment: PropTypes.func.isRequired,
-  addCommentToSinglePost: PropTypes.func.isRequired
+  addCommentToSinglePost: PropTypes.func.isRequired,
 };
 
 export default connect(null, { addComment, addCommentToSinglePost })(

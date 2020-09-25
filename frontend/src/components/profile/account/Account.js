@@ -57,12 +57,12 @@ const Account = ({ auth }) => {
 };
 
 Account.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
   //deleteAccount: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {})(Account);

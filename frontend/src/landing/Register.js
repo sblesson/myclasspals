@@ -9,6 +9,8 @@ import { setAlert } from '../actions/alert';
 import { register } from '../actions/auth';
 import { authRedirect } from '../utils/authRedirect';
 import PropTypes from 'prop-types';
+import KeyReasons from './Features';
+import './Register.scss';
 
 const Register = ({ setAlert, register, auth, history }) => {
   const [componentSize, setComponentSize] = useState('small');
@@ -116,16 +118,23 @@ const Register = ({ setAlert, register, auth, history }) => {
     <Fragment>
       <div className='landing-wrapper'>
         <div className='landing-text'>
-          <h2 style={{ fontSize: '1.6rem' }}>
-            Connect with families in school
+          <h2>
+            Clazzbuddy connects parents and families in school to build amazing
+            communities
           </h2>
-          <h4 style={{ fontSize: '.8rem' }}>
-            Let's support one another, ask questions, schedule playdate, share
-            your wisdom ...{' '}
-          </h4>
+          <p className='font-italic landing-text-info'>
+            “So thankful to the platform for a deeper meaningful way to connect
+            with school families!”{' '}
+          </p>
+          <p
+            className='landing-text-info-user'
+            style={{ fontSize: '.8rem', color: '#fff', textAlign: 'left' }}
+          >
+            <i>- Parent</i>
+          </p>
         </div>
         <div className='landing-form-wrapper'>
-          <h2>Sign-Up</h2>
+          <h2>Create Account</h2>
           {yourInfo}
           <Text className='form-info-text'>
             Already have an account?{' '}
@@ -135,6 +144,7 @@ const Register = ({ setAlert, register, auth, history }) => {
           </Text>
         </div>
       </div>
+      <KeyReasons />
       <Footer />
     </Fragment>
   );

@@ -4,6 +4,7 @@
 @import 'styles/abstracts/variables';
 @import 'styles/abstracts/mixins';
 @import 'styles/abstracts/include-media';
+@import 'styles/layout/features';
 
 @import url('https://fonts.googleapis.com/css?family=Comfortaa|Nanum+Pen+Script&display=swap');
 
@@ -611,7 +612,7 @@ button {
   background-color: #ddd;
 }
 
-[class*='fontawesome-']:before {
+[className*='fontawesome-']:before {
   font-family: 'fontawesome', sans-serif;
 }
 
@@ -1153,29 +1154,6 @@ thead {
   }
 } */
 
-.landing-wrapper {
-  width: 100%;
-  height: 85vh;
-  background: linear-gradient(45deg, #e0f5f6, #45b6dc);
-
-  // if the screen is going to be greater than 768px and less than 1366px
-  @include media('>tablet', '<desktop') {
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  }
-  // if the screen is going to be greater than or equal to 1366px
-  @include media('>=desktop') {
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  }
-
-  // if the screen is going to be greater than or equal to 1920px
-  @include media('>=LGdesktop', 'retina2x') {
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  }
-}
-
 .pending-registration-wrapper {
   width: 100%;
   height: 85vh;
@@ -1183,9 +1161,6 @@ thead {
 }
 
 .login-wrapper {
-  width: 100%;
-  margin-top: 2rem;
-  height: 80vh;
   background: url('./assets/images/login_community.jpeg') left center no-repeat;
   background-size: contain;
 }
@@ -1267,50 +1242,6 @@ thead {
   @include media('>=LGdesktop', 'retina2x') {
     width: 30%;
     margin-right: 3rem;
-  }
-}
-.landing-text {
-  text-align: center;
-
-  color: white;
-
-  // if the breakpoint is less than or equal to 360px
-  @include media('<=phone') {
-    padding: 3rem 0 2rem 0;
-    text-align: center;
-  }
-  // if the breakpoint is greater than 360px and less than or eqaul to 425px
-  @include media('>phone', '<=425px') {
-    padding: 3rem 0 2rem 0;
-    text-align: center;
-  }
-  // if the screen is going to be greater than 425px and less than or eqaul to 768px
-  @include media('>425px', '<=tablet') {
-    padding: 3rem 0 2rem 0;
-    text-align: center;
-  }
-
-  // if the screen is going to be greater than 768px and less than 1366px
-  @include media('>tablet', '<desktop') {
-    position: absolute;
-    top: 30%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-  }
-  // if the screen is going to be greater than or equal to 1366px
-  @include media('>=desktop') {
-    position: absolute;
-    top: 30%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-  }
-
-  // if the screen is going to be greater than or equal to 1920px
-  @include media('>=LGdesktop', 'retina2x') {
-    position: absolute;
-    top: 30%;
-    left: 30%;
-    transform: translate(-50%, -50%);
   }
 }
 

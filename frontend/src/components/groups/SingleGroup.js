@@ -20,6 +20,7 @@ import { DownOutlined } from '@ant-design/icons';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import GroupCard from './GroupCard';
 import AboutGroup from './AboutGroup';
+
 import SearchPost from '../common/searchPost/SearchPost';
 import PostFilterPanel from '../common/filterpanel/FilterPanel';
 import UserCard from './UserCard';

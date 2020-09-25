@@ -21,7 +21,7 @@ const GroupRulesForm = ({
   current,
   onStepChange,
   history,
-  setModal
+  setModal,
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
@@ -31,27 +31,27 @@ const GroupRulesForm = ({
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 8 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
-    }
+      sm: { span: 16 },
+    },
   };
   const tailFormItemLayout = {
     wrapperCol: {
       xs: {
         span: 24,
-        offset: 0
+        offset: 0,
       },
       sm: {
         span: 16,
-        offset: 8
-      }
-    }
+        offset: 8,
+      },
+    },
   };
 
-  const closeModalAndredirectToGroupPage = actions => {
+  const closeModalAndredirectToGroupPage = (actions) => {
     if (actions) {
       actions.setSubmitting(false);
       actions.resetForm();
@@ -69,7 +69,7 @@ const GroupRulesForm = ({
     <Formik
       initialValues={{
         aboutGroup: '',
-        groupRules: ''
+        groupRules: '',
       }}
       onSubmit={(values, actions) => {
         values.id = group.newGroup.id;
@@ -81,7 +81,7 @@ const GroupRulesForm = ({
           closeModalAndredirectToGroupPage(actions);
         }
       }}
-      validate={values => {}}
+      validate={(values) => {}}
       render={() => (
         <div style={{ flex: 1, padding: 15 }}>
           {isNewGroup ? (
@@ -90,7 +90,7 @@ const GroupRulesForm = ({
               <Button
                 type='link'
                 style={{ float: 'right' }}
-                onClick={e => closeModalAndredirectToGroupPage()}
+                onClick={(e) => closeModalAndredirectToGroupPage()}
               >
                 Skip
               </Button>
@@ -105,7 +105,7 @@ const GroupRulesForm = ({
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             <FormItem
@@ -142,12 +142,12 @@ const GroupRulesForm = ({
   return <Fragment>{groupRulesForm}</Fragment>;
 };
 
-const mapDispatchToProps = state => ({
+const mapDispatchToProps = (state) => ({
   auth: state.auth,
-  group: state.group
+  group: state.group,
 });
 
 export default connect(mapDispatchToProps, {
   updateGroup,
-  mapDispatchToProps
+  mapDispatchToProps,
 })(withRouter(GroupRulesForm));

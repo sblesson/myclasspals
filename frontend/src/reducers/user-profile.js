@@ -1,4 +1,4 @@
-export default function() {
+export default function () {
   return {
     user: {
       name: '',
@@ -9,25 +9,25 @@ export default function() {
         suite: '',
         city: '',
         state: '',
-        zipcode: ''
-      }
+        zipcode: '',
+      },
     },
     community: [
       {
         id: 2,
         childName: 'Leanne Graham',
         grade: 'Apt. 556',
-        classroom: 'Gwenborough',
+        classNameroom: 'Gwenborough',
         school: {
           name: 'Kulas Light',
           street: 'Apt. 556',
           suite: 'Apt. 556',
           city: 'Apt. 556',
           state: 'California',
-          zipcode: '92998-3874'
-        }
-      }
+          zipcode: '92998-3874',
+        },
+      },
     ],
-    isTandCAccepted: false
+    isTandCAccepted: false,
   };
 }

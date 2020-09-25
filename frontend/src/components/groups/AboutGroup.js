@@ -11,7 +11,7 @@ const AboutGroup = ({ index, group }) => {
       style={{
         width: '100%',
         marginBottom: 16,
-        textAlign: 'center'
+        textAlign: 'center',
       }}
       avatar={<i className='fas fa-users icon-group'></i>}
       title={'About'}
@@ -27,12 +27,12 @@ const AboutGroup = ({ index, group }) => {
 };
 
 AboutGroup.propTypes = {
-  group: PropTypes.object.isRequired
+  group: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   auth: state.auth,
-  group: state.group
+  group: state.group,
 });
 
 export default connect(mapStateToProps, {})(AboutGroup);

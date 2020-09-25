@@ -12,7 +12,7 @@ const DeletePostModal = ({
   postType,
   commentId,
   isSinglePost,
-  post
+  post,
 }) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
@@ -65,11 +65,11 @@ const DeletePostModal = ({
   );
 };
 
-const mapStateToProps = state => ({
-  post: state.post
+const mapStateToProps = (state) => ({
+  post: state.post,
 });
 
 export default connect(mapStateToProps, {
   deletePost,
-  deleteComment
+  deleteComment,
 })(DeletePostModal);

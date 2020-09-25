@@ -12,11 +12,11 @@ const OurStory = () => {
         As an immigrant, her parents and siblings are in India. She felt
         helpless in many situations, she need a community. She want to get some
         support from other parents as well as offer support when she can. But
-        there is no way to connect to other parents in classroom. Kids will be
-        going in different afterschool.
+        there is no way to connect to other parents in classNameroom. Kids will
+        be going in different afterschool.
         <br /> Her daughter wants to go to friends birthday party. But she don't
         know how to contact other parent. Her son wants to have playdate with
-        his friend in classroom. Again, no way to connect to parent. Parents
+        his friend in classNameroom. Again, no way to connect to parent. Parents
         pick-up and drop-off kids at different times. <br />
         Most of parents are always rushing. Sometimes, it is hard to initialize
         conversation. She thought to herself. This is the world of internet,

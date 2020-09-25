@@ -12,7 +12,7 @@ import './PostItem.scss';
 const CommentItem = ({
   postId,
   comment: { _id, message, userName, userId, avatar, postedDate, subject },
-  isSinglePost
+  isSinglePost,
 }) => {
   const { Meta } = Card;
 
@@ -34,10 +34,10 @@ const CommentItem = ({
       className='feed-comment'
       actions={[
         <Dropdown overlay={menu} placement='bottomCenter'>
-          <a className='ant-dropdown-link' onClick={e => e.preventDefault()}>
+          <a className='ant-dropdown-link' onClick={(e) => e.preventDefault()}>
             <EllipsisOutlined />
           </a>
-        </Dropdown>
+        </Dropdown>,
       ]}
     >
       <Meta
@@ -69,7 +69,7 @@ const CommentItem = ({
 
 CommentItem.propTypes = {
   postId: PropTypes.string.isRequired,
-  comment: PropTypes.object.isRequired
+  comment: PropTypes.object.isRequired,
 };
 
 export default CommentItem;
