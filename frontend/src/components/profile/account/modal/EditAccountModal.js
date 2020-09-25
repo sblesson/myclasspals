@@ -25,11 +25,11 @@ const EditAccountModal = ({ auth, updateUser }) => {
     setModalVisibility(!visible);
   };
   //const [formData, setFormData] = useState({ user });
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
   const [componentSize, setComponentSize] = useState('small');
-  const inputOnChange = event => {
+  const inputOnChange = (event) => {
     if (!event.target.value) {
       return;
     }
@@ -38,12 +38,12 @@ const EditAccountModal = ({ auth, updateUser }) => {
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 8 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
-    }
+      sm: { span: 16 },
+    },
   };
 
   const yourInfo = (
@@ -53,9 +53,9 @@ const EditAccountModal = ({ auth, updateUser }) => {
         name: '',
         city: '',
         state: '',
-        zipcode: ''
+        zipcode: '',
       }}
-      onSubmit={values => {
+      onSubmit={(values) => {
         let myAddress = JSON.parse(values.citySelect);
 
         updateUser(
@@ -64,7 +64,7 @@ const EditAccountModal = ({ auth, updateUser }) => {
             name: values.userName,
             city: myAddress.city,
             state: myAddress.state,
-            zipcode: myAddress.postalcode
+            zipcode: myAddress.postalcode,
           },
           true
         );
@@ -79,7 +79,7 @@ const EditAccountModal = ({ auth, updateUser }) => {
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             {auth !== null && auth.user ? (
@@ -113,7 +113,7 @@ const EditAccountModal = ({ auth, updateUser }) => {
             fontSize: '12px',
             cursor: 'pointer',
             marginTop: '12px',
-            marginRight: '10px'
+            marginRight: '10px',
           }}
         >
           <span>Edit</span>
@@ -140,10 +140,10 @@ const EditAccountModal = ({ auth, updateUser }) => {
 EditAccountModal.propTypes = {
   //profileData: PropTypes.object.isRequired
 };
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
-  updateUser
+  updateUser,
 })(withRouter(EditAccountModal));

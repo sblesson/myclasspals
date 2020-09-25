@@ -22,65 +22,48 @@ const FilterPanel = ({ group, searchGroup }) => {
     'Today',
     'This week',
     'This month',
-    'This year'
+    'This year',
   ];
 
   const groupTypeFilters = ['City', 'Zipcode', 'School Name'];
-  const getUTCDate = item => {
-    let dateFilterLessThan = moment()
-        .utc()
-        .format(),
+  const getUTCDate = (item) => {
+    let dateFilterLessThan = moment().utc().format(),
       dateFilterGreaterThan = null;
 
     switch (item) {
       case 'Last hour':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('hour')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('hour').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'Today':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('day')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('day').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'This week':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('week')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('week').format();
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'This month':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('month')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('month').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
       case 'This year':
-        dateFilterGreaterThan = moment()
-          .utc()
-          .startOf('year')
-          .format();
+        dateFilterGreaterThan = moment().utc().startOf('year').format();
 
         return {
           dateFilterGreaterThan: dateFilterGreaterThan,
-          dateFilterLessThan: dateFilterLessThan
+          dateFilterLessThan: dateFilterLessThan,
         };
     }
   };
@@ -133,7 +116,7 @@ const FilterPanel = ({ group, searchGroup }) => {
         filterObjectSelected.catagoryId = item;
       } else {
         filterObjectSelected = Object.assign(filterObjectSelected, {
-          catagoryId: item
+          catagoryId: item,
         });
       }
     } else {
@@ -171,9 +154,9 @@ const FilterPanel = ({ group, searchGroup }) => {
                 header={<div>DATE</div>}
                 bordered
                 dataSource={dateFilters}
-                renderItem={item => (
+                renderItem={(item) => (
                   <List.Item
-                    onClick={event => handleDateFilterClick(item, event)}
+                    onClick={(event) => handleDateFilterClick(item, event)}
                     className={dateFilterSelected === item ? ' selected' : ''}
                   >
                     {item}
@@ -181,7 +164,9 @@ const FilterPanel = ({ group, searchGroup }) => {
                       <svg
                         className='svg-icon'
                         viewBox='0 0 20 20'
-                        onClick={event => removeDateFilterHandler(item, event)}
+                        onClick={(event) =>
+                          removeDateFilterHandler(item, event)
+                        }
                       >
                         <path
                           fill='none'
@@ -200,9 +185,11 @@ const FilterPanel = ({ group, searchGroup }) => {
                   header={<div>TYPE</div>}
                   bordered
                   dataSource={groupTypeFilters}
-                  renderItem={item => (
+                  renderItem={(item) => (
                     <List.Item
-                      onClick={event => handleGroupTypeFilterClick(item, event)}
+                      onClick={(event) =>
+                        handleGroupTypeFilterClick(item, event)
+                      }
                       className={
                         groupTypeFilterSelected === item ? ' selected' : ''
                       }
@@ -212,7 +199,7 @@ const FilterPanel = ({ group, searchGroup }) => {
                         <svg
                           className='svg-icon'
                           viewBox='0 0 20 20'
-                          onClick={event =>
+                          onClick={(event) =>
                             removeGroupTypeFilterHandler(item, event)
                           }
                         >
@@ -234,8 +221,8 @@ const FilterPanel = ({ group, searchGroup }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  group: state.group
+const mapStateToProps = (state) => ({
+  group: state.group,
 });
 
 export default connect(mapStateToProps, { searchGroup })(FilterPanel);

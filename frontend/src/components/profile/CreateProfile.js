@@ -31,7 +31,7 @@ const CreateProfile = ({ auth, history }) => {
 
   const [current, setCurrentStep] = useState(0);
 
-  const handleStepChange = current => {
+  const handleStepChange = (current) => {
     current = current + 1;
     setCurrentStep(current);
   };
@@ -41,13 +41,13 @@ const CreateProfile = ({ auth, history }) => {
       subTitle: '(step 1 of 2)',
       content: (
         <UserProfileForm onStepChange={handleStepChange} current={current} />
-      )
+      ),
     },
     {
       title: 'Manage your group',
       subTitle: '(step 2 of 2)',
-      content: <DiscoverGroup newRegistration={true} />
-    }
+      content: <DiscoverGroup newRegistration={true} />,
+    },
   ];
 
   return auth && auth.user.userGroup && auth.user.userGroup.length > 0 ? (
@@ -61,7 +61,7 @@ const CreateProfile = ({ auth, history }) => {
           className='profile-step'
           /* onChange={handleStepChange} */
         >
-          {steps.map(item => (
+          {steps.map((item) => (
             <Step
               key={item.title}
               title={item.title}
@@ -76,9 +76,9 @@ const CreateProfile = ({ auth, history }) => {
 };
 
 CreateProfile.propTypes = {
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
-const mapStateToProps = state => ({
-  profile: state.profile
+const mapStateToProps = (state) => ({
+  profile: state.profile,
 });
 export default connect(mapStateToProps, {})(withRouter(CreateProfile));

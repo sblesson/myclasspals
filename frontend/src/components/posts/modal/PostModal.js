@@ -18,7 +18,7 @@ import {
   Radio,
   FormItem,
   FormikDebug,
-  Select
+  Select,
 } from 'formik-antd';
 import { addPost } from '../../../actions/post';
 import { DatePicker, TimePicker } from 'antd';
@@ -63,41 +63,41 @@ const PostModal = ({ addPost, history, group, auth }) => {
         name: 'xxx.png',
         status: 'done',
         response: 'Server Error 500', // custom error message to show
-        url: 'http://www.baidu.com/xxx.png'
+        url: 'http://www.baidu.com/xxx.png',
       },
       {
         uid: '2',
         name: 'yyy.png',
         status: 'done',
-        url: 'http://www.baidu.com/yyy.png'
+        url: 'http://www.baidu.com/yyy.png',
       },
       {
         uid: '3',
         name: 'zzz.png',
         status: 'error',
         response: 'Server Error 500', // custom error message to show
-        url: 'http://www.baidu.com/zzz.png'
-      }
+        url: 'http://www.baidu.com/zzz.png',
+      },
     ],
     showUploadList: {
       showDownloadIcon: true,
       downloadIcon: 'download ',
       showRemoveIcon: true,
-      removeIcon: <StarOutlined onClick={e => {}} />
-    }
+      removeIcon: <StarOutlined onClick={(e) => {}} />,
+    },
   };
 
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 8 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
-    }
+      sm: { span: 16 },
+    },
   };
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -107,7 +107,7 @@ const PostModal = ({ addPost, history, group, auth }) => {
         categoryId: 'General',
         groupId: group.currentGroup.id,
         subject: '',
-        message: ''
+        message: '',
       }}
       onSubmit={(values, actions) => {
         addPost(values, history);
@@ -123,7 +123,7 @@ const PostModal = ({ addPost, history, group, auth }) => {
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             {' '}
@@ -285,15 +285,15 @@ const PostModal = ({ addPost, history, group, auth }) => {
 };
 
 PostModal.propTypes = {
-  addPost: PropTypes.func.isRequired
+  addPost: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = state => ({
+const mapDispatchToProps = (state) => ({
   group: state.group,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapDispatchToProps, {
   addPost,
-  mapDispatchToProps
+  mapDispatchToProps,
 })(withRouter(PostModal));

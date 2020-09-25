@@ -30,9 +30,9 @@ const InviteUsersToGroupModal = ({ current }) => {
     setComponentSize(size);
   };
 
-  const onCreateGroupSubmit = data => {};
+  const onCreateGroupSubmit = (data) => {};
 
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
 
@@ -69,11 +69,11 @@ const InviteUsersToGroupModal = ({ current }) => {
 };
 
 InviteUsersToGroupModal.propTypes = {
-  group: PropTypes.object.isRequired
+  group: PropTypes.object.isRequired,
 };
 
-const mapDispatchToProps = state => ({
-  group: state.group
+const mapDispatchToProps = (state) => ({
+  group: state.group,
 });
 
 export default connect(

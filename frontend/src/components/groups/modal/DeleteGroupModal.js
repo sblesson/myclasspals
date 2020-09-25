@@ -51,10 +51,10 @@ const DeleteGroupModal = ({ deleteGroup, groupId }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  group: state.group
+const mapStateToProps = (state) => ({
+  group: state.group,
 });
 
 export default connect(mapStateToProps, {
-  deleteGroup
+  deleteGroup,
 })(DeleteGroupModal);

@@ -11,7 +11,7 @@ import {
   Radio,
   FormItem,
   FormikDebug,
-  Select
+  Select,
 } from 'formik-antd';
 
 import { addGroup } from '../../../actions/group';
@@ -26,16 +26,16 @@ const CreateGroupForm = ({
   addGroup,
   current,
   onStepChange,
-  setModal
+  setModal,
 }) => {
   const [isLoadingCreateBtn, setIsLoadingCreateBtn] = useState(false);
 
   //const [formData, setFormData] = useState({ user });
-  const validateRequired = value => {
+  const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
   const [componentSize, setComponentSize] = useState('small');
-  const inputOnChange = event => {
+  const inputOnChange = (event) => {
     if (!event.target.value) {
       return;
     }
@@ -48,15 +48,15 @@ const CreateGroupForm = ({
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 8 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
-    }
+      sm: { span: 16 },
+    },
   };
 
-  const showHideSchoolSelect = event => {
+  const showHideSchoolSelect = (event) => {
     if (event.target.value === 'yes') {
       setIsSchoolVisible(true);
     } else {
@@ -70,8 +70,8 @@ const CreateGroupForm = ({
       {
         _id: auth.user._id,
         name: auth.user.name,
-        role: 'admin'
-      }
+        role: 'admin',
+      },
     ];
     if (values.schoolSelect) {
       let schoolData = values.schoolSelect.split(',');
@@ -97,7 +97,7 @@ const CreateGroupForm = ({
         groupName: '',
         privacy: 'PUBLIC',
         isSchoolGroup: 'yes',
-        grade: ''
+        grade: '',
       }}
       onSubmit={(values, actions) => {
         submitProfileForm(values, actions);
@@ -111,7 +111,7 @@ const CreateGroupForm = ({
             {...formItemLayout}
             layout='vertical'
             initialValues={{
-              size: componentSize
+              size: componentSize,
             }}
           >
             <FormItem
@@ -134,12 +134,12 @@ const CreateGroupForm = ({
                 options={[
                   {
                     label: 'Public',
-                    value: 'PUBLIC'
+                    value: 'PUBLIC',
                   },
                   {
                     label: 'Private',
-                    value: 'PRIVATE'
-                  }
+                    value: 'PRIVATE',
+                  },
                 ]}
               />
             </FormItem>
@@ -149,7 +149,7 @@ const CreateGroupForm = ({
                 onChange={showHideSchoolSelect}
                 options={[
                   { label: 'Yes', value: 'yes' },
-                  { label: 'No', value: 'no' }
+                  { label: 'No', value: 'no' },
                 ]}
               />
             </FormItem>
@@ -198,12 +198,12 @@ const CreateGroupForm = ({
 CreateGroupForm.propTypes = {
   //profileData: PropTypes.object.isRequired
 };
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   group: state.group,
   auth: state.auth,
-  school: state.school.results
+  school: state.school.results,
 });
 
 export default connect(mapStateToProps, {
-  addGroup
+  addGroup,
 })(withRouter(CreateGroupForm));

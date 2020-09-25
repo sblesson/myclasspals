@@ -13,7 +13,7 @@ const Services = () => {
           <div>
             Connect with other families in school. Create a profile, search
             school and join groups. Share posts with other parents in your
-            childs classroom
+            childs classNameroom
           </div>
         </div>
       </div>
