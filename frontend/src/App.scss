@@ -37,6 +37,12 @@ body {
   padding: 0;
   //background: var(--main-body-bg-color);
 }
+.centered-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .modal-body {
   font-size: 0.8rem;
@@ -1067,10 +1073,17 @@ thead {
   margin-bottom: 2rem;
   margin-right: 1rem;
   padding: 2rem;
-  width: 70%;
+  display: flex;
+  flex-direction: column;
+  flex: 0.65;
   -webkit-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
   -moz-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
   box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
+}
+.sider {
+  display: flex;
+  flex-direction: column;
+  flex: 0.25;
 }
 
 .landing-bg {
@@ -1161,9 +1174,6 @@ thead {
 }
 
 .login-wrapper {
-  width: 100%;
-  margin-top: 2rem;
-  height: 80vh;
   background: url('./assets/images/login_community.jpeg') left center no-repeat;
   background-size: contain;
 }

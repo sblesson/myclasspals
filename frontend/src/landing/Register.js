@@ -134,7 +134,7 @@ const Register = ({ setAlert, register, auth, history }) => {
           </p>
         </div>
         <div className='landing-form-wrapper'>
-          <h2>Sign-Up</h2>
+          <h2>Create Account</h2>
           {yourInfo}
           <Text className='form-info-text'>
             Already have an account?{' '}

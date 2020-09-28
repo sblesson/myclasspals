@@ -5,7 +5,6 @@ import { Formik, ErrorMessage } from 'formik';
 import { Typography } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import { login } from '../actions/auth';
-import Services from './Services';
 import { authRedirect } from '../utils/authRedirect';
 import PropTypes from 'prop-types';
 import Footer from './Footer';
@@ -92,13 +91,10 @@ const Login = ({ login, auth, history }) => {
 
   return (
     <Fragment>
-      <div className='login-wrapper'>
-        <div className='landing-text'>
-          <h2 style={{ fontSize: '1.6rem' }}>Join your buddies</h2>
-          <h4 style={{ fontSize: '.8rem' }}>Together is better!</h4>
-        </div>
+      <div className='landing-wrapper d-flex justify-content-center'>
         <div className='landing-form-wrapper'>
-          <h2>Sign-In</h2>
+          <h2>Welcome back, buddy!</h2>
+
           {yourInfo}
           <Text className='form-info-text'>
             Don't have an account?{' '}

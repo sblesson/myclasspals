@@ -8,7 +8,8 @@ import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sendPrivateMessage } from '../../../actions/post';
-import AutoCompleteUserSeach from '../../common/autocompleteusersearch/AutoCompleteUserSeach';
+//import AutoCompleteUserSeach from '../../common/autocompleteusersearch/AutoCompleteUserSeach';
+import AutoCompleteUserSeach from '../../common/autocompleteusersearch/AutoCompleteUserSearch';
 
 import './PrivateMessageModal.scss';
 
@@ -27,9 +28,12 @@ const PrivateMessageModal = ({
     setModalVisibility(true);
   };
   const hideModal = () => {
+    console.log('hideModal');
     setModalVisibility(false);
   };
   const toggleModal = () => {
+    console.log('toggleModal');
+
     setModalVisibility(!visible);
   };
   const formItemLayout = {
@@ -155,14 +159,14 @@ const PrivateMessageModal = ({
     />
   );
   const displayInboxCompose = (
-    <div className='private-message-modal' onClick={toggleModal}>
+    <div className='private-message-modal'>
       <div as='h4' className='message-head-title'>
         Inbox
       </div>
       <div
         as='h4'
         className='message-head-title message-head-link'
-        onClick={toggleModal}
+        onClick={showModal}
       >
         <FormOutlined className='message-head-icon' />
         Compose
@@ -171,7 +175,7 @@ const PrivateMessageModal = ({
   );
 
   const displayMessageButton = (
-    <div className='private-message-modal' onClick={toggleModal}>
+    <div className='private-message-modal' onClick={showModal}>
       <Button
         type='primary'
         className='btn-primary'
@@ -183,7 +187,7 @@ const PrivateMessageModal = ({
   );
 
   const displayCompose = (
-    <div className='private-message-modal' onClick={toggleModal}>
+    <div className='private-message-modal'>
       <Result
         status='warning'
         subTitle='No messages found!'
@@ -191,7 +195,7 @@ const PrivateMessageModal = ({
           <div
             as='h4'
             className='message-head-title message-head-link'
-            onClick={toggleModal}
+            onClick={showModal}
           >
             <FormOutlined className='message-head-icon' />
             Compose
@@ -202,7 +206,7 @@ const PrivateMessageModal = ({
   );
 
   return (
-    <div>
+    <div className='message-body__private-message-modal'>
       {noMessagesFound && displayCompose}
       {!noMessagesFound && !toAddress && displayInboxCompose}
       {toAddress && displayMessageButton}
@@ -211,10 +215,9 @@ const PrivateMessageModal = ({
         centered
         visible={visible}
         onOk={hideModal}
-        onCancel={toggleModal} //pass close logic here
+        onCancel={hideModal} //pass close logic here
         destroyOnClose={true}
         cancelButtonProps={{ style: { display: 'none' } }}
-        destroyOnClose={true}
         footer={null}
       >
         {MessageForm}

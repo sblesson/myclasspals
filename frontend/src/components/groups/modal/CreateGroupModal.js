@@ -56,6 +56,7 @@ const CreateGroupModal = () => {
         <CreateGroupForm
           onStepChange={handleStepChange}
           current={current}
+          isNewGroup={true}
           setModal={setModalVisibility}
         />
       ),
@@ -93,14 +94,14 @@ const CreateGroupModal = () => {
           className='btn-primary add-group'
           icon={<UsergroupAddOutlined />}
         >
-          Create
+          Create Group
         </Button>
       </div>
       <Modal
         className='create-group-modal'
         title={steps[current].title + `${steps[current].subTitle}`}
         centered
-        closable={false}
+        closable={true}
         visible={visible}
         onOk={hideModal}
         okText='Create'

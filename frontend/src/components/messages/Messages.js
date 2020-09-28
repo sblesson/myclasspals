@@ -1,26 +1,22 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Menu, Layout, Divider, Empty, Spin } from 'antd';
+import { useMediaQuery } from 'react-responsive';
+
+import { Menu, Layout, Divider, Empty, Button, Spin } from 'antd';
 import {
   getPrivateMessages,
   getPost,
   addMessageReply,
 } from '../../actions/post';
 import PrivateMessageModal from './modal/PrivateMessageModal';
-import {
-  Comment,
-  Form,
-  Button,
-  List,
-  Input,
-  Card,
-  Dropdown,
-  Avatar,
-} from 'antd';
+
 import DeletePostModal from '../posts/modal/DeletePostModal';
 import { EllipsisOutlined } from '@ant-design/icons';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
+
+import MessagesSider from './MessagesSider';
+import MessageDetailsPage from './MessageDetailsPage';
 
 import './Messages.scss';
 const Messages = ({
@@ -29,237 +25,130 @@ const Messages = ({
   addMessageReply,
   post: { messages, loading, currentPost },
   auth,
-  history,
+  match,
 }) => {
-  const { Sider, Content } = Layout;
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isCurrent = useRef(true);
+  useEffect(() => {
+    return () => {
+      //called when component is going to unmount
+      isCurrent.current = false;
+    };
+  }, []);
 
-  const [messagePanelSelected, setMessagePanelItemSelected] = useState(null);
-
-  const [chatFormData, setChatForm] = useState({
-    submitting: false,
-    value: '',
-  });
   useEffect(() => {
     if (auth && auth.user && auth.user.email) {
-      getPrivateMessages({ userId: auth.user.email, isPrivate: true });
+      getPrivateMessages(
+        { userId: auth.user.email, isPrivate: true },
+        (cancelTokenSrc) => {
+          cancelTokenSrc.cancel();
+        }
+      );
     } else {
       const email = localStorage.getItem('userEmail');
-      getPrivateMessages({ userId: email, isPrivate: true });
+      if (isCurrent.current) {
+        loading = true;
+
+        getPrivateMessages(
+          { userId: email, isPrivate: true },
+          (cancelTokenSrc) => {
+            loading = false;
+            cancelTokenSrc.cancel();
+          }
+        );
+      }
     }
   }, [getPrivateMessages, auth.user._id]);
 
-  useEffect(() => {
-    const recentPost =
-      messages && messages.length > 0
-        ? messagePanelSelected
-          ? messagePanelSelected
-          : messages[0]
-        : null;
-    if (recentPost) {
-      getPost(recentPost._id);
-      const redirectUrl = `/messages/${recentPost._id}`;
-      history.push(redirectUrl);
-      setMessagePanelItemSelected(recentPost);
+  function callPost(checkCurrent, messageId) {
+    if (checkCurrent) {
+      loading = true;
+      getPost(messageId, (cancelTokenSrc) => {
+        loading = false;
+        cancelTokenSrc.cancel();
+      });
     }
-  }, [messages]);
+  }
 
-  const { TextArea } = Input;
+  useEffect(() => {
+    if (match && match.params && match.params.id) {
+      callPost(isCurrent.current, match.params.id);
+    }/*  else if (messages && messages.length > 0) {
+      callPost(isCurrent.current, messages[0]._id);
+    } */
 
-  const handleMessageItemClick = (item, event) => {
-    setMessagePanelItemSelected(item);
-    getPost(item._id);
-    const redirectUrl = `/messages/${item._id}`;
-    history.push(redirectUrl);
-  };
-
-  const onChatSubmit = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const formData = {
-      message: chatFormData.value,
-      endUserId: messagePanelSelected.endUserId,
-      subject: messagePanelSelected.subject,
+    return () => {
+      //todo
     };
+  }, [getPost, match]);
 
-    setChatForm({ ...chatFormData, ['submitting']: true });
-    setChatForm({ ...chatFormData, ['value']: '' });
-    addMessageReply(messagePanelSelected._id, formData);
-  };
+  const DeskTopView = () => {
+    if (loading) {
+      return <Spin />;
+    } else if (messages && messages.length > 0) {
+      return (
+        <div style='message-body' style={{ marginLeft: '2rem' }}>
+          <PrivateMessageModal />
 
-  const onChangeChatMessage = (event) => {
-    event.preventDefault();
-    setChatForm({ ...chatFormData, ['value']: event.target.value });
-  };
+          <div style={{ display: 'flex' }}>
+            <MessagesSider
+              messages={messages}
+              messageUrl={'/messages/'}
+              userEmail={auth.user.email}
+            />
 
-  const menu = (
-    <Menu>
-      <Menu.Item>
-        {' '}
-        <DeletePostModal postType='post' />
-      </Menu.Item>
-    </Menu>
-  );
-
-  return (
-    <Fragment>
-      {loading ? (
-        <Spin />
-      ) : (
-        <Layout>
-          {messages && messages.length > 0 ? (
-            <Sider
-              style={{
-                overflow: 'auto',
-                height: '100vh',
-                position: 'fixed',
-                left: '50',
-                right: '10',
-              }}
-              className='message-inbox-list'
-            >
-              <div className='message-head'>
-                <PrivateMessageModal />
-              </div>
-              <List
-                //className='message-list'
-                itemLayout='horizontal'
-                dataSource={messages}
-                renderItem={(message) => (
-                  <List.Item
-                    onClick={(event) => handleMessageItemClick(message, event)}
-                    className={
-                      messagePanelSelected === message ? ' selected' : ''
-                    }
-                  >
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar size='large' gap={4} className='avatar-icon'>
-                          {auth.user.email === message.endUserId
-                            ? message.userId.charAt(0)
-                            : message.endUserId
-                            ? message.endUserId.charAt(0)
-                            : ''}
-                        </Avatar>
-                      }
-                      title={
-                        <Ellipsis length={40} tooltip>
-                          {message.subject}
-                        </Ellipsis>
-                      }
-                      description={
-                        <Ellipsis length={40} tooltip>
-                          {auth.user.email === message.endUserId
-                            ? message.userId
-                            : message.endUserId}
-                        </Ellipsis>
-                      }
-                    />
-                  </List.Item>
-                )}
-              />
-            </Sider>
-          ) : (
-            ''
-          )}
-          <Content
-            style={{
-              marginLeft: 200,
-              marginTop: '24',
-              overflow: 'initial',
-            }}
-          >
-            {currentPost ? (
-              <Card
-                title={
-                  <Ellipsis length={80} tooltip>
-                    {currentPost.subject}
-                  </Ellipsis>
-                }
-                extra={
-                  <Dropdown
-                    overlay={menu}
-                    placement='bottomCenter'
-                    className='ant-dropdown-link'
-                  >
-                    <EllipsisOutlined />
-                  </Dropdown>
-                }
-                style={{ width: '50%' }}
-              >
-                <List>
-                  <List.Item>
-                    <Comment
-                      avatar={
-                        <Avatar size='small' className='avatar-icon' gap={4}>
-                          {currentPost.userId.charAt(0)}
-                        </Avatar>
-                      }
-                      key={currentPost._id}
-                      author={currentPost.endUserId}
-                      content={currentPost.message}
-                    ></Comment>
-                  </List.Item>
-                  {currentPost.comments &&
-                    currentPost.comments.length > 0 &&
-                    currentPost.comments.map((comment, index) => (
-                      <List.Item key={index}>
-                        <Comment
-                          key={comment._id}
-                          author={comment.userId}
-                          avatar={
-                            <Avatar
-                              className='avatar-icon'
-                              size='small'
-                              gap={4}
-                            >
-                              {comment.userId.charAt(0)}
-                            </Avatar>
-                          }
-                          content={comment.message}
-                          datetime={comment.datetime}
-                        />
-                      </List.Item>
-                    ))}
-                </List>
-                <Divider style={{ margin: 0 }} />
-
-                <Comment
-                  style={{ width: '100%' }}
-                  content={
-                    <div>
-                      <Form.Item>
-                        <TextArea
-                          name='reply'
-                          className='input-block-level form-control'
-                          onChange={(e) => onChangeChatMessage(e)}
-                          placeholder='Type a message'
-                          value={chatFormData.value}
-                        />
-                      </Form.Item>
-                      <Form.Item>
-                        <Button
-                          htmlType='button'
-                          onClick={onChatSubmit}
-                          type='primary'
-                          style={{ float: 'right' }}
-                          className='btn-primary'
-                        >
-                          Send
-                        </Button>
-                      </Form.Item>
-                    </div>
-                  }
-                />
-              </Card>
-            ) : (
-              <PrivateMessageModal noMessagesFound={true} />
+            {currentPost !== null && !isMobile && (
+              <MessageDetailsPage
+                loading={loading}
+                isMobile={isMobile}
+                currentPost={currentPost}
+                userEmail={auth.user.email}
+              ></MessageDetailsPage>
             )}
-          </Content>
-        </Layout>
-      )}
-    </Fragment>
+          </div>
+        </div>
+      );
+    } else {
+      return <EmptyMessage />;
+    }
+  };
+
+  const MobileView = () => {
+    if (messages && messages.length > 0) {
+      return (
+        <>
+          <PrivateMessageModal />
+
+          <MessagesSider
+            messages={messages}
+            messageUrl={'/message/'}
+            userEmail={auth.user.email}
+          />
+        </>
+      );
+    } else {
+      return <EmptyMessage />;
+    }
+  };
+
+  const EmptyMessage = () => (
+    <Empty
+      image='https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
+      imageStyle={{
+        height: 60,
+      }}
+      className='centered-content'
+      description={
+        <span>
+          You have no messages in your inbox. Create new by clicking compose
+          button.
+        </span>
+      }
+    >
+      <PrivateMessageModal />
+    </Empty>
   );
+  return <>{isMobile ? <MobileView /> : <DeskTopView />}</>;
 };
 
 Messages.propTypes = {
