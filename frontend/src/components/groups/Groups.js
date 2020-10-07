@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../common/spinner/Spinner';
 import GroupCard from './GroupCard';
+import SideBar from '../sidebar/SideBar';
 
 import CreateGroupModal from './modal/CreateGroupModal';
 import { getAllGroups } from '../../actions/group';
@@ -39,9 +40,14 @@ const Groups = ({ getAllGroups, group, auth }) => {
         <Spinner />
       ) : (
         <Content className='container'>
+          <SideBar />
           <div className='wrapper'>
             {group !== null ? (
-              <Tabs defaultActiveKey='1' tabBarExtraContent={operations}>
+              <Tabs
+                defaultActiveKey='1'
+                tabBarExtraContent={operations}
+                mode='top'
+              >
                 <TabPane tab='My Groups' key='1'>
                   {group.userGroup && group.userGroup.length > 0 ? (
                     group.userGroup.map((group, index) => (

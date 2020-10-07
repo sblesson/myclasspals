@@ -15,7 +15,8 @@ import { Button } from 'antd';
 
 import './CreateGroupModal.scss';
 
-const CreateGroupModal = () => {
+const CreateGroupModal = React.memo(() => {
+  console.log('inside create group');
   const { Step } = Steps;
   const [current, setCurrentStep] = useState(0);
 
@@ -29,7 +30,9 @@ const CreateGroupModal = () => {
     setModalVisibility(false);
     setCurrentStep(0);
   };
-  const toggleModal = () => {
+  const toggleModal = (event) => {
+    event.preventDefault();
+
     setModalVisibility(!visible);
     setCurrentStep(0);
   };
@@ -56,6 +59,7 @@ const CreateGroupModal = () => {
         <CreateGroupForm
           onStepChange={handleStepChange}
           current={current}
+          isNewGroup={true}
           setModal={setModalVisibility}
         />
       ),
@@ -88,19 +92,19 @@ const CreateGroupModal = () => {
 
   return (
     <div>
-      <div onClick={toggleModal}>
+      <div onClick={(event) => toggleModal(event)}>
         <Button
           className='btn-primary add-group'
           icon={<UsergroupAddOutlined />}
         >
-          Create
+          Create Group
         </Button>
       </div>
       <Modal
         className='create-group-modal'
         title={steps[current].title + `${steps[current].subTitle}`}
         centered
-        closable={false}
+        closable={true}
         visible={visible}
         onOk={hideModal}
         okText='Create'
@@ -116,6 +120,6 @@ const CreateGroupModal = () => {
       </Modal>
     </div>
   );
-};
+});
 
 export default withRouter(CreateGroupModal);

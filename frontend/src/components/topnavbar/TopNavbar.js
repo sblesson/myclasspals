@@ -15,13 +15,27 @@ const TopNavbar = ({ auth: { isAuthenticated } }) => {
         position: 'fixed',
         zIndex: 1,
         width: '100%',
+        display: 'flex',
+        cursor: 'pointer',
       }}
       className='top-menu'
     >
-      <div className='logo float-left'>
-        <span className='logo-text'>clazzbuddy</span>
+      <div
+        className='logo'
+        style={{
+          flex: 0.25,
+        }}
+      ></div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          flex: 0.65,
+        }}
+      >
+        {isAuthenticated ? <UserMenu /> : <GuestMenu />}
       </div>
-      {isAuthenticated ? <UserMenu /> : <GuestMenu />}
     </Header>
   );
 };

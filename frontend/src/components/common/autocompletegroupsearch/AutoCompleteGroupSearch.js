@@ -4,7 +4,6 @@ import { Spin, Select, AutoComplete, Input } from 'antd';
 import _ from 'lodash';
 import Spinner from '../spinner/Spinner';
 import { SearchOutlined } from '@ant-design/icons';
-import { Form, FormItem } from 'formik-antd';
 
 import {
   getGroupAutoComplete,
@@ -23,8 +22,10 @@ const AutoCompleteGroupSearch = ({
   const { Option, OptGroup } = Select;
 
   useEffect(() => {
-    clearAutoCompleteGroupSearchResult();
-    clearGroupSearchResult();
+    return () => {
+      clearAutoCompleteGroupSearchResult();
+      clearGroupSearchResult();
+    };
   }, []);
 
   const children =

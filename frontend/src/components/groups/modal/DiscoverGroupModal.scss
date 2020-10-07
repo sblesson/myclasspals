@@ -1,0 +1,76 @@
+@import '../../../styles/abstracts/variables';
+.search-box {
+  display: flex;
+  justify-content: left;
+  vertical-align: middle;
+  width: 100%;
+  border-radius: 5rem;
+  border: 1px solid #f0f2f5;
+  margin: 2rem 0 2rem 1rem;
+  cursor: pointer;
+  line-height: 10px;
+  background: #f0f2f5;
+  &__icon {
+    padding: 0.5rem 0.3rem;
+    color: #45b3e0;
+  }
+  &__input {
+    padding: 0.5rem 0.3rem;
+    background: #f0f2f5;
+    touch-action: none;
+  }
+}
+.icon-group {
+  color: var(--bg-gradient1);
+  padding: 0.5rem;
+}
+.ant-list-header {
+  padding: 0 1.6rem !important;
+  border: none !important;
+  color: #767676;
+  font-size: 0.875rem;
+  padding: 0.1rem 1.6rem;
+  background: transparent;
+}
+.create-btn-wrapper {
+  margin: 3rem 2rem 0 0;
+  text-align: right;
+}
+.discover-group {
+  background: transparent;
+  border-radius: 0.375em;
+  &:hover {
+    color: #767676;
+  }
+  .ant-btn:hover,
+  .ant-btn:focus {
+    color: #767676;
+    background-color: #fff;
+    border-color: #767676;
+  }
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+/* Bootstrap 4 text input with search icon */
+
+.form-control {
+  @at-root li.ant-menu-item-selected#{&} {
+    background: transparent;
+  }
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}

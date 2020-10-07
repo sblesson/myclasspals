@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import TopNavbar from './components/topnavbar/TopNavbar';
-import LeftNav from './components/leftnav/LeftNav';
 
 // Redux
 import store from './store';
@@ -14,6 +13,7 @@ import Routes from './components/routing/Routes';
 import { setInterceptors } from './utils/axios';
 import { loadUser } from './actions/auth';
 
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 /* import 'semantic-ui-css/semantic.min.css'; */
@@ -36,9 +36,7 @@ const App = () => {
         <Router>
           <Layout>
             <TopNavbar />
-
             <Layout className='main-container'>
-              <LeftNav />
               <Content>
                 <Switch>
                   <Route component={Routes} />

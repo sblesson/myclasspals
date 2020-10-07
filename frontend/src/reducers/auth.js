@@ -16,7 +16,7 @@ import {
   SEARCH_USER,
   GET_USER_BY_REGISTRATION_ID,
   CHANGE_PASSWORD_SUCCESS,
-  UPDATE_USER_GLOBAL
+  UPDATE_USER_GLOBAL,
 } from '../actions/types';
 
 import { setAuthToken } from '../utils/axios';
@@ -29,16 +29,16 @@ const initialState = {
   profileUser: null,
   searchUserResult: [],
   senderEmail: null,
-  invalidRegistrationToken: false
+  invalidRegistrationToken: false,
 };
 
-const updateUserLocalObject = user => {
+const updateUserLocalObject = (user) => {
   if (user) {
     localStorage.setItem('userEmail', user.email);
     localStorage.setItem('userId', user._id);
   }
 };
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -49,20 +49,20 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload.user
+        user: payload.user,
       };
     case SEARCH_USER:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        searchUserResult: payload.users
+        searchUserResult: payload.users,
       };
     case UPDATE_USER:
       return {
         ...state,
         user: payload.user,
-        loading: false
+        loading: false,
       };
 
     case GET_USER_BY_REGISTRATION_ID:
@@ -72,7 +72,7 @@ export default function(state = initialState, action) {
           isAuthenticated: false,
           loading: false,
           user: null,
-          invalidRegistrationToken: true
+          invalidRegistrationToken: true,
         };
       } else {
         return {
@@ -80,7 +80,7 @@ export default function(state = initialState, action) {
           isAuthenticated: false,
           loading: false,
           user: payload.user,
-          invalidRegistrationToken: false
+          invalidRegistrationToken: false,
         };
       }
 
@@ -89,7 +89,7 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload
+        user: payload,
       };
 
     case REGISTER_SUCCESS:
@@ -101,7 +101,7 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: false,
         loading: false,
-        user: payload.user
+        user: payload.user,
       };
     case UPDATE_USER_GLOBAL:
       if (payload.user) {
@@ -110,7 +110,7 @@ export default function(state = initialState, action) {
 
       return {
         ...state,
-        user: payload.user
+        user: payload.user,
       };
     case AUTH_SUCCESS:
       if (payload.token) {
@@ -123,14 +123,14 @@ export default function(state = initialState, action) {
         ...state,
         ...payload,
         isAuthenticated: true,
-        loading: false
+        loading: false,
       };
     case CHANGE_PASSWORD_SUCCESS:
       return {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: false
+        loading: false,
       };
 
     case LOGIN_FAIL:
@@ -150,10 +150,17 @@ export default function(state = initialState, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
-        user: {}
+        user: {},
       };
     case SEND_USER_EMAIL:
       return { ...state, ...payload, loading: false };
+
+    case 'CLEAR_AUTOCOMPLETE_USER_SEARCH':
+      return {
+        ...state,
+        loading: false,
+        searchUserResult: [],
+      };
 
     default:
       return state;

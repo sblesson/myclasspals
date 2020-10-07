@@ -6,6 +6,8 @@ import { Modal } from 'antd';
 import _ from 'lodash';
 
 const DeleteGroupModal = ({ deleteGroup, groupId }) => {
+  console.log('inside DeleteGroupModal');
+
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
   const [visible, setModalVisibility] = useState(false);

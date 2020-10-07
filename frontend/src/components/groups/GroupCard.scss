@@ -1,4 +1,15 @@
 @import '../../styles/abstracts/variables';
+.content-container {
+  display: flex;
+  flex-direction: column;
+  flex: 0.65;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 0.35;
+}
+
 .user-card-list {
   background: #fff;
   border-top: 1px solid #f0f0f0 !important;
@@ -35,6 +46,8 @@
 }
 .discover-group-card,
 .group-card {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
   .ant-card-meta-avatar {
     padding-right: 0.6rem;
   }
@@ -44,25 +57,28 @@
   .ant-card-body {
     padding: 1.2rem;
   }
-  .group-card-meta-desc {
-    margin: 0.4rem 1.5rem !important;
+  .group-card-details {
+    display: flex;
+    margin-left: 2rem;
+    margin-bottom: 0.2rem;
+    span {
+      display: inline-block;
+    }
+    &__role,
+    &__members {
+      margin-left: 1rem;
+    }
   }
-  .group-card-meta-privacy {
-    margin: 0.4rem 0rem !important;
-    display: inline-block;
-  }
-  .group-card-meta-role {
-    margin: 0.4rem 0.5rem !important;
-    display: inline-block;
-  }
-  .group-card-meta-count {
-    margin: 0.4rem !important;
-    display: inline-block;
-  }
-  .group-card-meta-action {
+  .group-card-action-dropdown {
+    margin-left: auto;
+    font-weight: 400;
+    line-height: 0.8rem;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 0.375em;
     float: right;
-    display: inline-block;
   }
+
   .group-card-update-status-link {
     margin: 0.4rem 0.1rem !important;
     cursor: pointer;

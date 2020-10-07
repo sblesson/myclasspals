@@ -5,7 +5,6 @@ import { Formik, ErrorMessage } from 'formik';
 import { Typography } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
 import { login } from '../actions/auth';
-import Services from './Services';
 import { authRedirect } from '../utils/authRedirect';
 import PropTypes from 'prop-types';
 import Footer from './Footer';
