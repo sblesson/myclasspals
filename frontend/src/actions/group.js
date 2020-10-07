@@ -17,7 +17,7 @@ import {
   ACCEPT_USER_GROUP_ERROR,
   REQUEST_JOIN_USER_GROUP,
   REQUEST_JOIN_USER_GROUP_ERROR,
-  APPROVE_GROUP_REQUEST,
+  APPROVE_GROUP_REanQUEST,
   APPROVE_GROUP_REQUEST_ERROR,
   CHANGE_GROUP_USER_ROLE,
   CHANGE_GROUP_USER_ROLE_ERROR,
@@ -47,7 +47,7 @@ export const addGroup = (formData) => async (dispatch) => {
       payload: res.data,
     });
 
-    dispatch(setAlert('Group Created', 'success'));
+    //dispatch(setAlert('Group Created', 'success'));
   } catch (err) {
     dispatch(
       setAlert(
@@ -314,7 +314,7 @@ export const approveUserGroupRequest = (requestData) => async (dispatch) => {
       (request) => request.id === requestData.groupId
     );
     dispatch({
-      type: APPROVE_GROUP_REQUEST,
+      type: 'APPROVE_GROUP_REQUEST',
       payload: { user: res.data.user, currentGroup: currentGroup },
     });
 
@@ -340,13 +340,13 @@ export const declineUserGroupRequest = (requestData) => async (dispatch) => {
       config
     );
     dispatch({
-      type: APPROVE_GROUP_REQUEST,
+      type: 'APPROVE_GROUP_REQUEST',
       payload: res,
     });
 
     dispatch(setAlert('User added to group', 'success'));
   } catch (err) {
-    catchHandler(err, APPROVE_GROUP_REQUEST_ERROR);
+    catchHandler(err, 'APPROVE_GROUP_REQUEST_ERROR');
   }
 };
 

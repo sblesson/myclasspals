@@ -84,7 +84,7 @@ export default function (state = initialState, action) {
     case ADD_GROUP:
       return {
         ...state,
-        userGroup: [...state.userGroup, payload.userGroup],
+        userGroup: [payload.userGroup, ...state.userGroup],
         newGroup: payload.userGroup,
         loading: false,
       };

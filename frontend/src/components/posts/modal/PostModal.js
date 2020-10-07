@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Button } from 'antd';
-import { UploadOutlined, StarOutlined } from '@ant-design/icons';
+import {
+  PlusCircleOutlined,
+  UploadOutlined,
+  StarOutlined,
+} from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
+import moment, { isMoment } from 'moment';
 
 import { Tabs, Modal } from 'antd';
 
@@ -25,7 +29,7 @@ import { DatePicker, TimePicker } from 'antd';
 
 import './PostModal.scss';
 
-const PostModal = ({ addPost, history, group, auth }) => {
+const PostModal = ({ isMobile, addPost, history, group, auth }) => {
   const [componentSize, setComponentSize] = useState('small');
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -248,14 +252,23 @@ const PostModal = ({ addPost, history, group, auth }) => {
   return (
     <div>
       <div className='new-post-form' onClick={showModal}>
-        <div className='bg-post-head p'>What do you want to discuss?</div>
+        <Button className='ant-btn btn-primary pinkBtn'>
+          {/* <PlusCircleOutlined /> */}
+          Create Post
+        </Button>
 
-        <div className='post-create-textarea'>
-          <div className='avatar-container'>
-            <i className='fas fa-user margin-right-5 '></i>
-            <span className='new-post'>Post your inner voice </span>
-          </div>
-        </div>
+        {/*         {!isMobile && (
+          <>
+            <div className='bg-post-head p'>What do you want to discuss?</div>
+
+            <div className='post-create-textarea'>
+              <div className='avatar-container'>
+                <i className='fas fa-user margin-right-5 '></i>
+                <span className='new-post'>Post your inner voice </span>
+              </div>
+            </div>
+          </>
+        )} */}
       </div>
       <Modal
         title={'Post to ' + group.currentGroup.groupName}

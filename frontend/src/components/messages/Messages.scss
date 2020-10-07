@@ -5,6 +5,14 @@ $bp-small: 37.5em;
 $color-grey-light-2: grey;
 
 $color-secondary: orange;
+.message-body {
+  margin-left: 2rem;
+  &__private-message-modal {
+    margin-top: 3rem;
+    margin-bottm: 2rem;
+  }
+}
+
 .empty-container {
   margin-top: 100px !important;
   width: 70%;

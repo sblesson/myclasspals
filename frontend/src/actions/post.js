@@ -16,16 +16,16 @@ import {
   SEARCH_POST,
   GET_PRIVATE_MESSAGES,
   GET_POST_CATEGORIES_ERROR,
-  ADD_MESSAGE_REPLY
+  ADD_MESSAGE_REPLY,
 } from './types';
 import { CancelToken } from '../utils/axios';
 
 // Get posts
-export const getPostCategories = () => async dispatch => {
+export const getPostCategories = () => async (dispatch) => {
   try {
     dispatch({
       type: GET_POST_CATEGORIES,
-      payload: { screen: 'dash' }
+      payload: { screen: 'dash' },
     });
   } catch (err) {
     catchHandler(err, GET_POST_CATEGORIES_ERROR);
@@ -33,18 +33,18 @@ export const getPostCategories = () => async dispatch => {
 };
 
 // Add post
-export const addPost = formData => async dispatch => {
+export const addPost = (formData) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   try {
     const res = await axios.post('/post/createpost', formData, config);
     dispatch({
       type: ADD_POST,
-      payload: res.data
+      payload: res.data,
     });
 
     dispatch(setAlert('Post created', 'success'));
@@ -54,22 +54,22 @@ export const addPost = formData => async dispatch => {
 };
 
 // Search post by groupId
-export const searchPost = (requestObj, callback) => async dispatch => {
+export const searchPost = (requestObj, callback) => async (dispatch) => {
   let cancel;
   console.log(requestObj);
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   try {
     const res = await axios.post('/post/searchpost', requestObj, config, {
-      cancelToken: new axios.CancelToken(c => (cancel = c))
+      cancelToken: new axios.CancelToken((c) => (cancel = c)),
     });
     dispatch({
       type: SEARCH_POST,
-      payload: res.data
+      payload: res.data,
     });
     console.log(res.data);
     callback(res.data.post, cancel);
@@ -80,36 +80,40 @@ export const searchPost = (requestObj, callback) => async dispatch => {
 };
 
 // Search post by groupId
-export const getPrivateMessages = formData => async dispatch => {
+export const getPrivateMessages = (formData, callback) => async (dispatch) => {
+  let cancelTokenSrc = axios.CancelToken.source();
+
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
-
   try {
-    const res = await axios.post('/post/searchpost', formData, config);
+    const res = await axios.post('/post/searchpost', formData, config, {
+      cancelToken: cancelTokenSrc.token,
+    });
     dispatch({
       type: GET_PRIVATE_MESSAGES,
-      payload: res.data.post
+      payload: res.data.post,
     });
   } catch (err) {
     catchHandler(err, 'CREATE_PRIVATE_POST_ERROR');
   }
+  callback(cancelTokenSrc);
 };
 // Add post
-export const sendPrivateMessage = formData => async dispatch => {
+export const sendPrivateMessage = (formData) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
   try {
     const res = await axios.post('/post/createpost', formData, config);
 
     dispatch({
       type: SEND_PRIVATE_MESSAGE,
-      payload: res.data
+      payload: res.data,
     });
 
     dispatch(setAlert('New Message Created', 'success'));
@@ -119,13 +123,13 @@ export const sendPrivateMessage = formData => async dispatch => {
 };
 
 // Search post by postId
-export const getPost = id => async dispatch => {
+export const getPost = (id) => async (dispatch) => {
   try {
     const res = await axios.get(`/post/getpost?id=${id}`);
 
     dispatch({
       type: GET_POST,
-      payload: res.data.post
+      payload: res.data.post,
     });
   } catch (err) {
     catchHandler(err, 'GET_POST_ERROR');
@@ -133,11 +137,11 @@ export const getPost = id => async dispatch => {
 };
 
 // Add comment
-export const addMessageReply = (postId, formData) => async dispatch => {
+export const addMessageReply = (postId, formData) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   try {
@@ -149,7 +153,7 @@ export const addMessageReply = (postId, formData) => async dispatch => {
 
     dispatch({
       type: ADD_MESSAGE_REPLY,
-      payload: { postId, comments: res.data.post.comments }
+      payload: { postId, comments: res.data.post.comments },
     });
 
     dispatch(setAlert('Comment Added', 'success'));
@@ -159,11 +163,11 @@ export const addMessageReply = (postId, formData) => async dispatch => {
 };
 
 // Add comment
-export const addComment = (postId, formData) => async dispatch => {
+export const addComment = (postId, formData) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   try {
@@ -175,7 +179,7 @@ export const addComment = (postId, formData) => async dispatch => {
 
     dispatch({
       type: ADD_COMMENT,
-      payload: { postId, comments: res.data.post.comments }
+      payload: { postId, comments: res.data.post.comments },
     });
 
     dispatch(setAlert('Comment Added', 'success'));
@@ -185,11 +189,13 @@ export const addComment = (postId, formData) => async dispatch => {
 };
 
 // Add comment
-export const addCommentToSinglePost = (postId, formData) => async dispatch => {
+export const addCommentToSinglePost = (postId, formData) => async (
+  dispatch
+) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   try {
@@ -201,7 +207,7 @@ export const addCommentToSinglePost = (postId, formData) => async dispatch => {
 
     dispatch({
       type: ADD_COMMENT_SINGLE_POST,
-      payload: { postId, comments: res.data.post.comments }
+      payload: { postId, comments: res.data.post.comments },
     });
 
     dispatch(setAlert('Comment Added', 'success'));
@@ -210,12 +216,25 @@ export const addCommentToSinglePost = (postId, formData) => async dispatch => {
   }
 };
 // Delete post
-export const deletePost = postId => async dispatch => {
+export const deletePost = (postId) => async (dispatch) => {
   try {
     const res = await axios.delete(`/post/deletepost/${postId}`);
     dispatch({
       type: DELETE_POST,
-      payload: postId
+      payload: postId,
+    });
+  } catch (err) {
+    catchHandler(err, 'DELETE_POST_ERROR');
+  }
+};
+
+// Delete post
+export const deleteMessage = (postId) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/post/deletepost/${postId}`);
+    dispatch({
+      type: 'DELETE_MESSAGE',
+      payload: postId,
     });
   } catch (err) {
     catchHandler(err, 'DELETE_POST_ERROR');
@@ -223,22 +242,20 @@ export const deletePost = postId => async dispatch => {
 };
 
 // Delete comment
-export const deleteComment = (
-  postId,
-  commentId,
-  isSinglePost
-) => async dispatch => {
+export const deleteComment = (postId, commentId, isSinglePost) => async (
+  dispatch
+) => {
   try {
     const res = await axios.delete(`/post/deletepost/${commentId}`);
     if (isSinglePost) {
       dispatch({
         type: REMOVE_COMMENT_SINGLE_POST,
-        payload: { postId, commentId, comments: res.data }
+        payload: { postId, commentId, comments: res.data },
       });
     } else {
       dispatch({
         type: REMOVE_COMMENT,
-        payload: { postId, commentId, comments: res.data }
+        payload: { postId, commentId, comments: res.data },
       });
     }
     dispatch(setAlert('Comment Removed', 'success'));

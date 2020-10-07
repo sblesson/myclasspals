@@ -28,6 +28,7 @@ const Posts = ({ post: { posts, totalPostCount, loading } }) => {
           <List.Item key={index} className='feed-list-item'>
             <PostItem post={item} />
           </List.Item>
+          
         )}
       />
     </div>

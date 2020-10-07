@@ -106,14 +106,14 @@ const InviteUsersToGroupForm = ({
               {' '}
               <FormItem
                 name='usersSelect'
-                label='Select Members'
+                label='Select existing users'
                 required={false}
               >
                 <MultiSelectUserSearch endUsersSelect={'usersSelect'} />
               </FormItem>
               <FormItem
                 name='invitedUsers'
-                label='Invite non members'
+                label='Invite non-members'
                 required={false}
                 style={{ marginTop: 20 }}
               >
@@ -122,7 +122,7 @@ const InviteUsersToGroupForm = ({
                   name='invitedUsers'
                   cols='20'
                   rows='5'
-                  placeholder='Invite non-members of clazzbuddy by typing or pasting email addresses, separated by commas'
+                  placeholder='Send email invitation to non members of clazzbuddy by typing or pasting email addresses, separated by commas'
                   required={false}
                 />
               </FormItem>

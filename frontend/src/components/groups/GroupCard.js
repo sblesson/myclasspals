@@ -170,7 +170,7 @@ const GroupCard = ({
       return <Tag color={'blue'}>{currentGroup.role}</Tag>;
     } else if (currentGroup.role === 'member') {
       return <Tag color={'geekblue'}>{currentGroup.role}</Tag>;
-    } else if (currentGroup.role === 'y      hb youhkujhjmhjhkhvitation') {
+    } else if (currentGroup.role === 'pending invitation') {
       return <Tag color={'green'}>{currentGroup.role}</Tag>;
     }
   };

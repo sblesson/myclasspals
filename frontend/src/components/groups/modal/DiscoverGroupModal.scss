@@ -1,0 +1,56 @@
+@import '../../../styles/abstracts/variables';
+
+.icon-group {
+  color: var(--bg-gradient1);
+  padding: 0.5rem;
+}
+.ant-list-header {
+  padding: 0 1.6rem !important;
+  border: none !important;
+  color: #767676;
+  font-size: 0.875rem;
+  padding: 0.1rem 1.6rem;
+  background: transparent;
+}
+.create-btn-wrapper {
+  margin: 3rem 2rem 0 0;
+  text-align: right;
+}
+.discover-group {
+  background: transparent;
+  border-radius: 0.375em;
+  &:hover {
+    color: #767676;
+  }
+  .ant-btn:hover,
+  .ant-btn:focus {
+    color: #767676;
+    background-color: #fff;
+    border-color: #767676;
+  }
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+/* Bootstrap 4 text input with search icon */
+
+.form-control {
+  @at-root li.ant-menu-item-selected#{&} {
+    background: transparent;
+  }
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}

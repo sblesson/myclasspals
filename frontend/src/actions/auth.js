@@ -27,33 +27,33 @@ import {
   UPDATE_USER_GLOBAL,
   DESTROY_SESSION,
   UPDATE_GROUP_STORE,
-  SEARCH_USER_ERROR
+  SEARCH_USER_ERROR,
 } from './types';
 import { setAuthToken, CancelToken } from '../utils/axios';
 
 let cancel;
 
-export const updateUserGlobal = userObj => dispatch => {
+export const updateUserGlobal = (userObj) => (dispatch) => {
   dispatch({
     type: UPDATE_USER_GLOBAL,
-    payload: userObj
+    payload: userObj,
   });
 };
 
-export const getUser = userId => async dispatch => {
+export const getUser = (userId) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   try {
     const userResp = await axios.get(`/user/getuserdetails?user=${userId}`, {
-      cancelToken: new CancelToken(c => (cancel = c))
+      cancelToken: new CancelToken((c) => (cancel = c)),
     });
     dispatch({
       type: GET_USER,
-      payload: userResp.data
+      payload: userResp.data,
     });
     dispatch({
       type: UPDATE_GROUP_STORE,
-      payload: userResp.data.user
+      payload: userResp.data.user,
     });
     //updateGroupStore(userResp.data.user);
   } catch (err) {
@@ -62,7 +62,7 @@ export const getUser = userId => async dispatch => {
 };
 
 // Load User
-export const loadUser = email => async dispatch => {
+export const loadUser = (email) => async (dispatch) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
 
@@ -75,16 +75,12 @@ export const loadUser = email => async dispatch => {
   }
 };
 
-export const searchUser = keyword => async dispatch => {
-  if (cancel !== undefined) cancel();
-
+export const searchUser = (searchTerm = '') => async (dispatch) => {
   try {
-    const userResp = await axios.get(`/user/searchuser?user=${keyword}`, {
-      cancelToken: new CancelToken(c => (cancel = c))
-    });
+    const res = await axios.get(`/user/searchuser?user=${searchTerm}`);
     dispatch({
       type: SEARCH_USER,
-      payload: userResp.data
+      payload: res.data,
     });
   } catch (err) {
     catchHandler(err, 'SEARCH_USER_ERROR');
@@ -92,23 +88,23 @@ export const searchUser = keyword => async dispatch => {
 };
 
 // Create or update user
-export const updateUser = (formData, edit = false) => async dispatch => {
+export const updateUser = (formData, edit = false) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
 
     const res = await axios.put(`/user/updateuser`, formData, config, {
-      cancelToken: new CancelToken(c => (cancel = c))
+      cancelToken: new CancelToken((c) => (cancel = c)),
     });
 
     dispatch({
       type: UPDATE_USER,
-      payload: res.data
+      payload: res.data,
     });
 
     if (edit) {
@@ -119,16 +115,16 @@ export const updateUser = (formData, edit = false) => async dispatch => {
   }
 };
 
-export const getuserbyregistrationid = (token, history) => async dispatch => {
+export const getuserbyregistrationid = (token, history) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   try {
     const response = await axios.get(`/user/userbyregid/${token}`, {
-      cancelToken: new CancelToken(c => (cancel = c))
+      cancelToken: new CancelToken((c) => (cancel = c)),
     });
     dispatch({
       type: GET_USER_BY_REGISTRATION_ID,
-      payload: response.data
+      payload: response.data,
     });
     if (response.data.errorCode !== 1) {
       //no error valid case
@@ -149,16 +145,16 @@ export const getuserbyregistrationid = (token, history) => async dispatch => {
   }
 };
 
-export const deleteUserRegistrationToken = token => async dispatch => {
+export const deleteUserRegistrationToken = (token) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   try {
     const response = await axios.delete(`/user/userbyregid/${token}`, {
-      cancelToken: new CancelToken(c => (cancel = c))
+      cancelToken: new CancelToken((c) => (cancel = c)),
     });
     dispatch({
       type: DELETE_USER_REGISTRATION_TOKEN,
-      payload: response.data
+      payload: response.data,
     });
   } catch (err) {
     catchHandler(err, 'DELETE_USER_REGISTRATION_TOKEN_ERROR', dispatch);
@@ -166,35 +162,35 @@ export const deleteUserRegistrationToken = token => async dispatch => {
 };
 
 // Register User
-export const register = (formData, callback) => async dispatch => {
+export const register = (formData, callback) => async (dispatch) => {
   let cancelTokenSrc = axios.CancelToken.source();
 
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   const body = JSON.stringify(formData);
 
   try {
     const res = await axios.post(`/user/register`, body, config, {
-      cancelToken: cancelTokenSrc.token
+      cancelToken: cancelTokenSrc.token,
     });
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: res.data
+      payload: res.data,
     });
 
     if (res.data.exception) {
       dispatch(setAlert(res.data.exception, 'error'));
     } else {
       const authRes = await axios.post(`/user/authenticate`, body, config, {
-        cancelToken: cancelTokenSrc.token
+        cancelToken: cancelTokenSrc.token,
       });
       dispatch({
         type: AUTH_SUCCESS,
-        payload: authRes.data
+        payload: authRes.data,
       });
       dispatch(getUser(formData.email));
     }
@@ -204,35 +200,35 @@ export const register = (formData, callback) => async dispatch => {
   callback(cancelTokenSrc);
 };
 // Register User
-export const contactUsMessage = (formData, callback) => async dispatch => {
+export const contactUsMessage = (formData, callback) => async (dispatch) => {
   let cancelTokenSrc = axios.CancelToken.source();
 
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   const body = JSON.stringify(formData);
 
   try {
     const res = await axios.post(`/user/contactusmessage`, body, config, {
-      cancelToken: cancelTokenSrc.token
+      cancelToken: cancelTokenSrc.token,
     });
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: res.data
+      payload: res.data,
     });
 
     if (res.data.exception) {
       dispatch(setAlert(res.data.exception, 'error'));
     } else {
       const authRes = await axios.post(`/user/authenticate`, body, config, {
-        cancelToken: cancelTokenSrc.token
+        cancelToken: cancelTokenSrc.token,
       });
       dispatch({
         type: AUTH_SUCCESS,
-        payload: authRes.data
+        payload: authRes.data,
       });
       dispatch(getUser(formData.email));
     }
@@ -242,25 +238,25 @@ export const contactUsMessage = (formData, callback) => async dispatch => {
   callback(cancelTokenSrc);
 };
 // Change User Password
-export const changePassword = ({ email, password }) => async dispatch => {
+export const changePassword = ({ email, password }) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   const formData = JSON.stringify({ email, password });
 
   try {
     const res = await axios.put('/user/updateuser', formData, config, {
-      cancelToken: new CancelToken(c => (cancel = c))
+      cancelToken: new CancelToken((c) => (cancel = c)),
     });
 
     dispatch({
       type: CHANGE_PASSWORD_SUCCESS,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     catchHandler(err, 'CHANGE_PASSWORD_ERROR');
@@ -268,25 +264,25 @@ export const changePassword = ({ email, password }) => async dispatch => {
 };
 
 // Login User
-export const login = (formData, callback) => async dispatch => {
+export const login = (formData, callback) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   if (formData) {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
 
     try {
       const body = JSON.stringify(formData);
       const res = await axios.post('/user/authenticate', body, config, {
-        cancelToken: new CancelToken(c => (cancel = c))
+        cancelToken: new CancelToken((c) => (cancel = c)),
       });
 
       dispatch({
         type: AUTH_SUCCESS,
-        payload: res.data
+        payload: res.data,
       });
 
       dispatch(getUser(formData.email));
@@ -298,10 +294,14 @@ export const login = (formData, callback) => async dispatch => {
 };
 
 // Logout / Clear Profile
-export const logout = () => dispatch => {
+export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: DESTROY_SESSION });
   dispatch({ type: LOGOUT });
 
   onClear();
+};
+
+export const clearAutoCompleteUserSearchResult = () => async (dispatch) => {
+  dispatch({ type: 'CLEAR_AUTOCOMPLETE_USER_SEARCH' });
 };

@@ -51,7 +51,8 @@ const InviteUsersToGroupModal = ({ current }) => {
         className='create-group-modal'
         visible={visible}
         onOk={hideModal}
-        okText='Post'
+        title={'Invite buddies to group'}
+        okText='Invite'
         onCancel={toggleModal} //pass close logic here
         destroyOnClose={true}
         cancelButtonProps={{ style: { display: 'none' } }}
