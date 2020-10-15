@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
 const GroupsList = ({ groupList, heading, groupUrl, iconColor }) => {
+  console.log('inside GroupsList', groupList);
+
   return (
     <>
       <Divider orientation='left'>{heading}</Divider>

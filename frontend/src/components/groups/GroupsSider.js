@@ -1,74 +1,86 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import DiscoverGroupModal from './modal/DiscoverGroupModal';
-import CreateGroupModal from './modal/CreateGroupModal';
 import GroupsList from './GroupsList';
 
-const GroupsSider = ({ group, groupUrl }) => {
-  const [adminGroups, setAdminGroups] = useState([]);
-  const [memberGroups, setMemberGroups] = useState([]);
+const GroupsSider = React.memo(
+  ({ group, groupUrl }) => {
+    console.log('inside GroupsSider');
 
-  const setGroups = () => {
-    let adminGroups = [];
-    let memberGroups = [];
-    group.userGroup.map((group) => {
-      if (group.role === 'admin') {
-        adminGroups.push(group);
-      } else {
-        memberGroups.push(group);
-      }
-    });
+    const [adminGroups, setAdminGroups] = useState([]);
+    const [memberGroups, setMemberGroups] = useState([]);
 
-    setAdminGroups(adminGroups);
-    setMemberGroups(memberGroups);
-  };
+    const setGroups = () => {
+      let adminGroups = [],
+        memberGroups = [];
+      group.userGroup.map((group) => {
+        if (group.role === 'admin') {
+          adminGroups.push(group);
+        } else {
+          memberGroups.push(group);
+        }
+      });
 
-  useEffect(() => {
-    setGroups();
-  }, [group]);
+      setAdminGroups(adminGroups);
+      setMemberGroups(memberGroups);
+    };
 
-  return (
-    <div className='sider'>
-      <DiscoverGroupModal />
-      <CreateGroupModal />
+    useEffect(() => {
+      setGroups();
+      return () => {};
+    }, [group]);
 
-      {adminGroups && adminGroups.length > 0 && (
-        <GroupsList
-          groupList={adminGroups}
-          heading='Groups I manage'
-          groupUrl={groupUrl}
-          iconColor='rgb(107, 202, 44)'
-        />
-      )}
-      {memberGroups && memberGroups.length > 0 && (
-        <GroupsList
-          groupList={memberGroups}
-          heading='Groups I joined'
-          groupUrl={groupUrl}
-          iconColor='rgb(107, 202, 44)'
-        />
-      )}
-      {group.pendingInvitedUserGroups &&
-        group.pendingInvitedUserGroups.length > 0 && (
+    return (
+      <>
+        {adminGroups && adminGroups.length > 0 && (
           <GroupsList
-            groupList={group.pendingInvitedUserGroups}
-            heading='Pending Invitations'
+            groupList={adminGroups}
+            heading='Groups I manage'
             groupUrl={groupUrl}
-            iconColor='rgb(0, 196, 204)'
+            iconColor='rgb(107, 202, 44)'
           />
         )}
-      {group.requestedUserGroup && group.requestedUserGroup.length > 0 && (
-        <GroupsList
-          groupList={group.requestedUserGroup}
-          heading='Requested To Join'
-          groupUrl={groupUrl}
-          iconColor='#d3d3d3'
-        />
-      )}
-    </div>
-  );
-};
+        {memberGroups && memberGroups.length > 0 && (
+          <GroupsList
+            groupList={memberGroups}
+            heading='Groups I joined'
+            groupUrl={groupUrl}
+            iconColor='rgb(107, 202, 44)'
+          />
+        )}
+        {group.pendingInvitedUserGroups &&
+          group.pendingInvitedUserGroups.length > 0 && (
+            <GroupsList
+              groupList={group.pendingInvitedUserGroups}
+              heading='Pending Invitations'
+              groupUrl={groupUrl}
+              iconColor='rgb(0, 196, 204)'
+            />
+          )}
+        {group.requestedUserGroup && group.requestedUserGroup.length > 0 && (
+          <GroupsList
+            groupList={group.requestedUserGroup}
+            heading='Requested To Join'
+            groupUrl={groupUrl}
+            iconColor='#d3d3d3'
+          />
+        )}
+      </>
+    );
+  },
+  (prevProps, nextProps) => {
+    if (prevProps.groupUrl !== nextProps.groupUrl) {
+      return false;
+    } else if (
+      prevProps.group &&
+      prevProps.group.currentGroup.id !== nextProps.group.currentGroup.id
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+);
 
 const mapStateToProps = (state) => ({
   group: state.group,

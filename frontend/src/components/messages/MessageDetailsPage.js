@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-import { PageHeader, Descriptions, Dropdown, Menu, Spin } from 'antd';
+import { PageHeader, Descriptions, Dropdown, Menu, Spin, Empty } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
@@ -10,14 +11,15 @@ import DeleteMessageModal from './modal/DeleteMessageModal';
 
 import './MessageDetailsPage.scss';
 
-const MessageDetailsPage = ({ isMobile, loading, currentPost, userEmail }) => {
-  console.log(' MessageDetailsPage' + loading);
-  useEffect(() => {
-    return () => {
-      //called when component is going to unmount
-      currentPost = null;
-    };
-  }, [currentPost]);
+const MessageDetailsPage = ({
+  post: { currentPost },
+  isMobile,
+  loading,
+  userEmail,
+}) => {
+  console.log(' MessageDetailsPage');
+  console.log(currentPost);
+
   const menu = (
     <Menu>
       <Menu.Item>
@@ -29,7 +31,7 @@ const MessageDetailsPage = ({ isMobile, loading, currentPost, userEmail }) => {
 
   if (loading) {
     return <Spin />;
-  } else {
+  } else if (currentPost !== null) {
     return (
       <div className='wrapper'>
         <PageHeader
@@ -51,11 +53,17 @@ const MessageDetailsPage = ({ isMobile, loading, currentPost, userEmail }) => {
             </Dropdown>
           }
         >
-          <MessageDetails currentMessage={currentPost} userEmail={userEmail} />
+          <MessageDetails userEmail={userEmail} />
         </PageHeader>
       </div>
     );
+  } else {
+    return <Empty description={'Message not exist'} />;
   }
 };
 
-export default MessageDetailsPage;
+const mapStateToProps = (state) => ({
+  post: state.post,
+});
+
+export default connect(mapStateToProps, {})(MessageDetailsPage);

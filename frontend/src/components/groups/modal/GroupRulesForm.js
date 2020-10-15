@@ -114,19 +114,21 @@ const GroupRulesForm = ({
               style={{ marginBottom: 16 }}
               required={false}
             >
-              <Input
+              <Input.TextArea
+                className='post-form-text-input post-form-textarea'
                 name='aboutGroup'
-                placeholder='What is this group about?'
+                cols='50'
+                rows='3'
+                placeholder='Describe your group&#39;s purpose'
               />
             </FormItem>
-
             <FormItem name='groupRules' label='Group Rules' required={false}>
               <Input.TextArea
                 className='post-form-text-input post-form-textarea'
                 name='groupRules'
                 cols='50'
-                rows='10'
-                placeholder='Start with the right tone by sharing your purpose and rules for your group?'
+                rows='6'
+                placeholder='Start with the right tone by sharing your purpose and rules for your group. You can come back and edit this later, too. Note: all groups operate under clazzbuddy&#39;s global guidelines in addition to the guidelines you choose.'
               />{' '}
             </FormItem>
 

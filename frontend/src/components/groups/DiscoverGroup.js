@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/spinner/Spinner';
@@ -13,19 +13,23 @@ import GroupCard from './GroupCard';
 import './DiscoverGroups.scss';
 
 const DiscoverGroups = ({ group, newRegistration }) => {
+  const [visible, setModalVisibility] = useState(false);
+  const toggleModal = () => {
+    setModalVisibility(!visible);
+  };
   return (
-    <Fragment>
+    <Fragment onClick={toggleModal}>
       {!group ? (
         <Spinner />
       ) : (
         <div className={`${newRegistration ? '' : 'wrapper group-page'}`}>
           {' '}
-          <div className='create-btn-wrapper'>
-            <CreateGroupModal />
-          </div>
           <Card style={{ marginBottom: 10 }} bordered={false}>
             <AutoCompleteGroupSearch />
           </Card>
+          <div className='create-btn-wrapper'>
+            <CreateGroupModal />
+          </div>
           {group !== null &&
           group.searchResult &&
           group.searchResult.length > 0 ? (

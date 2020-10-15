@@ -23,7 +23,7 @@ import Login from '../../landing/Login';
 import PrivateRoute from '../routing/PrivateRoute';
 import PendingRegistration from '../../landing/PendingRegistration';
 
-const CreateProfile = React.lazy(() => import('../profile/CreateProfile'));
+const OnboardingUser = React.lazy(() => import('../onboarding/OnboardingUser'));
 const Account = React.lazy(() => import('../profile/account/Account'));
 const Profile = React.lazy(() => import('../profile/Profile'));
 const Messages = React.lazy(() => import('../messages/Messages'));
@@ -36,6 +36,7 @@ const AboutGroup = React.lazy(() => import('../groups/AboutGroup'));
 const SinglePost = React.lazy(() => import('../posts/SinglePost'));
 
 const SingleMessage = React.lazy(() => import('../messages/SingleMessage'));
+const ListEvents = React.lazy(() => import('../events/EventsList'));
 
 const Routes = () => {
   return (
@@ -70,6 +71,8 @@ const Routes = () => {
           <PrivateRoute exact path='/messages/:id' component={Messages} />
           <PrivateRoute exact path='/message/:id' component={SingleMessage} />
           <PrivateRoute exact path='/groups' component={Groups} />
+          <PrivateRoute exact path='/events' component={ListEvents} />
+
           <PrivateRoute exact path='/discovergroup' component={DiscoverGroup} />
           <PrivateRoute
             path='/group/:id'
@@ -91,11 +94,8 @@ const Routes = () => {
               <Dashboard {...props} key={window.location.pathname} />
             )}
           />
-          <PrivateRoute
-            exact
-            path='/create-profile/:id'
-            component={CreateProfile}
-          />
+          <PrivateRoute exact path='/onboarding' component={OnboardingUser} />
+
           <PrivateRoute exact path='/account' component={Account} />
           <PrivateRoute
             exact

@@ -9,7 +9,7 @@ import './TopNavbar.scss';
 
 const SubMenu = Menu.SubMenu;
 
-const UserMenu = () => {
+const UserMenu = ({ logout }) => {
   let selectedKey = window.location.pathname.split('/')[1];
   selectedKey = selectedKey ? selectedKey : 'register';
 
@@ -23,6 +23,9 @@ const UserMenu = () => {
         <Menu.Item key='dashboard'>
           <Link to='/dashboard'>{'Home'}</Link>
         </Menu.Item>
+        <Menu.Item key='events'>
+          <Link to='/events'>{'Events'}</Link>
+        </Menu.Item>
         <Menu.Item key='messages'>
           <Link to='/messages'>{'Message'}</Link>
         </Menu.Item>
@@ -31,7 +34,7 @@ const UserMenu = () => {
             {' '}
             <Link to='/account'>{'Account'}</Link>
           </Menu.Item>
-          <Menu.Item key='logout' onClick={logout}>
+          <Menu.Item key='logout' onClick={(event) => logout(event)}>
             Log out
           </Menu.Item>
         </SubMenu>

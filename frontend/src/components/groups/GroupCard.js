@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Card, Menu, Tag, Button, Dropdown } from 'antd';
+import { Card, Menu, Tag, Button, Dropdown, Avatar } from 'antd';
 import _ from 'lodash';
 import DeleteGroupModal from './modal/DeleteGroupModal';
+
+import './GroupCard.scss';
 
 import {
   EditOutlined,
@@ -29,7 +33,10 @@ const GroupCard = ({
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
   deleteGroup,
+  newRegistration,
 }) => {
+  let history = useHistory();
+
   const { Meta } = Card;
   const [isRequestUpdated, setRequestUpdate] = useState(false);
 
@@ -41,8 +48,10 @@ const GroupCard = ({
         requestorUserId: auth.user.email,
       },
       record,
-      (userGroup) => {
-        console.log(userGroup);
+      () => {
+        if (newRegistration) {
+          history.push(`/dashboard/${record.id}`);
+        }
         //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
     );
@@ -64,11 +73,18 @@ const GroupCard = ({
     </Menu>
   );
   const acceptPendingInviteActionClick = (record) => {
-    acceptUserGroupInvitation({
-      groupId: record.id,
-      role: 'member',
-      invitedUserId: auth.user.email,
-    });
+    acceptUserGroupInvitation(
+      {
+        groupId: record.id,
+        role: 'member',
+        invitedUserId: auth.user.email,
+      },
+      () => {
+        if (newRegistration) {
+          history.push(`/dashboard/${record.id}`);
+        }
+      }
+    );
   };
 
   const adminMemberActionMenu = (
@@ -115,11 +131,7 @@ const GroupCard = ({
             }
           } else if (currentGroup.role === 'admin') {
             return (
-              <Dropdown
-                overlay={menu}
-                placement='bottomCenter'
-                style={{ float: 'right' }}
-              >
+              <Dropdown overlay={menu} className='group-card-action-dropdown'>
                 <a
                   className='ant-dropdown-link'
                   onClick={(e) => e.preventDefault()}
@@ -185,7 +197,7 @@ const GroupCard = ({
     }
   };
 
-  const getGroupPrivacyLabel = (privacy) => {
+  const getGroupPrivacy = (privacy) => {
     if (privacy) {
       let groupPrivacy = privacy.toLowerCase();
       groupPrivacy = _.startCase(groupPrivacy);
@@ -208,81 +220,58 @@ const GroupCard = ({
     }
   };
 
-  const getGroupPrivacy = (currentGroup) => {
-    if (
-      currentGroup &&
-      currentGroup.userGroupMembers &&
-      currentGroup.userGroupMembers.length > 0
-    ) {
-      if (currentGroup.userGroupMembers.length === 1) {
-        return <div>{getGroupPrivacyLabel(currentGroup.privacy)}</div>;
-      } else {
-        return <div>{getGroupPrivacyLabel()}</div>;
-      }
-    }
-  };
-
   return (
-    <Card key={index} className='discover-group-card'>
+    <Card key={index} className='discover-group-card' hoverable={true}>
       <Link to={`/group/${currentGroup.id}`}>
         <Meta
           avatar={
-            currentGroup.isSchoolGroup === 'no' ? (
-              <i
-                className='fas fa-users icon-group no-padding'
-                style={{ paddingRight: 0 }}
-              ></i>
-            ) : (
-              <i
-                className='fas fa-school icon-group no-padding'
-                title='school group'
-              ></i>
-            )
+            <Avatar
+              style={{
+                textTransform: 'uppercase',
+                background: 'rgb(0, 196, 204)',
+              }}
+              shape='square'
+              icon={currentGroup.groupName.charAt(0)}
+            />
           }
           title={currentGroup.groupName}
+          /*           description={
+            currentGroup.schoolName && (
+              <Meta
+                //className='group-card-meta-desc no-padding'
+                description={
+                  currentGroup.schoolName
+                    ? `School: ${currentGroup.schoolName}`
+                    : ''
+                }
+              />
+            )
+          } */
         ></Meta>
       </Link>
-      <Meta
-        className='group-card-meta-privacy no-padding'
-        description={getGroupPrivacy(currentGroup)}
-      ></Meta>
 
-      <Meta
-        className='group-card-meta-count no-padding'
-        description={getUserGroupMemberCount(currentGroup)}
-      ></Meta>
+      <div className='group-card-details'>
+        {currentGroup.privacy && (
+          <span className='group-card-details__privacy'>
+            {getGroupPrivacy(currentGroup.privacy)}
+          </span>
+        )}
 
-      <Meta
-        className='group-card-meta-role no-padding'
-        description={getUserGroupRole(currentGroup)}
-      ></Meta>
-      <Meta
-        className='group-card-meta-action group-action no-padding'
-        description={groupActionMenu(currentGroup, type)}
-      ></Meta>
-      {currentGroup.schoolName ? (
-        <Meta
-          className='group-card-meta-desc no-padding'
-          description={
-            currentGroup.schoolName
-              ? `School Name: ${currentGroup.schoolName}`
-              : ''
-          }
-        />
-      ) : (
-        ''
-      )}
-
-      {currentGroup.isGroupStatusUpdated ? (
-        <Meta
-          className='group-card-update-status-link no-padding'
-          description={
-            <Link to={`/group/${currentGroup.id}`}>Peek inside</Link>
-          }
-        />
-      ) : (
-        ''
-      )}
+        {currentGroup.userGroupMembers &&
+          currentGroup.userGroupMembers.length > 0 && (
+            <>
+              <span className='group-card-details__members'>
+                {getUserGroupMemberCount(currentGroup)}
+              </span>
+              <span className='group-card-details__role'>
+                {getUserGroupRole(currentGroup)}
+              </span>
+            </>
+          )}
+        <div className='group-card-details__action'>
+          {groupActionMenu(currentGroup, type)}
+        </div>
+      </div>
     </Card>
   );
 };

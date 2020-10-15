@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Formik, ErrorMessage, useFormik } from 'formik';
 import PostCategorySelect from '../../common/postcategoryselect/PostCategorySelect';
+
 import {
   SubmitButton,
   Input,
@@ -24,12 +25,14 @@ import {
   FormikDebug,
   Select,
 } from 'formik-antd';
-import { addPost } from '../../../actions/post';
+import { addPost, addEvent } from '../../../actions/post';
 import { DatePicker, TimePicker } from 'antd';
 
 import './PostModal.scss';
 
-const PostModal = ({ isMobile, addPost, history, group, auth }) => {
+const PostModal = ({ isMobile, addPost, addEvent, history, group, auth }) => {
+  const { RangePicker } = TimePicker;
+
   const [componentSize, setComponentSize] = useState('small');
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -104,6 +107,9 @@ const PostModal = ({ isMobile, addPost, history, group, auth }) => {
   const validateRequired = (value) => {
     return value ? undefined : 'required';
   };
+  function callback(key) {
+    console.log(key);
+  }
 
   const MessagePostForm = (
     <Formik
@@ -171,19 +177,106 @@ const PostModal = ({ isMobile, addPost, history, group, auth }) => {
       )}
     />
   );
-  /* 
+
   const EventPostForm = (
+    <Formik
+      initialValues={{
+        eventTitle: '',
+        eventType: 'Birthday',
+        groupId: group.currentGroup.id,
+        location: '',
+        description: '',
+      }}
+      onSubmit={(values, actions) => {
+        addEvent(values, history);
+        setModalVisibility(false);
+        setActiveIndex(0);
+      }}
+      validator={() => ({})}
+      //validate={values => {}}
+      render={() => (
+        <div style={{ flex: 1, padding: 10 }}>
+          <Form
+            className='form-wrapper'
+            {...formItemLayout}
+            layout='vertical'
+            initialValues={{
+              size: componentSize,
+            }}
+          >
+            <FormItem
+              name='eventTitle'
+              label='Title'
+              required={true}
+              validate={validateRequired}
+            >
+              <Input name='eventTitle' placeholder='Event Title' />
+            </FormItem>
+            <FormItem
+              name='eventDate'
+              label='Event Date'
+              required={true}
+              validate={validateRequired}
+            >
+              <DatePicker /* onChange={onChange} */ />
+            </FormItem>
+
+            <FormItem
+              name='eventTime'
+              label='Event Time'
+              required={true}
+              validate={validateRequired}
+            >
+              <RangePicker
+                use12Hours
+                format='h:mm a' /* onChange={onChange} */
+              />
+            </FormItem>
+
+            <FormItem
+              name='eventLocation'
+              label='Location'
+              required={true}
+              validate={validateRequired}
+            >
+              <Input
+                name='eventLocation'
+                placeholder='Enter address or online link'
+              />
+            </FormItem>
+            <FormItem
+              name='eventDescription'
+              label='Description'
+              required={false}
+            >
+              <Input.TextArea
+                className='post-form-text-input post-form-textarea'
+                name='eventDescription'
+                cols='30'
+                rows='5'
+                placeholder='Enter event description ...'
+                required={false}
+              />
+            </FormItem>
+            <SubmitButton className='ant-btn btn-primary'> Create</SubmitButton>
+          </Form>
+        </div>
+      )}
+    />
+  );
+
+  const EventPostForm2 = (
     <Form>
       <Form.Group className='post-form'>
         <Select
           allowClear
           style={{ width: '100%' }}
           placeholder='Choose event category'
-          onChange={onCategoryChange}
+          //onChange={onCategoryChange}
         >
-          {categories.map(function(topic, index) {
+          {/*     {categories.map(function (topic, index) {
             return <Option key={index}>{topic.title}</Option>;
-          })}
+          })} */}
         </Select>
       </Form.Group>
       <Form.Group className='post-form'>
@@ -198,7 +291,7 @@ const PostModal = ({ isMobile, addPost, history, group, auth }) => {
           type='text'
           name='location'
           placeholder='Address'
-          onChange={e => onChange(e)}
+          //onChange={(e) => onChange(e)}
         />
       </Form.Group>
       <Form.Group className='post-form'>
@@ -207,7 +300,7 @@ const PostModal = ({ isMobile, addPost, history, group, auth }) => {
           type='text'
           name='subject'
           placeholder='Subject'
-          onChange={e => onChange(e)}
+          //onChange={(e) => onChange(e)}
         />
       </Form.Group>
       <Form.Group className='post-form'>
@@ -217,20 +310,18 @@ const PostModal = ({ isMobile, addPost, history, group, auth }) => {
           cols='30'
           rows='5'
           placeholder='Enter your message ...'
-          onChange={e => onChange(e)}
+          //onChange={(e) => onChange(e)}
           required
         />
       </Form.Group>
-             <Form.Group>
+      <Form.Group>
         <Upload {...uploadProps}>
           <Button>
             <UploadOutlined /> Upload
           </Button>
         </Upload>
-      </Form.Group> 
-      <ModalFooter>
-        <SubmitButton className='ant-btn btn-primary'> Post</SubmitButton>
-      </ModalFooter>
+      </Form.Group>
+      <SubmitButton className='ant-btn btn-primary'>Add</SubmitButton>
     </Form>
   );
 
@@ -243,18 +334,18 @@ const PostModal = ({ isMobile, addPost, history, group, auth }) => {
           cols='30'
           rows='5'
           placeholder='Enter your message ...'
-          onChange={e => onChange(e)}
+          //onChange={(e) => onChange(e)}
           required
         />
       </Form.Group>
     </Form>
-  ); */
+  );
   return (
     <div>
       <div className='new-post-form' onClick={showModal}>
         <Button className='ant-btn btn-primary pinkBtn'>
           {/* <PlusCircleOutlined /> */}
-          Create Post
+          Create
         </Button>
 
         {/*         {!isMobile && (
@@ -271,27 +362,23 @@ const PostModal = ({ isMobile, addPost, history, group, auth }) => {
         )} */}
       </div>
       <Modal
-        title={'Post to ' + group.currentGroup.groupName}
         centered
         visible={visible}
         onOk={hideModal}
-        okText='Post'
         onCancel={toggleModal} //pass close logic here
         destroyOnClose={true}
         cancelButtonProps={{ style: { display: 'none' } }}
         destroyOnClose={true}
         footer={null}
       >
-        {/*   <Tabs defaultActiveKey='1' onChange={callback}> */}
-        {/*             <TabPane tab="Let\'s discuss" key='1'>
-         */}{' '}
-        {MessagePostForm}
-        {/*     </TabPane>
-            <TabPane tab="Let's Meet" key='2'>
-              {EventPostForm}
-            </TabPane> */}
-        {/*           </Tabs>
-         */}{' '}
+        <Tabs defaultActiveKey='1' onChange={callback}>
+          <TabPane tab={'Post'} key='1'>
+            {MessagePostForm}
+          </TabPane>
+          <TabPane tab={'Event'} key='2'>
+            {EventPostForm}
+          </TabPane>
+        </Tabs>
       </Modal>
     </div>
   );
@@ -308,5 +395,6 @@ const mapDispatchToProps = (state) => ({
 
 export default connect(mapDispatchToProps, {
   addPost,
+  addEvent,
   mapDispatchToProps,
 })(withRouter(PostModal));
