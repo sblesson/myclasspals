@@ -3,7 +3,8 @@ import { List, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
-const MessageList = ({ messages, messageUrl, userEmail }) => {
+const MessageList = React.memo(({ messages, messageUrl, userEmail }) => {
+  console.log('MessageList' + messages);
   const [messagePanelSelected, setMessagePanelItemSelected] = useState(
     messages ? messages[0]._id : null
   );
@@ -59,6 +60,6 @@ const MessageList = ({ messages, messageUrl, userEmail }) => {
       )}
     />
   );
-};
+});
 
 export default MessageList;

@@ -6,39 +6,39 @@ import AutoCompleteGroupSearch from '../../common/autocompletegroupsearch/AutoCo
 import { searchGroup, searchGroupWithFilters } from '../../../actions/group';
 import { SearchOutlined } from '@ant-design/icons';
 
-import GroupCard from '../GroupCard';
+import GroupSearchResult from './GroupSearchResult';
 
 import './DiscoverGroupModal.scss';
 
-const DiscoverGroupModal = ({ group, newRegistration }) => {
-  const [visible, setModalVisibility] = useState(true);
-
-  const showModal = () => {
-    setModalVisibility(true);
-  };
+const DiscoverGroupModal = React.memo(({ group }) => {
+  console.log('inside DiscoverGroupModal');
+  const [isModalVisible, setModalVisibility] = useState(false);
 
   const hideModal = () => {
     setModalVisibility(false);
   };
-  const toggleModal = () => {
-    setModalVisibility(!visible);
+  const toggleModal = (event) => {
+    console.log(event);
+    event.preventDefault();
+    setModalVisibility(!isModalVisible);
   };
   return (
-    <Fragment>
-      <div onClick={toggleModal}>
-        <Button className='discover-group' icon={<SearchOutlined />}>
-          Search Group
-        </Button>
+    <>
+      <div onClick={(event) => toggleModal(event)}>
+        <div
+          className='search-box'
+        >
+          <SearchOutlined className='search-box__icon' />
+          <span className='search-box__input'> Search Groups</span>
+        </div>
       </div>
 
       <Modal
-        className='create-group-modal'
+        className='discover-group-modal'
         title={'Discover Group'}
         centered
-        closable={true}
-        visible={visible}
+        visible={isModalVisible}
         onOk={hideModal}
-        okText='Create'
         onCancel={toggleModal}
         destroyOnClose={true}
         cancelButtonProps={{ style: { display: 'none' } }}
@@ -51,29 +51,7 @@ const DiscoverGroupModal = ({ group, newRegistration }) => {
         {group !== null &&
         group.searchResult &&
         group.searchResult.length > 0 ? (
-          <List
-            itemLayout='vertical'
-            size='small'
-            header={
-              group.searchTerm
-                ? `Groups based on your search`
-                : 'Groups near you'
-            }
-            pagination={{
-              onChange: (page) => {
-                console.log(page);
-              },
-              total: group.searchResult.length,
-              pageSize: 50,
-              hideOnSinglePage: true,
-            }}
-            dataSource={group.searchResult}
-            renderItem={(item) => (
-              <Card key={`${item.id}-card`} hoverable={true} bordered={false}>
-                <GroupCard currentGroup={item} type='discover' />
-              </Card>
-            )}
-          />
+          <GroupSearchResult group={group} />
         ) : (
           <Empty
             description={
@@ -84,9 +62,9 @@ const DiscoverGroupModal = ({ group, newRegistration }) => {
           />
         )}
       </Modal>
-    </Fragment>
+    </>
   );
-};
+});
 
 DiscoverGroupModal.propTypes = {
   searchGroup: PropTypes.func.isRequired,

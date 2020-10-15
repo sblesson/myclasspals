@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { connect } from 'react-redux';
 import { PageHeader, Descriptions, Tag, message } from 'antd';
 import _ from 'lodash';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
@@ -7,7 +7,9 @@ import PostModal from '../posts/modal/PostModal';
 import GroupDetails from './GroupDetails';
 import './GroupPage.scss';
 
-const GroupPage = ({ isMobile, currentGroup, userEmail }) => {
+const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
+  const currentGroup = group.currentGroup;
+  console.log('inside GroupPage' + currentGroup.groupName);
   const getUserGroupMemberCount = (currentGroup) => {
     if (currentGroup && currentGroup.userGroupMembers) {
       if (currentGroup.userGroupMembers.length <= 1) {
@@ -93,6 +95,10 @@ const GroupPage = ({ isMobile, currentGroup, userEmail }) => {
       </PageHeader>
     </div>
   );
-};
+});
 
-export default GroupPage;
+const mapStateToProps = (state) => ({
+  group: state.group,
+});
+
+export default connect(mapStateToProps, {})(GroupPage);

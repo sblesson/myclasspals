@@ -36,6 +36,7 @@ const AboutGroup = React.lazy(() => import('../groups/AboutGroup'));
 const SinglePost = React.lazy(() => import('../posts/SinglePost'));
 
 const SingleMessage = React.lazy(() => import('../messages/SingleMessage'));
+const ListEvents = React.lazy(() => import('../events/ListEvents'));
 
 const Routes = () => {
   return (
@@ -70,6 +71,8 @@ const Routes = () => {
           <PrivateRoute exact path='/messages/:id' component={Messages} />
           <PrivateRoute exact path='/message/:id' component={SingleMessage} />
           <PrivateRoute exact path='/groups' component={Groups} />
+          <PrivateRoute exact path='/events' component={ListEvents} />
+
           <PrivateRoute exact path='/discovergroup' component={DiscoverGroup} />
           <PrivateRoute
             path='/group/:id'

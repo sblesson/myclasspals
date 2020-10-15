@@ -39,6 +39,7 @@
 .top-menu {
   width: calc(100% - 9.375rem);
   float: left;
+  //background: var(--clazzbuddy-color) !important;
   .logo {
     background: url('../../assets/images/logo.png') center no-repeat;
     .logo-text {
@@ -61,10 +62,14 @@
   }
   .ant-menu-item {
     padding: 0px 0.313rem;
+    /*    a {
+      color: #fff !important;
+    } */
   }
   .ant-menu-submenu-title {
     padding: 0.625rem 1.25rem;
     span {
+      //color: #fff !important;
       color: var(--font-color-2) !important;
     }
   }

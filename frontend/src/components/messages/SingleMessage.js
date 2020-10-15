@@ -53,12 +53,11 @@ const SingleMessage = ({ post, getPost, auth, history, match }) => {
       {post && post.loading ? (
         <Spin />
       ) : (
-        <div style={{ display: 'flex' }}>
+        <div>
           {post !== null && post.currentPost && (
             <MessageDetailsPage
               loading={post.loading}
               isMobile={isMobile}
-              currentPost={post.currentPost}
               userEmail={auth.user.email}
             ></MessageDetailsPage>
           )}

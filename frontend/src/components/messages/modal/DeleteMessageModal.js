@@ -22,7 +22,9 @@ const DeleteMessageModal = ({ deleteMessage, postType, post }) => {
   };
   const handleDelete = () => {
     if (post && post.currentPost && post.currentPost._id) {
-      deleteMessage(post.currentPost._id);
+      deleteMessage(post.currentPost._id, () => {
+        window.location.pathname = '/messages';
+      });
     }
     hideModal();
   };

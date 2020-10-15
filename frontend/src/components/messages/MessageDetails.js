@@ -22,7 +22,7 @@ import {
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
 import './Messages.scss';
-const MessageDetails = ({ currentMessage, addMessageReply }) => {
+const MessageDetails = ({ post: { currentPost }, addMessageReply }) => {
   const [chatFormData, setChatForm] = useState({
     submitting: false,
     value: '',
@@ -36,13 +36,13 @@ const MessageDetails = ({ currentMessage, addMessageReply }) => {
 
     const formData = {
       message: chatFormData.value,
-      endUserId: currentMessage.endUserId,
-      subject: currentMessage.subject,
+      endUserId: currentPost.endUserId,
+      subject: currentPost.subject,
     };
 
     setChatForm({ ...chatFormData, ['submitting']: true });
     setChatForm({ ...chatFormData, ['value']: '' });
-    addMessageReply(currentMessage._id, formData);
+    addMessageReply(currentPost._id, formData);
   };
 
   const onChangeChatMessage = (event) => {
@@ -52,24 +52,24 @@ const MessageDetails = ({ currentMessage, addMessageReply }) => {
 
   return (
     <>
-      {currentMessage ? (
+      {currentPost ? (
         <Card style={{ width: '100%' }}>
           <List>
             <List.Item>
               <Comment
                 avatar={
                   <Avatar size='small' className='avatar-icon' gap={4}>
-                    {currentMessage.userId.charAt(0)}
+                    {currentPost.userId.charAt(0)}
                   </Avatar>
                 }
-                key={currentMessage._id}
-                author={currentMessage.endUserId}
-                content={currentMessage.message}
+                key={currentPost._id}
+                author={currentPost.endUserId}
+                content={currentPost.message}
               ></Comment>
             </List.Item>
-            {currentMessage.comments &&
-              currentMessage.comments.length > 0 &&
-              currentMessage.comments.map((comment, index) => (
+            {currentPost.comments &&
+              currentPost.comments.length > 0 &&
+              currentPost.comments.map((comment, index) => (
                 <List.Item key={index}>
                   <Comment
                     key={comment._id}

@@ -23,6 +23,9 @@ const UserMenu = () => {
         <Menu.Item key='dashboard'>
           <Link to='/dashboard'>{'Home'}</Link>
         </Menu.Item>
+        <Menu.Item key='events'>
+          <Link to='/events'>{'Events'}</Link>
+        </Menu.Item>
         <Menu.Item key='messages'>
           <Link to='/messages'>{'Message'}</Link>
         </Menu.Item>

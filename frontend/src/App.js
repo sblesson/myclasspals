@@ -13,6 +13,7 @@ import Routes from './components/routing/Routes';
 import { setInterceptors } from './utils/axios';
 import { loadUser } from './actions/auth';
 
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 /* import 'semantic-ui-css/semantic.min.css'; */

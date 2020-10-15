@@ -229,7 +229,7 @@ export const deletePost = (postId) => async (dispatch) => {
 };
 
 // Delete post
-export const deleteMessage = (postId) => async (dispatch) => {
+export const deleteMessage = (postId,callback) => async (dispatch) => {
   try {
     const res = await axios.delete(`/post/deletepost/${postId}`);
     dispatch({
@@ -239,6 +239,7 @@ export const deleteMessage = (postId) => async (dispatch) => {
   } catch (err) {
     catchHandler(err, 'DELETE_POST_ERROR');
   }
+  callback();
 };
 
 // Delete comment

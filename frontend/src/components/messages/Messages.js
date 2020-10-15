@@ -3,153 +3,138 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
-import { Menu, Layout, Divider, Empty, Button, Spin } from 'antd';
-import {
-  getPrivateMessages,
-  getPost,
-  addMessageReply,
-} from '../../actions/post';
+import { Empty, Spin } from 'antd';
+import { getPrivateMessages, getPost, clearMessages } from '../../actions/post';
 import PrivateMessageModal from './modal/PrivateMessageModal';
-
-import DeletePostModal from '../posts/modal/DeletePostModal';
-import { EllipsisOutlined } from '@ant-design/icons';
-import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 
 import MessagesSider from './MessagesSider';
 import MessageDetailsPage from './MessageDetailsPage';
 
 import './Messages.scss';
-const Messages = ({
-  getPrivateMessages,
-  getPost,
-  addMessageReply,
-  post: { messages, loading, currentPost },
-  auth,
-  match,
-}) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
-  const isCurrent = useRef(true);
-  useEffect(() => {
-    return () => {
-      //called when component is going to unmount
-      isCurrent.current = false;
-    };
-  }, []);
+const Messages = React.memo(
+  ({
+    getPrivateMessages,
+    getPost,
+    post: { messages, loading, currentPost },
+    auth,
+    match,
+  }) => {
+    console.log('inside Message DASHBIARD');
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    const isCurrent = useRef(true);
+    let messageId;
 
-  useEffect(() => {
-    if (auth && auth.user && auth.user.email) {
-      getPrivateMessages(
-        { userId: auth.user.email, isPrivate: true },
-        (cancelTokenSrc) => {
-          cancelTokenSrc.cancel();
-        }
-      );
-    } else {
-      const email = localStorage.getItem('userEmail');
+    useEffect(() => {
       if (isCurrent.current) {
-        loading = true;
-
         getPrivateMessages(
-          { userId: email, isPrivate: true },
+          { userId: auth.user.email, isPrivate: true },
           (cancelTokenSrc) => {
-            loading = false;
             cancelTokenSrc.cancel();
           }
         );
       }
-    }
-  }, [getPrivateMessages, auth.user._id]);
+      return () => {
+        //called when component is going to unmount
+        isCurrent.current = false;
+      };
+    }, [isCurrent]);
 
-  function callPost(checkCurrent, messageId) {
-    if (checkCurrent) {
-      loading = true;
-      getPost(messageId, (cancelTokenSrc) => {
-        loading = false;
-        cancelTokenSrc.cancel();
-      });
-    }
-  }
+    useEffect(() => {
+      if (match && match.params && match.params.id) {
+        messageId = match.params.id;
+        //user clicked on another group from dashboard leftnav groups menu,
+        //get groupId from params
+        console.log(messageId);
+        getPost(messageId, (cancelTokenSrc) => {
+          //loading = false;
+          cancelTokenSrc.cancel();
+        });
+      }
 
-  useEffect(() => {
-    if (match && match.params && match.params.id) {
-      callPost(isCurrent.current, match.params.id);
-    }/*  else if (messages && messages.length > 0) {
-      callPost(isCurrent.current, messages[0]._id);
-    } */
+      return () => {};
+    }, [getPost, match]);
 
-    return () => {
-      //todo
-    };
-  }, [getPost, match]);
+    const DeskTopView = () => {
+      if (loading) {
+        return <Spin />;
+      } else if (messages && messages.length > 0) {
+        return (
+          <div style='message-body' style={{ marginLeft: '2rem' }}>
+            <PrivateMessageModal />
 
-  const DeskTopView = () => {
-    if (loading) {
-      return <Spin />;
-    } else if (messages && messages.length > 0) {
-      return (
-        <div style='message-body' style={{ marginLeft: '2rem' }}>
-          <PrivateMessageModal />
+            <div style={{ display: 'flex' }}>
+              <MessagesSider
+                messageUrl={'/messages/'}
+                userEmail={auth.user.email}
+              />
 
-          <div style={{ display: 'flex' }}>
-            <MessagesSider
-              messages={messages}
-              messageUrl={'/messages/'}
-              userEmail={auth.user.email}
-            />
-
-            {currentPost !== null && !isMobile && (
               <MessageDetailsPage
                 loading={loading}
                 isMobile={isMobile}
-                currentPost={currentPost}
                 userEmail={auth.user.email}
               ></MessageDetailsPage>
-            )}
+            </div>
           </div>
-        </div>
-      );
-    } else {
-      return <EmptyMessage />;
-    }
-  };
-
-  const MobileView = () => {
-    if (messages && messages.length > 0) {
-      return (
-        <>
-          <PrivateMessageModal />
-
-          <MessagesSider
-            messages={messages}
-            messageUrl={'/message/'}
-            userEmail={auth.user.email}
-          />
-        </>
-      );
-    } else {
-      return <EmptyMessage />;
-    }
-  };
-
-  const EmptyMessage = () => (
-    <Empty
-      image='https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
-      imageStyle={{
-        height: 60,
-      }}
-      className='centered-content'
-      description={
-        <span>
-          You have no messages in your inbox. Create new by clicking compose
-          button.
-        </span>
+        );
+      } else {
+        return <EmptyMessage />;
       }
-    >
-      <PrivateMessageModal />
-    </Empty>
-  );
-  return <>{isMobile ? <MobileView /> : <DeskTopView />}</>;
-};
+    };
+
+    const MobileView = () => {
+      if (messages && messages.length > 0) {
+        return (
+          <>
+            <PrivateMessageModal />
+
+            <MessagesSider
+              messageUrl={'/message/'}
+              userEmail={auth.user.email}
+            />
+          </>
+        );
+      } else {
+        return <EmptyMessage />;
+      }
+    };
+
+    const EmptyMessage = () => (
+      <Empty
+        image='https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
+        imageStyle={{
+          height: 60,
+        }}
+        className='centered-content'
+        description={
+          <span>
+            You have no messages in your inbox. Create new by clicking compose
+            button.
+          </span>
+        }
+      >
+        <PrivateMessageModal userId={auth.user._id} />
+      </Empty>
+    );
+    return <>{isMobile ? <MobileView /> : <DeskTopView />}</>;
+  },
+  (prevProps, nextProps) => {
+    if (
+      prevProps.post &&
+      prevProps.post.currentPost &&
+      nextProps.post.currentPost &&
+      prevProps.post.currentPost._id !== nextProps.post.currentPost._id
+    ) {
+      return false;
+    } else if (
+      prevProps.match.params &&
+      prevProps.match.params.id !== nextProps.match.params.id
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+);
 
 Messages.propTypes = {
   getPrivateMessages: PropTypes.func.isRequired,
@@ -164,5 +149,4 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getPrivateMessages,
   getPost,
-  addMessageReply,
 })(Messages);

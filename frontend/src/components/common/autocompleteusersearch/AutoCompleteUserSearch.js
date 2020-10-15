@@ -12,8 +12,11 @@ const AutoCompleteUserSearch = ({
   searchUser,
   clearAutoCompleteUserSearchResult,
   auth,
+  onChangeUserSelect,
 }) => {
-  const Option = Select.Option;
+  console.log('inside Message AutoCompleteUserSearch');
+
+  const { Option } = Select;
 
   useEffect(() => {
     //clearAutoCompleteUserSearchResult();
@@ -25,6 +28,14 @@ const AutoCompleteUserSearch = ({
         searchUser(searchTerm);
       }, 1000);
       debounced();
+    }
+  };
+
+  const onUserSelect = (selectedSearchTerm) => {
+    if (selectedSearchTerm) {
+      console.log(selectedSearchTerm);
+
+      onChangeUserSelect(selectedSearchTerm);
     }
   };
 
@@ -41,25 +52,13 @@ const AutoCompleteUserSearch = ({
     });
 
   return (
-    /*     <Select
-      mode='multiple'
-      size='default'
-      name='endUserId'
-      //showSearch={true}
-      placeholder='Type Name'
-      onChange={handleUserSearch}
-      //allowClear={true}
-    >
-      {children}
-    </Select> */
-
     <AutoComplete
       //dropdownMatchSelectWidth={252}
       style={{
         width: '100%',
       }}
       placeholder={'Type Name'}
-      //onSelect={onGroupSelect}
+      onSelect={onUserSelect}
       onSearch={handleUserSearch}
     >
       {children}

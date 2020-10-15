@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
-import GroupPage from './GroupPage';
 import { searchPost } from '../../actions/post';
 import {
   getGroupDetails,
@@ -19,78 +18,95 @@ import './GroupCard.scss';
 import { isMoment } from 'moment';
 import GroupsSider from './GroupsSider';
 import { findLastIndex } from 'lodash';
+import CreateGroupModal from './modal/CreateGroupModal';
+import DiscoverGroupModal from './modal/DiscoverGroupModal';
 
-const Dashboard = ({
-  loading,
-  group,
-  getGroupDetails,
-  approveUserGroupRequest,
-  acceptUserGroupInvitation,
-  match,
-  auth,
-  history,
-  searchPost,
-}) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+import GroupPage from './GroupPage';
 
-  const isCurrent = useRef(true);
-  let groupId;
+const Dashboard = React.memo(
+  ({ loading, group, getGroupDetails, match, auth, history, searchPost }) => {
+    console.log('inside DAAAASH');
+    const isMobile = useMediaQuery({ maxWidth: 767 });
 
-  useEffect(() => {
-    return () => {
-      //called when component is going to unmount
-      isCurrent.current = false;
-    };
-  }, []);
+    const isCurrent = useRef(true);
+    let groupId;
 
-  useEffect(() => {
-    debugger;
-    if (match && match.params && match.params.id) {
-      groupId = match.params.id;
-      //user clicked on another group from dashboard leftnav groups menu,
-      //get groupId from params
-      if (isCurrent.current) {
-        getGroupDetails(groupId, (cancelTokenSrc) => {
-          cancelTokenSrc.cancel();
-        });
-        searchPost(
-          {
-            groupId: groupId,
-          },
-          (cancel) => {
-            cancel();
-          }
-        );
+    useEffect(() => {
+      return () => {
+        //called when component is going to unmount
+        isCurrent.current = false;
+      };
+    }, [isCurrent]);
+
+    useEffect(() => {
+      if (match && match.params && match.params.id) {
+        groupId = match.params.id;
+        //user clicked on another group from dashboard leftnav groups menu,
+        //get groupId from params
+        if (isCurrent.current) {
+          getGroupDetails(groupId, (cancelTokenSrc) => {
+            cancelTokenSrc.cancel();
+          });
+          searchPost(
+            {
+              groupId: groupId,
+            },
+            (cancel) => {
+              cancel();
+            }
+          );
+        }
       }
-    }
 
-    return () => {
-      //todo
+      return () => {
+        //todo
+      };
+    }, [getGroupDetails, match]);
+
+    const DeskTopView = () => {
+      return (
+        <div style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}>
+          <div className='sider'>
+            <DiscoverGroupModal />
+
+            <CreateGroupModal />
+
+            <GroupsSider groupUrl={`/dashboard/`} />
+          </div>
+
+          {group !== null && group.currentGroup && !isMobile && (
+            <GroupPage
+              isMobile={isMobile}
+              userEmail={auth.user.email}
+            ></GroupPage>
+          )}
+        </div>
+      );
     };
-  }, [getGroupDetails, match]);
 
-  const DeskTopView = () => {
-    return (
-      <div style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}>
-        <GroupsSider groupUrl={`/dashboard/`} />
+    const MobileView = () => {
+      return (
+        <div style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}>
+          <div className='sider'>
+            <DiscoverGroupModal />
+            <CreateGroupModal />
 
-        {group !== null && group.currentGroup && !isMobile && (
-          <GroupPage
-            isMobile={isMobile}
-            currentGroup={group.currentGroup}
-            userEmail={auth.user.email}
-          ></GroupPage>
-        )}
-      </div>
-    );
-  };
+            <GroupsSider groupUrl={'/group/'} />
+          </div>
+        </div>
+      );
+    };
 
-  const MobileView = () => {
-    return <GroupsSider groupUrl={'/group/'} />;
-  };
-
-  return <>{isMobile ? <MobileView /> : <DeskTopView />}</>;
-};
+    return <>{isMobile ? <MobileView /> : <DeskTopView />}</>;
+  },
+  (prevProps, nextProps) => {
+    if (prevProps.match.params.id !== nextProps.match.params.id) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+);
 
 Dashboard.propTypes = {
   getGroupDetails: PropTypes.func.isRequired,

@@ -66,6 +66,7 @@ export default function (state = initialState, action) {
     case SEND_PRIVATE_MESSAGE:
       return {
         ...state,
+        currentPost: payload.post,
         messages: [payload.post, ...state.messages],
         loading: false,
       };
@@ -79,7 +80,8 @@ export default function (state = initialState, action) {
       return {
         ...state,
         messages: state.messages.filter((message) => message._id !== payload),
-        currentPost: null,
+        currentPost:
+          state.message && state.messages.length > 0 ? state.messages[0] : null,
         loading: false,
       };
     case POST_ERROR:
@@ -113,6 +115,7 @@ export default function (state = initialState, action) {
     case ADD_MESSAGE_REPLY:
       return {
         ...state,
+        currentPost: { ...state.currentPost, comments: payload.comments },
         messages: state.messages.map((post) =>
           post._id === payload.postId
             ? {
