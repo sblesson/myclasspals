@@ -1,49 +1,22 @@
 .new-post-form {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  .new-post {
-    padding-left: 0.525rem;
-  }
-  .ui.menu {
-    border: none !important;
-    box-shadow: none !important;
-    border-radius: none !important;
-  }
-  .ui.vertical.menu {
-    box-shadow: none !important;
-  }
-  &-radio-options-container {
-    margin: 0 30px 20px 0px;
-    -webkit-animation: fadein 400ms;
-    -moz-animation: fadein 400ms;
-    -ms-animation: fadein 400ms;
-    -o-animation: fadein 400ms;
-    animation: fadein 400ms;
-    label {
-      position: relative;
-      display: block;
-      cursor: pointer;
-      font-weight: normal;
-      line-height: 23px;
-      margin: 0 0 8px 0;
-      transition: color 100ms ease;
-      color: rgb(118, 118, 118);
+  .new-post-action {
+    margin: 1rem 0;
+    border-radius: 5rem;
+    background: #f0f2f5;
+    border: 1px solid #f0f2f5;
+    height: 40px;
+    overflow: auto;
+    padding: 2px;
+    resize: both;
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+
+    &__label {
+      font-weight: bold;
+      padding: 0 0.5rem;
+      vertical-align: middle;
     }
-  }
-  &-text-input {
-    outline: none;
-    border: 0;
-    padding: 16px 8px;
-    width: 80%;
-  }
-  &-textarea {
-    resize: none;
-    height: 120px;
-    width: 80%;
-    padding: 16px 8px;
   }
 }

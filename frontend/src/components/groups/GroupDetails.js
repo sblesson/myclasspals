@@ -8,8 +8,6 @@ import MemberRequest from './MemberRequest';
 import PendingRequests from './PendingRequests';
 import Posts from '../posts/Posts';
 import AboutGroup from './AboutGroup';
-
-import PostModal from '../posts/modal/PostModal';
 const GroupDetails = ({ currentGroup }) => {
   const { TabPane } = Tabs;
   const { Meta } = Card;
@@ -32,8 +30,6 @@ const GroupDetails = ({ currentGroup }) => {
       currentGroup.privacy === 'PUBLIC' ? (
         <Tabs defaultActiveKey='1'>
           <TabPane tab='Posts' key='posts'>
-            {/*                   <PostModal />
-             */}{' '}
             <div style={{ marginBottom: '20px' }}>
               <SearchPost />
               <PostFilterPanel />

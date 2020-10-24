@@ -5,6 +5,7 @@ import _ from 'lodash';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import PostModal from '../posts/modal/PostModal';
 import GroupDetails from './GroupDetails';
+import PendingGroupNotification from './PendingGroupNotification';
 import './GroupPage.scss';
 
 const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
@@ -84,21 +85,26 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
   };
   return (
     <div className='wrapper'>
+      {currentGroup.pendingInvitations &&
+        currentGroup.pendingInvitations.length > 0 && (
+          <PendingGroupNotification
+            pendingGroups={currentGroup.pendingInvitations}
+          />
+        )}
       <PageHeader
         ghost={false}
         onBack={isMobile ? () => window.history.back() : false}
         title={currentGroup.groupName}
         subTitle={getGroupPrivacyLabel(currentGroup.privacy)}
-        extra={displayCreatePostButton(currentGroup)}
+        extra={isUserInPendingRequestedInvitations(currentGroup)}
       >
         <Descriptions size='small' column={1}>
           <Descriptions.Item label={getUserGroupRole(currentGroup)}>
             {getUserGroupMemberCount(currentGroup)}
           </Descriptions.Item>
-          <Descriptions.Item>
-            {isUserInPendingRequestedInvitations(currentGroup)}
-          </Descriptions.Item>
         </Descriptions>
+        {displayCreatePostButton(currentGroup)}
+
         <GroupDetails currentGroup={currentGroup} />
       </PageHeader>
     </div>

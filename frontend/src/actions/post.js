@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { setAlert, catchHandler } from './alert';
 import {
-  GET_POST_CATEGORIES,
   POST_ERROR,
   UPDATE_LIKES,
   DELETE_POST,
@@ -15,22 +14,9 @@ import {
   SEND_PRIVATE_MESSAGE,
   SEARCH_POST,
   GET_PRIVATE_MESSAGES,
-  GET_POST_CATEGORIES_ERROR,
   ADD_MESSAGE_REPLY,
 } from './types';
 import { CancelToken } from '../utils/axios';
-
-// Get posts
-export const getPostCategories = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_POST_CATEGORIES,
-      payload: { screen: 'dash' },
-    });
-  } catch (err) {
-    catchHandler(err, GET_POST_CATEGORIES_ERROR);
-  }
-};
 
 // Add post
 export const addPost = (formData) => async (dispatch) => {

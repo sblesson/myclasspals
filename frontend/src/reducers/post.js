@@ -8,20 +8,16 @@ import {
   ADD_COMMENT_SINGLE_POST,
   REMOVE_COMMENT,
   REMOVE_COMMENT_SINGLE_POST,
-  GET_POST_CATEGORIES,
   REMOVE_COMMENT_ERROR,
   SEARCH_POST,
   SEND_PRIVATE_MESSAGE,
-  GET_POST_CATEGORIES_ERROR,
   ADD_MESSAGE_REPLY,
   GET_PRIVATE_MESSAGES,
 } from '../actions/types';
-import CATEGORIES from '../const/CATEGORIES';
 
 const initialState = {
   posts: [],
   messages: [],
-  categories: CATEGORIES,
   currentPost: null,
   loading: true,
   error: {},
@@ -45,12 +41,7 @@ export default function (state = initialState, action) {
         currentPost: payload[0],
         loading: false,
       };
-    case GET_POST_CATEGORIES:
-      return {
-        ...state,
-        categories: CATEGORIES,
-        loading: false,
-      };
+
     case GET_POST:
       return {
         ...state,
@@ -162,13 +153,6 @@ export default function (state = initialState, action) {
       };
 
     case REMOVE_COMMENT_ERROR:
-      return {
-        ...state,
-        error: payload,
-        loading: false,
-      };
-
-    case GET_POST_CATEGORIES_ERROR:
       return {
         ...state,
         error: payload,
