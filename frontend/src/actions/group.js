@@ -32,7 +32,7 @@ import {
 } from './types';
 
 // Add post
-export const addGroup = (formData) => async (dispatch) => {
+export const addGroup = (formData, callback) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +47,8 @@ export const addGroup = (formData) => async (dispatch) => {
       payload: res.data,
     });
 
-    //dispatch(setAlert('Group Created', 'success'));
+    dispatch(setAlert('Group Created', 'success'));
+    callback(res.data);
   } catch (err) {
     dispatch(
       setAlert(
@@ -55,7 +56,7 @@ export const addGroup = (formData) => async (dispatch) => {
           err.response &&
           err.response.data &&
           err.response.data.message !== null
-          ? err.data.message
+          ? err.response.data.message
           : 'Unable to create group, please try again later',
         'error'
       )
@@ -191,7 +192,9 @@ export const searchGroupWithFilters = (requestData) => async (dispatch) => {
 };
 
 //Admin sends users invitation to join userGroup
-export const inviteToJoinUserGroup = (requestData) => async (dispatch) => {
+export const inviteToJoinUserGroup = (requestData, callback) => async (
+  dispatch
+) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -211,6 +214,7 @@ export const inviteToJoinUserGroup = (requestData) => async (dispatch) => {
       });
 
       dispatch(setAlert('Send invitation to new user(s)', 'success'));
+      callback();
     } else {
       dispatch(
         setAlert(
@@ -224,7 +228,9 @@ export const inviteToJoinUserGroup = (requestData) => async (dispatch) => {
   }
 };
 //Users accept invitation to join userGroup
-export const acceptUserGroupInvitation = (requestData) => async (dispatch) => {
+export const acceptUserGroupInvitation = (requestData, callback) => async (
+  dispatch
+) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -256,6 +262,10 @@ export const acceptUserGroupInvitation = (requestData) => async (dispatch) => {
     });
 
     dispatch(setAlert('User added to group', 'success'));
+
+    if (callback) {
+      callback();
+    }
   } catch (err) {
     catchHandler(err, ACCEPT_USER_GROUP_ERROR);
   }

@@ -40,9 +40,10 @@ const Login = ({ login, auth, history }) => {
       }}
       onSubmit={(values) => {
         setIsLoadingSignInBtn(true);
-        login({ email: values.email, password: values.password }, () => {
+        login({ email: values.email, password: values.password }, (resp) => {
+          console.log('inside login', auth, resp);
           setIsLoadingSignInBtn(false);
-          authRedirect(auth, history);
+          authRedirect(resp, history);
         });
       }}
       validator={() => ({})}

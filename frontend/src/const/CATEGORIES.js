@@ -10,49 +10,29 @@ const CATEGORIES = [
     url: '/recommendations/',
   },
   {
-    id: 12,
+    id: 2,
     title: 'Urgent',
     url: '/urgent/',
   },
   {
-    id: 2,
-    title: 'Reminder',
-    url: '/reminder/',
-  },
-  {
-    id: 5,
-    title: 'About Homework',
+    id: 3,
+    title: 'Homework',
     url: '/homework/',
   },
   {
-    category_id: 8,
-    title: 'Birthday',
-    url: '/birthday/',
+    id: 4,
+    title: 'Test',
+    url: '/test/',
   },
   {
-    category_id: 9,
-    title: 'Playdate',
-    url: '/playdate/',
+    id: 5,
+    title: 'Classes & clubs',
+    url: '/classclubs/',
   },
   {
-    id: 10,
-    title: 'Virtual Meet',
-    url: '/virtualmeet/',
-  },
-  {
-    id: 11,
-    title: 'Volunteering',
-    url: '/volunteering/',
-  },
-  {
-    id: 13,
-    title: 'Screen Time',
-    url: '/screentime/',
-  },
-  {
-    id: 15,
-    title: 'COVID-19',
-    url: '/covid/',
+    id: 6,
+    title: 'Other',
+    url: '/other/',
   },
 ];
 

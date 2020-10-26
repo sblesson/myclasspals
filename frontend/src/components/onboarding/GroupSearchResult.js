@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { List, Card, Empty } from 'antd';
 
-import GroupCard from '../GroupCard';
+import GroupCard from './GroupCard';
 
-const GroupSearchResult = React.memo(({ group, newRegistration }) => {
+const GroupSearchResult = React.memo(({ group }) => {
   console.log('GroupSearchResult');
 
   return (
@@ -27,7 +27,7 @@ const GroupSearchResult = React.memo(({ group, newRegistration }) => {
           }}
           dataSource={group.searchResult}
           renderItem={(item) => (
-            <GroupCard currentGroup={item} type='discover' newRegistration />
+            <GroupCard currentGroup={item} type='discover' />
           )}
         />
       )}

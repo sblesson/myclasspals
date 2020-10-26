@@ -4,8 +4,8 @@ import { Button } from 'antd';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { sendPrivateMessage } from '../../../actions/post';
-import { updateGroup } from '../../../actions/group';
+import { sendPrivateMessage } from '../../actions/post';
+import { updateGroup } from '../../actions/group';
 
 import { Formik, ErrorMessage } from 'formik';
 
@@ -114,21 +114,19 @@ const GroupRulesForm = ({
               style={{ marginBottom: 16 }}
               required={false}
             >
-              <Input.TextArea
-                className='post-form-text-input post-form-textarea'
+              <Input
                 name='aboutGroup'
-                cols='50'
-                rows='3'
-                placeholder='Describe your group&#39;s purpose'
+                placeholder='What is this group about?'
               />
             </FormItem>
+
             <FormItem name='groupRules' label='Group Rules' required={false}>
               <Input.TextArea
                 className='post-form-text-input post-form-textarea'
                 name='groupRules'
                 cols='50'
-                rows='6'
-                placeholder='Start with the right tone by sharing your purpose and rules for your group. You can come back and edit this later, too. Note: all groups operate under clazzbuddy&#39;s global guidelines in addition to the guidelines you choose.'
+                rows='10'
+                placeholder='Start with the right tone by sharing your purpose and rules for your group?'
               />{' '}
             </FormItem>
 

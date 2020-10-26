@@ -36,7 +36,10 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
       maxCount: 3,
       rtl: true,
     });
-    if (!found) {
+    if (
+      !found &&
+      (currentGroup.role === 'admin' || currentGroup.role === 'member')
+    ) {
       return <InviteUsersToGroupModal />;
     }
   };
@@ -74,6 +77,11 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
     }
   };
 
+  const displayCreatePostButton = (currentGroup) => {
+    if (currentGroup.role === 'admin' || currentGroup.role === 'member') {
+      return [<PostModal key='3' isMobile={isMobile} />];
+    }
+  };
   return (
     <div className='wrapper'>
       <PageHeader
@@ -81,7 +89,7 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
         onBack={isMobile ? () => window.history.back() : false}
         title={currentGroup.groupName}
         subTitle={getGroupPrivacyLabel(currentGroup.privacy)}
-        extra={[<PostModal key='3' isMobile={isMobile} />]}
+        extra={displayCreatePostButton(currentGroup)}
       >
         <Descriptions size='small' column={1}>
           <Descriptions.Item label={getUserGroupRole(currentGroup)}>

@@ -53,6 +53,27 @@ export const addPost = (formData) => async (dispatch) => {
   }
 };
 
+// Add post
+export const addEvent = (formData) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const res = await axios.post('/post/createpost', formData, config);
+    dispatch({
+      type: ADD_POST,
+      payload: res.data,
+    });
+
+    dispatch(setAlert('Post created', 'success'));
+  } catch (err) {
+    catchHandler(err, 'ADD_POST_ERROR');
+  }
+};
+
 // Search post by groupId
 export const searchPost = (requestObj, callback) => async (dispatch) => {
   let cancel;
@@ -102,7 +123,7 @@ export const getPrivateMessages = (formData, callback) => async (dispatch) => {
   callback(cancelTokenSrc);
 };
 // Add post
-export const sendPrivateMessage = (formData) => async (dispatch) => {
+export const sendPrivateMessage = (formData, callback) => async (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -117,6 +138,7 @@ export const sendPrivateMessage = (formData) => async (dispatch) => {
     });
 
     dispatch(setAlert('New Message Created', 'success'));
+    callback(res.data);
   } catch (err) {
     catchHandler(err, 'CREATE_POST_ERROR');
   }
@@ -229,7 +251,7 @@ export const deletePost = (postId) => async (dispatch) => {
 };
 
 // Delete post
-export const deleteMessage = (postId,callback) => async (dispatch) => {
+export const deleteMessage = (postId, callback) => async (dispatch) => {
   try {
     const res = await axios.delete(`/post/deletepost/${postId}`);
     dispatch({

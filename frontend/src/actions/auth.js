@@ -40,7 +40,7 @@ export const updateUserGlobal = (userObj) => (dispatch) => {
   });
 };
 
-export const getUser = (userId) => async (dispatch) => {
+export const getUser = (userId, callback) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   try {
@@ -285,12 +285,32 @@ export const login = (formData, callback) => async (dispatch) => {
         payload: res.data,
       });
 
-      dispatch(getUser(formData.email));
+      dispatch(getUser(formData.email), callback);
+
+      try {
+        const userResp = await axios.get(
+          `/user/getuserdetails?user=${formData.email}`,
+          {
+            cancelToken: new CancelToken((c) => (cancel = c)),
+          }
+        );
+        dispatch({
+          type: GET_USER,
+          payload: userResp.data,
+        });
+        dispatch({
+          type: UPDATE_GROUP_STORE,
+          payload: userResp.data.user,
+        });
+        //updateGroupStore(userResp.data.user);
+        callback(userResp.data);
+      } catch (err) {
+        catchHandler(err, 'AUTH_ERROR');
+      }
     } catch (err) {
       dispatch(catchHandler(err));
     }
   }
-  callback();
 };
 
 // Logout / Clear Profile
@@ -298,6 +318,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: DESTROY_SESSION });
   dispatch({ type: LOGOUT });
+  console.log('logout');
 
   onClear();
 };

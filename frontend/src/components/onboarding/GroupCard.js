@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Menu, Tag, Button, Dropdown, Avatar } from 'antd';
 import _ from 'lodash';
-import DeleteGroupModal from './modal/DeleteGroupModal';
-
-import './GroupCard.scss';
+import DeleteGroupModal from '../groups/modal/DeleteGroupModal';
 
 import {
   EditOutlined,
@@ -33,10 +29,7 @@ const GroupCard = ({
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
   deleteGroup,
-  newRegistration,
 }) => {
-  let history = useHistory();
-
   const { Meta } = Card;
   const [isRequestUpdated, setRequestUpdate] = useState(false);
 
@@ -48,10 +41,8 @@ const GroupCard = ({
         requestorUserId: auth.user.email,
       },
       record,
-      () => {
-        if (newRegistration) {
-          history.push(`/dashboard/${record.id}`);
-        }
+      (userGroup) => {
+        console.log(userGroup);
         //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
     );
@@ -73,18 +64,11 @@ const GroupCard = ({
     </Menu>
   );
   const acceptPendingInviteActionClick = (record) => {
-    acceptUserGroupInvitation(
-      {
-        groupId: record.id,
-        role: 'member',
-        invitedUserId: auth.user.email,
-      },
-      () => {
-        if (newRegistration) {
-          history.push(`/dashboard/${record.id}`);
-        }
-      }
-    );
+    acceptUserGroupInvitation({
+      groupId: record.id,
+      role: 'member',
+      invitedUserId: auth.user.email,
+    });
   };
 
   const adminMemberActionMenu = (

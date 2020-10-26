@@ -24,7 +24,7 @@ export const authRedirect = (auth, history) => {
       history.push(`/group/${groupId}`);
     } else {
       //New user login for first time, not part of any groups, redirect to create profile and help user discover group
-      history.push(`/create-profile/1`);
+      history.push(`/onboarding`);
     }
   }
 };
