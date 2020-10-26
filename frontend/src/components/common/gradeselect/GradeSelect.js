@@ -9,7 +9,7 @@ const GradeSelect = () => {
   const children =
     GRADES &&
     GRADES.length > 0 &&
-    GRADES.map(item => {
+    GRADES.map((item) => {
       return (
         <Select.Option key={item.id} value={item.id}>
           {item.title}
@@ -18,11 +18,7 @@ const GradeSelect = () => {
     });
 
   return (
-    <Select
-      name='grade'
-      style={{ width: '100%' }}
-      placeholder='Click to  select'
-    >
+    <Select name='grade' style={{ width: '100%' }} placeholder='Select Grade'>
       {children}
     </Select>
   );

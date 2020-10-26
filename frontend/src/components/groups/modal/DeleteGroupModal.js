@@ -5,7 +5,7 @@ import { Modal } from 'antd';
 
 import _ from 'lodash';
 
-const DeleteGroupModal = ({ deleteGroup, groupId }) => {
+const DeleteGroupModal = ({ deleteGroup, groupId, newRegistration }) => {
   console.log('inside DeleteGroupModal');
 
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");

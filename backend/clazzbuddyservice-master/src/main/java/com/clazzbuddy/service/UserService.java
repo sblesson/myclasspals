@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.clazzbuddy.externalclients.EmailServiceClient;
+import com.clazzbuddy.mongocollections.Event;
+import com.clazzbuddy.mongocollections.EventInvites;
 import com.clazzbuddy.mongocollections.GroupInvitations;
 import com.clazzbuddy.mongocollections.School;
 import com.clazzbuddy.mongocollections.UserGroup;
@@ -25,6 +27,8 @@ import com.clazzbuddy.mongocollections.UserGroupMembers;
 import com.clazzbuddy.mongocollections.UserRegistration;
 import com.clazzbuddy.mongocollections.Users;
 import com.clazzbuddy.restmodel.GroupInvitationAction;
+import com.clazzbuddy.restmodel.UserEvent;
+import com.clazzbuddy.restmodel.UserEventResult;
 import com.clazzbuddy.utils.CommonUtils;
 import com.clazzbuddy.utils.Constants;
 
@@ -42,6 +46,9 @@ public class UserService implements UserDetailsService{
 
 	@Autowired
 	SchoolCache schoolCache;
+	
+	@Autowired
+	EventService eventService;
 	
 	@Autowired
     private PasswordEncoder bcryptEncoder;
@@ -182,6 +189,8 @@ public class UserService implements UserDetailsService{
 			}
 
 		}
+		user.setEvents(eventService.getEventForUser(user.get_id()));
+		
 		return user;
 	}
 
@@ -414,6 +423,29 @@ public class UserService implements UserDetailsService{
 		UserRegistration userReg = mongoTemplate.findOne(userRegById, UserRegistration.class);
 
 		mongoTemplate.remove(userReg);
+	}
+	
+	public List<UserEvent>  getUserEvents() throws Exception
+	{
+		Users user = (Users) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		
+		List<EventInvites> eventList = eventService.getEventForUser(user.get_id());
+		
+		List<UserEvent> userEvents = new ArrayList<UserEvent>();
+		for (EventInvites event : eventList) {
+			UserEvent userEvent = new UserEvent();
+			userEvent.setDesc(event.getEvent().getDesc());
+			userEvent.setTitle(event.getEvent().getTitle());
+			userEvent.setGroupName(event.getEvent().getGroupName());
+			userEvent.setStart(event.getEvent().getStart());
+			userEvent.setEnd(event.getEvent().getEnd());
+			userEvent.setEventInvities(event.getEvent().getEventInvities());
+			userEvent.setLocation(event.getEvent().getLocation());
+			userEvents.add(userEvent);
+			
+		}
+		return userEvents;
 	}
 
 

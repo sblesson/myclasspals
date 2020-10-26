@@ -88,11 +88,18 @@ const AutoCompleteGroupSearch = ({
       style={{
         width: '100%',
       }}
-      placeholder={'Type school name or group name'}
       onSelect={onGroupSelect}
       onSearch={handleSearch}
+      allowClear={true}
     >
-      {children}
+      {children ? (
+        children
+      ) : (
+        <Input.Search
+          size='large'
+          placeholder='Type school name or group name'
+        />
+      )}
     </AutoComplete>
   );
 };

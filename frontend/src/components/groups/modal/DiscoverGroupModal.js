@@ -10,7 +10,7 @@ import GroupSearchResult from './GroupSearchResult';
 
 import './DiscoverGroupModal.scss';
 
-const DiscoverGroupModal = React.memo(({ group }) => {
+const DiscoverGroupModal = React.memo(({ group, newRegistration }) => {
   console.log('inside DiscoverGroupModal');
   const [isModalVisible, setModalVisibility] = useState(false);
 
@@ -24,14 +24,24 @@ const DiscoverGroupModal = React.memo(({ group }) => {
   };
   return (
     <>
-      <div onClick={(event) => toggleModal(event)}>
+      {newRegistration ? (
         <div
-          className='search-box'
+          onClick={(event) => toggleModal(event)}
+          className='onboarding-action-container join-action'
         >
-          <SearchOutlined className='search-box__icon' />
-          <span className='search-box__input'> Search Groups</span>
+          <i className='fas fa-hands-helping'></i>
+          <div className='onboarding-action-buttons'>
+            Join school/class group{' '}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div onClick={(event) => toggleModal(event)}>
+          <div className='search-box'>
+            <SearchOutlined className='search-box__icon' />
+            <span className='search-box__input'> Search Groups</span>
+          </div>
+        </div>
+      )}
 
       <Modal
         className='discover-group-modal'
@@ -51,7 +61,7 @@ const DiscoverGroupModal = React.memo(({ group }) => {
         {group !== null &&
         group.searchResult &&
         group.searchResult.length > 0 ? (
-          <GroupSearchResult group={group} />
+          <GroupSearchResult group={group} newRegistration />
         ) : (
           <Empty
             description={

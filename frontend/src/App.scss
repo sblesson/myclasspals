@@ -1380,3 +1380,15 @@ thead {
   right: 15rem;
   top: 0.4rem;
 }
+.ant-form-item textarea.ant-input {
+  height: 122px;
+}
+.ant-form-item textarea.ant-input[name='location'] {
+  height: 60px;
+}
+.rbc-toolbar {
+  font-size: 0.625rem;
+  .rbc-toolbar-label {
+    font-size: 1rem;
+  }
+}

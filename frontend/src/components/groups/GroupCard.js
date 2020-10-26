@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Menu, Tag, Button, Dropdown, Avatar } from 'antd';
 import _ from 'lodash';
 import DeleteGroupModal from './modal/DeleteGroupModal';
+
+import './GroupCard.scss';
 
 import {
   EditOutlined,
@@ -29,7 +33,10 @@ const GroupCard = ({
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
   deleteGroup,
+  newRegistration,
 }) => {
+  let history = useHistory();
+
   const { Meta } = Card;
   const [isRequestUpdated, setRequestUpdate] = useState(false);
 
@@ -41,8 +48,10 @@ const GroupCard = ({
         requestorUserId: auth.user.email,
       },
       record,
-      (userGroup) => {
-        console.log(userGroup);
+      () => {
+        if (newRegistration) {
+          history.push(`/dashboard/${record.id}`);
+        }
         //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
     );
@@ -64,11 +73,18 @@ const GroupCard = ({
     </Menu>
   );
   const acceptPendingInviteActionClick = (record) => {
-    acceptUserGroupInvitation({
-      groupId: record.id,
-      role: 'member',
-      invitedUserId: auth.user.email,
-    });
+    acceptUserGroupInvitation(
+      {
+        groupId: record.id,
+        role: 'member',
+        invitedUserId: auth.user.email,
+      },
+      () => {
+        if (newRegistration) {
+          history.push(`/dashboard/${record.id}`);
+        }
+      }
+    );
   };
 
   const adminMemberActionMenu = (
@@ -252,21 +268,10 @@ const GroupCard = ({
               </span>
             </>
           )}
+        <div className='group-card-details__action'>
+          {groupActionMenu(currentGroup, type)}
+        </div>
       </div>
-      <Meta
-        className='group-card-meta-action group-action no-padding'
-        description={groupActionMenu(currentGroup, type)}
-      ></Meta>
-      {currentGroup.isGroupStatusUpdated ? (
-        <Meta
-          className='group-card-update-status-link no-padding'
-          description={
-            <Link to={`/group/${currentGroup.id}`}>Peek inside</Link>
-          }
-        />
-      ) : (
-        ''
-      )}
     </Card>
   );
 };

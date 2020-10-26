@@ -61,6 +61,8 @@ public class Users {
 	
 	@DBRef
 	private List<UserGroup> requestedUserGroup;
+	
+	private List<EventInvites> events;
 
 	public String getName() {
 		return name;
@@ -190,6 +192,16 @@ public class Users {
 	public void setRegId(String regId) {
 		this.regId = regId;
 	}
+
+	public List<EventInvites> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<EventInvites> events) {
+		this.events = events;
+	}
+
+
 
 
 

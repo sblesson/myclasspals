@@ -2,16 +2,27 @@ import React, { useState } from 'react';
 import { List, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import Ellipsis from 'ant-design-pro/lib/Ellipsis';
-
+import './MessageList.scss';
 const MessageList = React.memo(({ messages, messageUrl, userEmail }) => {
   console.log('MessageList' + messages);
-  const [messagePanelSelected, setMessagePanelItemSelected] = useState(
+  let messagePanelSelected;
+  /*  const [messagePanelSelected, setMessagePanelItemSelected] = useState(
     messages ? messages[0]._id : null
-  );
+  ); */
 
   const handleMessageItemClick = (item, event) => {
+    //var element = document.getElementsByClassName('message-list');
+    //element.classList.remove('selected');
+    console.log(event.target.classList);
     console.log(event);
-    setMessagePanelItemSelected(item._id);
+
+    event.target.classList.add('selected');
+
+    messagePanelSelected = item._id;
+    //setMessagePanelItemSelected(item._id);
+
+    console.log(messagePanelSelected);
+    console.log(item._id);
   };
   return (
     <List

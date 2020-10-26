@@ -14,7 +14,7 @@ import AutoCompleteUserSeach from '../../common/autocompleteusersearch/AutoCompl
 import './PrivateMessageModal.scss';
 
 const PrivateMessageModal = React.memo(
-  ({ userId, sendPrivateMessage, toAddress, noMessagesFound }) => {
+  ({ userId, sendPrivateMessage, toAddress, noMessagesFound, history }) => {
     console.log('inside Message PrivateMessageModal');
 
     const [componentSize, setComponentSize] = useState('small');
@@ -105,7 +105,13 @@ const PrivateMessageModal = React.memo(
         }}
         onSubmit={(values, actions) => {
           values.endUserId = selectedEndUser;
-          sendPrivateMessage(values);
+          sendPrivateMessage(values, (response) => {
+            console.log(response);
+            debugger;
+            if (response && response.post && response.post._id) {
+              history.push(`/messages/${response.post._id}`);
+            }
+          });
           setModalVisibility(false);
         }}
         validator={() => ({})}

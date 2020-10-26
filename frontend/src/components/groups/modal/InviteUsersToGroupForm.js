@@ -21,6 +21,7 @@ const InviteUsersToGroupForm = ({
   onStepChange,
   isNewGroup,
   setModal,
+  history,
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
@@ -38,7 +39,7 @@ const InviteUsersToGroupForm = ({
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 },
+      sm: { span: 16 },
     },
     wrapperCol: {
       xs: { span: 24 },
@@ -46,6 +47,19 @@ const InviteUsersToGroupForm = ({
     },
   };
 
+  const closeModalAndredirectToGroupPage = (actions) => {
+    if (actions) {
+      //actions.setSubmitting(false);
+      //actions.resetForm();
+    }
+
+    onStepChange(0);
+    setModal(false);
+    if (group && group.newGroup && group.newGroup.id) {
+      history.push('/dashboard/' + group.newGroup.id);
+      window.location.reload();
+    }
+  };
   return (
     <div>
       {isNewGroup ? (
@@ -54,7 +68,7 @@ const InviteUsersToGroupForm = ({
           <Button
             type='link'
             style={{ float: 'right' }}
-            onClick={(e) => goToNextStep(e, current)}
+            onClick={(e) => closeModalAndredirectToGroupPage(e, current)}
           >
             Skip
           </Button>
@@ -82,15 +96,11 @@ const InviteUsersToGroupForm = ({
             : group.currentGroup.id;
 
           if (values.invitedUsers) {
-            inviteToJoinUserGroup(JSON.stringify(values));
-          }
-
-          actions.setSubmitting(false);
-          actions.resetForm();
-          if (isNewGroup) {
-            onStepChange(current + 1);
+            inviteToJoinUserGroup(JSON.stringify(values), () => {
+              closeModalAndredirectToGroupPage(actions);
+            });
           } else {
-            setModal(false);
+            closeModalAndredirectToGroupPage(actions);
           }
         }}
         render={() => (
@@ -106,23 +116,23 @@ const InviteUsersToGroupForm = ({
               {' '}
               <FormItem
                 name='usersSelect'
-                label='Select existing users'
+                label='Select clazzbuddy members'
                 required={false}
               >
                 <MultiSelectUserSearch endUsersSelect={'usersSelect'} />
               </FormItem>
               <FormItem
                 name='invitedUsers'
-                label='Invite non-members'
+                label='Invite users to join clazzbuddy group'
                 required={false}
                 style={{ marginTop: 20 }}
               >
                 <Input.TextArea
                   className='post-form-text-input post-form-textarea'
                   name='invitedUsers'
-                  cols='20'
-                  rows='5'
-                  placeholder='Send email invitation to non members of clazzbuddy by typing or pasting email addresses, separated by commas'
+                  cols='40'
+                  rows='6'
+                  placeholder='Send email invitation to non members to join clazzbuddy group by typing or pasting email addresses, separated by commas'
                   required={false}
                 />
               </FormItem>

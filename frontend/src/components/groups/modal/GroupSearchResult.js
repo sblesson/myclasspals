@@ -5,7 +5,7 @@ import { List, Card, Empty } from 'antd';
 
 import GroupCard from '../GroupCard';
 
-const GroupSearchResult = React.memo(({ group }) => {
+const GroupSearchResult = React.memo(({ group, newRegistration }) => {
   console.log('GroupSearchResult');
 
   return (
@@ -27,7 +27,7 @@ const GroupSearchResult = React.memo(({ group }) => {
           }}
           dataSource={group.searchResult}
           renderItem={(item) => (
-            <GroupCard currentGroup={item} type='discover' />
+            <GroupCard currentGroup={item} type='discover' newRegistration />
           )}
         />
       )}

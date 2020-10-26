@@ -1,0 +1,64 @@
+@import '../../styles/abstracts/variables';
+@import '../../styles/abstracts/include-media';
+
+.onboarding-wrapper {
+  margin: auto;
+  // if the breakpoint is less than or equal to 360px
+  @include media('<=phone') {
+    width: 90%;
+  }
+  // if the breakpoint is greater than 360px and less than or eqaul to 425px
+  @include media('>phone', '<=425px') {
+    width: 80%;
+  }
+
+  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  @include media('>425px', '<=tablet') {
+    width: 70%;
+  }
+
+  // if the screen is going to be greater than 768px and less than 1366px
+  @include media('>tablet', '<desktop') {
+    width: 70%;
+  }
+  // if the screen is going to be greater than or equal to 1366px
+  @include media('>=desktop') {
+    width: 70%;
+  }
+
+  // if the screen is going to be greater than or equal to 1920px
+  @include media('>=LGdesktop', 'retina2x') {
+    width: 60%;
+  }
+  .fa-hands-helping,
+  .fa-plus-circle {
+    color: white;
+  }
+  .onboarding-action-container {
+    margin: 2rem;
+    padding: 3rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    &:hover,
+    &:focus {
+      opacity: 0.7;
+    }
+  }
+  .join-action {
+    background: #767caa;
+    border-color: #767caa;
+  }
+  .create-action {
+    background: var(--clazzbuddy-color);
+    border-color: var(--clazzbuddy-color);
+  }
+  .onboarding-action-buttons {
+    text-align: center;
+    color: white;
+    font-size: 0.8rem;
+    margin-top: 0.6rem;
+  }
+}

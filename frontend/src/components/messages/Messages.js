@@ -15,7 +15,7 @@ const Messages = React.memo(
   ({
     getPrivateMessages,
     getPost,
-    post: { messages, loading, currentPost },
+    post: { messages, loading },
     auth,
     match,
   }) => {
@@ -118,14 +118,14 @@ const Messages = React.memo(
     return <>{isMobile ? <MobileView /> : <DeskTopView />}</>;
   },
   (prevProps, nextProps) => {
-    if (
+    /*     if (
       prevProps.post &&
       prevProps.post.currentPost &&
       nextProps.post.currentPost &&
       prevProps.post.currentPost._id !== nextProps.post.currentPost._id
     ) {
       return false;
-    } else if (
+    } else */ if (
       prevProps.match.params &&
       prevProps.match.params.id !== nextProps.match.params.id
     ) {

@@ -3,6 +3,8 @@ import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { Tooltip } from 'antd';
+
 import { Formik, ErrorMessage } from 'formik';
 import {
   SubmitButton,
@@ -19,15 +21,7 @@ import { addGroup } from '../../../actions/group';
 import AutoCompleteSchoolSearch from '../../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
 
 import GradeSelect from '../../common/gradeselect/GradeSelect';
-const CreateGroupForm = ({
-  auth,
-  group,
-  school,
-  addGroup,
-  current,
-  onStepChange,
-  setModal,
-}) => {
+const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
   const [isLoadingCreateBtn, setIsLoadingCreateBtn] = useState(false);
 
   //const [formData, setFormData] = useState({ user });
@@ -64,7 +58,7 @@ const CreateGroupForm = ({
     }
   };
   const submitProfileForm = (values, actions) => {
-    //setIsLoadingCreateBtn(true);
+    setIsLoadingCreateBtn(true);
 
     values.userGroupMembers = [
       {
@@ -80,23 +74,26 @@ const CreateGroupForm = ({
       values.schoolCity = schoolData[1];
       values.schoolState = schoolData[2];
       values.schoolZipCode = schoolData[3];
-
-      //delete schoolData property
       delete values.schoolSelect;
     }
 
-    addGroup(JSON.stringify(values));
+    addGroup(JSON.stringify(values), (response) => {
+      setModal(false);
+      console.log(response);
+      if (response && response.userGroup && response.userGroup.id) {
+        history.push('/dashboard/' + response.userGroup.id);
+      }
+    });
     //actions.setSubmitting(false);
     actions.resetForm();
-    onStepChange(current + 1);
+    setIsLoadingCreateBtn(false);
   };
 
   const groupForm = (
     <Formik
       initialValues={{
         groupName: '',
-        privacy: 'PUBLIC',
-        isSchoolGroup: 'yes',
+        privacy: 'PRIVATE',
         grade: '',
       }}
       onSubmit={(values, actions) => {
@@ -120,73 +117,83 @@ const CreateGroupForm = ({
               required={true}
               validate={validateRequired}
             >
-              <Input name='groupName' placeholder='Group Name' />
+              <Input name='groupName' placeholder='Group Name or Room Name' />
+            </FormItem>
+            <FormItem
+              name='schoolData'
+              required={false}
+              label='Select School'
+              //validate={validateRequired}
+            >
+              <AutoCompleteSchoolSearch />
+            </FormItem>
+            <FormItem
+              name='gradeLabel'
+              label='Select Grade'
+              //required={true}
+              //validate={validateRequired}
+            >
+              <GradeSelect />
             </FormItem>
 
             <FormItem
               name='groupDiscovery'
-              label='Group Discoverability'
+              label='Group Privacy'
               //required={true}
               //validate={validateRequired}
             >
-              <Radio.Group
-                name='privacy'
-                options={[
-                  {
-                    label: 'Public',
-                    value: 'PUBLIC',
-                  },
-                  {
-                    label: 'Private',
-                    value: 'PRIVATE',
-                  },
-                ]}
+              <Select name='privacy' defaultValue='PRIVATE'>
+                <Select.Option
+                  value='PRIVATE'
+                  title='Private – Needs approval for membership, only members can
+                  view post.'
+                >
+                  Private – Needs approval for membership, post only members can
+                  view.
+                </Select.Option>
+                <Select.Option
+                  value='PUBLIC'
+                  title='Public – Anyone can join, see posts etc.'
+                >
+                  Public – Anyone can join, see posts etc.
+                </Select.Option>
+              </Select>
+            </FormItem>
+            <FormItem
+              name='aboutGroup'
+              label='About Group'
+              style={{ marginBottom: 16 }}
+              required={false}
+            >
+              <Input.TextArea
+                className='post-form-text-input post-form-textarea'
+                name='aboutGroup'
+                cols='50'
+                rows='3'
+                placeholder='Describe your group&#39;s purpose'
               />
             </FormItem>
-            <FormItem name='schoolGroupLabel' label='School Group'>
-              <Radio.Group
-                name='isSchoolGroup'
-                onChange={showHideSchoolSelect}
-                options={[
-                  { label: 'Yes', value: 'yes' },
-                  { label: 'No', value: 'no' },
-                ]}
-              />
+            <FormItem name='groupRules' label='Group Rules' required={false}>
+              <Input.TextArea
+                className='post-form-text-input post-form-textarea'
+                name='groupRules'
+                cols='50'
+                rows='6'
+                placeholder='Start with the right tone by sharing your purpose and rules for your group. You can come back and edit this later, too. Note: all groups operate under clazzbuddy&#39;s global guidelines in addition to the guidelines you choose.'
+              />{' '}
             </FormItem>
-
-            {isSchoolVisible ? (
-              <div>
-                <FormItem
-                  name='schoolData'
-                  required={false}
-                  label='Select School'
-                  //validate={validateRequired}
-                >
-                  <AutoCompleteSchoolSearch />
-                </FormItem>
-                <FormItem
-                  name='gradeLabel'
-                  label='Select Grade'
-                  //required={true}
-                  //validate={validateRequired}
-                >
-                  <GradeSelect />
-                </FormItem>
-              </div>
-            ) : (
-              ''
-            )}
             <SubmitButton
               className='ant-btn btn-primary'
+              style={{ float: 'right' }}
               loading={isLoadingCreateBtn}
             >
               {' '}
               Create
             </SubmitButton>
           </Form>
-          {/*    <pre style={{ flex: 1 }}>
+          <pre style={{ flex: 1 }}>
             <FormikDebug />
-          </pre> */}
+          </pre>
         </div>
       )}
     />

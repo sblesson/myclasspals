@@ -8,7 +8,7 @@ import { searchUser } from '../../../actions/auth';
 const MultiSelectUserSearch = ({ searchUser, auth, endUsersSelect }) => {
   const Option = Select.Option;
 
-  const fetchUser = searchTerm => {
+  const fetchUser = (searchTerm) => {
     if (searchTerm) {
       setTimeout(() => {
         searchUser(searchTerm);
@@ -38,8 +38,7 @@ const MultiSelectUserSearch = ({ searchUser, auth, endUsersSelect }) => {
   return (
     <Select
       name={endUsersSelect}
-      style={{ width: '100%' }}
-      placeholder='Select Members'
+      placeholder='Select members'
       mode='multiple'
       onSearch={fetchUser}
       onChange={onUserSelect}
@@ -49,7 +48,7 @@ const MultiSelectUserSearch = ({ searchUser, auth, endUsersSelect }) => {
     </Select>
   );
 };
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 export default connect(mapStateToProps, { searchUser })(MultiSelectUserSearch);
