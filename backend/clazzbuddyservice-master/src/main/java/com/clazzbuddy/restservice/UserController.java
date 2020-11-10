@@ -26,6 +26,7 @@ import com.clazzbuddy.restmodel.CommonResult;
 import com.clazzbuddy.restmodel.GroupInvitationAction;
 import com.clazzbuddy.restmodel.JwtRequest;
 import com.clazzbuddy.restmodel.JwtResponse;
+import com.clazzbuddy.restmodel.UserEventResult;
 import com.clazzbuddy.restmodel.UserGroupResult;
 import com.clazzbuddy.restmodel.UserResult;
 import com.clazzbuddy.service.UserService;
@@ -142,6 +143,22 @@ public class UserController {
 		authorizeUserRequest(userkey);
 		try {
 			result.setUser(userService.getUserDetails(userkey));
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error", e);
+		}
+		
+		return result;
+
+	}
+	
+	@GetMapping(value = "/events", produces = { "application/json" })
+	public CommonResult getUserEvent() throws Exception {
+		UserEventResult result = new UserEventResult();
+		try {
+			result.setEvents(userService.getUserEvents());
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

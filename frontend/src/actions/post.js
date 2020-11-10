@@ -34,6 +34,7 @@ export const getPostCategories = () => async (dispatch) => {
 
 // Add post
 export const addPost = (formData) => async (dispatch) => {
+  console.log('add post action triggered');
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -42,6 +43,7 @@ export const addPost = (formData) => async (dispatch) => {
 
   try {
     const res = await axios.post('/post/createpost', formData, config);
+    console.log(res);
     dispatch({
       type: ADD_POST,
       payload: res.data,

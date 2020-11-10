@@ -27,6 +27,7 @@ const OnboardingUser = React.lazy(() => import('../onboarding/OnboardingUser'));
 const Account = React.lazy(() => import('../profile/account/Account'));
 const Profile = React.lazy(() => import('../profile/Profile'));
 const Messages = React.lazy(() => import('../messages/Messages'));
+const Invite = React.lazy(() => import('../invite/Invite'));
 const Groups = React.lazy(() => import('../groups/Groups'));
 const DiscoverGroup = React.lazy(() => import('../groups/DiscoverGroup'));
 const Dashboard = React.lazy(() => import('../groups/Dashboard'));
@@ -67,6 +68,7 @@ const Routes = () => {
           }
         >
           <PrivateRoute exact path='/profile/:id/:userId' component={Profile} />
+          <PrivateRoute exact path='/invite' component={Invite} />
           <PrivateRoute exact path='/messages' component={Messages} />
           <PrivateRoute exact path='/messages/:id' component={Messages} />
           <PrivateRoute exact path='/message/:id' component={SingleMessage} />

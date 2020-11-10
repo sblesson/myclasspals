@@ -7,13 +7,14 @@ import profile from './profile';
 import post from './post';
 import school from './school';
 import group from './group';
+import event from './event';
 import address from './address';
 import { DESTROY_SESSION } from '../actions/types';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['alert', 'auth', 'profile', 'post', 'school', 'group', 'address']
+  whitelist: ['alert', 'auth', 'profile', 'post', 'school', 'group', 'address'],
 };
 
 const appReducer = combineReducers({
@@ -23,7 +24,8 @@ const appReducer = combineReducers({
   post,
   school,
   group,
-  address
+  event,
+  address,
 });
 
 const rootReducer = (state, action) => {
