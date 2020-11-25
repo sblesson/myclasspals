@@ -5,7 +5,7 @@ import DisplayCreateEventForm from './DisplayCreateEventForm';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addEvent, getEvents } from '../../actions/event';
+import { addEvent } from '../../actions/event';
 
 const CreateEventForm = ({
   group,

@@ -9,7 +9,7 @@ import PendingRequests from './PendingRequests';
 import Posts from '../posts/Posts';
 import AboutGroup from './AboutGroup';
 
-import PostModal from '../posts/modal/PostModal';
+import JoinGroup from './JoinGroup';
 const GroupDetails = ({ currentGroup }) => {
   const { TabPane } = Tabs;
   const { Meta } = Card;
@@ -26,14 +26,9 @@ const GroupDetails = ({ currentGroup }) => {
 
   return (
     <>
-      {/*       <GroupCard currentGroup={group.currentGroup} type='mygroup' /> */}
-      {currentGroup.role === 'admin' ||
-      currentGroup.role === 'member' ||
-      currentGroup.privacy === 'PUBLIC' ? (
+      {currentGroup.role === 'admin' || currentGroup.role === 'member' ? (
         <Tabs defaultActiveKey='1'>
           <TabPane tab='Posts' key='posts'>
-            {/*                   <PostModal />
-             */}{' '}
             <div style={{ marginBottom: '20px' }}>
               <SearchPost />
               <PostFilterPanel />
@@ -128,7 +123,14 @@ const GroupDetails = ({ currentGroup }) => {
           )}
         </Tabs>
       ) : (
-        <AboutGroup />
+        ''
+      )}
+      {currentGroup.role === 'Pending Request' && (
+        <>
+          <JoinGroup currentGroup={currentGroup} />
+          <br />
+          <AboutGroup />
+        </>
       )}
     </>
   );
