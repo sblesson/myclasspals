@@ -60,7 +60,7 @@ const Routes = () => {
         <Route exact path='/403' component={Page403} />
         <Route exact path='/404' component={Page404} />
         <Route exact path='/500' component={Page500} />
-        <Route exact path='/invite' component={Invite} />
+
         <Suspense
           fallback={
             <div className='center'>
@@ -68,6 +68,7 @@ const Routes = () => {
             </div>
           }
         >
+          <PrivateRoute exact path='/invite' component={Invite} />
           <PrivateRoute exact path='/profile/:id/:userId' component={Profile} />
           <PrivateRoute exact path='/messages' component={Messages} />
           <PrivateRoute exact path='/messages/:id' component={Messages} />
