@@ -39,10 +39,7 @@ const InviteUsersToGroupModal = ({ current }) => {
   return (
     <div>
       <div onClick={toggleModal}>
-        <Button
-          className='ant-btn btn-primary pinkBtn'
-          icon={<UsergroupAddOutlined />}
-        >
+        <Button style={{ color: '#46bfd1' }} icon={<UsergroupAddOutlined />}>
           Invite
         </Button>
       </div>
@@ -62,7 +59,7 @@ const InviteUsersToGroupModal = ({ current }) => {
         <InviteUsersToGroupForm
           current={current}
           isNewGroup={false}
-          setModal={setModalVisibility}
+          hideModal={hideModal}
         />
       </Modal>
     </div>

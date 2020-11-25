@@ -95,6 +95,7 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
         groupName: '',
         privacy: 'PRIVATE',
         grade: '',
+        role: 'admin',
       }}
       onSubmit={(values, actions) => {
         submitProfileForm(values, actions);

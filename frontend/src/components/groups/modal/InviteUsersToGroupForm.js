@@ -20,20 +20,12 @@ const InviteUsersToGroupForm = ({
   current,
   onStepChange,
   isNewGroup,
-  setModal,
+  hideModal,
   history,
 }) => {
   const [componentSize, setComponentSize] = useState('small');
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
-  };
-
-  const validateRequired = (value) => {
-    return value ? undefined : 'required';
-  };
-
-  const goToNextStep = (event, current) => {
-    onStepChange(current + 1);
   };
 
   const formItemLayout = {
@@ -47,19 +39,6 @@ const InviteUsersToGroupForm = ({
     },
   };
 
-  const closeModalAndredirectToGroupPage = (actions) => {
-    if (actions) {
-      //actions.setSubmitting(false);
-      //actions.resetForm();
-    }
-
-    onStepChange(0);
-    setModal(false);
-    if (group && group.newGroup && group.newGroup.id) {
-      history.push('/dashboard/' + group.newGroup.id);
-      window.location.reload();
-    }
-  };
   return (
     <div>
       {isNewGroup ? (
@@ -68,7 +47,7 @@ const InviteUsersToGroupForm = ({
           <Button
             type='link'
             style={{ float: 'right' }}
-            onClick={(e) => closeModalAndredirectToGroupPage(e, current)}
+            onClick={(e) => hideModal()}
           >
             Skip
           </Button>
@@ -97,10 +76,10 @@ const InviteUsersToGroupForm = ({
 
           if (values.invitedUsers) {
             inviteToJoinUserGroup(JSON.stringify(values), () => {
-              closeModalAndredirectToGroupPage(actions);
+              hideModal(false);
             });
           } else {
-            closeModalAndredirectToGroupPage(actions);
+            hideModal(false);
           }
         }}
         render={() => (

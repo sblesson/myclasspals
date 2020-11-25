@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
-import { Tabs, Modal } from 'antd';
+import { Tabs, Modal, Button } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addPost } from '../../../actions/post';
+
 import CreatePostForm from './CreatePostForm';
 import CreateEventForm from '../../events/CreateEventForm';
 import './PostModal.scss';
@@ -30,12 +31,19 @@ const PostModal = ({ group }) => {
       <div className='new-post-form' onClick={showModal}>
         <>
           <div className='new-post-action'>
-            <div className='avatar-container'>
+            <Button
+              className='avatar-container 
+            ant-btn btn-primary'
+            >
               <PlusCircleOutlined
-                style={{ color: '#45b3e0', paddingLeft: '0.5rem' }}
+                style={{
+                  color: '#fff',
+                  paddingLeft: '0.5rem',
+                  paddingRight: '0.5rem',
+                }}
               />
               <span className='new-post-action__label'>Create post, event</span>
-            </div>
+            </Button>
           </div>
         </>
       </div>
@@ -59,7 +67,7 @@ const PostModal = ({ group }) => {
             }
             key='1'
           >
-            <CreatePostForm group={group} setModal={setModalVisibility} />
+            <CreatePostForm group={group} hideModal={hideModal} />
           </TabPane>
           <TabPane
             tab={
@@ -70,7 +78,7 @@ const PostModal = ({ group }) => {
             }
             key='2'
           >
-            <CreateEventForm group={group} setModal={setModalVisibility} />
+            <CreateEventForm group={group} hideModal={hideModal} />
           </TabPane>
         </Tabs>
       </Modal>

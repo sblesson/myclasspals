@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import TopNavbar from './components/topnavbar/TopNavbar';
+import IdleTimerContainer from './utils/idleTimerContainer';
 
 // Redux
 import store from './store';

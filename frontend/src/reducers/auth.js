@@ -19,7 +19,7 @@ import {
   UPDATE_USER_GLOBAL,
 } from '../actions/types';
 
-import { setAuthToken } from '../utils/axios';
+import { setAuthToken } from '../utils/setAuthToken';
 
 const initialState = {
   token: '',

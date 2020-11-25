@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Formik } from 'formik';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -27,11 +27,16 @@ const CreateInviteForm = ({ group, setModal, addPost }) => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      render={DisplayCreateInviteForm}
-    />
+    <Fragment>
+      <h2 style={{ marginBottom: '1rem' }}>
+        Invite your friends, acquaintance and family to join classpalz
+      </h2>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        render={DisplayCreateInviteForm}
+      />
+    </Fragment>
   );
 };
 

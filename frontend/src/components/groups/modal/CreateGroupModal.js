@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button } from 'antd';
@@ -28,7 +28,7 @@ const CreateGroupModal = React.memo(({ newRegistration }) => {
   };
 
   return (
-    <div>
+    <Fragment>
       {newRegistration ? (
         <div
           onClick={(event) => toggleModal(event)}
@@ -40,7 +40,10 @@ const CreateGroupModal = React.memo(({ newRegistration }) => {
           </div>
         </div>
       ) : (
-        <div onClick={(event) => toggleModal(event)}>
+        <div
+          style={{ marginLeft: '1.3rem' }}
+          onClick={(event) => toggleModal(event)}
+        >
           <Button
             className='btn-primary add-group'
             icon={<UsergroupAddOutlined />}
@@ -66,7 +69,7 @@ const CreateGroupModal = React.memo(({ newRegistration }) => {
       >
         <CreateGroupForm isNewGroup={true} setModal={setModalVisibility} />
       </Modal>
-    </div>
+    </Fragment>
   );
 });
 

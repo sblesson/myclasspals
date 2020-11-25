@@ -2,19 +2,37 @@ import React from 'react';
 import { Formik } from 'formik';
 
 import DisplayCreateEventForm from './DisplayCreateEventForm';
-import {
-  dateFormat,
-  timeFormat,
-} from '../common/createformfields/CreateFormFields';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addEvent } from '../../actions/event';
+import { addEvent, getEvents } from '../../actions/event';
 
-const CreateEventForm = ({ group, setModal, addEvent }) => {
+const CreateEventForm = ({
+  group,
+  auth,
+  hideModal,
+  addEvent,
+  isGenericEvent,
+}) => {
+  const getUserGroups = () => {
+    const currentGroups = group.userGroup.map((values) => {
+      return values.groupName;
+    });
+    console.log(currentGroups);
+    return currentGroups;
+  };
+
+  const getGroupIdFromGroupName = (selectedGroupName) => {
+    const currentGroupId = group.userGroup.filter(
+      (values) => selectedGroupName === values.groupName
+    );
+    if (currentGroupId && currentGroupId.length > 0) {
+      return currentGroupId[0].id;
+    } else return null;
+  };
   const initialValues = {
     eventTitle: '',
-    groupId: group.currentGroup.id,
+    //groupId: group.currentGroup.id,
     eventLocation: '',
     eventDescription: '',
     eventStartDate: moment(Date.now()),
@@ -22,6 +40,8 @@ const CreateEventForm = ({ group, setModal, addEvent }) => {
     eventStartTime: moment(Date.now()),
     eventEndTime: moment(Date.now()),
     eventFrequency: 'Does not repeat',
+    userGroups: getUserGroups(),
+    isGenericEvent: isGenericEvent,
     /*   isEventAllDay: 'false',
     isEventRSVPRequired: 'false', */
     eventFrequencySelectOptions: [
@@ -30,6 +50,25 @@ const CreateEventForm = ({ group, setModal, addEvent }) => {
       'Weekly',
       'Monthly',
     ],
+    eventGroup: '-Select-',
+    //userGroup: group.userGroup,
+  };
+
+  const formatFormDate = (date, time) => {
+    //sample date format 11/19/2020
+    const dateArr = moment(date).format('L').split('/');
+    const month = parseInt(dateArr[0]) - 1;
+    const day = parseInt(dateArr[1]);
+    const year = parseInt(dateArr[2]);
+    //time in format hour,minute eg: 11,41
+    const timeArr = time.format('HH,mm').split(',');
+    let hour, minute;
+    if (timeArr && timeArr.length > 0) {
+      hour = parseInt(timeArr[0]);
+      minute = parseInt(timeArr[1]);
+    }
+
+    return new Date(year, month, day, hour, minute);
   };
   const handleSubmit = (formProps) => {
     console.log(formProps);
@@ -48,6 +87,9 @@ const CreateEventForm = ({ group, setModal, addEvent }) => {
       eventEndDate,
       eventStartTime,
       eventEndTime,
+      eventGroup,
+      userGroups,
+      usersSelect,
     } = formProps;
     start = start ? start : eventStartDate;
     end = end ? end : eventEndDate;
@@ -61,32 +103,28 @@ const CreateEventForm = ({ group, setModal, addEvent }) => {
       //eventFrequency: eventFrequency,
     };
     if (start) {
-      const selectedStartDate = moment(start).format(dateFormat);
-      const selectedStartTime = startTime
-        ? moment(startTime, ['h:mm A']).format('HH, mm')
-        : '';
-      formObj.start = selectedStartDate + ', ' + selectedStartTime;
+      formObj.start = formatFormDate(start, startTime);
     }
     if (end) {
-      //if end date is provided, use it otherwise it is same as start date
-      const selectedEndDate = end
-        ? moment(end).format(dateFormat)
-        : moment(start).format(dateFormat);
-
-      //if end time is provided, use it otherwise it is same as start time
-      const selectedEndTime = endTime
-        ? moment(endTime, ['h:mm A']).format('HH, mm')
-        : moment(startTime, ['h:mm A']).format('HH, mm');
-      formObj.end = selectedEndDate + ', ' + selectedEndTime;
+      formObj.end = formatFormDate(end, endTime);
+    }
+    debugger;
+    if (isGenericEvent) {
+      //creating event from events page we need to pass groupId or eventInvitees, if both are undefined, add current user email into eventInvitees array (host )
+      if (eventGroup !== '-Select-') {
+        formObj.groupId = getGroupIdFromGroupName(eventGroup);
+      } else if (usersSelect && usersSelect.length > 0) {
+        formObj.eventInvities = usersSelect;
+      } else {
+        formObj.eventInvities = [auth.user.email];
+      }
+    } else {
+      //event created from groups page
+      formObj.groupId = group.currentGroup.id;
     }
 
-    if (groupId) {
-      formObj.groupId = groupId;
-    }
-
-    addEvent(JSON.stringify(formObj), (response) => {
-      setModal(false);
-      console.log(response);
+    addEvent(JSON.stringify(formObj), () => {
+      hideModal();
     });
   };
 
@@ -100,7 +138,8 @@ const CreateEventForm = ({ group, setModal, addEvent }) => {
 };
 
 const mapStateToProps = (state) => ({
-  event: state.event,
+  auth: state.auth,
+  group: state.group,
 });
 
 export default connect(mapStateToProps, {

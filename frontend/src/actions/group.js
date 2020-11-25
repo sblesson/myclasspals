@@ -214,7 +214,6 @@ export const inviteToJoinUserGroup = (requestData, callback) => async (
       });
 
       dispatch(setAlert('Send invitation to new user(s)', 'success'));
-      callback();
     } else {
       dispatch(
         setAlert(
@@ -226,6 +225,7 @@ export const inviteToJoinUserGroup = (requestData, callback) => async (
   } catch (err) {
     catchHandler(err, INVITE_TO_GROUP_ERROR);
   }
+  callback();
 };
 //Users accept invitation to join userGroup
 export const acceptUserGroupInvitation = (requestData, callback) => async (

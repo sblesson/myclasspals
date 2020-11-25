@@ -11,13 +11,20 @@ export default function (state = initialState, action) {
     case 'ADD_EVENT':
       return {
         ...state,
-        event: [payload.event, ...state.event],
+        events: [payload.event, ...state.events],
         loading: false,
       };
     case 'GET_EVENTS':
+      console.log(payload);
       return {
         ...state,
-        event: [payload.event],
+        events: payload.events,
+        loading: false,
+      };
+    case 'DELETE_EVENT':
+      return {
+        ...state,
+        events: state.events.filter((event) => event._id !== payload),
         loading: false,
       };
 

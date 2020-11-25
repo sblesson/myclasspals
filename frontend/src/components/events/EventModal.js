@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { PlusCircleOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
-import CreateEventForm from '../../events/CreateEventForm';
+import { connect } from 'react-redux';
+
+import CreateEventForm from './CreateEventForm';
 //import './PostModal.scss';
 
-const PostModal = ({}) => {
+const EventModal = ({ group }) => {
   const [visible, setModalVisibility] = useState(false);
 
   const showModal = () => {
@@ -21,16 +22,26 @@ const PostModal = ({}) => {
   return (
     <Fragment>
       <div className='new-event-form' onClick={showModal}>
-        <>
-          <div className='new-event-action'>
-            <div className='avatar-container'>
-              <PlusCircleOutlined
-                style={{ color: '#45b3e0', paddingLeft: '0.5rem' }}
-              />
-              <span className='new-event-action__label'>Create event</span>
-            </div>
-          </div>
-        </>
+        <div
+          style={{
+            display: 'flex',
+            flex: '1',
+            justifyContent: 'flex-end',
+            margin: '1rem 0',
+            cursor: 'pointer',
+          }}
+        >
+          <button
+            className='ant-btn ant-btn-primary btn-primary float-right'
+            type='submit'
+          >
+            <span>
+              <i className='far fa-calendar-alt'></i>
+              &nbsp; Add Event
+            </span>{' '}
+          </button>
+        </div>
+      </div>
       <Modal
         centered
         title={'Create event'}
@@ -43,10 +54,19 @@ const PostModal = ({}) => {
         destroyOnClose={true}
         footer={null}
       >
-        <CreateEventForm group={group} setModal={setModalVisibility} />
+        <CreateEventForm
+          hideModal={hideModal}
+          group={group}
+          isGenericEvent={true}
+        />
       </Modal>
     </Fragment>
   );
 };
 
-export default EventModal;
+const mapDispatchToProps = (state) => ({
+  group: state.group,
+});
+export default connect(mapDispatchToProps, {
+  mapDispatchToProps,
+})(EventModal);

@@ -212,7 +212,7 @@ img {
     var(--bg-gradient2)
   ) !important;
 
-  color: #fff;
+  color: #fff !important;
   border: none;
   text-decoration: none;
   -webkit-transition: color 200ms ease;
@@ -1068,7 +1068,7 @@ thead {
   }
   background-color: transparent;
   //background: var(--bg-profile);
-  margin-top: 1.5rem;
+  //margin-top: 1.5rem;
   margin-left: 2rem;
   margin-bottom: 2rem;
   margin-right: 1rem;
@@ -1383,12 +1383,35 @@ thead {
 .ant-form-item textarea.ant-input {
   height: 122px;
 }
-.ant-form-item textarea.ant-input[name='location'] {
-  height: 60px;
-}
+
 .rbc-toolbar {
   font-size: 0.625rem;
   .rbc-toolbar-label {
     font-size: 1rem;
   }
+}
+//todo remove later overriding default style
+.ant-col-sm-8 {
+  @media (min-width: 576px) {
+    max-width: 100%;
+  }
+}
+.ant-btn {
+  color: #45b3e0;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  &:hover {
+    border: 1px solid #45b3e0 !important;
+  }
+}
+.ant-modal-footer {
+  .ant-btn-primary {
+    color: #fff !important;
+    background: var(--bg-primary-btn);
+    cursor: pointer;
+  }
+}
+.ant-card-body {
+  padding: 0px;
 }
