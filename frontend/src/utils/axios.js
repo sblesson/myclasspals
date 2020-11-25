@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from '../store';
+import { LOGOUT } from '../actions/types';
 
 const { REACT_APP_BACKEND_URL, REACT_APP_STAGE } = process.env;
 console.log(process.env);
@@ -18,9 +20,15 @@ axios.defaults.baseURL = 'http://localhost:8080/api';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const setInterceptors = (store) => {
-  axios.interceptors.response.use((response) => {
-    return response;
-  });
+  axios.interceptors.response.use(
+    (res) => res,
+    (err) => {
+      if (err.response.status === 401) {
+        store.dispatch({ type: LOGOUT });
+      }
+      return Promise.reject(err);
+    }
+  );
 };
 
 export const setAuthToken = (token) => {

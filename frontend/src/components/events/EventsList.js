@@ -1,15 +1,37 @@
-import React, { useEffect, useState, useRef } from 'react';
-import events from './events';
-
+import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { getEvents } from '../../actions/event';
+import { getEvents, deleteEvent } from '../../actions/event';
+import EventModal from './EventModal';
+import { Modal, Button } from 'antd';
 
 moment.locale('en');
+
 const localizer = momentLocalizer(moment);
 
-const EventsList = ({ getEvents }) => {
+const EventsList = ({ getEvents, deleteEvent, event }) => {
+  const [isModalVisible, setModalVisibility] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState({});
+  const [currentView, setCurrentView] = useState('');
+
+  const [visible, setVisible] = React.useState(false);
+  const [deleteLoading, setDeleteLoading] = React.useState(false);
+
+  const handleDelete = () => {
+    setDeleteLoading(true);
+    deleteEvent(currentEvent.eventId, () => {
+      setVisible(false);
+      setDeleteLoading(false);
+      window.location.pathname = '/events';
+    });
+  };
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setVisible(false);
+  };
+
   const isCurrent = useRef(true);
 
   useEffect(() => {
@@ -30,38 +52,77 @@ const EventsList = ({ getEvents }) => {
     };
   }, []);
 
-  const handleSelect = (title) => {
-    console.log(title);
+  const formatStartDate = (event) => {
+    return new Date(event.start);
   };
-
+  const formatEndDate = (event) => {
+    return new Date(event.end);
+  };
+  const onSelectEvent = (event) => {
+    setModalVisibility(true);
+    setCurrentEvent(event);
+    setVisible(true);
+  };
+  const onViewChange = (view) => {
+    console.log(view);
+  };
   return (
     <div style={{ height: '80vh', width: '95vw', margin: '2rem auto' }}>
-      <div
-        style={{
-          display: 'flex',
-          flex: '1',
-          justifyContent: 'flex-end',
-          margin: '1rem 0',
-          cursor: 'pointer',
-        }}
-      >
-        <button
-          className='ant-btn ant-btn-primary btn-primary float-right'
-          type='submit'
-        >
-          <span>
-            <i className='far fa-calendar-alt'></i>
-            &nbsp; Add Event
-          </span>{' '}
-        </button>
-      </div>
+      <EventModal />
+
       <Calendar
+        startAccessor={formatStartDate}
+        endAccessor={formatEndDate}
         localizer={localizer}
-        defaultView={Views.WEEK}
+        defaultate={new Date(Date.now())}
+        defaultView={currentView ? currentView : Views.WEEK}
         defaultDate={new Date()}
-        defaultView='month'
-        events={events}
+        events={event.events}
+        drilldownView='agenda'
+        views={['month', 'week', 'agenda']}
+        popup={true}
+        onView={onViewChange}
+        onSelectEvent={(event) => onSelectEvent(event)}
       />
+
+      <Modal
+        centered
+        title={currentEvent.title}
+        visible={visible}
+        okText='Delete'
+        onOk={handleCancel}
+        onCancel={handleDelete} //pass close logic here
+        destroyOnClose={true}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        okButtonProps={{ loading: deleteLoading }}
+        destroyOnClose={true}
+        footer={[
+          <Button
+            key='delete'
+            danger
+            style={{ color: '#cc0000' }}
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>,
+          <Button key='cancel' onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        {currentEvent.groupName ? 'Group Name:' + currentEvent.groupName : ''}
+        <br />
+        {currentEvent.desc ? 'Description: ' + currentEvent.desc : ''}
+        <br />
+        {currentEvent.location ? 'Location: ' + currentEvent.location : ''}
+        <br />
+
+        {'Date: ' +
+          moment(currentEvent.start).format('MMMM Do YYYY, h:mm:ss a')}
+        {currentEvent.end
+          ? ' - ' + moment(currentEvent.end).format('MMMM Do YYYY, h:mm:ss a')
+          : ''}
+      </Modal>
     </div>
   );
 };
@@ -72,4 +133,4 @@ const mapStateToProps = (state, ownProps) => ({
   event: state.event,
 });
 
-export default connect(mapStateToProps, { getEvents })(EventsList);
+export default connect(mapStateToProps, { getEvents, deleteEvent })(EventsList);

@@ -33,7 +33,7 @@ export const getPostCategories = () => async (dispatch) => {
 };
 
 // Add post
-export const addPost = (formData) => async (dispatch) => {
+export const addPost = (formData, callback) => async (dispatch) => {
   console.log('add post action triggered');
   const config = {
     headers: {
@@ -53,6 +53,7 @@ export const addPost = (formData) => async (dispatch) => {
   } catch (err) {
     catchHandler(err, 'ADD_POST_ERROR');
   }
+  callback();
 };
 
 // Add post

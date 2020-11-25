@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { addPost } from '../../../actions/post';
 import DisplayCreatePostForm from './DisplayCreatePostForm';
 
-const CreatePostForm = ({ group, setModal, addPost }) => {
+const CreatePostForm = ({ group, hideModal, addPost }) => {
   const initialValues = {
     categoryId: 'General',
     groupId: group.currentGroup.id,
@@ -24,9 +24,8 @@ const CreatePostForm = ({ group, setModal, addPost }) => {
       categoryId: categoryId,
       groupId: groupId,
     };
-    console.log('from addpost');
-    addPost(JSON.stringify(formObj), (response) => {
-      setModal(false);
+    addPost(JSON.stringify(formObj), () => {
+      hideModal(false);
     });
   };
 

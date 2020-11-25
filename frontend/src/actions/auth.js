@@ -44,6 +44,7 @@ export const getUser = (userId, callback) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   try {
+    console.log('I am here');
     const userResp = await axios.get(`/user/getuserdetails?user=${userId}`, {
       cancelToken: new CancelToken((c) => (cancel = c)),
     });
@@ -192,7 +193,7 @@ export const register = (formData, callback) => async (dispatch) => {
         type: AUTH_SUCCESS,
         payload: authRes.data,
       });
-      dispatch(getUser(formData.email));
+      //dispatch(getUser(formData.email));
     }
   } catch (err) {
     catchHandler(err, 'REGISTER_FAIL');
@@ -230,7 +231,7 @@ export const contactUsMessage = (formData, callback) => async (dispatch) => {
         type: AUTH_SUCCESS,
         payload: authRes.data,
       });
-      dispatch(getUser(formData.email));
+      //dispatch(getUser(formData.email));
     }
   } catch (err) {
     catchHandler(err, 'REGISTER_FAIL');
@@ -284,8 +285,6 @@ export const login = (formData, callback) => async (dispatch) => {
         type: AUTH_SUCCESS,
         payload: res.data,
       });
-
-      dispatch(getUser(formData.email), callback);
 
       try {
         const userResp = await axios.get(

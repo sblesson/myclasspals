@@ -12,7 +12,6 @@ import {
 
 //const FormItem = Form.Item;
 const { Option } = Select;
-
 const CreateFormFields = (AntComponent) => ({
   field,
   form,
@@ -57,8 +56,8 @@ const CreateFormFields = (AntComponent) => ({
 };
 const { TextArea } = Input;
 
-export const dateFormat = 'YYYY, MM, DD';
-export const timeFormat = 'h, mm, A';
+export const dateFormat = 'MM/DD/YYYY';
+export const timeFormat = 'h:mm A';
 export const AntSelect = CreateFormFields(Select);
 export const AntDatePicker = CreateFormFields(DatePicker);
 export const AntInput = CreateFormFields(Input);

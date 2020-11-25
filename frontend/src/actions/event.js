@@ -22,8 +22,9 @@ export const addEvent = (formData, callback) => async (dispatch) => {
     });
 
     dispatch(setAlert('Event Created', 'success'));
-    callback(res.data);
+    callback(res);
   } catch (err) {
+    console.log(err);
     dispatch(
       setAlert(
         err &&
@@ -31,7 +32,7 @@ export const addEvent = (formData, callback) => async (dispatch) => {
           err.response.data &&
           err.response.data.message !== null
           ? err.response.data.message
-          : 'Unable to create group, please try again later',
+          : 'Unable to create the event, please try again later',
         'error'
       )
     );
@@ -56,4 +57,18 @@ export const getEvents = (callback) => async (dispatch) => {
     catchHandler(err, 'GET_EVENTS_ERROR');
   }
   callback(cancelTokenSrc);
+};
+
+// Delete post
+export const deleteEvent = (eventId, callback) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/event/${eventId}`);
+    dispatch({
+      type: 'DELETE_EVENT',
+      payload: eventId,
+    });
+  } catch (err) {
+    catchHandler(err, 'DELETE_EVENT_ERROR');
+  }
+  callback();
 };

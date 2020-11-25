@@ -18,6 +18,8 @@ public class UserEvent {
 	
 	private List<String> eventInvities;
 	
+	private String eventId;
+	
 	
 	public String getStart() {
 		return start;
@@ -81,6 +83,14 @@ public class UserEvent {
 
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
+	}
+
+	public String getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
 	}
 
 	private Boolean allDay;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Field } from 'formik';
-import { FormikDebug } from 'formik-antd';
 import { Form } from 'formik-antd';
 import { AntTextArea } from '../common/createformfields/CreateFormFields';
 
@@ -32,7 +31,7 @@ export default ({ handleSubmit, values, submitCount }) => {
         component={AntTextArea}
         name='inviteeEmail'
         type='text'
-        label='Invite new users to join clazzbuddy'
+        label='Enter email addresses separated by coma'
         placeholder='Send email invitation to non members to join clazzbuddy group by typing or pasting email addresses, separated by commas'
         defaultValue={values.inviteeEmail}
         validate={isRequired}
@@ -55,9 +54,6 @@ export default ({ handleSubmit, values, submitCount }) => {
           Submit
         </button>
       </div>
-      <pre style={{ flex: 1 }}>
-        <FormikDebug />
-      </pre>
     </Form>
   );
 };

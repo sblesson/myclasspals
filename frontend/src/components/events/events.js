@@ -2,6 +2,36 @@ const now = new Date();
 
 export default [
   {
+    start: '2020-11-17T08:00:00.000Z',
+    end: '2020-11-180T08:00:00.000Z',
+    title: 'coffee with kids',
+    desc: null,
+    location: 'dsjkfjkfdslkdfd',
+    groupName: 'info',
+    eventInvities: ['baba'],
+    allDay: null,
+  },
+  {
+    start: '2020-11-19T08:00:00.000Z',
+    end: '2020-11-20T08:00:00.000Z',
+    title: 'Bookclub',
+    desc: null,
+    location: 'fsdfsd',
+    groupName: 'info',
+    eventInvities: ['baba'],
+    allDay: null,
+  },
+  {
+    start: '2020-11-19T08:00:00.000Z',
+    end: '2020-11-20T08:00:00.000Z',
+    title: 'warmup',
+    desc: null,
+    location: 'fsklfdjkfdjf',
+    groupName: 'info',
+    eventInvities: ['baba'],
+    allDay: null,
+  },
+  /*   {
     id: 0,
     title: 'All Day Event very long title',
     allDay: true,
@@ -10,9 +40,9 @@ export default [
   },
   {
     id: 1,
-    title: 'Long Event',
-    start: new Date(2020, 3, 7),
-    end: new Date(2020, 3, 10),
+    title: 'Baking Event',
+    start: new Date(2020, 10, 18, 3, 24, 0),
+    end: new Date(2020, 10, 19, 3, 24, 0),
   },
 
   {
@@ -158,5 +188,5 @@ export default [
     title: 'Go to the gym',
     start: new Date(2020, 3, 14, 18, 30, 0),
     end: new Date(2020, 3, 14, 20, 0, 0),
-  },
+  }, */
 ];

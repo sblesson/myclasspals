@@ -81,9 +81,9 @@ export default ({ handleSubmit, values, submitCount }) => {
           Submit
         </button>
       </div>
-      <pre style={{ flex: 1 }}>
+      {/*     <pre style={{ flex: 1 }}>
         <FormikDebug />
-      </pre>
+      </pre> */}
     </Form>
   );
 };

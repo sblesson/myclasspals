@@ -11,12 +11,14 @@ import {
   AntSelect,
   AntTimePicker,
 } from '../common/createformfields/CreateFormFields';
+import { FormItem } from 'formik-antd';
 
 import {
   validateDate,
   isRequired,
 } from '../common/validatefields/ValidateFields';
-
+import MultiSelectUserSearch from '../common/multiselectusersearch/MultiSelectUserSearch';
+import './DisplayCreateEventForm.scss';
 export default ({ handleSubmit, values, submitCount }) => {
   const formItemLayout = {
     labelCol: {
@@ -43,7 +45,7 @@ export default ({ handleSubmit, values, submitCount }) => {
         component={AntInput}
         name='title'
         type='text'
-        label='Event Name'
+        label='What is the event name?'
         placeholder='Name of the event'
         defaultValue={values.eventTitle}
         validate={isRequired}
@@ -54,13 +56,44 @@ export default ({ handleSubmit, values, submitCount }) => {
         component={AntTextArea}
         name='location'
         type='text'
-        label='Location'
-        placeholder='Where is the event held, type address or share virtual link'
+        label='Where is the event held?'
+        placeholder='Type address or add virtual link'
         defaultValue={values.eventLocation}
         validate={isRequired}
         submitCount={submitCount}
         hasFeedback
       />
+      <Field
+        component={AntTextArea}
+        name='desc'
+        type='text'
+        label='What is the event about?'
+        placeholder='Type your short description about the event'
+        defaultValue={values.eventDescription}
+        //validate={isRequired}
+        submitCount={submitCount}
+        hasFeedback
+      />
+      {values.isGenericEvent && (
+        <Field
+          component={AntSelect}
+          name='eventGroup'
+          label='Which groups can view the event?'
+          defaultValue={values.eventFrequency}
+          selectOptions={values.userGroups}
+          submitCount={submitCount}
+        />
+      )}
+      {values.isGenericEvent && (
+        <FormItem
+          name='usersSelect'
+          label='Who else can view the event other than group?'
+          required={false}
+        >
+          <MultiSelectUserSearch endUsersSelect={'usersSelect'} />
+        </FormItem>
+      )}
+
       <Field
         component={AntDatePicker}
         name='start'
@@ -108,27 +141,15 @@ export default ({ handleSubmit, values, submitCount }) => {
         hasFeedback
         use12Hours
       />
-      {/*       <Field
+      <Field
         component={AntSelect}
         name='frequency'
         label='Repeats'
         defaultValue={values.eventFrequency}
         selectOptions={values.eventFrequencySelectOptions}
-        validate={isRequired}
         submitCount={submitCount}
         tokenSeparators={[',']}
         style={{ width: 200 }}
-        hasFeedback
-      /> */}
-      <Field
-        component={AntTextArea}
-        name='desc'
-        type='text'
-        label='Description'
-        placeholder='Short description about the event'
-        defaultValue={values.eventDescription}
-        //validate={isRequired}
-        submitCount={submitCount}
         hasFeedback
       />
 

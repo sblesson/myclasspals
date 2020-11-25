@@ -89,14 +89,14 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
         onBack={isMobile ? () => window.history.back() : false}
         title={currentGroup.groupName}
         subTitle={getGroupPrivacyLabel(currentGroup.privacy)}
-        extra={displayCreatePostButton(currentGroup)}
+        extra={isUserInPendingRequestedInvitations(currentGroup)}
       >
         <Descriptions size='small' column={1}>
           <Descriptions.Item label={getUserGroupRole(currentGroup)}>
             {getUserGroupMemberCount(currentGroup)}
           </Descriptions.Item>
           <Descriptions.Item>
-            {isUserInPendingRequestedInvitations(currentGroup)}
+            {displayCreatePostButton(currentGroup)}
           </Descriptions.Item>
         </Descriptions>
         <GroupDetails currentGroup={currentGroup} />

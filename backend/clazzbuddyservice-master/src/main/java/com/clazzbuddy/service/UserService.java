@@ -189,7 +189,7 @@ public class UserService implements UserDetailsService{
 			}
 
 		}
-		user.setEvents(eventService.getEventForUser(user.get_id()));
+		//user.setEvents(eventService.getEventForUser(user.get_id()));
 		
 		return user;
 	}
@@ -435,14 +435,17 @@ public class UserService implements UserDetailsService{
 		List<UserEvent> userEvents = new ArrayList<UserEvent>();
 		for (EventInvites event : eventList) {
 			UserEvent userEvent = new UserEvent();
-			userEvent.setDesc(event.getEvent().getDesc());
-			userEvent.setTitle(event.getEvent().getTitle());
-			userEvent.setGroupName(event.getEvent().getGroupName());
-			userEvent.setStart(event.getEvent().getStart());
-			userEvent.setEnd(event.getEvent().getEnd());
-			userEvent.setEventInvities(event.getEvent().getEventInvities());
-			userEvent.setLocation(event.getEvent().getLocation());
-			userEvents.add(userEvent);
+			if (event.getEvent() != null) {
+				userEvent.setDesc(event.getEvent().getDesc());
+				userEvent.setTitle(event.getEvent().getTitle());
+				userEvent.setGroupName(event.getEvent().getGroupName());
+				userEvent.setStart(event.getEvent().getStart());
+				userEvent.setEnd(event.getEvent().getEnd());
+				userEvent.setEventInvities(event.getEvent().getEventInvities());
+				userEvent.setLocation(event.getEvent().getLocation());
+				userEvent.setEventId(event.getEvent().get_id());
+				userEvents.add(userEvent);
+			}
 			
 		}
 		return userEvents;
