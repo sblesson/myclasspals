@@ -7,6 +7,7 @@ import { Typography } from 'antd';
 import Footer from './Footer';
 import { setAlert } from '../actions/alert';
 import { getuserbyregistrationid, register } from '../actions/auth';
+import { acceptUserGroupInvitation } from '../actions/group';
 import { authRedirect } from '../utils/authRedirect';
 
 import PropTypes from 'prop-types';
@@ -15,6 +16,7 @@ const PendingRegistration = ({
   setAlert,
   getuserbyregistrationid,
   register,
+  acceptUserGroupInvitation,
   auth,
   history,
   match,
@@ -40,7 +42,6 @@ const PendingRegistration = ({
   }, [auth.invalidRegistrationToken]);
 
   const [formData, setFormData] = useState({
-    name: '',
     password: '',
     password2: '',
   });
@@ -69,7 +70,6 @@ const PendingRegistration = ({
   const yourInfo = (
     <Formik
       initialValues={{
-        name: '',
         email: '',
         password: '',
         password2: '',
@@ -86,7 +86,6 @@ const PendingRegistration = ({
             if (regId) {
               register(
                 {
-                  name: values.name,
                   email,
                   password: values.password,
                   regId,
@@ -95,12 +94,29 @@ const PendingRegistration = ({
                   setIsLoadingSignUpBtn(false);
                   cancelTokenSrc.cancel();
                   authRedirect(auth, history);
+                  if (
+                    auth.user.pendingInvitedUserGroups &&
+                    auth.user.pendingInvitedUserGroups.length > 0
+                  ) {
+                    acceptUserGroupInvitation(
+                      {
+                        groupId: auth.user.pendingInvitedUserGroups[0].id,
+                        role: 'member',
+                        invitedUserId: auth.user.email,
+                      },
+                      () => {
+                        console.log('cool');
+                        /*    history.push(
+                          `/dashboard/${auth.user.pendingInvitedUserGroups[0].id}`
+                        ); */
+                      }
+                    );
+                  }
                 }
               );
             } else {
               register(
                 {
-                  name: values.name,
                   email,
                   password: values.password,
                 },
@@ -125,14 +141,14 @@ const PendingRegistration = ({
               size: componentSize,
             }}
           >
-            <FormItem
+            {/*             <FormItem
               name='name'
               label='What should we call you?'
               required={true}
               validate={validateRequired}
             >
               <Input name='name' placeholder='Your name' />
-            </FormItem>
+            </FormItem> */}
             <FormItem
               name='password'
               label='Password'
@@ -171,15 +187,9 @@ const PendingRegistration = ({
 
   return (
     <Fragment>
-      <div className='pending-registration-wrapper'>
-        <div className='landing-text'>
-          <h2 style={{ fontSize: '1.6rem' }}>Join your school community</h2>
-          <h4 style={{ fontSize: '.8rem' }}>
-            Together is better, ask for help, offer help, schedule playdate ...
-          </h4>
-        </div>
+      <div className='landing-wrapper d-flex justify-content-center'>
         <div className='landing-form-wrapper'>
-          <h2>Sign-Up</h2>
+          <h2 style={{ fontSize: '1.6rem' }}>Create password</h2>
           {yourInfo}
           <Text className='form-info-text'>
             Already have an account?{' '}
@@ -209,4 +219,5 @@ export default connect(mapStateToProps, {
   setAlert,
   getuserbyregistrationid,
   register,
+  acceptUserGroupInvitation,
 })(PendingRegistration);
