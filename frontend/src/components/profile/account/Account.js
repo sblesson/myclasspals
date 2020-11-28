@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 
-import EditAccountModal from './modal/EditAccountModal';
+/* import EditAccountModal from './modal/EditAccountModal'; */
 
 import './Account.scss';
 const Account = ({ auth }) => {
@@ -11,11 +11,9 @@ const Account = ({ auth }) => {
 
   const userDetails = (
     <div className='profile-content-details' key={auth.user._id}>
-      <EditAccountModal />
+      {/*       <EditAccountModal />
+       */}
 
-      <div className='user-info-item'>
-        <div className='user-info-content'>{auth.user.name} </div>
-      </div>
       {auth.user.phone && (
         <div className='user-info-item'>
           <i className='fas fa-mobile'></i>
@@ -27,16 +25,6 @@ const Account = ({ auth }) => {
         <i className='fas fa-at'></i>
         <div className='user-info-content'>{auth.user.email} </div>
       </div>
-      {auth.user.city ? (
-        <div className='user-info-item'>
-          <i className='fas fa-map-marker big'></i>
-          <div className='user-info-content'>
-            {auth.user.city}, {auth.user.state} {auth.user.zipcode}
-          </div>
-        </div>
-      ) : (
-        ''
-      )}
     </div>
   );
 

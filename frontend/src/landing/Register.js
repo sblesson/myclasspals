@@ -8,6 +8,11 @@ import Footer from './Footer';
 import { setAlert } from '../actions/alert';
 import { register } from '../actions/auth';
 import { authRedirect } from '../utils/authRedirect';
+import {
+  validateEmail,
+  validatePassword,
+} from '../components/common/validatefields/ValidateFields';
+
 import PropTypes from 'prop-types';
 import KeyReasons from './Features';
 import './Register.scss';
@@ -74,7 +79,7 @@ const Register = ({ setAlert, register, auth, history }) => {
               name='email'
               label='Email'
               required={true}
-              validate={validateRequired}
+              validate={validateEmail}
             >
               <Input name='email' placeholder='your@email.com' />
             </FormItem>
@@ -82,7 +87,7 @@ const Register = ({ setAlert, register, auth, history }) => {
               name='password'
               label='Password'
               required={true}
-              validate={validateRequired}
+              validate={validatePassword}
             >
               <Input name='password' type='password' placeholder='Password' />
             </FormItem>

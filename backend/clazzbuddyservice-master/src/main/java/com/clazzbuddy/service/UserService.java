@@ -281,6 +281,7 @@ public class UserService implements UserDetailsService{
 			UserRegistration userRegistration = new UserRegistration();
 			userRegistration.setUserId(action.getInvitedUserId());
 			userRegistration.setRegId(CommonUtils.getRandomId().toString());
+			userRegistration.setGroupId(userGroup.getId());
 			mongoTemplate.save(userRegistration);
 			emailServiceClient.sendUserRegistrationEmail(userRegistration.getRegId(),
 					action.getInvitedUserId());

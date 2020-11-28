@@ -15,6 +15,8 @@ public class UserRegistration {
 	private String regId;
 
 	private String userId;
+	
+	private String groupId;
 
 	private Date expirationDate;
 
@@ -48,6 +50,14 @@ public class UserRegistration {
 
 	public void setRegId(String regId) {
 		this.regId = regId;
+	}
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 }
