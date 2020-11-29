@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import { Formik } from 'formik';
+
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addPost } from '../../actions/post';
 import DisplayCreateInviteForm from './DisplayCreateInviteForm';
 
-const CreateInviteForm = ({ group, setModal, addPost }) => {
+const CreateInviteForm = ({ group, setModal }) => {
   const initialValues = {
     message:
       'We think you will really enjoy clazzbuddy, where school families unite. Join us to create more meaningful connection and improve school experience',
@@ -16,14 +17,29 @@ const CreateInviteForm = ({ group, setModal, addPost }) => {
     console.log(formProps);
     let { message, inviteeEmail } = formProps;
 
-    let formObj = {
-      message,
-      inviteeEmail,
+    console.log(window.emailjs);
+    let templateParams = {
+      from_name: 'support@clazzbuddy.com',
+      to_name: inviteeEmail,
+      subject: 'You have a new invitation',
+      message_html: message,
     };
-    console.log('from addpost');
-    addPost(JSON.stringify(formObj), (response) => {
-      setModal(false);
-    });
+    window.emailjs
+      .send(
+        'default_service',
+        'template_invite',
+        templateParams,
+        'user_lol6VvJrSdlG57bHeWx0I'
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setModal(false);
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
   };
 
   return (
