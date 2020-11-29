@@ -1,29 +1,50 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Formik } from 'formik';
+
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addPost } from '../../actions/post';
+import { setAlert } from '../../actions/alert';
 import DisplayCreateInviteForm from './DisplayCreateInviteForm';
 
-const CreateInviteForm = ({ group, setModal, addPost }) => {
+const CreateInviteForm = ({ setAlert }) => {
+  const [isResultVisible, setIsResultVisible] = useState(false);
   const initialValues = {
     message:
-      'We think you will really enjoy clazzbuddy, where school families unite. Join us to create more meaningful connection and improve school experience',
+      'We think you will really enjoy classpalz, where school families unite. Join us to create more meaningful connection and improve school experience',
     inviteeEmail: '',
   };
-  const handleSubmit = (formProps) => {
-    console.log(formProps);
+  const handleSubmit = (formProps, actions) => {
     let { message, inviteeEmail } = formProps;
 
-    let formObj = {
-      message,
-      inviteeEmail,
+    let templateParams = {
+      useremail: 'cbzircon@gmail.com',
+      from_name: 'clazzbuddy@gmail.com',
+      to_name: inviteeEmail,
+      subject: 'You have a new invitation',
+      message_html: message,
     };
-    console.log('from addpost');
-    addPost(JSON.stringify(formObj), (response) => {
-      setModal(false);
-    });
+    window.emailjs
+      .send(
+        'default_service',
+        'template_invite',
+        templateParams,
+        'user_lol6VvJrSdlG57bHeWx0I'
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setAlert('Message send', 'success');
+        },
+        (error) => {
+          setAlert(
+            'Error occured while sending email invitation. Please try again later!',
+            'error'
+          );
+        }
+      );
+    actions.resetForm();
+    setIsResultVisible(true);
   };
 
   return (
@@ -43,10 +64,7 @@ const CreateInviteForm = ({ group, setModal, addPost }) => {
 DisplayCreateInviteForm.propTypes = {
   addPost: PropTypes.func.isRequired,
 };
-const mapStateToProps = (state) => ({
-  group: state.group,
-});
 
-export default connect(mapStateToProps, {
-  addPost,
+export default connect(null, {
+  setAlert,
 })(withRouter(CreateInviteForm));

@@ -11,7 +11,7 @@ const AboutServices = () => {
             <div className='service-description'>
               <h3>Our Story</h3>
               <div>
-                Clazzbuddy is the community that brings families in school
+                Classpalz is the community that brings families in school
                 together. When families unite and support one another, we can
                 create stronger communities. Parents can ask their questions and
                 get help from other families. If you have a talent share it with

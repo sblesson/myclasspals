@@ -4,14 +4,11 @@ import { Link, Redirect } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik';
 import { Typography, Result } from 'antd';
 import { SubmitButton, Input, Form, FormItem, FormikDebug } from 'formik-antd';
-import Services from './Services';
 import Footer from './Footer';
 import { setAlert } from '../actions/alert';
-import { contactUsMessage } from '../actions/auth';
-import { authRedirect } from '../utils/authRedirect';
 import PropTypes from 'prop-types';
 
-const ContactUs = ({ setAlert, contactUsMessage }) => {
+const ContactUs = ({ setAlert }) => {
   const [componentSize, setComponentSize] = useState('small');
   const [isResultVisible, setIsResultVisible] = useState(false);
 
@@ -42,17 +39,36 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
         name: '',
         message: '',
       }}
-      onSubmit={(values) => {
+      onSubmit={(values, actions) => {
+        let { email, name, message } = values;
+        let templateParams = {
+          useremail: email,
+          to_name: email,
+          subject: message,
+          message_html: message,
+        };
         setIsLoadingSignUpBtn(true);
 
-        contactUsMessage(
-          { email: values.email, name: values.name, message: values.message },
-          (cancelTokenSrc) => {
-            setIsLoadingSignUpBtn(false);
-            console.log(cancelTokenSrc);
-            cancelTokenSrc.cancel();
-          }
-        );
+        window.emailjs
+          .send(
+            'default_service',
+            'template_invite',
+            templateParams,
+            'user_lol6VvJrSdlG57bHeWx0I'
+          )
+          .then(
+            (result) => {
+              console.log(result.text);
+              setAlert('Message send', 'success');
+            },
+            (error) => {
+              setAlert(
+                'Error occured while sending email invitation. Please try again later!',
+                'error'
+              );
+            }
+          );
+        actions.resetForm();
         setIsResultVisible(true);
       }}
       validator={() => ({})}
@@ -135,7 +151,6 @@ const ContactUs = ({ setAlert, contactUsMessage }) => {
 
 ContactUs.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  contactUsMessage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -143,6 +158,4 @@ const mapStateToProps = (state) => ({
   isLoading: state.school.isLoading,
 });
 
-export default connect(mapStateToProps, { setAlert, contactUsMessage })(
-  ContactUs
-);
+export default connect(mapStateToProps, { setAlert })(ContactUs);
