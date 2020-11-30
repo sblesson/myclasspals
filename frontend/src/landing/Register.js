@@ -124,7 +124,7 @@ const Register = ({ setAlert, register, auth, history }) => {
       <div className='landing-wrapper'>
         <div className='landing-text'>
           <h2>
-            Clazzbuddy connects parents and families in school to build amazing
+            Classpalz connects parents and families in school to build amazing
             communities
           </h2>
           <p className='font-italic landing-text-info'>

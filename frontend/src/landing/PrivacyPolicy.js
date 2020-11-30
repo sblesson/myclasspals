@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
             <p>
               <strong>Company</strong> (referred to as either &quot;the
               Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot;
-              in this Agreement) refers to clazzbuddy, inc, 94539.
+              in this Agreement) refers to classpalz, inc, 94539.
             </p>
           </li>
           <li>
@@ -100,13 +100,13 @@ const PrivacyPolicy = () => {
           </li>
           <li>
             <p>
-              <strong>Website</strong> refers to clazzbuddy, accessible from{' '}
+              <strong>Website</strong> refers to classpalz, accessible from{' '}
               <a
-                href='http://clazzbuddy.com'
+                href='http://classpalz.com'
                 rel='external nofollow noopener'
                 target='_blank'
               >
-                http://clazzbuddy.com
+                http://classpalz.com
               </a>
             </p>
           </li>
@@ -457,7 +457,7 @@ const PrivacyPolicy = () => {
           us:
         </p>
         <ul>
-          <li>By email: support@clazzbuddy.com</li>
+          <li>By email: support@classpalz.com</li>
         </ul>
       </div>
       <Footer />
