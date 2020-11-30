@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { getEvents, deleteEvent } from '../../actions/event';
 import EventModal from './EventModal';
 import { Modal, Button } from 'antd';
+/* import AddToCalendar from 'react-add-to-calendar-hoc'; */
+import AddToCalendar from 'react-add-to-calendar';
 
 moment.locale('en');
 
@@ -13,6 +15,7 @@ const localizer = momentLocalizer(moment);
 const EventsList = ({ getEvents, deleteEvent, event }) => {
   const [isModalVisible, setModalVisibility] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
+  const [hocEvent, setHOCEvent] = useState({});
   const [currentView, setCurrentView] = useState('');
 
   const [visible, setVisible] = React.useState(false);
@@ -60,7 +63,17 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
   };
   const onSelectEvent = (event) => {
     setModalVisibility(true);
+    let calendarEvent = {
+      description: event.desc,
+      //duration,
+      endDatetime: event.end,
+      location: event.location,
+      startDatetime: event.start,
+      //timezone: 'Europe/London',
+      title: event.title,
+    };
     setCurrentEvent(event);
+    setHOCEvent(calendarEvent);
     setVisible(true);
   };
   const onViewChange = (view) => {
@@ -116,12 +129,19 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
         <br />
         {currentEvent.location ? 'Location: ' + currentEvent.location : ''}
         <br />
-
         {'Date: ' +
           moment(currentEvent.start).format('MMMM Do YYYY, h:mm:ss a')}
         {currentEvent.end
           ? ' - ' + moment(currentEvent.end).format('MMMM Do YYYY, h:mm:ss a')
           : ''}
+        {/*   const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown); ... */}
+        <AddToCalendar
+          //className={componentStyles}
+          /*  linkProps={{
+            className: linkStyles,
+          }} */
+          event={hocEvent}
+        />
       </Modal>
     </div>
   );
