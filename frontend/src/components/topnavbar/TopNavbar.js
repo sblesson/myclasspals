@@ -23,7 +23,8 @@ const TopNavbar = ({ auth: { isAuthenticated } }) => {
       <div
         className='logo'
         style={{
-          flex: 0.25,
+          flex: 0.5,
+          height: '1.8rem',
         }}
       ></div>
 
