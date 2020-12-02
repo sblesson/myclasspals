@@ -40,14 +40,25 @@
   width: calc(100% - 9.375rem);
   float: left;
   //background: var(--classpalz-color) !important;
+
   .logo {
-    background: url('../../assets/images/klasspalslogo.png') center no-repeat;
-    .logo-text {
-      display: inline-block;
-      font-family: Norther-Lights;
-      color: #46bfd1;
-      font-weight: bolder;
-      font-size: 0.7rem;
+    flex: 0.5;
+    line-height: 2.8rem;
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 1.55rem;
+    display: inline-block;
+    font-family: Norther-Lights;
+    font-weight: normal;
+    margin-left: 3rem;
+
+    .logo-text-primary {
+      color: #46bdc6 !important;
+      &:hover {
+        color: #333;
+      }
+    }
+    .logo-text-dark {
+      color: #333;
     }
   }
   .logo a {

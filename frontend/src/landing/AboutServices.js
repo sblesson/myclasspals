@@ -17,7 +17,7 @@ const AboutServices = () => {
                 get help from other families. If you have a talent share it with
                 others. Let's learn together. If you are struggling, ask for
                 help. Your community is there to help you. Share your interest.
-                Offer help, spread kindness and make new buddies.
+                Offer help, spread kindness and make new friends.
               </div>
             </div>
           </div>

@@ -983,7 +983,9 @@ thead {
 .filter {
   background: url('/assets/images/filter.svg');
 }
-
+.landing-big {
+  background: url('./assets/images/login_community.jpeg');
+}
 .layout-header-navbar {
   height: 30px;
   width: 100%;
@@ -1206,12 +1208,12 @@ thead {
   }
   // if the screen is going to be greater than or equal to 1366px
   @include media('>=desktop') {
-    width: 40%;
+    width: 30%;
   }
 
   // if the screen is going to be greater than or equal to 1920px
   @include media('>=LGdesktop', 'retina2x') {
-    width: 40%;
+    width: 30%;
   }
 }
 .landing-form-wrapper,
@@ -1221,8 +1223,7 @@ thead {
   padding: 1rem;
   display: inline-block;
   vertical-align: top;
-  margin: 2rem;
-  padding: 2rem;
+  margin: 1rem;
   float: right;
   height: auto;
 
@@ -1242,8 +1243,8 @@ thead {
 
   // if the screen is going to be greater than 768px and less than 1366px
   @include media('>tablet', '<desktop') {
-    width: 40%;
-    margin-right: 2rem;
+    width: 30%;
+    margin-right: 0.5rem;
   }
   // if the screen is going to be greater than or equal to 1366px
   @include media('>=desktop') {

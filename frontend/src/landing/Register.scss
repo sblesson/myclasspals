@@ -2,9 +2,9 @@
 
 .landing-wrapper {
   width: 100%;
-  height: 85vh;
+  height: 68vh;
 
-  //background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+  //background: linear-gradient(45deg, #e0f5f6, #46bdc6);
   //background-image: linear-gradient(-90deg, #42d5a1, #0cadc5);
   //background-image: linear-gradient(-90deg, var(--bg-gradient2), #0cadc5);
 
@@ -17,16 +17,16 @@
   // if the screen is going to be greater than 768px and less than 1366px
 
   @include media('<=phone') {
-    background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+    background: linear-gradient(45deg, #e0f5f6, #46bdc6);
   }
   // if the breakpoint is greater than 360px and less than or eqaul to 425px
   @include media('>phone', '<=425px') {
-    background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+    background: linear-gradient(45deg, #e0f5f6, #46bdc6);
   }
 
   // if the screen is going to be greater than 425px and less than or eqaul to 768px
   @include media('>425px', '<=tablet') {
-    background: linear-gradient(45deg, #e0f5f6, #45b6dc);
+    background: linear-gradient(45deg, #e0f5f6, #46bdc6);
   }
   @include media('>tablet', '<desktop') {
     background-image: linear-gradient(
