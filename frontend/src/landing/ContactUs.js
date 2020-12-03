@@ -58,7 +58,6 @@ const ContactUs = ({ setAlert }) => {
           )
           .then(
             (result) => {
-              console.log(result.text);
               setAlert('Message send', 'success');
             },
             (error) => {

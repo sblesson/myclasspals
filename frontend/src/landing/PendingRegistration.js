@@ -105,7 +105,6 @@ const PendingRegistration = ({
                         invitedUserId: auth.user.email,
                       },
                       () => {
-                        console.log('cool');
                         /*    history.push(
                           `/dashboard/${auth.user.pendingInvitedUserGroups[0].id}`
                         ); */

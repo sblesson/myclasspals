@@ -25,7 +25,6 @@ import GroupPage from './GroupPage';
 
 const Dashboard = React.memo(
   ({ loading, group, getGroupDetails, match, auth, history, searchPost }) => {
-    console.log('inside DAAAASH');
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const isCurrent = useRef(true);

@@ -41,7 +41,7 @@ const TermsAndConditions = () => {
             <p>
               <strong>Company</strong> (referred to as either &quot;the
               Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot;
-              in this Agreement) refers to classpalz, inc, 94539.
+              in this Agreement) refers to myclasspals, inc, 94539.
             </p>
           </li>
           <li>
@@ -81,13 +81,13 @@ const TermsAndConditions = () => {
           </li>
           <li>
             <p>
-              <strong>Website</strong> refers to classpalz, accessible from{' '}
+              <strong>Website</strong> refers to myclasspals, accessible from{' '}
               <a
-                href='http://classpalz.com'
+                href='http://myclasspals.com'
                 rel='external nofollow noopener'
                 target='_blank'
               >
-                http://classpalz.com
+                http://myclasspals.com
               </a>
             </p>
           </li>
@@ -245,15 +245,15 @@ const TermsAndConditions = () => {
           resident in.
         </p>
         <h1>Account and Content</h1>
-        When you create account with classpalz, you are giving us permission to
-        use your name and share post and comments with others in classpalz
+        When you create account with myclasspals, you are giving us permission
+        to use your name and share post and comments with others in myclasspals
         community. You maintain all the ownership and liability of contents you
-        post to classpalz, which includes all the text, photos. Please do not
+        post to myclasspals, which includes all the text, photos. Please do not
         post any illegal content to this website. If you post any content, you
         give us permission to share with others. Do not post any content that
-        you don't have the right to publish. Classpalz is not checking the
+        you don't have the right to publish. myclasspals is not checking the
         content posted by members; but we have the right to remove content if it
-        violates classpalz policies. We also have the right to delete your
+        violates myclasspals policies. We also have the right to delete your
         account if we see your content is harmful or threat to group members.
         <h6>Please be kind and respectful to other members.</h6>
         <h1>United States Legal Compliance</h1>
@@ -511,7 +511,7 @@ const TermsAndConditions = () => {
           contact us:
         </p>
         <ul>
-          <li>By email: support@classpalz.com</li>
+          <li>By email: support@myclasspals.com</li>
         </ul>
       </div>
       <Footer />

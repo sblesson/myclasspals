@@ -13,35 +13,35 @@ const Services = () => {
         <ol>
           <li>
             <strong>It&#39;s free</strong>
-            <p>There is no hidden fees.</p>
+            <p>There are no hidden fees.</p>
           </li>
           <li>
             <strong>Benefit your child</strong>
             <p>
-              Research shows when families more involved in school and
+              Research shows that when families are more involved in school and
               community, it will benefit the overall academic experience of your
-              child
+              child.
             </p>
           </li>
           <li>
             {' '}
             <strong>Start a Movement</strong>
             <p>
-              Learn & grow together. Make more impact in your community. Start
-              volunteering, bookclub, get fit challenge etc.
+              Learn & grow together. Make more of an impact in your community.
+              Start new movements like volunteering, bookclub, etc.
             </p>
           </li>
           <li>
             {' '}
             <strong>Be a role model</strong>
             <p>
-              More involment in school community and taking initiatives meaning
-              you are leading by example.Take new inititatives.
+              Have more involment in school community and take initiatives that
+              show you are leading by example.
             </p>
           </li>
           <li>
-            <strong>Get Deeper Meaningful Connection</strong>
-            <p>Schedule playdate, walk to park, hiking together etc</p>
+            <strong>Get Deeper Meaningful Connections</strong>
+            <p>Schedule playdate, book club, lego club, walk to park, etc.</p>
           </li>
         </ol>
       </div>
@@ -53,9 +53,9 @@ const Services = () => {
             Discover School Community
           </strong>
           <div>
-            Connect with other families in school. Create a profile, search
-            school and join school community. Share posts with other parents in
-            your childs class
+            Connect with other families in school. Create a profile, join school
+            community and share posts with other parents in your child&apos;s
+            class
           </div>
         </div>
       </div>

@@ -128,7 +128,7 @@ const GroupRulesForm = ({
                 name='groupRules'
                 cols='50'
                 rows='6'
-                placeholder='Start with the right tone by sharing your purpose and rules for your group. You can come back and edit this later, too. Note: all groups operate under classpalz&#39;s global guidelines in addition to the guidelines you choose.'
+                placeholder='Start with the right tone by sharing your purpose and rules for your group. You can come back and edit this later, too. Note: all groups operate under myclasspals&#39;s global guidelines in addition to the guidelines you choose.'
               />{' '}
             </FormItem>
 

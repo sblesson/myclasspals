@@ -1,22 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Select } from 'formik-antd';
+import { Select } from 'antd';
 
 import { getCityData } from '../../../actions/address';
-
-const AutoCompleteCitySeach = ({ getCityData, address }) => {
+import { searchGroupWithFilters } from '../../../actions/group';
+const AutoCompleteCitySeach = ({
+  getCityData,
+  address,
+  searchGroupWithFilters,
+}) => {
   const Option = Select.Option;
 
-  const handleCitySearch = searchTerm => {
+  const handleCitySearch = (searchTerm) => {
     setTimeout(() => {
       getCityData(searchTerm);
     }, Math.random() * 1000);
   };
 
   const onCitySelect = (value, option) => {
-    if (address && address.results && address.results.length > 0) {
+    if (address && address.results && address.results.length > 0 && value) {
       //update selected address in the reducer
-      address.selectedAddress = address.results[option.key];
+      address.selectedAddress = JSON.parse(value);
+      searchGroupWithFilters({
+        zipcode: address.selectedAddress.postalcode,
+        city: address.selectedAddress.city,
+      });
     }
   };
 
@@ -29,24 +37,29 @@ const AutoCompleteCitySeach = ({ getCityData, address }) => {
 
       return (
         <Option key={index} value={selectedAddress}>
-          {item.city}, {item.statecode} {item.postalcode}
+          {item.city}, {item.statecode} <br />
+          {item.postalcode}
         </Option>
       );
     });
 
   return (
     <Select
-      name='citySelect'
-      showSearch
-      placeholder='Select City'
+      style={{ width: '100%' }}
+      showSearch={true}
+      allowClear={true}
+      placeholder='Search by city or zipcode'
       onSearch={handleCitySearch}
-      onChange={onCitySelect}
+      onSelect={onCitySelect}
     >
       {children}
     </Select>
   );
 };
-const mapStateToProps = state => ({
-  address: state.address
+const mapStateToProps = (state) => ({
+  address: state.address,
 });
-export default connect(mapStateToProps, { getCityData })(AutoCompleteCitySeach);
+export default connect(mapStateToProps, {
+  getCityData,
+  searchGroupWithFilters,
+})(AutoCompleteCitySeach);

@@ -6,8 +6,6 @@ import { List, Card, Empty } from 'antd';
 import GroupCard from './GroupCard';
 
 const GroupSearchResult = React.memo(({ group }) => {
-  console.log('GroupSearchResult');
-
   return (
     <>
       {group !== null && group.searchResult && group.searchResult.length > 0 && (
@@ -18,9 +16,7 @@ const GroupSearchResult = React.memo(({ group }) => {
             group.searchTerm ? `Groups based on your search` : 'Groups near you'
           }
           pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
+            onChange: (page) => {},
             total: group.searchResult.length,
             pageSize: 50,
             hideOnSinglePage: true,

@@ -108,7 +108,6 @@ const CreateEventForm = ({
     if (end) {
       formObj.end = formatFormDate(end, endTime);
     }
-    debugger;
     if (isGenericEvent) {
       //creating event from events page we need to pass groupId or eventInvitees, if both are undefined, add current user email into eventInvitees array (host )
       if (eventGroup !== '-Select-') {

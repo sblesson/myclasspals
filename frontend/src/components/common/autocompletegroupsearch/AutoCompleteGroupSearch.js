@@ -68,7 +68,10 @@ const AutoCompleteGroupSearch = ({
 
   const handleSearch = (searchTerm) => {
     if (searchTerm) {
-      getGroupAutoComplete(searchTerm);
+      var debounced = _.debounce(() => {
+        getGroupAutoComplete(searchTerm);
+      }, 5000);
+      debounced();
     }
   };
 

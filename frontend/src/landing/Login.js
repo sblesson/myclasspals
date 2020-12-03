@@ -41,10 +41,10 @@ const Login = ({ login, auth, history }) => {
       onSubmit={(values) => {
         setIsLoadingSignInBtn(true);
         login({ email: values.email, password: values.password }, (resp) => {
-          console.log('inside login', auth, resp);
           setIsLoadingSignInBtn(false);
           authRedirect(resp, history);
         });
+        setIsLoadingSignInBtn(false);
       }}
       validator={() => ({})}
       //validate={values => {}}
@@ -92,7 +92,10 @@ const Login = ({ login, auth, history }) => {
 
   return (
     <Fragment>
-      <div className='landing-wrapper d-flex justify-content-center'>
+      <div className='landing-wrapper'>
+        <div className='landing-text'>
+          <h2>You belong here!</h2>
+        </div>
         <div className='landing-form-wrapper'>
           <h2>Welcome back, buddy!</h2>
 
@@ -105,7 +108,6 @@ const Login = ({ login, auth, history }) => {
           </Text>
         </div>
       </div>
-      <Footer />
     </Fragment>
   );
 };
