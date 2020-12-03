@@ -15,6 +15,8 @@ import {
 
 import PropTypes from 'prop-types';
 import KeyReasons from './Features';
+import Services from './Services';
+
 import './Register.scss';
 
 const Register = ({ setAlert, register, auth, history }) => {
@@ -124,8 +126,8 @@ const Register = ({ setAlert, register, auth, history }) => {
       <div className='landing-wrapper'>
         <div className='landing-text'>
           <h2>
-            Classpalz connects parents and families in school to build amazing
-            communities
+            Enhance the academic experience of your child by building a positive
+            &amp; authentic school communities
           </h2>
           <p className='font-italic landing-text-info'>
             “So thankful to the platform for a deeper meaningful way to connect
@@ -150,6 +152,7 @@ const Register = ({ setAlert, register, auth, history }) => {
         </div>
       </div>
       <KeyReasons />
+      <Services />
       <Footer />
     </Fragment>
   );

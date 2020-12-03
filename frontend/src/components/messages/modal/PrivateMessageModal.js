@@ -131,7 +131,7 @@ const PrivateMessageModal = React.memo(
               ) : (
                 <FormItem
                   name='endUserId'
-                  label='Select your buddies'
+                  label='Select your friends'
                   /*  required={true}
                   validate={validateRequired} */
                 >
