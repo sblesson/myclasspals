@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Layout } from 'antd';
+import { Layout, Link } from 'antd';
 
 import { connect } from 'react-redux';
 import UserMenu from './UserMenu';
@@ -20,13 +20,11 @@ const TopNavbar = ({ auth: { isAuthenticated } }) => {
       }}
       className='top-menu'
     >
-      <div
-        className='logo'
-        style={{
-          flex: 0.5,
-          height: '1.8rem',
-        }}
-      ></div>
+      <div className='logo'>
+        <span className='logo-text-primary '>
+          c<span className='logo-text-dark'>lasspalz</span>
+        </span>
+      </div>
 
       <div
         style={{

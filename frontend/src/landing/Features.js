@@ -14,12 +14,12 @@ const Features = () => {
         <div className='info feature-box text-center p-3 p-md-4 mx-auto'>
           <ShareAltOutlined
             className='feature-icon'
-            style={{ fontSize: '2.8rem', color: '#45b6dc' }}
+            style={{ fontSize: '2.8rem', color: '#46bdc6' }}
           />
           <div className='description'>
             <h5 className='feature-title mb-3'>CONNECT</h5>
             <p>
-              Connect with other families, make new buddies. Support one
+              Connect with other families, make new friends. Support one
               another. Create buddy groups for playing sports, chess,
               art-science-math-debate clubs, carpool, book clubs, after care
               support, meal planning tips etc..
@@ -31,7 +31,7 @@ const Features = () => {
         <div className='info feature-box text-center p-3 p-md-4 mx-auto'>
           <NotificationOutlined
             className='feature-icon mx-auto'
-            style={{ fontSize: '2.8rem', color: '#45b6dc' }}
+            style={{ fontSize: '2.8rem', color: '#46bdc6' }}
           />
           <div className='description'>
             <h5 className='feature-title mb-3'>COMMUNICATE</h5>
@@ -46,7 +46,7 @@ const Features = () => {
         <div className='info feature-box text-center p-3 p-md-4 mx-auto'>
           <SmileOutlined
             className='feature-icon mx-auto'
-            style={{ fontSize: '2.8rem', color: '#45b6dc' }}
+            style={{ fontSize: '2.8rem', color: '#46bdc6' }}
           />
 
           <div className='description'>
