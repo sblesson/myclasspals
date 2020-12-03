@@ -92,7 +92,10 @@ const Login = ({ login, auth, history }) => {
 
   return (
     <Fragment>
-      <div className='landing-wrapper d-flex justify-content-center'>
+      <div className='landing-wrapper'>
+        <div className='landing-text'>
+          <h2>You belong here!</h2>
+        </div>
         <div className='landing-form-wrapper'>
           <h2>Welcome back, buddy!</h2>
 
