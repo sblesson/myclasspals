@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { PageHeader, Descriptions, Tag, message } from 'antd';
+import { PageHeader, Alert, Descriptions, Tag, message } from 'antd';
 import _ from 'lodash';
 import InviteUsersToGroupModal from './modal/InviteUsersToGroupModal';
 import PostModal from '../posts/modal/PostModal';
@@ -84,6 +84,14 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
   };
   return (
     <div className='wrapper'>
+      {group.pendingInvitedUserGroups &&
+        group.pendingInvitedUserGroups.length > 0 && (
+          <Alert
+            message='You have group invitations pending. Click on groups under pending invitations and click join...'
+            type='warning'
+            closable
+          />
+        )}
       <PageHeader
         ghost={false}
         onBack={isMobile ? () => window.history.back() : false}

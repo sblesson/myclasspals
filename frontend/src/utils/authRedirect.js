@@ -1,7 +1,6 @@
 export const authRedirect = (auth, history) => {
   let groupId;
 
-  console.log(auth);
   if (auth && auth.user) {
     if (auth.user.userGroup && auth.user.userGroup.length > 0) {
       //first time groupId is not passed in url param.

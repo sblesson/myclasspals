@@ -42,7 +42,6 @@ const GroupCard = ({
       },
       record,
       (userGroup) => {
-        console.log(userGroup);
         //searchGroupWithFilters({ groupKeyword: group.searchTerm });
       }
     );
@@ -50,7 +49,6 @@ const GroupCard = ({
 
   const onClick = (key) => {
     if (key === 'deletegroup') {
-      console.log('deletegroup');
     } else if (key === 'editpost') {
     }
   };

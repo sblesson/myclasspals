@@ -19,7 +19,6 @@ const Messages = React.memo(
     auth,
     match,
   }) => {
-    console.log('inside Message DASHBIARD');
     const isMobile = useMediaQuery({ maxWidth: 767 });
     const isCurrent = useRef(true);
     let messageId;
@@ -44,7 +43,6 @@ const Messages = React.memo(
         messageId = match.params.id;
         //user clicked on another group from dashboard leftnav groups menu,
         //get groupId from params
-        console.log(messageId);
         getPost(messageId, (cancelTokenSrc) => {
           //loading = false;
           cancelTokenSrc.cancel();

@@ -15,7 +15,6 @@ const CreatePostForm = ({ group, hideModal, addPost }) => {
     categoryOptions: ['Have Question', 'Homework', 'Tutoring', 'Help Needed'],
   };
   const handleSubmit = (formProps) => {
-    console.log(formProps);
     let { subject, message, categoryId, groupId } = formProps;
 
     let formObj = {

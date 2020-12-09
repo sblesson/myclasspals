@@ -49,7 +49,7 @@ const Register = ({ setAlert, register, auth, history }) => {
         password2: '',
       }}
       onSubmit={(values) => {
-        setIsLoadingSignUpBtn(true);
+        //setIsLoadingSignUpBtn(true);
         if (values.password !== values.password2) {
           setAlert('Passwords do not match', 'danger');
           setIsLoadingSignUpBtn(false);
@@ -58,11 +58,11 @@ const Register = ({ setAlert, register, auth, history }) => {
             { email: values.email, password: values.password },
             (cancelTokenSrc) => {
               setIsLoadingSignUpBtn(false);
-              console.log(cancelTokenSrc);
               cancelTokenSrc.cancel();
               authRedirect(auth, history);
             }
           );
+          setIsLoadingSignUpBtn(false);
         }
       }}
       validator={() => ({})}
@@ -107,8 +107,8 @@ const Register = ({ setAlert, register, auth, history }) => {
             </FormItem>
             <FormItem name='submit'>
               <SubmitButton
-                block
                 className='ant-btn btn-primary'
+                block
                 loading={isLoadingSignUpBtn}
               >
                 {' '}

@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useRef } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
 import { connect } from 'react-redux';
@@ -9,8 +8,7 @@ import './TopNavbar.scss';
 import IdleTimerContainer from '../../utils/idleTimerContainer';
 const SubMenu = Menu.SubMenu;
 
-const UserMenu = ({ logout }) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+const UserMenu = ({ logout, isMobile }) => {
   const isMountedRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +28,7 @@ const UserMenu = ({ logout }) => {
         <IdleTimerContainer></IdleTimerContainer>
         <Menu
           theme='light'
-          mode={'horizontal'}
+          mode={isMobile ? 'vertical' : 'horizontal'}
           defaultSelectedKeys={[selectedKey]}
         >
           <Menu.Item key='dashboard'>
@@ -42,22 +40,16 @@ const UserMenu = ({ logout }) => {
           <Menu.Item key='messages'>
             <Link to='/messages'>{'Message'}</Link>
           </Menu.Item>
-          {!isMobile && (
-            <Menu.Item key='invite'>
-              <Link to='/invite'>{'Invite'}</Link>
-            </Menu.Item>
-          )}
+
+          <Menu.Item key='invite'>
+            <Link to='/invite'>{'Invite'}</Link>
+          </Menu.Item>
 
           <SubMenu title={<span>User</span>}>
             <Menu.Item key='account'>
               {' '}
               <Link to='/account'>{'Account'}</Link>
             </Menu.Item>
-            {isMobile && (
-              <Menu.Item key='invite'>
-                <Link to='/invite'>{'Invite'}</Link>
-              </Menu.Item>
-            )}
             <Menu.Item key='logout' onClick={(event) => logout(event)}>
               Log out
             </Menu.Item>

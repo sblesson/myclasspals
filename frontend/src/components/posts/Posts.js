@@ -17,9 +17,7 @@ const Posts = ({ post: { posts, totalPostCount, loading } }) => {
         size='small'
         dataSource={posts}
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
+          onChange: (page) => {},
           total: MAX_FEED_COUNT,
           pageSize: 50,
           hideOnSinglePage: true,
@@ -28,7 +26,6 @@ const Posts = ({ post: { posts, totalPostCount, loading } }) => {
           <List.Item key={index} className='feed-list-item'>
             <PostItem post={item} />
           </List.Item>
-          
         )}
       />
     </div>

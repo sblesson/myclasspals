@@ -33,14 +33,14 @@ const Footer = () => {
         </Menu.Item>
       </Menu>
       <div className='text-muted copyright-footer-text'>
-        Copyright ©2020 classpalz, inc. All rights reserved.
+        Copyright ©2020 myclasspals, inc. All rights reserved.
       </div>
       {/*       <div className='container'>
         <div className='row'>
           <div className='col-lg-3 col-md-3 col-sm-4 col-xs-12'>
             <div className='footer-section col-xs-12'>
               <p className='text-muted copyright-footer-text'>
-                Copyright ©2020 classpalz, inc
+                Copyright ©2020 myclasspals, inc
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@ const Footer = () => {
           </div>
         </div>
         <div className='item' style={{ color: '#444' }}>
-          Copyright © 2020 classpalz, Inc. All rights reserved.
+          Copyright © 2020 myclasspals, Inc. All rights reserved.
         </div>
       </div> */}
     </Footer>
@@ -156,7 +156,7 @@ const Footer = () => {
         </div>
         <div className='ui inverted small divided link list m-bottom-15'>
           <p className='item' style={{ color: '#444' }}>
-            Copyright © 2020 classpalz, Inc. All rights reserved.
+            Copyright © 2020 myclasspals, Inc. All rights reserved.
           </p>
         </div>
       </div>

@@ -22,7 +22,6 @@ const AutoCompleteUserSearch = ({
     //clearAutoCompleteUserSearchResult();
   }, []);
   const handleUserSearch = (searchTerm) => {
-    console.log(searchTerm);
     if (searchTerm) {
       var debounced = _.debounce(() => {
         searchUser(searchTerm);

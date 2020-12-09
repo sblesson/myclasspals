@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { List, Card, Empty, Modal, Button } from 'antd';
 import AutoCompleteGroupSearch from '../../common/autocompletegroupsearch/AutoCompleteGroupSearch';
+import AutoCompleteCitySearch from '../../common/autocompletecitysearch/AutoCompleteCitySearch';
 import { searchGroup, searchGroupWithFilters } from '../../../actions/group';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -56,18 +57,19 @@ const DiscoverGroupModal = React.memo(({ group, newRegistration }) => {
         footer={null}
       >
         <Card style={{ marginBottom: 10 }} bordered={false}>
+          <AutoCompleteCitySearch />
+          <div style={{ margin: '10px', textAlign: 'center' }}>OR</div>
           <AutoCompleteGroupSearch />
         </Card>
         {group !== null &&
-        group.searchResult &&
-        group.searchResult.length > 0 ? (
-          <GroupSearchResult group={group} newRegistration />
-        ) : (
+          group.searchResult &&
+          group.searchResult.length > 0 && (
+            <GroupSearchResult group={group} newRegistration />
+          )}
+        {group.searchTerm && (
           <Empty
             description={
-              group.searchTerm
-                ? 'No results found. Check the spelling or try again with another keyword.'
-                : 'No groups found in your city or school'
+              'No groups found in your city or school. Check the spelling or try again with another keyword.'
             }
           />
         )}
