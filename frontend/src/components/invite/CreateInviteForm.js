@@ -11,15 +11,15 @@ const CreateInviteForm = ({ setAlert }) => {
   const [isResultVisible, setIsResultVisible] = useState(false);
   const initialValues = {
     message:
-      'We think you will really enjoy classpalz, where school families unite. Join us to create more meaningful connection and improve school experience',
+      'We think you will really enjoy myclasspals, where school families unite. Join us to create more meaningful connection and improve school experience',
     inviteeEmail: '',
   };
   const handleSubmit = (formProps, actions) => {
     let { message, inviteeEmail } = formProps;
 
     let templateParams = {
-      useremail: 'cbzircon@gmail.com',
-      from_name: 'clazzbuddy@gmail.com',
+      useremail: inviteeEmail,
+      from_name: 'Team myclasspals',
       to_name: inviteeEmail,
       subject: 'You have a new invitation',
       message_html: message,
@@ -27,9 +27,9 @@ const CreateInviteForm = ({ setAlert }) => {
     window.emailjs
       .send(
         'default_service',
-        'template_invite',
+        'user_invitation_template',
         templateParams,
-        'user_lol6VvJrSdlG57bHeWx0I'
+        'user_S5jCFVSO6Kl9QPTfRYj0E'
       )
       .then(
         (result) => {
@@ -50,7 +50,7 @@ const CreateInviteForm = ({ setAlert }) => {
   return (
     <Fragment>
       <h2 style={{ marginBottom: '1rem' }}>
-        Invite your friends, acquaintance and family to join classpalz
+        Invite your friends, acquaintance and family to join myclasspals
       </h2>
       <Formik
         initialValues={initialValues}

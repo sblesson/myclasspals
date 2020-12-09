@@ -15,8 +15,6 @@ import './PrivateMessageModal.scss';
 
 const PrivateMessageModal = React.memo(
   ({ userId, sendPrivateMessage, toAddress, noMessagesFound, history }) => {
-    console.log('inside Message PrivateMessageModal');
-
     const [componentSize, setComponentSize] = useState('small');
     const [selectedEndUser, setSelectedEndUser] = useState(
       toAddress ? toAddress : ''
@@ -28,12 +26,9 @@ const PrivateMessageModal = React.memo(
       setModalVisibility(true);
     };
     const hideModal = () => {
-      console.log('hideModal');
       setModalVisibility(false);
     };
     const toggleModal = () => {
-      console.log('toggleModal');
-
       setModalVisibility(!visible);
     };
     const formItemLayout = {
@@ -106,8 +101,6 @@ const PrivateMessageModal = React.memo(
         onSubmit={(values, actions) => {
           values.endUserId = selectedEndUser;
           sendPrivateMessage(values, (response) => {
-            console.log(response);
-            debugger;
             if (response && response.post && response.post._id) {
               history.push(`/messages/${response.post._id}`);
             }

@@ -52,13 +52,12 @@ const ContactUs = ({ setAlert }) => {
         window.emailjs
           .send(
             'default_service',
-            'template_invite',
+            'user_invitation_template',
             templateParams,
-            'user_lol6VvJrSdlG57bHeWx0I'
+            'user_S5jCFVSO6Kl9QPTfRYj0E'
           )
           .then(
             (result) => {
-              console.log(result.text);
               setAlert('Message send', 'success');
             },
             (error) => {

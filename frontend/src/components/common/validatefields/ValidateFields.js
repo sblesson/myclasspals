@@ -31,8 +31,8 @@ export const validatePassword = (value) => {
   var errors;
   if (!value) {
     errors = 'Required';
-  } else if (value.length < 8) {
-    errors = 'Your password must be at least 8 characters';
+  } else if (value.length < 6) {
+    errors = 'Your password must be at least 6 characters';
   } else if (value.search(/[a-z]/i) < 0) {
     errors = 'Your password must contain at least one letter.';
   } /*  else if (value.search(/[0-9]/) < 0) {

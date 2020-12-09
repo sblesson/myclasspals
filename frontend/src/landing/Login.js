@@ -41,10 +41,10 @@ const Login = ({ login, auth, history }) => {
       onSubmit={(values) => {
         setIsLoadingSignInBtn(true);
         login({ email: values.email, password: values.password }, (resp) => {
-          console.log('inside login', auth, resp);
           setIsLoadingSignInBtn(false);
           authRedirect(resp, history);
         });
+        setIsLoadingSignInBtn(false);
       }}
       validator={() => ({})}
       //validate={values => {}}
@@ -108,7 +108,7 @@ const Login = ({ login, auth, history }) => {
           </Text>
         </div>
       </div>
-      <Footer />
+      <Footer isFixedFooter={true} />
     </Fragment>
   );
 };

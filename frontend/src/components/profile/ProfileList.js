@@ -30,9 +30,7 @@ const ProfileList = ({ getAllUsers, auth }) => {
         itemLayout='vertical'
         size='small'
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
+          onChange: (page) => {},
           pageSize: 50,
           hideOnSinglePage: true,
         }}

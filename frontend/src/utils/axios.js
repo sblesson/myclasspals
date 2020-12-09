@@ -3,7 +3,6 @@ import store from '../store';
 import { LOGOUT } from '../actions/types';
 
 const { REACT_APP_BACKEND_URL, REACT_APP_STAGE } = process.env;
-console.log(process.env);
 let url;
 /* if (REACT_APP_STAGE === 'dev') {
   axios.defaults.baseURL = 'http://localhost:8080/api';

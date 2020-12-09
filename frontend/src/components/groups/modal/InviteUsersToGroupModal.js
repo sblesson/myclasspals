@@ -39,16 +39,14 @@ const InviteUsersToGroupModal = ({ current }) => {
   return (
     <div>
       <div onClick={toggleModal}>
-        <Button style={{ color: '#46bfd1' }} icon={<UsergroupAddOutlined />}>
-          Invite
-        </Button>
+        <Button icon={<UsergroupAddOutlined />}>Invite</Button>
       </div>
       <Modal
         centered
         className='create-group-modal'
         visible={visible}
         onOk={hideModal}
-        title={'Invite friends to group'}
+        title={'Invite to group'}
         okText='Invite'
         onCancel={toggleModal} //pass close logic here
         destroyOnClose={true}

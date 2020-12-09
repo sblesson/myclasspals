@@ -34,7 +34,6 @@ export const getPostCategories = () => async (dispatch) => {
 
 // Add post
 export const addPost = (formData, callback) => async (dispatch) => {
-  console.log('add post action triggered');
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +42,6 @@ export const addPost = (formData, callback) => async (dispatch) => {
 
   try {
     const res = await axios.post('/post/createpost', formData, config);
-    console.log(res);
     dispatch({
       type: ADD_POST,
       payload: res.data,
@@ -80,7 +78,6 @@ export const addEvent = (formData) => async (dispatch) => {
 // Search post by groupId
 export const searchPost = (requestObj, callback) => async (dispatch) => {
   let cancel;
-  console.log(requestObj);
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -95,7 +92,6 @@ export const searchPost = (requestObj, callback) => async (dispatch) => {
       type: SEARCH_POST,
       payload: res.data,
     });
-    console.log(res.data);
     callback(res.data.post, cancel);
   } catch (err) {
     if (axios.isCancel(err)) return;

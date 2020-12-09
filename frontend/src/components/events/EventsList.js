@@ -17,6 +17,7 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
   const [currentEvent, setCurrentEvent] = useState({});
   const [hocEvent, setHOCEvent] = useState({});
   const [currentView, setCurrentView] = useState('');
+  let icon = { 'calendar-plus-o': 'left' };
 
   const [visible, setVisible] = React.useState(false);
   const [deleteLoading, setDeleteLoading] = React.useState(false);
@@ -63,15 +64,18 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
   };
   const onSelectEvent = (event) => {
     setModalVisibility(true);
+    console.log(event);
     let calendarEvent = {
       description: event.desc,
       //duration,
-      endDatetime: event.end,
+      endTime: event.end,
       location: event.location,
-      startDatetime: event.start,
+      startTime: event.start,
       //timezone: 'Europe/London',
       title: event.title,
     };
+    console.log(calendarEvent);
+
     setCurrentEvent(event);
     setHOCEvent(calendarEvent);
     setVisible(true);
@@ -88,7 +92,7 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
         endAccessor={formatEndDate}
         localizer={localizer}
         defaultate={new Date(Date.now())}
-        defaultView={currentView ? currentView : Views.WEEK}
+        defaultView={currentView ? currentView : Views.MONTH}
         defaultDate={new Date()}
         events={event.events}
         drilldownView='agenda'
@@ -102,6 +106,7 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
         centered
         title={currentEvent.title}
         visible={visible}
+        closable={false}
         okText='Delete'
         onOk={handleCancel}
         onCancel={handleDelete} //pass close logic here
@@ -113,7 +118,7 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
           <Button
             key='delete'
             danger
-            style={{ color: '#cc0000' }}
+            style={{ background: '#fff', color: '#cc0000' }}
             onClick={handleDelete}
           >
             Delete
@@ -123,25 +128,18 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
           </Button>,
         ]}
       >
-        {currentEvent.groupName ? 'Group Name:' + currentEvent.groupName : ''}
-        <br />
-        {currentEvent.desc ? 'Description: ' + currentEvent.desc : ''}
-        <br />
-        {currentEvent.location ? 'Location: ' + currentEvent.location : ''}
-        <br />
-        {'Date: ' +
-          moment(currentEvent.start).format('MMMM Do YYYY, h:mm:ss a')}
-        {currentEvent.end
-          ? ' - ' + moment(currentEvent.end).format('MMMM Do YYYY, h:mm:ss a')
+        <AddToCalendar event={hocEvent} />
+
+        {moment(currentEvent.start).format('LLL')}
+        {currentEvent.end && currentEvent.end !== currentEvent.start
+          ? ' - ' + moment(currentEvent.end).format('LLL')
           : ''}
-        {/*   const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown); ... */}
-        <AddToCalendar
-          //className={componentStyles}
-          /*  linkProps={{
-            className: linkStyles,
-          }} */
-          event={hocEvent}
-        />
+        <br />
+        {currentEvent.groupName && 'Group Name: ' + currentEvent.groupName}
+        <br />
+        {currentEvent.desc && 'Description: ' + currentEvent.desc}
+        <br />
+        {currentEvent.location && 'Location: ' + currentEvent.location}
       </Modal>
     </div>
   );

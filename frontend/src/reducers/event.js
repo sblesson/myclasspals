@@ -15,7 +15,6 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case 'GET_EVENTS':
-      console.log(payload);
       return {
         ...state,
         events: payload.events,

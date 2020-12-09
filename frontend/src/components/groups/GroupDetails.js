@@ -66,7 +66,7 @@ const GroupDetails = ({ currentGroup }) => {
           </TabPane>
 
           {currentGroup.role === 'admin' ? (
-            <TabPane tab='Member Request' key='approvals'>
+            <TabPane tab='Pending Approvals' key='approvals'>
               {currentGroup.pendingInvitations &&
               currentGroup.pendingInvitations.length > 0 ? (
                 <List
@@ -86,7 +86,7 @@ const GroupDetails = ({ currentGroup }) => {
                   renderItem={(item) => <MemberRequest member={item} />}
                 />
               ) : (
-                <Empty description={'There are no member request pending'} />
+                <Empty description={'There are no approvals pending'} />
               )}
             </TabPane>
           ) : (

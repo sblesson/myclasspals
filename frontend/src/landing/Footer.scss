@@ -1,4 +1,5 @@
-.footer {
+.footer,
+.fixed-footer {
   right: 0;
   left: 0;
   bottom: 0;
@@ -26,4 +27,7 @@
   .copyright-footer-text {
     font-size: 0.7rem;
   }
+}
+.fixed-footer {
+  position: fixed;
 }

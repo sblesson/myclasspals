@@ -126,6 +126,23 @@ public class UserController {
 
 	}
 	
+	@DeleteMapping(value = "/deleteuser", produces = { "application/json" })
+	public CommonResult deleteuser(@RequestBody Users user) throws Exception {
+		UserResult result = new UserResult();
+		authorizeUserRequest(user.getEmail());
+		try {
+			userService.deleteUser(user);
+			result.setErrorCode(0);
+		} catch (Exception e) {
+			result.setErrorCode(1);
+			result.setException(e.toString());
+			logger.error("error", e);
+		}
+
+		return result;
+
+	}
+	
 	public void authorizeUserRequest(String userKey) throws Exception {
 		
 		Users user = (Users) SecurityContextHolder

@@ -141,7 +141,7 @@ export default ({ handleSubmit, values, submitCount }) => {
         hasFeedback
         use12Hours
       />
-      <Field
+      {/*       <Field
         component={AntSelect}
         name='frequency'
         label='Repeats'
@@ -151,7 +151,7 @@ export default ({ handleSubmit, values, submitCount }) => {
         tokenSeparators={[',']}
         style={{ width: 200 }}
         hasFeedback
-      />
+      /> */}
 
       <div className='submit-container'>
         <button className='ant-btn ant-btn-primary btn-primary' type='submit'>

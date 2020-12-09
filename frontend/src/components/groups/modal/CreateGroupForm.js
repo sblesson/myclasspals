@@ -179,22 +179,21 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
                 className='post-form-text-input post-form-textarea'
                 name='groupRules'
                 cols='50'
-                rows='6'
-                placeholder='Start with the right tone by sharing your purpose and rules for your group. You can come back and edit this later, too. Note: all groups operate under classpalz&#39;s global guidelines in addition to the guidelines you choose.'
+                rows='3'
+                placeholder='Start with the right tone by sharing your purpose and rules for your group. You can come back and edit this later, too. Note: all groups operate under myclasspals&#39;s global guidelines in addition to the guidelines you choose.'
               />{' '}
             </FormItem>
             <SubmitButton
               className='ant-btn btn-primary'
-              style={{ float: 'right' }}
               loading={isLoadingCreateBtn}
             >
               {' '}
               Create
             </SubmitButton>
           </Form>
-          <pre style={{ flex: 1 }}>
+          {/*       <pre style={{ flex: 1 }}>
             <FormikDebug />
-          </pre>
+          </pre> */}
         </div>
       )}
     />

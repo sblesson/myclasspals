@@ -19,7 +19,14 @@ public class PostalAddressService {
 	public List<PostalAddress> getCityStartingWithLetters(String searchKey) throws Exception {
 
 		Query postalAddressSearchQuery = new Query();
-		postalAddressSearchQuery.addCriteria(Criteria.where("city").regex("^" + searchKey.toLowerCase(), "i"));
+		postalAddressSearchQuery.addCriteria(new Criteria()
+		        .orOperator(
+		        		Criteria.where("city").regex("^" +searchKey.toLowerCase(), "i"),
+		        		Criteria.where("postalcode").regex("^" + searchKey.toLowerCase(), "i")		        	
+		            ) );
+		//postalAddressSearchQuery.addCriteria(Criteria.where("city").regex("^" + searchKey.toLowerCase(), "i"));
+		//postalAddressSearchQuery.addCriteria(Criteria.where("postalcode").regex("^" + searchKey.toLowerCase(), "i"));
+
 		List<PostalAddress> addresses = mongoTemplate.find(postalAddressSearchQuery, PostalAddress.class);
 		return addresses;
 

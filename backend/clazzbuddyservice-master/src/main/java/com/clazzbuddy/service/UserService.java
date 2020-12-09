@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -52,6 +54,8 @@ public class UserService implements UserDetailsService{
 	
 	@Autowired
     private PasswordEncoder bcryptEncoder;
+	
+	Logger logger = LogManager.getLogger(UserService.class);
 
 	public Users createUser(Users user) throws Exception {
 		if (user.getRegId() != null) {
@@ -126,6 +130,16 @@ public class UserService implements UserDetailsService{
 			;
 		}
 		return mongoTemplate.save(userFromDB);
+	}
+	
+	public void deleteUser(Users user) throws Exception {
+		Query userByName = new Query();
+		userByName.addCriteria(Criteria.where("email").is(user.getEmail()));
+
+		Users userFromDB = mongoTemplate.findOne(userByName, Users.class);
+		if (userFromDB != null) {
+			mongoTemplate.remove(userFromDB);
+		}
 	}
 
 
@@ -227,6 +241,9 @@ public class UserService implements UserDetailsService{
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
 
 		Users requestorUser = getUserDetails(action.getRequestorUserId());
+		if (checkForDuplicate(userGroup, requestorUser)) {
+			return requestorUser;
+		}
 		
 		if (Constants.PUBLIC.equals(userGroup.getPrivacy())) {
 			if (requestorUser.getUserGroup() == null) {
@@ -288,6 +305,9 @@ public class UserService implements UserDetailsService{
 
 		}
 
+		if (checkForDuplicate(userGroup, invitedUser)) {
+			return userGroup;
+		}
 		GroupInvitations invitation = new GroupInvitations();
 		invitation.setGroupId(action.getGroupId());
 
@@ -308,6 +328,36 @@ public class UserService implements UserDetailsService{
 		mongoTemplate.save(userGroup);
 
 		return userGroup;
+	}
+	
+	private Boolean checkForDuplicate(UserGroup userGroup, Users invitedUser) {
+		if (userGroup.getRequestedInvitations() != null) {
+			for (GroupInvitations invite :  userGroup.getRequestedInvitations()) {
+				if (invite.getInvitedUserId().equals(invitedUser.getEmail())) {
+					logger.warn("user already present in requested invitations : " + invitedUser.get_id() + " group :" + userGroup.getId());
+					return true;
+				}
+			}
+		}
+		if (userGroup.getPendingInvitations() != null) {
+			for (GroupInvitations invite :  userGroup.getPendingInvitations()) {
+				if (invite.getInvitedUserId().equals(invitedUser.getEmail())) {
+					logger.warn("user already present in pending invitations : " + invitedUser.get_id() + " group :" + userGroup.getId());
+					return true;
+				}
+			}
+		}
+		if (userGroup.getUserGroupMembers() != null) {
+			for (UserGroupMembers member :  userGroup.getUserGroupMembers()) {
+				if (member.get_id().equals(invitedUser.get_id())) {
+					logger.warn("user already part of the group : " + invitedUser.get_id() + " group :" + userGroup.getId());
+					return true;
+				}
+			}
+		}
+		return false;
+		
+		
 	}
 
 	public Users acceptGroupInvitation(GroupInvitationAction action) throws Exception {

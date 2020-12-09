@@ -44,7 +44,6 @@ export const getUser = (userId, callback) => async (dispatch) => {
   if (cancel !== undefined) cancel();
 
   try {
-    console.log('I am here');
     const userResp = await axios.get(`/user/getuserdetails?user=${userId}`, {
       cancelToken: new CancelToken((c) => (cancel = c)),
     });
@@ -317,7 +316,6 @@ export const logout = () => (dispatch) => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: DESTROY_SESSION });
   dispatch({ type: LOGOUT });
-  console.log('logout');
 
   onClear();
 };

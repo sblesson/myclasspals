@@ -17,12 +17,12 @@ const Features = () => {
             style={{ fontSize: '2.8rem', color: '#46bdc6' }}
           />
           <div className='description'>
-            <h5 className='feature-title mb-3'>CONNECT</h5>
+            <h5 className='feature-title mb-3'>Join Community</h5>
             <p>
               Connect with other families, make new friends. Support one
-              another. Create buddy groups for playing sports, chess,
+              another. Create groups for playing sports, chess,
               art-science-math-debate clubs, carpool, book clubs, after care
-              support, meal planning tips etc..
+              support, meal planning tips etc.
             </p>
           </div>
         </div>
@@ -34,10 +34,10 @@ const Features = () => {
             style={{ fontSize: '2.8rem', color: '#46bdc6' }}
           />
           <div className='description'>
-            <h5 className='feature-title mb-3'>COMMUNICATE</h5>
+            <h5 className='feature-title mb-3'>Authentic Connection</h5>
             <p>
-              Talk to other families in school and get informed. Be the voice
-              and make the change.
+              Talk to other families in school and get informed. Create 
+              deeper connection. Be the voice and make the change.
             </p>
           </div>
         </div>
@@ -50,7 +50,7 @@ const Features = () => {
           />
 
           <div className='description'>
-            <h5 className='feature-title mb-3'>COORDINATE</h5>
+            <h5 className='feature-title mb-3'>Co-ordinate Events</h5>
             <p>
               Schedule events, playdate, birthday party, volunteering, PTA
               meetings, scouts meetings. The possibilities are endless!

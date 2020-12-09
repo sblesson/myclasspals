@@ -32,7 +32,7 @@ public class SchoolCache {
 		
 		if (schoolSearch  != null) {
 			Query schoolListQuery = new Query();
-			schoolListQuery.addCriteria(Criteria.where("schoolName").regex("^" + searchKey.toLowerCase(), "i"));			
+			schoolListQuery.addCriteria(Criteria.where("schoolSerachKey").is(searchKey.toLowerCase()));			
 			List<School> schools = mongoTemplate.find(schoolListQuery, School.class);
 			return schools;
 		} else {
@@ -44,6 +44,7 @@ public class SchoolCache {
 				Query schoolByID = new Query();
 				schoolByID.addCriteria(Criteria.where("schoolid").is(school.getSchoolid()));
 				if (mongoTemplate.findOne(schoolByID, School.class) == null) {
+					school.setSchoolSerachKey(searchKey);
 					mongoTemplate.insert(school);
 				}
 			}
