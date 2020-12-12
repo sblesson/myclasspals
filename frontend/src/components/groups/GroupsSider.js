@@ -76,12 +76,16 @@ const GroupsSider = React.memo(
       return false;
     } else if (
       prevProps.group &&
+      prevProps.group.pendingInvitedUserGroups &&
+      nextProps.group.pendingInvitedUserGroups &&
       prevProps.group.pendingInvitedUserGroups.length !==
         nextProps.group.pendingInvitedUserGroups.length
     ) {
       return false;
     } else if (
       prevProps.group &&
+      prevProps.group.requestedUserGroup &&
+      nextProps.group.requestedUserGroup &&
       prevProps.group.requestedUserGroup.length !==
         nextProps.group.requestedUserGroup.length
     ) {

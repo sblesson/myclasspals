@@ -83,6 +83,7 @@ const GroupCard = ({
         if (newRegistration) {
           history.push(`/dashboard/${record.id}`);
         }
+        window.location.reload();
       }
     );
   };

@@ -108,6 +108,7 @@ const Login = ({ login, auth, history }) => {
           </Text>
         </div>
       </div>
+      <Footer isFixedFooter={true} />
     </Fragment>
   );
 };

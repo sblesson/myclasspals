@@ -131,6 +131,16 @@ public class UserService implements UserDetailsService{
 		}
 		return mongoTemplate.save(userFromDB);
 	}
+	
+	public void deleteUser(Users user) throws Exception {
+		Query userByName = new Query();
+		userByName.addCriteria(Criteria.where("email").is(user.getEmail()));
+
+		Users userFromDB = mongoTemplate.findOne(userByName, Users.class);
+		if (userFromDB != null) {
+			mongoTemplate.remove(userFromDB);
+		}
+	}
 
 
 	public Users validateUser(Users user) throws Exception {

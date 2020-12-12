@@ -34,6 +34,8 @@ public class School {
 	private Integer rankOf;
 	
 	private Integer rankStars;
+	
+	private String schoolSerachKey;
 
 	public String getSchoolid() {
 		return schoolid;
@@ -153,6 +155,14 @@ public class School {
 
 	public void set_id(String _id) {
 		this._id = _id;
+	}
+
+	public String getSchoolSerachKey() {
+		return schoolSerachKey;
+	}
+
+	public void setSchoolSerachKey(String schoolSerachKey) {
+		this.schoolSerachKey = schoolSerachKey;
 	}
 
 	

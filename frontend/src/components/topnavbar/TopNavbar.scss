@@ -82,7 +82,7 @@
     // if the screen is going to be greater than 425px and less than or eqaul to 768px
     @include media('>tablet') {
       flex: 0.5;
-      font-size: 1.55rem;
+      font-size: 1.4rem;
       margin-left: 3rem;
       line-height: 2.8rem;
       display: inline-block;

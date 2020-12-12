@@ -92,7 +92,7 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
         endAccessor={formatEndDate}
         localizer={localizer}
         defaultate={new Date(Date.now())}
-        defaultView={currentView ? currentView : Views.WEEK}
+        defaultView={currentView ? currentView : Views.MONTH}
         defaultDate={new Date()}
         events={event.events}
         drilldownView='agenda'
@@ -118,7 +118,7 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
           <Button
             key='delete'
             danger
-            style={{ color: '#cc0000' }}
+            style={{ background: '#fff', color: '#cc0000' }}
             onClick={handleDelete}
           >
             Delete
