@@ -24,7 +24,10 @@ const GroupsSider = React.memo(
 
     useEffect(() => {
       setGroups();
-      return () => {};
+      return () => {
+        setAdminGroups([]);
+        setMemberGroups([]);
+      };
     }, [group]);
 
     return (
@@ -71,17 +74,23 @@ const GroupsSider = React.memo(
       return false;
     } else if (
       prevProps.group &&
+      prevProps.group.currentGroup &&
+      nextProps.group.currentGroup &&
       prevProps.group.currentGroup.id !== nextProps.group.currentGroup.id
     ) {
       return false;
     } else if (
       prevProps.group &&
+      prevProps.group.pendingInvitedUserGroups &&
+      nextProps.group.pendingInvitedUserGroups &&
       prevProps.group.pendingInvitedUserGroups.length !==
         nextProps.group.pendingInvitedUserGroups.length
     ) {
       return false;
     } else if (
       prevProps.group &&
+      prevProps.group.requestedUserGroup &&
+      nextProps.group.requestedUserGroup &&
       prevProps.group.requestedUserGroup.length !==
         nextProps.group.requestedUserGroup.length
     ) {

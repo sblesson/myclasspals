@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import {
   fetchSchool,
-  clearAutoCompleteSchoolSearchResult
+  clearAutoCompleteSchoolSearchResult,
 } from '../../../actions/school';
 
 const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
@@ -14,7 +14,7 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
   useEffect(() => {
     clearAutoCompleteSchoolSearchResult();
   }, []);
-  const handleSchoolSearch = searchTerm => {
+  const handleSchoolSearch = (searchTerm) => {
     if (searchTerm) {
       var debounced = _.debounce(() => {
         fetchSchool(searchTerm);
@@ -38,7 +38,10 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
         item.zip;
       return (
         <Option key={selectedSchool} value={selectedSchool}>
-          <span style={{ fontWeigth: 'bolder' }}> {selectedSchool}</span>
+          <div style={{ fontSize: 'small' }}> {item.schoolName}</div>
+          <div style={{ fontSize: 'smaller' }}>
+            {item.city}, {item.state} {item.zip}
+          </div>
         </Option>
       );
     });
@@ -55,10 +58,10 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
     </Select>
   );
 };
-const mapStateToProps = state => ({
-  school: state.school
+const mapStateToProps = (state) => ({
+  school: state.school,
 });
 export default connect(mapStateToProps, {
   fetchSchool,
-  clearAutoCompleteSchoolSearchResult
+  clearAutoCompleteSchoolSearchResult,
 })(AutoCompleteSchoolSearch);

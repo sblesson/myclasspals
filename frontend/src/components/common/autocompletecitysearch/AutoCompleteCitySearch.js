@@ -45,10 +45,11 @@ const AutoCompleteCitySeach = ({
 
   return (
     <Select
+      name='cityGroupSelect'
       style={{ width: '100%' }}
       showSearch={true}
       allowClear={true}
-      placeholder='Search by city or zipcode'
+      placeholder='Type city or zipcode'
       onSearch={handleCitySearch}
       onSelect={onCitySelect}
     >

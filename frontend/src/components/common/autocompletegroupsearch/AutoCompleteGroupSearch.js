@@ -33,37 +33,86 @@ const AutoCompleteGroupSearch = ({
     group.autoCompleteSearchResult &&
     group.autoCompleteSearchResult.length > 0 &&
     group.autoCompleteSearchResult.map((item) => {
-      return (
-        <OptGroup label={item.label} key={item.label}>
-          {item.options &&
-            item.options.length > 0 &&
-            item.options.map((dataOption) => {
-              if (dataOption) {
-                return (
-                  <Option key={dataOption} value={dataOption}>
-                    <div>
-                      {' '}
-                      <SearchOutlined
-                        twoToneColor='#52c41a'
-                        style={{ fontSize: '.8rem' }}
-                      />
-                      <span
-                        style={{
-                          marginLeft: '.5rem',
-                          paddingTop: '.3rem',
-                          fontSize: '.8rem',
-                          display: 'inline-block',
-                        }}
-                      >
-                        {dataOption}
-                      </span>
-                    </div>
-                  </Option>
-                );
-              }
-            })}
-        </OptGroup>
-      );
+      if (item.label === 'Schools') {
+        return (
+          <OptGroup label={item.label} key={item.label}>
+            {item.options &&
+              item.options.length > 0 &&
+              item.options.map((dataOption) => {
+                console.log(dataOption);
+                if (dataOption) {
+                  let dataArr = dataOption.split(',');
+                  if (dataArr.length === 4) {
+                    let schoolName = dataArr[0];
+                    let schoolCity = dataArr[1];
+                    let schoolState = dataArr[2];
+                    let schoolZip = dataArr[3];
+
+                    //if (dataOption) {
+                    return (
+                      <Option key={dataOption} value={dataOption}>
+                        <div>
+                          <SearchOutlined
+                            twoToneColor='#52c41a'
+                            style={{ fontSize: '.8rem' }}
+                          />
+                          <span
+                            style={{
+                              marginLeft: '.5rem',
+                              /*paddingTop: '.3rem', */
+                              fontSize: '.8rem',
+                              display: 'inline-block',
+                            }}
+                          >
+                            <div style={{ fontSize: 'small' }}>
+                              {' '}
+                              {schoolName}
+                            </div>
+                            <div style={{ fontSize: 'smaller' }}>
+                              {schoolCity}, {schoolState} {schoolZip}
+                            </div>
+                          </span>
+                        </div>
+                      </Option>
+                    );
+                  }
+                }
+              })}
+          </OptGroup>
+        );
+      } else {
+        return (
+          <OptGroup label={item.label} key={item.label}>
+            {item.options &&
+              item.options.length > 0 &&
+              item.options.map((dataOption) => {
+                if (dataOption) {
+                  return (
+                    <Option key={dataOption} value={dataOption}>
+                      <div>
+                        {' '}
+                        <SearchOutlined
+                          twoToneColor='#52c41a'
+                          style={{ fontSize: '.8rem' }}
+                        />
+                        <span
+                          style={{
+                            marginLeft: '.5rem',
+                            paddingTop: '.3rem',
+                            fontSize: '.8rem',
+                            display: 'inline-block',
+                          }}
+                        >
+                          {dataOption}
+                        </span>
+                      </div>
+                    </Option>
+                  );
+                }
+              })}
+          </OptGroup>
+        );
+      }
     });
 
   const handleSearch = (searchTerm) => {

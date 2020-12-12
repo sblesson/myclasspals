@@ -138,10 +138,7 @@ export default function (state = initialState, action) {
     case AUTH_ERROR:
     case LOGOUT:
     case ACCOUNT_DELETED:
-      localStorage.removeItem('token');
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userId');
+      window.localStorage.clear();
 
       updateUserLocalObject(null);
 

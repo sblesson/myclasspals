@@ -233,6 +233,7 @@ export default function (state = initialState, action) {
         ...state,
         userGroup: state.userGroup.filter((group) => group.id !== payload),
         loading: false,
+        currentGroup: {},
       };
 
     default:

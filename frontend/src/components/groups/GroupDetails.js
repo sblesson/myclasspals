@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, List, Empty, Card } from 'antd';
 import SearchPost from '../common/searchPost/SearchPost';
@@ -66,7 +66,7 @@ const GroupDetails = ({ currentGroup }) => {
           </TabPane>
 
           {currentGroup.role === 'admin' ? (
-            <TabPane tab='Member Request' key='approvals'>
+            <TabPane tab='Pending Approvals' key='approvals'>
               {currentGroup.pendingInvitations &&
               currentGroup.pendingInvitations.length > 0 ? (
                 <List
@@ -86,13 +86,13 @@ const GroupDetails = ({ currentGroup }) => {
                   renderItem={(item) => <MemberRequest member={item} />}
                 />
               ) : (
-                <Empty description={'There are no member request pending'} />
+                <Empty description={'There are no approvals pending'} />
               )}
             </TabPane>
           ) : (
             ''
           )}
-          {currentGroup.role === 'admin' ? (
+          {currentGroup.role === 'admin' && (
             <TabPane tab='Pending Invitations' key='request'>
               {currentGroup.requestedInvitations &&
               currentGroup.requestedInvitations.length > 0 ? (
@@ -118,8 +118,6 @@ const GroupDetails = ({ currentGroup }) => {
                 />
               )}
             </TabPane>
-          ) : (
-            ''
           )}
         </Tabs>
       ) : (
