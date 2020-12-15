@@ -424,10 +424,8 @@ export const deleteGroup = (groupId, callback) => async (dispatch) => {
       type: DELETE_GROUP,
       payload: groupId,
     });
-    if (res.data.userGroup === null) {
-      callback();
-    }
   } catch (err) {
     catchHandler(err, 'DELETE_GROUP_ERROR');
   }
+  callback();
 };

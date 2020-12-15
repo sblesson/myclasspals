@@ -132,9 +132,9 @@ public class UserService implements UserDetailsService{
 		return mongoTemplate.save(userFromDB);
 	}
 	
-	public void deleteUser(Users user) throws Exception {
+	public void deleteUser(String email) throws Exception {
 		Query userByName = new Query();
-		userByName.addCriteria(Criteria.where("email").is(user.getEmail()));
+		userByName.addCriteria(Criteria.where("email").is(email));
 
 		Users userFromDB = mongoTemplate.findOne(userByName, Users.class);
 		if (userFromDB != null) {
@@ -239,8 +239,11 @@ public class UserService implements UserDetailsService{
 	public Users requestToJoinUserGroup(GroupInvitationAction action) throws Exception {
 
 		UserGroup userGroup = userGroupService.getUserGroupById(action.getGroupId());
+		
+		Users user = (Users) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
 
-		Users requestorUser = getUserDetails(action.getRequestorUserId());
+		Users requestorUser = getUserDetails(user.get_id());
 		if (checkForDuplicate(userGroup, requestorUser)) {
 			return requestorUser;
 		}
@@ -341,7 +344,7 @@ public class UserService implements UserDetailsService{
 		}
 		if (userGroup.getPendingInvitations() != null) {
 			for (GroupInvitations invite :  userGroup.getPendingInvitations()) {
-				if (invite.getInvitedUserId().equals(invitedUser.getEmail())) {
+				if (invite.getRequestorUserId().equals(invitedUser.getEmail())) {
 					logger.warn("user already present in pending invitations : " + invitedUser.get_id() + " group :" + userGroup.getId());
 					return true;
 				}

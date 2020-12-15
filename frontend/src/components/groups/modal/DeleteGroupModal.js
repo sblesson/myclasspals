@@ -4,17 +4,12 @@ import { deleteGroup } from '../../../actions/group';
 import { Modal } from 'antd';
 
 import _ from 'lodash';
+import './DeleteGroupModal.scss';
 
-const DeleteGroupModal = ({ deleteGroup, groupId, newRegistration }) => {
-  console.log('inside DeleteGroupModal');
-
+const DeleteGroupModal = ({ deleteGroup, groupId, group }) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
   const [visible, setModalVisibility] = useState(false);
-
-  const showModal = () => {
-    setModalVisibility(true);
-  };
 
   const hideModal = () => {
     setModalVisibility(false);
@@ -23,15 +18,17 @@ const DeleteGroupModal = ({ deleteGroup, groupId, newRegistration }) => {
     setModalVisibility(!visible);
   };
   const handleDelete = () => {
-    deleteGroup(groupId);
+    deleteGroup(groupId, () => {
+      console.log(group.useGroup);
+      console.log(group.currentGroup);
+      console.log('evenry deleted');
+    });
     hideModal();
   };
   return (
-    <div>
-      <div className='account-info-action-container' onClick={toggleModal}>
-        <div className='account-info-delete-button-right'>
-          <span>Delete</span>
-        </div>
+    <>
+      <div className='delete-group-modal' onClick={toggleModal}>
+        <span>Delete</span>
       </div>
       <Modal
         title={headerTitle}
@@ -43,20 +40,20 @@ const DeleteGroupModal = ({ deleteGroup, groupId, newRegistration }) => {
         destroyOnClose={true}
         cancelButtonProps={{ style: { display: 'none' } }}
         destroyOnClose={true}
+        className='delete-group-modal'
       >
         <div>
-          Deleting this grouop will removes it forever. Are you sure you want to
+          Deleting this group will removes it forever. Are you sure you want to
           delete?
         </div>
       </Modal>
-    </div>
+    </>
   );
 };
 
 const mapStateToProps = (state) => ({
   group: state.group,
 });
-
 export default connect(mapStateToProps, {
   deleteGroup,
 })(DeleteGroupModal);

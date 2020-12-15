@@ -42,10 +42,13 @@
   }
 }
 .account-info-action-container {
-  margin-top: 8px;
   color: #0075a1;
 
-  .account-info-delete-button-right {
-    margin-right: 26px;
+  .account-info-delete-link {
+    cursor: pointer;
+    color: rgb(204, 0, 0);
   }
+}
+.ant-modal-footer .ant-btn-primary {
+  background: rgb(204, 0, 0) !important;
 }

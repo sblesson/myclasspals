@@ -87,6 +87,22 @@ export const searchUser = (searchTerm = '') => async (dispatch) => {
   }
 };
 
+export const deleteUser = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/user/${userId}`);
+    dispatch({
+      type: 'ACCOUNT_DELETED',
+      payload: userId,
+    });
+    dispatch({ type: CLEAR_PROFILE });
+    dispatch({ type: DESTROY_SESSION });
+
+    onClear();
+  } catch (err) {
+    catchHandler(err, 'DELETE_USER_ERROR');
+  }
+};
+
 // Create or update user
 export const updateUser = (formData, edit = false) => async (dispatch) => {
   if (cancel !== undefined) cancel();
@@ -313,6 +329,7 @@ export const login = (formData, callback) => async (dispatch) => {
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
+  console.log('logout');
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: DESTROY_SESSION });
   dispatch({ type: LOGOUT });

@@ -2,22 +2,16 @@ import React from 'react';
 import { Field } from 'formik';
 import { FormikDebug } from 'formik-antd';
 import { Form } from 'formik-antd';
+import { Upload, message, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+
 import {
-  dateFormat,
-  timeFormat,
-  AntDatePicker,
   AntInput,
   AntTextArea,
   AntSelect,
-  AntTimePicker,
 } from '../../common/createformfields/CreateFormFields';
-import PostCategorySelect from '../../common/postcategoryselect/PostCategorySelect';
-import CATEGORIES from '../../../const/CATEGORIES';
 
-import {
-  validateDate,
-  isRequired,
-} from '../../common/validatefields/ValidateFields';
+import { isRequired } from '../../common/validatefields/ValidateFields';
 
 export default ({ handleSubmit, values, submitCount }) => {
   const formItemLayout = {
@@ -28,6 +22,31 @@ export default ({ handleSubmit, values, submitCount }) => {
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 16 },
+    },
+  };
+  const props = {
+    name: 'file',
+    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    headers: {
+      authorization: 'authorization-text',
+    },
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    progress: {
+      strokeColor: {
+        '0%': '#108ee9',
+        '100%': '#87d068',
+      },
+      strokeWidth: 3,
+      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
     },
   };
   return (
@@ -76,6 +95,9 @@ export default ({ handleSubmit, values, submitCount }) => {
         submitCount={submitCount}
         hasFeedback
       />
+      {/*      <Upload {...props}>
+        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+      </Upload> */}
       <div className='submit-container'>
         <button className='ant-btn ant-btn-primary btn-primary' type='submit'>
           Submit

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, List, Empty, Card } from 'antd';
 import SearchPost from '../common/searchPost/SearchPost';
@@ -92,7 +92,7 @@ const GroupDetails = ({ currentGroup }) => {
           ) : (
             ''
           )}
-          {currentGroup.role === 'admin' ? (
+          {currentGroup.role === 'admin' && (
             <TabPane tab='Pending Invitations' key='request'>
               {currentGroup.requestedInvitations &&
               currentGroup.requestedInvitations.length > 0 ? (
@@ -118,8 +118,6 @@ const GroupDetails = ({ currentGroup }) => {
                 />
               )}
             </TabPane>
-          ) : (
-            ''
           )}
         </Tabs>
       ) : (

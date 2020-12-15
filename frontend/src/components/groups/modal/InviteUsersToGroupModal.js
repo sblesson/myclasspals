@@ -11,7 +11,6 @@ import { Button } from 'antd';
 import './CreateGroupModal.scss';
 
 const InviteUsersToGroupModal = ({ current }) => {
-  console.log(current);
   const [visible, setModalVisibility] = useState(false);
 
   const showModal = () => {
@@ -37,10 +36,16 @@ const InviteUsersToGroupModal = ({ current }) => {
   };
 
   return (
-    <div>
-      <div onClick={toggleModal}>
-        <Button icon={<UsergroupAddOutlined />}>Invite</Button>
-      </div>
+    <>
+      <span onClick={toggleModal}>
+        <Button
+          key='invite'
+          className='invite-link'
+          icon={<UsergroupAddOutlined />}
+        >
+          Invite
+        </Button>
+      </span>
       <Modal
         centered
         className='create-group-modal'
@@ -60,7 +65,7 @@ const InviteUsersToGroupModal = ({ current }) => {
           hideModal={hideModal}
         />
       </Modal>
-    </div>
+    </>
   );
 };
 

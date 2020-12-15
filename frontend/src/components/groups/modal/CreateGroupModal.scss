@@ -149,3 +149,12 @@
 .ant-radio-wrapper {
   display: block !important;
 }
+.invite-link {
+  background: #fff;
+  color: var(--myclasspals-color);
+  font-size: 1rem;
+  &:hover {
+    border: none !important;
+    color: var(--dark-color);
+  }
+}

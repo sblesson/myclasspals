@@ -14,11 +14,13 @@ import {
   FormItem,
   FormikDebug,
   Select,
+  Switch,
 } from 'formik-antd';
 
 import { addGroup } from '../../../actions/group';
 
 import AutoCompleteSchoolSearch from '../../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
+import AutoCompleteCitySearch from '../../common/autocompletecitysearch/AutoCompleteCitySearch';
 
 import GradeSelect from '../../common/gradeselect/GradeSelect';
 const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
@@ -37,7 +39,6 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
   };
 
   const [isSchoolVisible, setIsSchoolVisible] = useState(true);
-  const { Option } = Select;
 
   const formItemLayout = {
     labelCol: {
@@ -50,12 +51,8 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
     },
   };
 
-  const showHideSchoolSelect = (event) => {
-    if (event.target.value === 'yes') {
-      setIsSchoolVisible(true);
-    } else {
-      setIsSchoolVisible(false);
-    }
+  const showHideSchoolSelect = (value, event) => {
+    setIsSchoolVisible(value);
   };
   const submitProfileForm = (values, actions) => {
     setIsLoadingCreateBtn(true);
@@ -94,8 +91,8 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
       initialValues={{
         groupName: '',
         privacy: 'PRIVATE',
-        grade: '',
         role: 'admin',
+        isSchoolGroup: true,
       }}
       onSubmit={(values, actions) => {
         submitProfileForm(values, actions);
@@ -121,21 +118,46 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
               <Input name='groupName' placeholder='Group Name or Room Name' />
             </FormItem>
             <FormItem
-              name='schoolData'
-              required={false}
-              label='Select School'
-              //validate={validateRequired}
+              name='isSchoolGroup'
+              label='Are you creating this group for school?'
             >
-              <AutoCompleteSchoolSearch />
+              <Switch
+                name='isSchoolGroup'
+                checkedChildren='Yes'
+                unCheckedChildren='No'
+                onClick={(value, event) => showHideSchoolSelect(value, event)}
+              />
             </FormItem>
-            <FormItem
-              name='gradeLabel'
-              label='Select Grade'
-              //required={true}
-              //validate={validateRequired}
-            >
-              <GradeSelect />
-            </FormItem>
+            {isSchoolVisible ? (
+              <>
+                {' '}
+                <FormItem
+                  name='schoolSelect'
+                  label='Select School'
+                  required={true}
+                  validate={validateRequired}
+                >
+                  <AutoCompleteSchoolSearch />
+                </FormItem>
+                <FormItem
+                  name='gradeSelect'
+                  label='Select Grade'
+                  required={true}
+                  validate={validateRequired}
+                >
+                  <GradeSelect />
+                </FormItem>{' '}
+              </>
+            ) : (
+              <FormItem
+                name='cityGroupSelect'
+                //required={true}
+                label='Select City'
+                //validate={validateRequired}
+              >
+                <AutoCompleteCitySearch />
+              </FormItem>
+            )}
 
             <FormItem
               name='groupDiscovery'
@@ -191,9 +213,9 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
               Create
             </SubmitButton>
           </Form>
-          {/*       <pre style={{ flex: 1 }}>
+          <pre style={{ flex: 1 }}>
             <FormikDebug />
-          </pre> */}
+          </pre>
         </div>
       )}
     />
