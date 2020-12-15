@@ -126,12 +126,12 @@ public class UserController {
 
 	}
 	
-	@DeleteMapping(value = "/deleteuser", produces = { "application/json" })
-	public CommonResult deleteuser(@RequestBody Users user) throws Exception {
+	@DeleteMapping(value="/{id}", produces = { "application/json" })
+	public CommonResult deleteuser(@PathVariable(value = "id") String id) throws Exception {
 		UserResult result = new UserResult();
-		authorizeUserRequest(user.getEmail());
+		authorizeUserRequest(id);
 		try {
-			userService.deleteUser(user);
+			userService.deleteUser(id);
 			result.setErrorCode(0);
 		} catch (Exception e) {
 			result.setErrorCode(1);

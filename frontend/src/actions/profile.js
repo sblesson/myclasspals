@@ -67,3 +67,16 @@ export const deleteAccount = () => async (dispatch) => {
     catchHandler(err, 'PROFILE_ERROR');
   }
 };
+
+export const deleteUser = (userId, callback) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/user/${userId}`);
+    dispatch({
+      type: 'DELETE_USER',
+      payload: userId,
+    });
+  } catch (err) {
+    catchHandler(err, 'DELETE_USER_ERROR');
+  }
+  callback();
+};

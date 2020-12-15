@@ -138,19 +138,18 @@ export default function (state = initialState, action) {
     case AUTH_ERROR:
     case LOGOUT:
     case ACCOUNT_DELETED:
-      localStorage.removeItem('token');
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userId');
-
+      window.localStorage.clear();
       updateUserLocalObject(null);
-
       return {
         ...state,
-        token: null,
+        token: '',
         isAuthenticated: false,
-        loading: false,
+        loading: true,
         user: {},
+        profileUser: null,
+        searchUserResult: [],
+        senderEmail: null,
+        invalidRegistrationToken: false,
       };
     case SEND_USER_EMAIL:
       return { ...state, ...payload, loading: false };

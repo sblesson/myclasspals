@@ -148,13 +148,13 @@ public class UserGroupService {
 		
 		if (userGroup.getRole().equals("admin")) {
 			userGroup.setEnabled(false);
-			mongoTemplate.save(userGroup);
+			mongoTemplate.remove(userGroup);
 		} else {
 			throw new Exception("Only admin can delete the group");
 		}
 		
 		
-
+		
 	}
 
 	public List<UserGroup> getUserGroups(String key) {

@@ -1,18 +1,33 @@
-import React, { useEffect, Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Layout } from 'antd';
-
-/* import EditAccountModal from './modal/EditAccountModal'; */
+import { Layout, Dropdown, Menu } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+import DeleteAccountModal from './modal/DeleteAccountModal';
 
 import './Account.scss';
 const Account = ({ auth }) => {
   const { Content } = Layout;
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <DeleteAccountModal />
+      </Menu.Item>
+    </Menu>
+  );
 
   const userDetails = (
     <div className='profile-content-details' key={auth.user._id}>
-      {/*       <EditAccountModal />
-       */}
+      <Dropdown key='action_menu' overlay={menu}>
+        <EllipsisOutlined
+          style={{
+            fontSize: 20,
+            float: 'right',
+            verticalAlign: 'top',
+            cursor: 'pointer',
+          }}
+        />
+      </Dropdown>
 
       {auth.user.phone && (
         <div className='user-info-item'>

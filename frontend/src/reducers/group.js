@@ -32,6 +32,7 @@ const initialState = {
   autoCompleteSearchResult: [],
   newGroup: null,
   currentGroup: {},
+  isDeletedCurrentGroup: false,
   isGroupAdmin: false,
   loading: true,
   error: {},
@@ -233,6 +234,8 @@ export default function (state = initialState, action) {
         ...state,
         userGroup: state.userGroup.filter((group) => group.id !== payload),
         loading: false,
+        currentGroup: {},
+        isDeletedCurrentGroup: true,
       };
 
     default:

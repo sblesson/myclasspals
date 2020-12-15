@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deleteAccount } from '../../../actions/profile';
+import { deleteUser } from '../../../../actions/auth';
 import { Modal } from 'antd';
 
 import _ from 'lodash';
+import './AccountModal.scss';
 
-const DeleteAccountModal = ({ deletePost, postId, postType }) => {
+const DeleteAccountModal = ({ deleteUser, auth }) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
   const [visible, setModalVisibility] = useState(false);
@@ -21,13 +22,13 @@ const DeleteAccountModal = ({ deletePost, postId, postType }) => {
     setModalVisibility(!visible);
   };
   const handleDelete = () => {
-    deleteAccount();
+    deleteUser(auth.user.email);
     hideModal();
   };
   return (
     <div>
       <div className='account-info-action-container' onClick={toggleModal}>
-        <div className='account-info-delete-button-right'>
+        <div className='account-info-delete-link'>
           <span>Delete</span>
         </div>
       </div>
@@ -52,4 +53,7 @@ const DeleteAccountModal = ({ deletePost, postId, postType }) => {
   );
 };
 
-export default connect(null, { deleteAccount })(DeleteAccountModal);
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps, { deleteUser })(DeleteAccountModal);

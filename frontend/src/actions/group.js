@@ -116,6 +116,7 @@ export const getGroupAutoComplete = (key, callback) => async (dispatch) => {
 };
 // Get all userGroups
 export const getGroupDetails = (groupId, callback) => async (dispatch) => {
+  debugger;
   let cancelTokenSrc = axios.CancelToken.source();
 
   try {
@@ -424,10 +425,8 @@ export const deleteGroup = (groupId, callback) => async (dispatch) => {
       type: DELETE_GROUP,
       payload: groupId,
     });
-    if (res.data.userGroup === null) {
-      callback();
-    }
   } catch (err) {
     catchHandler(err, 'DELETE_GROUP_ERROR');
   }
+  callback();
 };

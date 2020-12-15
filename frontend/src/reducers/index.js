@@ -32,7 +32,7 @@ const rootReducer = (state, action) => {
   if (action.type === DESTROY_SESSION) {
     // for all keys defined in your persistConfig(s)
     storage.removeItem('persist:root');
-
+    window.localStorage.removeItem('persist:root');
     state = undefined;
   }
 

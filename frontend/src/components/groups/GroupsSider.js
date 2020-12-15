@@ -24,7 +24,10 @@ const GroupsSider = React.memo(
 
     useEffect(() => {
       setGroups();
-      return () => {};
+      return () => {
+        setAdminGroups([]);
+        setMemberGroups([]);
+      };
     }, [group]);
 
     return (
@@ -71,6 +74,8 @@ const GroupsSider = React.memo(
       return false;
     } else if (
       prevProps.group &&
+      prevProps.group.currentGroup &&
+      nextProps.group.currentGroup &&
       prevProps.group.currentGroup.id !== nextProps.group.currentGroup.id
     ) {
       return false;

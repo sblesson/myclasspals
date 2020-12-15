@@ -18,7 +18,11 @@ const GradeSelect = () => {
     });
 
   return (
-    <Select name='grade' style={{ width: '100%' }} placeholder='Select Grade'>
+    <Select
+      name='gradeSelect'
+      style={{ width: '100%' }}
+      placeholder='Select Grade'
+    >
       {children}
     </Select>
   );
