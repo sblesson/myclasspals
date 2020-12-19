@@ -12,9 +12,9 @@ if (REACT_APP_STAGE === 'prod') {
   axios.defaults.baseURL = '/api';
 } */
 
-axios.defaults.baseURL = 'http://localhost:8080/api';
-
-//axios.defaults.baseURL = '/api';
+//axios.defaults.baseURL = 'http://localhost:8080/api';
+//#TODO for prod
+axios.defaults.baseURL = '/api';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

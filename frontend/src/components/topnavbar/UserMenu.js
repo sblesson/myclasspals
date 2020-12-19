@@ -22,6 +22,11 @@ const UserMenu = ({ logout, isMobile }) => {
   let selectedKey = window.location.pathname.split('/')[1];
   selectedKey = selectedKey ? selectedKey : 'register';
 
+  const handleLogout = (event) => {
+    window.location.href = '/login';
+    logout();
+  };
+
   const LoggedInMenu = () => {
     return (
       <Fragment>
@@ -50,7 +55,7 @@ const UserMenu = ({ logout, isMobile }) => {
               {' '}
               <Link to='/account'>{'Account'}</Link>
             </Menu.Item>
-            <Menu.Item key='logout' onClick={(event) => logout(event)}>
+            <Menu.Item key='logout' onClick={(event) => handleLogout(event)}>
               Log out
             </Menu.Item>
           </SubMenu>

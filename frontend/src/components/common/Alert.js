@@ -6,22 +6,26 @@ import { Alert } from 'antd';
 const AlertComponent = ({ alerts }) =>
   alerts !== null &&
   alerts.length > 0 &&
-  alerts.map(alert => (
-    <Alert
-      key={alert.id}
-      message={alert.msg}
-      banner
-      type={alert.alertType}
-      closable
-    />
-  ));
+  alerts.map((alert) => {
+    if (alert) {
+      return (
+        <Alert
+          key={alert.id}
+          message={alert.msg}
+          banner
+          type={alert.alertType}
+          closable
+        />
+      );
+    }
+  });
 
 AlertComponent.propTypes = {
-  alerts: PropTypes.array.isRequired
+  alerts: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = state => ({
-  alerts: state.alert
+const mapStateToProps = (state) => ({
+  alerts: state.alert,
 });
 
 export default connect(mapStateToProps)(AlertComponent);

@@ -304,7 +304,7 @@ public class UserService implements UserDetailsService{
 			userRegistration.setGroupId(userGroup.getId());
 			mongoTemplate.save(userRegistration);
 			emailServiceClient.sendUserRegistrationEmail(userRegistration.getRegId(),
-					action.getInvitedUserId());
+					action.getInvitedUserId(), userGroup.getSchoolName(), userGroup.getGrade());
 
 		}
 

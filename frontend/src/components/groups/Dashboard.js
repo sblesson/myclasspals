@@ -1,17 +1,16 @@
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
+import _ from 'lodash';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Spin } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-
 import { searchPost } from '../../actions/post';
 import {
   getGroupDetails,
   approveUserGroupRequest,
   declineUserGroupRequest,
   changeGroupUserRole,
-  deleteGroup,
   acceptUserGroupInvitation,
 } from '../../actions/group';
 import './GroupCard.scss';
@@ -24,7 +23,7 @@ import DiscoverGroupModal from './modal/DiscoverGroupModal';
 import GroupPage from './GroupPage';
 
 const Dashboard = React.memo(
-  ({ loading, group, getGroupDetails, match, auth, history, searchPost }) => {
+  ({ group, getGroupDetails, match, auth, history, searchPost }) => {
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const isCurrent = useRef(true);
@@ -63,24 +62,46 @@ const Dashboard = React.memo(
     }, [getGroupDetails, match]);
 
     const DeskTopView = () => {
-      return (
-        <div style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}>
-          <div className='sider'>
-            <DiscoverGroupModal />
+      if (group.loading) {
+        return (
+          <div
+            style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}
+          >
+            <div className='sider'>
+              <DiscoverGroupModal />
 
-            <CreateGroupModal />
+              <CreateGroupModal />
 
-            <GroupsSider groupUrl={`/dashboard/`} />
+              <GroupsSider groupUrl={`/dashboard/`} />
+            </div>
+            <Spin />
           </div>
+        );
+      } else {
+        return (
+          <div
+            style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}
+          >
+            <div className='sider'>
+              <DiscoverGroupModal />
 
-          {group !== null && group.currentGroup && !isMobile && (
-            <GroupPage
-              isMobile={isMobile}
-              userEmail={auth.user.email}
-            ></GroupPage>
-          )}
-        </div>
-      );
+              <CreateGroupModal />
+
+              <GroupsSider groupUrl={`/dashboard/`} />
+            </div>
+            {group !== null && group.currentGroup && !isMobile && (
+              <GroupPage
+                isMobile={isMobile}
+                userEmail={auth.user.email}
+              ></GroupPage>
+            )}
+
+            {/*     {group !== null && _.isEmpty(group.currentGroup) && (
+              <Redirect to='/onboarding'></Redirect>
+            )} */}
+          </div>
+        );
+      }
     };
 
     const MobileView = () => {
@@ -89,7 +110,6 @@ const Dashboard = React.memo(
           <div className='sider'>
             <DiscoverGroupModal />
             <CreateGroupModal />
-
             <GroupsSider groupUrl={'/group/'} />
           </div>
         </div>

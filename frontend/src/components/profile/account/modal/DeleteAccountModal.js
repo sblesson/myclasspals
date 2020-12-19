@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deleteUser } from '../../../../actions/auth';
+import { deleteUser, logout } from '../../../../actions/auth';
 import { Modal } from 'antd';
 
 import _ from 'lodash';
 import './AccountModal.scss';
 
-const DeleteAccountModal = ({ deleteUser, auth }) => {
+const DeleteAccountModal = ({ deleteUser, logout, auth }) => {
   const [headerTitle, setHeaderTitle] = useState("Please don't delete me!");
 
   const [visible, setModalVisibility] = useState(false);
@@ -24,6 +24,8 @@ const DeleteAccountModal = ({ deleteUser, auth }) => {
   const handleDelete = () => {
     deleteUser(auth.user.email);
     hideModal();
+    logout();
+    window.location.href = '/login';
   };
   return (
     <div>
@@ -56,4 +58,6 @@ const DeleteAccountModal = ({ deleteUser, auth }) => {
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
-export default connect(mapStateToProps, { deleteUser })(DeleteAccountModal);
+export default connect(mapStateToProps, { deleteUser, logout })(
+  DeleteAccountModal
+);

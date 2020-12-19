@@ -26,9 +26,11 @@ export default ({ handleSubmit, values, submitCount }) => {
   };
   const props = {
     name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    action:
+      'https://console.cloud.google.com/storage/browser/myclasspals-bucket',
     headers: {
-      authorization: 'authorization-text',
+      authorization:
+        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjaGFra2FAZ21haWwuY29tIiwiZXhwIjoxNjA4NzMyOTYxLCJpYXQiOjE2MDg3MTQ5NjF9.hLrHebVrdid5FA2R65OHdPR9if5bepYEAw31tyJiemUGRUoBTTI-4CG5Ze_DdqdfUruofomqV73dG36MjlTzYA',
     },
     onChange(info) {
       if (info.file.status !== 'uploading') {
@@ -95,9 +97,9 @@ export default ({ handleSubmit, values, submitCount }) => {
         submitCount={submitCount}
         hasFeedback
       />
-      {/*      <Upload {...props}>
+      <Upload {...props}>
         <Button icon={<UploadOutlined />}>Click to Upload</Button>
-      </Upload> */}
+      </Upload>
       <div className='submit-container'>
         <button className='ant-btn ant-btn-primary btn-primary' type='submit'>
           Submit
