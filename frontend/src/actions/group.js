@@ -116,6 +116,7 @@ export const getGroupAutoComplete = (key, callback) => async (dispatch) => {
 };
 // Get all userGroups
 export const getGroupDetails = (groupId, callback) => async (dispatch) => {
+  debugger;
   let cancelTokenSrc = axios.CancelToken.source();
 
   try {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  NotificationOutlined,
+  MessageOutlined,
   SmileOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
@@ -29,15 +29,15 @@ const Features = () => {
       </div>
       <div className='col-md-4'>
         <div className='info feature-box text-center p-3 p-md-4 mx-auto'>
-          <NotificationOutlined
+          <MessageOutlined
             className='feature-icon mx-auto'
             style={{ fontSize: '2.8rem', color: '#46bdc6' }}
           />
           <div className='description'>
             <h5 className='feature-title mb-3'>Authentic Connection</h5>
             <p>
-              Talk to other families in school and get informed. Create 
-              deeper connection. Be the voice and make the change.
+              Talk to other families and get informed. Create deeper connection.
+              Be the voice and make the change.
             </p>
           </div>
         </div>

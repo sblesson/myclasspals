@@ -213,9 +213,9 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
               Create
             </SubmitButton>
           </Form>
-          <pre style={{ flex: 1 }}>
+          {/*  <pre style={{ flex: 1 }}>
             <FormikDebug />
-          </pre>
+          </pre> */}
         </div>
       )}
     />

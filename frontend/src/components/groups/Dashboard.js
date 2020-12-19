@@ -24,7 +24,7 @@ import DiscoverGroupModal from './modal/DiscoverGroupModal';
 import GroupPage from './GroupPage';
 
 const Dashboard = React.memo(
-  ({ loading, group, getGroupDetails, match, auth, history, searchPost }) => {
+  ({ group, getGroupDetails, match, auth, history, searchPost }) => {
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     const isCurrent = useRef(true);
@@ -63,24 +63,43 @@ const Dashboard = React.memo(
     }, [getGroupDetails, match]);
 
     const DeskTopView = () => {
-      return (
-        <div style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}>
-          <div className='sider'>
-            <DiscoverGroupModal />
+      if (group.loading) {
+        return (
+          <div
+            style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}
+          >
+            <div className='sider'>
+              <DiscoverGroupModal />
 
-            <CreateGroupModal />
+              <CreateGroupModal />
 
-            <GroupsSider groupUrl={`/dashboard/`} />
+              <GroupsSider groupUrl={`/dashboard/`} />
+            </div>
+            <Spin />
           </div>
+        );
+      } else {
+        return (
+          <div
+            style={{ display: 'flex', marginLeft: '2rem', marginTop: '3rem' }}
+          >
+            <div className='sider'>
+              <DiscoverGroupModal />
 
-          {group !== null && group.currentGroup && !isMobile && (
-            <GroupPage
-              isMobile={isMobile}
-              userEmail={auth.user.email}
-            ></GroupPage>
-          )}
-        </div>
-      );
+              <CreateGroupModal />
+
+              <GroupsSider groupUrl={`/dashboard/`} />
+            </div>
+
+            {group !== null && group.currentGroup && !isMobile && (
+              <GroupPage
+                isMobile={isMobile}
+                userEmail={auth.user.email}
+              ></GroupPage>
+            )}
+          </div>
+        );
+      }
     };
 
     const MobileView = () => {
@@ -89,7 +108,6 @@ const Dashboard = React.memo(
           <div className='sider'>
             <DiscoverGroupModal />
             <CreateGroupModal />
-
             <GroupsSider groupUrl={'/group/'} />
           </div>
         </div>

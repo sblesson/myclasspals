@@ -139,15 +139,17 @@ export default function (state = initialState, action) {
     case LOGOUT:
     case ACCOUNT_DELETED:
       window.localStorage.clear();
-
       updateUserLocalObject(null);
-
       return {
         ...state,
-        token: null,
+        token: '',
         isAuthenticated: false,
-        loading: false,
+        loading: true,
         user: {},
+        profileUser: null,
+        searchUserResult: [],
+        senderEmail: null,
+        invalidRegistrationToken: false,
       };
     case SEND_USER_EMAIL:
       return { ...state, ...payload, loading: false };

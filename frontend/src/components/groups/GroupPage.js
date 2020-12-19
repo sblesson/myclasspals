@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Spin } from 'antd';
 import { SmileOutlined, EllipsisOutlined } from '@ant-design/icons';
 import {
   PageHeader,
@@ -22,7 +23,6 @@ import './GroupPage.scss';
 
 const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
   let currentGroup = group.currentGroup;
-
   useEffect(() => {
     return () => {
       currentGroup = {};
@@ -125,7 +125,9 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
   };
 
   const redirectToHome = () => {
-    if (
+    if (group.userGroup && group.userGroup.length > 0) {
+      window.location.href = '/dashboard/' + group.userGroup[0].id;
+    } else if (
       group.pendingInvitedUserGroups &&
       group.pendingInvitedUserGroups.length > 0
     ) {
@@ -150,7 +152,7 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
             closable
           />
         )}
-      {!_.isEmpty(currentGroup) ? (
+      {!_.isEmpty(currentGroup) && (
         <PageHeader
           ghost={false}
           onBack={isMobile ? () => window.history.back() : false}
@@ -199,7 +201,8 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
           </Descriptions>
           <GroupDetails currentGroup={currentGroup} />
         </PageHeader>
-      ) : (
+      )}
+      {group.isDeletedCurrentGroup && _.isEmpty(currentGroup) && (
         <Result
           icon={
             <SmileOutlined style={{ fontSize: '3rem', color: '#1bb0c4' }} />
@@ -212,6 +215,7 @@ const GroupPage = React.memo(({ isMobile, userEmail, group }) => {
           }
         />
       )}
+      {group.loading && <Spin />}
     </div>
   );
 });

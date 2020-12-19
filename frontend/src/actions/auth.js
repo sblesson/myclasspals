@@ -329,12 +329,12 @@ export const login = (formData, callback) => async (dispatch) => {
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
-  console.log('logout');
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: DESTROY_SESSION });
   dispatch({ type: LOGOUT });
-
   onClear();
+  document.cookie = '_ga=;';
+  document.cookie = '_gid=;';
 };
 
 export const clearAutoCompleteUserSearchResult = () => async (dispatch) => {
