@@ -18,7 +18,7 @@ const AutoCompleteSchoolSearch = ({ fetchSchool, school }) => {
     if (searchTerm) {
       var debounced = _.debounce(() => {
         fetchSchool(searchTerm);
-      }, 1000);
+      }, 500);
       debounced();
     }
   };

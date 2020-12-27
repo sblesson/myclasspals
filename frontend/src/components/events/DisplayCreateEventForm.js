@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Field } from 'formik';
 import { FormikDebug } from 'formik-antd';
 import { Form } from 'formik-antd';
@@ -11,7 +11,7 @@ import {
   AntSelect,
   AntTimePicker,
 } from '../common/createformfields/CreateFormFields';
-import { FormItem } from 'formik-antd';
+import { FormItem, Switch } from 'formik-antd';
 
 import {
   validateDate,
@@ -29,6 +29,10 @@ export default ({ handleSubmit, values, submitCount }) => {
       xs: { span: 24 },
       sm: { span: 16 },
     },
+  };
+  const [isMultidayEvent, setIsMultidayEvent] = useState(false);
+  const showHideSchoolSelect = (value, event) => {
+    setIsMultidayEvent(value);
   };
   return (
     <Form
@@ -109,7 +113,8 @@ export default ({ handleSubmit, values, submitCount }) => {
         component={AntTimePicker}
         name='startTime'
         label='Start Time'
-        defaultValue={values.eventStartTime}
+        validate={isRequired}
+        //defaultValue={values.eventStartTime}
         format={timeFormat}
         hourStep={1}
         minuteStep={5}
@@ -118,21 +123,31 @@ export default ({ handleSubmit, values, submitCount }) => {
         hasFeedback
         use12Hours
       />
-      <Field
-        component={AntDatePicker}
-        name='end'
-        label='End Date'
-        defaultValue={values.eventEndDate}
-        format={dateFormat}
-        validate={validateDate}
-        submitCount={submitCount}
-        hasFeedback
-      />
+      <FormItem name='isMultidayEvent' label='Is this a multi-day event?'>
+        <Switch
+          name='isMultidayEvent'
+          checkedChildren='Yes'
+          unCheckedChildren='No'
+          onClick={(value, event) => showHideSchoolSelect(value, event)}
+        />
+      </FormItem>
+      {isMultidayEvent && (
+        <Field
+          component={AntDatePicker}
+          name='end'
+          label='End Date'
+          format={dateFormat}
+          validate={validateDate}
+          submitCount={submitCount}
+          hasFeedback
+        />
+      )}
+
       <Field
         component={AntTimePicker}
         name='endTime'
         label='End Time'
-        defaultValue={values.eventEndTime}
+        //defaultValue={values.eventEndTime}
         format={timeFormat}
         hourStep={1}
         minuteStep={5}

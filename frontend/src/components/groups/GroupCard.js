@@ -19,7 +19,6 @@ import {
 import {
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
-  deleteGroup,
 } from '../../actions/group';
 
 import './GroupCard.scss';
@@ -250,7 +249,26 @@ const GroupCard = ({
           } */
         ></Meta>
       </Link>
-
+      {currentGroup.schoolName && (
+        <>
+          <div className='group-card-details' style={{ marginTop: '.4rem' }}>
+            <i className='fas fa-school school-group-icon'></i>&nbsp;
+            {currentGroup.schoolName}
+          </div>
+          <div className='group-card-details'>
+            {currentGroup.schoolCity}, {currentGroup.schoolState}{' '}
+            {currentGroup.schoolZipCode}{' '}
+          </div>
+        </>
+      )}
+      {currentGroup.city && (
+        <>
+          <div className='group-card-details' style={{ marginTop: '.4rem' }}>
+            {currentGroup.city}, {currentGroup.schoolState}{' '}
+            {currentGroup.zipcode}{' '}
+          </div>
+        </>
+      )}
       <div className='group-card-details'>
         {currentGroup.privacy && (
           <span className='group-card-details__privacy'>

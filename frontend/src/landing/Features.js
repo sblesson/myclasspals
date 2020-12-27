@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  MessageOutlined,
+  CalendarOutlined,
   SmileOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
@@ -14,7 +14,7 @@ const Features = () => {
         <div className='info feature-box text-center p-3 p-md-4 mx-auto'>
           <ShareAltOutlined
             className='feature-icon'
-            style={{ fontSize: '2.8rem', color: '#46bdc6' }}
+            style={{ fontSize: '2.8rem', color: '#4FC2C2' }}
           />
           <div className='description'>
             <h5 className='feature-title mb-3'>Join Community</h5>
@@ -29,9 +29,9 @@ const Features = () => {
       </div>
       <div className='col-md-4'>
         <div className='info feature-box text-center p-3 p-md-4 mx-auto'>
-          <MessageOutlined
+          <SmileOutlined
             className='feature-icon mx-auto'
-            style={{ fontSize: '2.8rem', color: '#46bdc6' }}
+            style={{ fontSize: '2.8rem', color: '#4FC2C2' }}
           />
           <div className='description'>
             <h5 className='feature-title mb-3'>Authentic Connection</h5>
@@ -44,11 +44,10 @@ const Features = () => {
       </div>
       <div className='col-md-4'>
         <div className='info feature-box text-center p-3 p-md-4 mx-auto'>
-          <SmileOutlined
+          <CalendarOutlined
             className='feature-icon mx-auto'
-            style={{ fontSize: '2.8rem', color: '#46bdc6' }}
+            style={{ fontSize: '2.8rem', color: '#4FC2C2' }}
           />
-
           <div className='description'>
             <h5 className='feature-title mb-3'>Co-ordinate Events</h5>
             <p>

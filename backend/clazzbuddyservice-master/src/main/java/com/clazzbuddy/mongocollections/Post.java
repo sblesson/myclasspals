@@ -34,6 +34,8 @@ public class Post {
 	@DBRef
 	private List<Post> comments;
 	
+	private List<ImageURL> fileList;
+	
 	private Boolean isComment;
 
 	public Boolean getIsPrivate() {
@@ -141,6 +143,14 @@ public class Post {
 
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public List<ImageURL> getFileList() {
+		return fileList;
+	}
+
+	public void setFileList(List<ImageURL> fileList) {
+		this.fileList = fileList;
 	}
 
 }

@@ -12,22 +12,23 @@ const Posts = ({ post: { posts, totalPostCount, loading } }) => {
   return (
     <div>
       {loading && <Spin />}
-
-      <List
-        size='small'
-        dataSource={posts}
-        pagination={{
-          onChange: (page) => {},
-          total: MAX_FEED_COUNT,
-          pageSize: 50,
-          hideOnSinglePage: true,
-        }}
-        renderItem={(item, index) => (
-          <List.Item key={index} className='feed-list-item'>
-            <PostItem post={item} />
-          </List.Item>
-        )}
-      />
+      {posts && posts.length > 0 && (
+        <List
+          size='small'
+          dataSource={posts}
+          pagination={{
+            onChange: (page) => {},
+            total: MAX_FEED_COUNT,
+            pageSize: 50,
+            hideOnSinglePage: true,
+          }}
+          renderItem={(item, index) => (
+            <List.Item key={`post-item-${index}`} className='feed-list-item'>
+              <PostItem post={item} />
+            </List.Item>
+          )}
+        />
+      )}
     </div>
   );
 };

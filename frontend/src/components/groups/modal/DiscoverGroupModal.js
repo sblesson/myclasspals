@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { List, Card, Empty, Modal, Button } from 'antd';
+import { Card, Empty, Modal } from 'antd';
 import AutoCompleteGroupSearch from '../../common/autocompletegroupsearch/AutoCompleteGroupSearch';
 import AutoCompleteCitySearch from '../../common/autocompletecitysearch/AutoCompleteCitySearch';
 import { searchGroup, searchGroupWithFilters } from '../../../actions/group';
@@ -12,7 +12,6 @@ import GroupSearchResult from './GroupSearchResult';
 import './DiscoverGroupModal.scss';
 
 const DiscoverGroupModal = React.memo(({ group, newRegistration }) => {
-  console.log('inside DiscoverGroupModal');
   const [isModalVisible, setModalVisibility] = useState(false);
 
   const hideModal = () => {

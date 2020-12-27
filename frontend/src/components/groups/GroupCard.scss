@@ -61,6 +61,11 @@
     display: flex;
     margin-left: 2rem;
     margin-bottom: 0.2rem;
+    .school-group-icon {
+      color: var(--myclasspals-color);
+      margin-top: 0.15rem;
+    }
+
     span {
       display: inline-block;
     }

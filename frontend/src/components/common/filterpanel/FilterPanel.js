@@ -201,14 +201,14 @@ const FilterPanel = ({ group, searchPost, post: { categories } }) => {
                   renderItem={(item) => (
                     <List.Item
                       onClick={(event) =>
-                        handlePostCategoryFilterClick(item.title, event)
+                        handlePostCategoryFilterClick(item, event)
                       }
                       className={
-                        categoryFilterSelected === item.title ? ' selected' : ''
+                        categoryFilterSelected === item ? ' selected' : ''
                       }
                     >
-                      {item.title}
-                      {categoryFilterSelected === item.title && (
+                      {item}
+                      {categoryFilterSelected === item && (
                         <svg
                           className='svg-icon'
                           viewBox='0 0 20 20'

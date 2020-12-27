@@ -1,16 +1,13 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { Link, withRouter, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React, { useState, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Tooltip } from 'antd';
 
 import { Formik, ErrorMessage } from 'formik';
 import {
   SubmitButton,
   Input,
   Form,
-  Radio,
   FormItem,
   FormikDebug,
   Select,
@@ -18,25 +15,14 @@ import {
 } from 'formik-antd';
 
 import { addGroup } from '../../../actions/group';
-
 import AutoCompleteSchoolSearch from '../../common/autocompleteschoolsearch/AutoCompleteSchoolSearch';
-import AutoCompleteCitySearch from '../../common/autocompletecitysearch/AutoCompleteCitySearch';
-
+import AutoCompleteCitySearch from '../../common/autocompletecitysearch/AutoCompleteCitySearchWithFormik';
 import GradeSelect from '../../common/gradeselect/GradeSelect';
-const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
+import address from '../../../reducers/address';
+const CreateGroupForm = ({ auth, address, addGroup, setModal, history }) => {
   const [isLoadingCreateBtn, setIsLoadingCreateBtn] = useState(false);
 
-  //const [formData, setFormData] = useState({ user });
-  const validateRequired = (value) => {
-    return value ? undefined : 'required';
-  };
   const [componentSize, setComponentSize] = useState('small');
-  const inputOnChange = (event) => {
-    if (!event.target.value) {
-      return;
-    }
-    //fetchSchools(event.target.value);
-  };
 
   const [isSchoolVisible, setIsSchoolVisible] = useState(true);
 
@@ -64,14 +50,28 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
         role: 'admin',
       },
     ];
-    if (values.schoolSelect) {
-      let schoolData = values.schoolSelect.split(',');
+    if (values.isSchoolGroup) {
+      if (values.schoolSelect) {
+        var schoolData = values.schoolSelect.split(',');
 
-      values.schoolName = schoolData[0];
-      values.schoolCity = schoolData[1];
-      values.schoolState = schoolData[2];
-      values.schoolZipCode = schoolData[3];
+        values.schoolName = schoolData[0];
+        values.schoolCity = schoolData[1];
+        values.schoolState = schoolData[2];
+        values.schoolZipCode = schoolData[3];
+
+        delete values.schoolSelect;
+        if (values.city) delete values.city;
+        if (values.state) delete values.state;
+        if (values.zipcode) delete values.zipcode;
+      }
+    } else if (!values.isSchoolGroup) {
+      //if not school group, clear selected school
       delete values.schoolSelect;
+      if (address && address.selectedAddress) {
+        values.city = address.selectedAddress.city;
+        values.state = address.selectedAddress.state;
+        values.zipcode = address.selectedAddress.postalcode;
+      }
     }
 
     addGroup(JSON.stringify(values), (response) => {
@@ -93,12 +93,29 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
         privacy: 'PRIVATE',
         role: 'admin',
         isSchoolGroup: true,
+        schoolSelect: '',
+        citySelect: '',
       }}
       onSubmit={(values, actions) => {
         submitProfileForm(values, actions);
       }}
-      validator={() => ({})}
-      //validate={values => {}}
+      const
+      validate={(values) => {
+        let errors = {};
+        if (!values.groupName) {
+          errors.groupName = 'Group name cannot be blank';
+        }
+        if (values.isSchoolGroup) {
+          if (!values.schoolSelect) {
+            errors.schoolSelect = 'Please select school';
+          }
+        } else if (!values.isSchoolGroup) {
+          if (!values.citySelect) {
+            errors.citySelect = 'Please select city';
+          }
+        }
+        return errors;
+      }}
       render={() => (
         <div style={{ flex: 1, padding: 10 }}>
           <Form
@@ -109,12 +126,7 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
               size: componentSize,
             }}
           >
-            <FormItem
-              name='groupName'
-              label='Group Name'
-              required={true}
-              validate={validateRequired}
-            >
+            <FormItem name='groupName' label='Group Name' required={true}>
               <Input name='groupName' placeholder='Group Name or Room Name' />
             </FormItem>
             <FormItem
@@ -135,26 +147,20 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
                   name='schoolSelect'
                   label='Select School'
                   required={true}
-                  validate={validateRequired}
                 >
                   <AutoCompleteSchoolSearch />
                 </FormItem>
                 <FormItem
                   name='gradeSelect'
                   label='Select Grade'
-                  required={true}
-                  validate={validateRequired}
+                  //required={true}
+                  //validate={validateRequired}
                 >
                   <GradeSelect />
                 </FormItem>{' '}
               </>
             ) : (
-              <FormItem
-                name='cityGroupSelect'
-                //required={true}
-                label='Select City'
-                //validate={validateRequired}
-              >
+              <FormItem name='citySelect' label='Select City' required={true}>
                 <AutoCompleteCitySearch />
               </FormItem>
             )}
@@ -213,7 +219,8 @@ const CreateGroupForm = ({ auth, group, addGroup, setModal, history }) => {
               Create
             </SubmitButton>
           </Form>
-          {/*  <pre style={{ flex: 1 }}>
+
+          {/*     <pre style={{ flex: 1 }}>
             <FormikDebug />
           </pre> */}
         </div>
@@ -231,6 +238,7 @@ const mapStateToProps = (state) => ({
   group: state.group,
   auth: state.auth,
   school: state.school.results,
+  address: state.address,
 });
 
 export default connect(mapStateToProps, {
