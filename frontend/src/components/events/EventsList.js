@@ -96,7 +96,7 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
         defaultDate={new Date()}
         events={event.events}
         drilldownView='agenda'
-        views={['month', 'week', 'agenda']}
+        views={['month', 'week', 'day', 'agenda']}
         popup={true}
         onView={onViewChange}
         onSelectEvent={(event) => onSelectEvent(event)}
@@ -131,9 +131,11 @@ const EventsList = ({ getEvents, deleteEvent, event }) => {
         <AddToCalendar event={hocEvent} />
 
         {moment(currentEvent.start).format('LLL')}
-        {currentEvent.end && currentEvent.end !== currentEvent.start
+        {currentEvent.end &&
+        moment(currentEvent.end).format('MMM Do YY') !==
+          moment(currentEvent.start).format('MMM Do YY')
           ? ' - ' + moment(currentEvent.end).format('LLL')
-          : ''}
+          : ' - ' + moment(currentEvent.end).format('LT')}
         <br />
         {currentEvent.groupName && 'Group Name: ' + currentEvent.groupName}
         <br />

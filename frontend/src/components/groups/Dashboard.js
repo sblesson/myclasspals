@@ -1,17 +1,16 @@
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
+import _ from 'lodash';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Spin } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-
 import { searchPost } from '../../actions/post';
 import {
   getGroupDetails,
   approveUserGroupRequest,
   declineUserGroupRequest,
   changeGroupUserRole,
-  deleteGroup,
   acceptUserGroupInvitation,
 } from '../../actions/group';
 import './GroupCard.scss';
@@ -90,13 +89,16 @@ const Dashboard = React.memo(
 
               <GroupsSider groupUrl={`/dashboard/`} />
             </div>
-
             {group !== null && group.currentGroup && !isMobile && (
               <GroupPage
                 isMobile={isMobile}
                 userEmail={auth.user.email}
               ></GroupPage>
             )}
+
+            {/*     {group !== null && _.isEmpty(group.currentGroup) && (
+              <Redirect to='/onboarding'></Redirect>
+            )} */}
           </div>
         );
       }

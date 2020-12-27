@@ -32,7 +32,7 @@ public class EmailServiceClient {
 
 	private Client client = ClientBuilder.newClient();
 
-	public void sendUserRegistrationEmail(String id, String email) throws Exception {
+	public void sendUserRegistrationEmail(String id, String email, String school, String grade) throws Exception {
 		UserRegDetails userRegDetails = new UserRegDetails();
 		userRegDetails.setUser_id(userId);
 		userRegDetails.setService_id(serviceId);
@@ -40,6 +40,8 @@ public class EmailServiceClient {
 		Map<String, String> templateParams = new HashMap<>();
 		templateParams.put("useremail", email);
 		templateParams.put("username", email);
+		templateParams.put("schoolname", school);
+		templateParams.put("grade", grade);
 		templateParams.put("token", id);
 		userRegDetails.setTemplate_params(templateParams);
 	

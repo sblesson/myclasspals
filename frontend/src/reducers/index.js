@@ -9,7 +9,7 @@ import school from './school';
 import group from './group';
 import event from './event';
 import address from './address';
-import { DESTROY_SESSION } from '../actions/types';
+import { CLEAR_PROFILE } from '../actions/types';
 
 const persistConfig = {
   key: 'root',
@@ -29,7 +29,7 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === DESTROY_SESSION) {
+  if (action.type === CLEAR_PROFILE) {
     // for all keys defined in your persistConfig(s)
     storage.removeItem('persist:root');
     window.localStorage.removeItem('persist:root');
