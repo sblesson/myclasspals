@@ -100,7 +100,7 @@ const PrivacyPolicy = () => {
           </li>
           <li>
             <p>
-              <strong>Website</strong> refers to myclasspals, accessible from{' '}
+              <strong>Website</strong> refers to MyClassPals, accessible from{' '}
               <a
                 href='http://myclasspals.com'
                 rel='external nofollow noopener'

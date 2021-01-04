@@ -143,7 +143,6 @@ const ContactUs = ({ setAlert }) => {
           </div>
         )}
       </div>
-      <Footer />
     </Fragment>
   );
 };

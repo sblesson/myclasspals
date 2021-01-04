@@ -140,6 +140,7 @@ export default function (state = initialState, action) {
     case ACCOUNT_DELETED:
       window.localStorage.clear();
       updateUserLocalObject(null);
+      window.location.href = '/login';
       return {
         ...state,
         token: '',

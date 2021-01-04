@@ -10,16 +10,11 @@ import DeleteGroupModal from './modal/DeleteGroupModal';
 
 import './GroupCard.scss';
 
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
+import { EllipsisOutlined } from '@ant-design/icons';
 
 import {
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
-  deleteGroup,
 } from '../../actions/group';
 
 import './GroupCard.scss';
@@ -32,7 +27,6 @@ const GroupCard = ({
   group,
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
-  deleteGroup,
   newRegistration,
 }) => {
   let history = useHistory();
@@ -88,20 +82,12 @@ const GroupCard = ({
     );
   };
 
-  const adminMemberActionMenu = (
-    <Dropdown overlay={menu} placement='bottomCenter'>
-      <a className='ant-dropdown-link' onClick={(e) => e.preventDefault()}>
-        <EllipsisOutlined />
-      </a>
-    </Dropdown>
-  );
-
   const groupActionMenu = (currentGroup, type) => {
     if (currentGroup) {
       switch (type) {
         case 'mygroup':
         case 'discover':
-          if (currentGroup.role === null) {
+          if (currentGroup.role === null || currentGroup.role === undefined) {
             //non members
             if (currentGroup.privacy === 'PUBLIC') {
               //display join button for public group

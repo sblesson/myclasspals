@@ -37,6 +37,10 @@
   font-family: Norther-Lights;
   src: url(../../assets/fonts/Northern-Lights.ttf);
 }
+@font-face {
+  font-family: OpenSans-Light;
+  src: url(../../assets/fonts/OpenSans-Light.ttf);
+}
 
 .top-header {
   position: fixed;
@@ -44,8 +48,9 @@
   width: 100%;
   cursor: pointer;
   font-size: 1.55rem;
+  display: flex;
 
-  // if the screen is going to be greater than 425px and less than or eqaul to 768px
+  /*   // if the screen is going to be greater than 425px and less than or eqaul to 768px
   @include media('<=tablet') {
     //display: block;
     float: left;
@@ -53,7 +58,7 @@
   // if the screen is going to be greater than 425px and less than or eqaul to 768px
   @include media('>tablet') {
     display: flex;
-  }
+  } */
   .top-right-menu {
     // if the screen is going to be greater than 425px and less than or eqaul to 768px
     /*   @include media('<=tablet') {
@@ -69,8 +74,9 @@
   }
 
   .logo {
-    font-family: 'Imperia' !important;
-    font-weight: normal;
+    flex: 0.5 1;
+    display: flex;
+    justify-content: left;
 
     // if the screen is going to be greater than 425px and less than or eqaul to 768px
     @include media('<=tablet') {
@@ -81,21 +87,35 @@
     }
     // if the screen is going to be greater than 425px and less than or eqaul to 768px
     @include media('>tablet') {
-      flex: 0.5;
       font-size: 1.4rem;
       margin-left: 3rem;
       line-height: 2.8rem;
       display: inline-block;
     }
 
-    .logo-text-primary {
-      color: #1bb0c4 !important;
-      &:hover {
-        color: #333;
-      }
+    .logo-image {
+      background-image: url('../../assets/images/logo.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      display: inline-block;
+      min-width: 55px;
+      height: 55px;
     }
-    .logo-text-dark {
-      color: #333;
+    .logo-text {
+      display: inline-block;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 1.6rem;
+      font-weight: 600;
+
+      font-family: 'OpenSans-Light';
+      //font-family: 'Imperia' !important;
+      @include media('<tablet') {
+        font-size: 1.2rem;
+      }
+      @include media('>tablet') {
+        margin-bottom: 50px;
+      }
     }
   }
   .drawer-icon {

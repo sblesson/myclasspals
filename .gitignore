@@ -1,9 +1,10 @@
 node_modules
 config/default.json
-/client/node_modules
+/frontend/node_modules
+/frontend/build
 /.history
-clazzbuddyservice-master/.metadata/.plugins/
-/client/.history
+/backend/clazzbuddyservice-master/logs
+/backend/clazzbuddyservice-master/.metadata
+/frontend/.history
 node_modules/
 target/
-clazzbuddyservice-master/.metadata/

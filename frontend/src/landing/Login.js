@@ -97,7 +97,7 @@ const Login = ({ login, auth, history }) => {
           <h2>You belong here!</h2>
         </div>
         <div className='landing-form-wrapper'>
-          <h2>Welcome back, buddy!</h2>
+          <h2>Welcome back!</h2>
 
           {yourInfo}
           <Text className='form-info-text'>

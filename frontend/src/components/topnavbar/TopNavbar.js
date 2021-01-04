@@ -38,9 +38,8 @@ const TopNavbar = ({ auth: { isAuthenticated } }) => {
   return (
     <Header className='top-header'>
       <div className='logo' onClick={goToHome}>
-        <span className='logo-text-primary '>
-          my<span className='logo-text-dark'>classpals</span>
-        </span>
+        <div className='logo-image'></div>
+        <div className='logo-text'>MyClassPals</div>
       </div>
       {isMobile ? (
         <>

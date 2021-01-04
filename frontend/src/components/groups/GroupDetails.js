@@ -64,8 +64,32 @@ const GroupDetails = ({ currentGroup }) => {
                 ))}
             </List>
           </TabPane>
-
-          {currentGroup.role === 'admin' ? (
+          <TabPane tab='Pending Invitations' key='request'>
+            {currentGroup.requestedInvitations &&
+            currentGroup.requestedInvitations.length > 0 ? (
+              <List
+                itemLayout='vertical'
+                size='small'
+                header={`${currentGroup.requestedInvitations.length} 
+                      pending invitations`}
+                pagination={{
+                  onChange: (page) => {
+                    console.log(page);
+                  },
+                  total: currentGroup.requestedInvitations.length,
+                  pageSize: 50,
+                  hideOnSinglePage: true,
+                }}
+                dataSource={currentGroup.requestedInvitations}
+                renderItem={(item) => <PendingRequests member={item} />}
+              />
+            ) : (
+              <Empty
+                description={'No pending invitations to join this group'}
+              />
+            )}
+          </TabPane>
+          {currentGroup.role === 'admin' && (
             <TabPane tab='Pending Approvals' key='approvals'>
               {currentGroup.pendingInvitations &&
               currentGroup.pendingInvitations.length > 0 ? (
@@ -87,35 +111,6 @@ const GroupDetails = ({ currentGroup }) => {
                 />
               ) : (
                 <Empty description={'There are no approvals pending'} />
-              )}
-            </TabPane>
-          ) : (
-            ''
-          )}
-          {currentGroup.role === 'admin' && (
-            <TabPane tab='Pending Invitations' key='request'>
-              {currentGroup.requestedInvitations &&
-              currentGroup.requestedInvitations.length > 0 ? (
-                <List
-                  itemLayout='vertical'
-                  size='small'
-                  header={`${currentGroup.requestedInvitations.length} 
-                      pending invitations`}
-                  pagination={{
-                    onChange: (page) => {
-                      console.log(page);
-                    },
-                    total: currentGroup.requestedInvitations.length,
-                    pageSize: 50,
-                    hideOnSinglePage: true,
-                  }}
-                  dataSource={currentGroup.requestedInvitations}
-                  renderItem={(item) => <PendingRequests member={item} />}
-                />
-              ) : (
-                <Empty
-                  description={'No pending invitations to join this group'}
-                />
               )}
             </TabPane>
           )}

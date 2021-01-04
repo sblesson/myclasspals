@@ -37,6 +37,12 @@ const DeletePostModal = ({
       deletePost(post.currentPost._id);
     }
     hideModal();
+    if (window.location.href.indexOf('dashboard') == -1) {
+      //if deleting post from single post page
+      let groupId = window.location.pathname.split('/').pop();
+
+      window.location.href = `/dashboard/${groupId}`;
+    }
   };
   return (
     <div>
@@ -49,6 +55,7 @@ const DeletePostModal = ({
         title={headerTitle}
         centered
         visible={visible}
+        okButtonProps={{ danger: true }}
         onOk={handleDelete}
         okText='Delete'
         onCancel={toggleModal} //pass close logic here

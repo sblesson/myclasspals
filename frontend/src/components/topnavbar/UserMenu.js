@@ -46,9 +46,9 @@ const UserMenu = ({ logout, isMobile }) => {
             <Link to='/messages'>{'Message'}</Link>
           </Menu.Item>
 
-          <Menu.Item key='invite'>
+          {/*       <Menu.Item key='invite'>
             <Link to='/invite'>{'Invite'}</Link>
-          </Menu.Item>
+          </Menu.Item> */}
 
           <SubMenu title={<span>User</span>}>
             <Menu.Item key='account'>

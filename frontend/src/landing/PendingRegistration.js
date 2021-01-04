@@ -189,10 +189,8 @@ const PendingRegistration = ({
       <div className='landing-wrapper d-flex justify-content-center'>
         <div className='landing-form-wrapper'>
           {auth && auth.user && auth.user.email && (
-            <h2 style={{ fontSize: '1.6rem' }}>Welcome {auth.user.email},</h2>
+            <h2 style={{ fontSize: '1.6rem' }}>Welcome {auth.user.email}</h2>
           )}
-          <h2 style={{ fontSize: '1.2rem' }}>create password</h2>
-
           {yourInfo}
           <Text className='form-info-text'>
             Already have an account?{' '}

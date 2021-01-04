@@ -13,7 +13,6 @@ const AboutUs = () => {
         {' '}
         <AboutServices />
       </div>
-      <Footer />
     </div>
   );
 };

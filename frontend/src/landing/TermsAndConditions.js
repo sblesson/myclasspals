@@ -41,7 +41,7 @@ const TermsAndConditions = () => {
             <p>
               <strong>Company</strong> (referred to as either &quot;the
               Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot;
-              in this Agreement) refers to myclasspals, inc, 94539.
+              in this Agreement) refers to MyClassPals, inc, 94539.
             </p>
           </li>
           <li>
@@ -253,7 +253,7 @@ const TermsAndConditions = () => {
         give us permission to share with others. Do not post any content that
         you don't have the right to publish. myclasspals is not checking the
         content posted by members; but we have the right to remove content if it
-        violates myclasspals policies. We also have the right to delete your
+        violates MyClassPals policies. We also have the right to delete your
         account if we see your content is harmful or threat to group members.
         <h6>Please be kind and respectful to other members.</h6>
         <h1>United States Legal Compliance</h1>

@@ -1,22 +1,25 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
-import { Avatar, Card, Menu, Dropdown, List, Typography } from 'antd';
-import Ellipsis from 'ant-design-pro/lib/Ellipsis';
-
 import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
-import { deletePost } from '../../actions/post';
+  Avatar,
+  Tag,
+  Card,
+  Menu,
+  Dropdown,
+  List,
+  Typography,
+  PageHeader,
+} from 'antd';
+import ProgressiveImage from 'react-progressive-graceful-image';
+import Ellipsis from 'ant-design-pro/lib/Ellipsis';
+import { EllipsisOutlined } from '@ant-design/icons';
 import DeletePostModal from './modal/DeletePostModal';
-import { MessageOutlined } from '@ant-design/icons';
-
+import { MessageOutlined, LeftCircleOutlined } from '@ant-design/icons';
 import './PostItem.scss';
 
 const PostItem = ({
@@ -27,13 +30,11 @@ const PostItem = ({
     subject,
     message,
     userName,
-    avatar,
-    user,
-    likes,
-    thanks,
     groupId,
     comments,
     postedDate,
+    fileList,
+    categoryId,
   },
   showActions,
   showAllComments,
@@ -43,46 +44,36 @@ const PostItem = ({
 
   const { Meta } = Card;
 
-  const firstLetterUserName = (userName) => {
-    if (typeof userName !== 'string') return '';
-    return userName.charAt(0).toUpperCase();
-  };
-
-  const onClick = (key) => {
-    if (key === 'deletepost') {
-    } else if (key === 'editpost') {
-    }
-  };
-
   const menu = (
-    <Menu onClick={onClick}>
+    <Menu>
       <Menu.Item key='deletepost'>
-        {' '}
         <DeletePostModal postId={_id} postType='post' />
       </Menu.Item>
-      <Menu.Item key='editpost'>Edit</Menu.Item>
     </Menu>
   );
-  const allComments = comments !== null && comments && comments.length > 0 && (
-    <List
-      itemLayout='horizontal'
-      dataSource={comments}
-      style={{ overflow: 'hidden' }}
-      renderItem={(comment) => (
-        <CommentItem
-          key={comment._id}
-          comment={comment}
-          postId={_id}
-          groupId={groupId}
-          isSinglePost={isSinglePost}
-        />
-      )}
-    />
-  );
+  const allComments = comments !== null &&
+    comments &&
+    comments.length > 0 &&
+    comments[0] !== null && (
+      <List
+        itemLayout='horizontal'
+        dataSource={comments}
+        style={{ overflow: 'hidden' }}
+        renderItem={(comment) => (
+          <CommentItem
+            key={comment._id}
+            comment={comment}
+            postId={_id}
+            groupId={groupId}
+            isSinglePost={isSinglePost}
+          />
+        )}
+      />
+    );
   const IconText = ({ icon, text }) => (
     <Link to={`/posts/${_id}/${groupId}`}>
       {' '}
-      {React.createElement(icon)}{' '}
+      {React.createElement(icon)}
       <span className='comment-count-text'>
         {comments.length > 1
           ? `${comments.length} comments`
@@ -93,7 +84,8 @@ const PostItem = ({
 
   const lastThreeComments = comments !== null &&
     comments &&
-    comments.length > 0 && (
+    comments.length > 0 &&
+    comments[0] !== null && (
       <List
         itemLayout='horizontal'
         dataSource={comments.slice(-3)}
@@ -109,9 +101,36 @@ const PostItem = ({
         )}
       />
     );
-
+  const allPostImages = fileList !== null && fileList && fileList.length > 0 && (
+    <List
+      size='small'
+      dataSource={fileList}
+      pagination={{
+        onChange: (page) => {},
+        total: fileList.length,
+        pageSize: 2,
+        hideOnSinglePage: true,
+      }}
+      renderItem={(item, index) => (
+        <List.Item key={`post-image-${index}`} className='feed-list-item'>
+          <ProgressiveImage src={`${item.url}`} placeholder={`${item.url}`}>
+            {(src) => (
+              <img src={src} alt={item.fileName} className='feed-image' />
+            )}
+          </ProgressiveImage>
+        </List.Item>
+      )}
+    />
+  );
   return (
-    <div className='feed' style={{ width: '100%' }}>
+    <div className='feed'>
+      {isSinglePost && (
+        <PageHeader
+          ghost={false}
+          title={'Back'}
+          onBack={() => window.history.back()}
+        ></PageHeader>
+      )}
       <Card
         className={isSinglePost ? 'single-feed-card' : 'feed-card'}
         title={
@@ -125,6 +144,7 @@ const PostItem = ({
               title={<span className='feed-author-title'>{userId}</span>}
               description={
                 <div className='feed-author-time'>
+                  <Tag>{categoryId}</Tag>&nbsp;
                   <Moment fromNow ago>
                     {postedDate}
                   </Moment>
@@ -156,11 +176,10 @@ const PostItem = ({
         <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}>
           {message}
         </Paragraph>
+        {allPostImages}
 
-        {comments && comments.length > 0 ? (
+        {comments && comments.length > 0 && comments[0] !== null && (
           <IconText icon={MessageOutlined} key='list-vertical-message' />
-        ) : (
-          ''
         )}
         {showActions && (
           <div style={{ marginBottom: '2rem' }}>

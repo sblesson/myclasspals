@@ -7,7 +7,6 @@ import _ from 'lodash';
 import { Steps } from 'antd';
 
 import UserProfileForm from './UserProfileForm';
-import DiscoverGroup from '../groups/DiscoverGroup';
 
 import './CreateProfile.scss';
 
@@ -42,11 +41,6 @@ const CreateProfile = ({ auth, history }) => {
       content: (
         <UserProfileForm onStepChange={handleStepChange} current={current} />
       ),
-    },
-    {
-      title: 'Manage your group',
-      subTitle: '(step 2 of 2)',
-      content: <DiscoverGroup newRegistration={true} />,
     },
   ];
 
