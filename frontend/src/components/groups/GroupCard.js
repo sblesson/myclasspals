@@ -19,7 +19,6 @@ import {
 import {
   acceptUserGroupInvitation,
   requestToJoinUserGroup,
-  deleteGroup,
 } from '../../actions/group';
 
 import './GroupCard.scss';

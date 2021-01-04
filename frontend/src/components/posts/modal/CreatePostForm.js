@@ -6,13 +6,19 @@ import { connect } from 'react-redux';
 import { addPost } from '../../../actions/post';
 import DisplayCreatePostForm from './DisplayCreatePostForm';
 
-const CreatePostForm = ({ group, hideModal, addPost }) => {
+const CreatePostForm = ({
+  group,
+  hideModal,
+  addPost,
+  post: { categories },
+}) => {
   const initialValues = {
     categoryId: 'General',
     groupId: group.currentGroup.id,
     subject: '',
     message: '',
-    categoryOptions: ['Have Question', 'Homework', 'Tutoring', 'Help Needed'],
+    categoryOptions: categories,
+    fileList: [],
   };
   const handleSubmit = (formProps) => {
     let { subject, message, categoryId, groupId } = formProps;
@@ -23,6 +29,9 @@ const CreatePostForm = ({ group, hideModal, addPost }) => {
       categoryId: categoryId,
       groupId: groupId,
     };
+    if (initialValues.fileList && initialValues.fileList.length > 0) {
+      formObj.fileList = initialValues.fileList;
+    }
     addPost(JSON.stringify(formObj), () => {
       hideModal(false);
     });
@@ -42,6 +51,7 @@ CreatePostForm.propTypes = {
 };
 const mapStateToProps = (state) => ({
   group: state.group,
+  post: state.post,
 });
 
 export default connect(mapStateToProps, {

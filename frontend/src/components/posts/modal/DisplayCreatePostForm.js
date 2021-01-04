@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Field } from 'formik';
 import { FormikDebug } from 'formik-antd';
 import { Form } from 'formik-antd';
@@ -14,6 +14,8 @@ import {
 import { isRequired } from '../../common/validatefields/ValidateFields';
 
 export default ({ handleSubmit, values, submitCount }) => {
+  const [fileList, setFileList] = useState([]);
+
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -26,41 +28,47 @@ export default ({ handleSubmit, values, submitCount }) => {
   };
   const props = {
     name: 'file',
-    action:
-      'https://console.cloud.google.com/storage/browser/myclasspals-bucket',
-    headers: {
-      authorization:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjaGFra2FAZ21haWwuY29tIiwiZXhwIjoxNjA4NzMyOTYxLCJpYXQiOjE2MDg3MTQ5NjF9.hLrHebVrdid5FA2R65OHdPR9if5bepYEAw31tyJiemUGRUoBTTI-4CG5Ze_DdqdfUruofomqV73dG36MjlTzYA',
-    },
+    multiple: false,
+    action: 'https://api.cloudinary.com/v1_1/myclasspals/image/upload',
+    data: { upload_preset: 'ooh34j0k' },
     onChange(info) {
-      if (info.file.status !== 'uploading') {
+      const { status } = info.file;
+      if (status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
+
+      if (status === 'done') {
+        let myFile = [];
+        for (let i = 0; i < info.fileList.length; i++) {
+          const {
+            original_extension,
+            original_filename,
+            secure_url,
+          } = info.fileList[i].response;
+          myFile.push({
+            fileName: original_filename + '.' + original_extension,
+            url: secure_url,
+          });
+        }
+        values.fileList = myFile;
+        console.log(values.fileList);
+      } else if (status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
-    progress: {
-      strokeColor: {
-        '0%': '#108ee9',
-        '100%': '#87d068',
-      },
-      strokeWidth: 3,
-      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
-    },
+  };
+  const submitFormWithDelay = () => {
+    setTimeout(() => handleSubmit, 5000);
   };
   return (
     <Form
       className='form-container'
-      /*  className='form-wrapper' */
       {...formItemLayout}
       layout='vertical'
       initialValues={{
         size: 'small',
       }}
-      onSubmit={handleSubmit}
+      onSubmit={submitFormWithDelay}
     >
       <Field
         component={AntSelect}

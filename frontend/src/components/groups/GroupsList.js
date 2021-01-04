@@ -5,8 +5,6 @@ import Ellipsis from 'ant-design-pro/lib/Ellipsis';
 import _ from 'lodash';
 
 const GroupsList = ({ groupList, heading, groupUrl, iconColor }) => {
-  console.log('inside GroupsList', groupList);
-
   const getGroupNamePrivacyIcon = (groupName, privacy) => {
     if (privacy) {
       let groupPrivacy = privacy.toLowerCase();
