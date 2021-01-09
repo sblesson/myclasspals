@@ -6,10 +6,6 @@
 @import 'styles/abstracts/include-media';
 @import 'styles/layout/features';
 
-@import url('https://fonts.googleapis.com/css?family=Comfortaa|Nanum+Pen+Script&display=swap');
-
-//font-family: 'Comfortaa', cursive;
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -1077,7 +1073,7 @@ thead {
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  flex: 0.65;
+  //flex: 0.45;
   -webkit-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
   -moz-box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
   box-shadow: 10px 10px 77px 0px rgba(0, 0, 0, 0.13);
@@ -1278,19 +1274,16 @@ thead {
   background-color: #fff;
 }
 .service-one {
-  background: url('./assets/images/find.png') top no-repeat;
-  background-size: cover;
+  background: url('./assets/images/login_community.jpeg') center no-repeat;
+  background-size: contain;
 }
-
 .service-two {
-  background: url('./assets/images/together.jpg') center no-repeat;
-  background-size: cover;
-
-  //background: url('https://images.unsplash.com/photo-1581094648468-20624f9c771a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80');
+  background: url('./assets/images/together.png') center no-repeat;
+  background-size: contain;
 }
 
 .service-three {
-  background: url('./assets/images/login_community.jpeg') center no-repeat;
+  background: url('./assets/images/find.png') top no-repeat;
   background-size: contain;
 }
 
@@ -1438,4 +1431,21 @@ thead {
 
 .ant-switch-checked {
   background-color: #1bb0c4;
+}
+
+.ant-page-header {
+  .ant-page-header-back-button {
+    color: var(--myclasspals-color);
+    font-size: 1.3rem !important;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .ant-page-header-heading-title {
+    margin-top: 0.4rem;
+    font-size: 1rem !important;
+    font-weight: 600;
+  }
+}
+.ant-modal-footer .ant-btn-dangerous {
+  background: #cc0000 !important;
 }

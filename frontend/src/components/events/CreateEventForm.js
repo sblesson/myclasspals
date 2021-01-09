@@ -6,7 +6,7 @@ import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addEvent } from '../../actions/event';
-
+import { dateFormat } from '../common/createformfields/CreateFormFields';
 const CreateEventForm = ({
   group,
   auth,
@@ -92,7 +92,12 @@ const CreateEventForm = ({
       usersSelect,
     } = formProps;
     start = start ? start : eventStartDate;
-    end = end ? end : eventEndDate;
+
+    //if end date less than start date, set start date as end date
+    end =
+      end && moment(end).format(dateFormat) > moment(start).format(dateFormat)
+        ? end
+        : start;
     startTime = startTime ? startTime : eventStartTime;
     endTime = endTime ? endTime : eventEndTime;
 

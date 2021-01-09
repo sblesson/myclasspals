@@ -95,7 +95,7 @@ const InviteUsersToGroupForm = ({
               {' '}
               <FormItem
                 name='usersSelect'
-                label='Add myclasspals members'
+                label='Add MyClassPals members'
                 required={false}
               >
                 <MultiSelectUserSearch endUsersSelect={'usersSelect'} />

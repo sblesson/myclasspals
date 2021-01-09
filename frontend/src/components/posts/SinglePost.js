@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Spinner from '../common/spinner/Spinner';
 import PostItem from './PostItem';
 import { getPost } from '../../actions/post';
-import { LeftCircleOutlined } from '@ant-design/icons';
 
 const SinglePost = ({ getPost, post: { currentPost, loading }, match }) => {
   let groupId = null;
@@ -18,18 +17,6 @@ const SinglePost = ({ getPost, post: { currentPost, loading }, match }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <Link
-        to={`/dashboard/${match.params.groupId}`}
-        style={{
-          fontSize: '1rem',
-          marginLeft: '1rem',
-          marginTop: '1rem',
-          cursor: 'pointer',
-          display: 'inline-block'
-        }}
-      >
-        <LeftCircleOutlined />
-      </Link>
       <PostItem
         post={currentPost}
         showActions={true}
@@ -42,11 +29,11 @@ const SinglePost = ({ getPost, post: { currentPost, loading }, match }) => {
 
 SinglePost.propTypes = {
   getPost: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  post: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  post: state.post
+const mapStateToProps = (state) => ({
+  post: state.post,
 });
 
 export default connect(mapStateToProps, { getPost })(SinglePost);

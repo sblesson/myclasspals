@@ -33,7 +33,7 @@ const Footer = ({ isFixedFooter }) => {
         </Menu.Item>
       </Menu>
       <div className='text-muted copyright-footer-text'>
-        Copyright ©2020 myclasspals, inc. All rights reserved.
+        Copyright ©2020 MyClassPals, inc. All rights reserved.
       </div>
     </Footer>
   );

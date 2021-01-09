@@ -30,7 +30,7 @@ const AboutGroup = ({ index, group }) => {
       )}
       {/* {!group.currentGroup.groupRules && ( */}
       <div>
-        {'All myclasspals communities must follow general guidelines'}
+        {'All MyClassPals communities must follow general guidelines'}
         <ol>
           <li>
             {' '}

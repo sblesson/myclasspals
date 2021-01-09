@@ -3,61 +3,12 @@
 .landing-wrapper {
   width: 100%;
   height: 68vh;
+  background-image: linear-gradient(
+    to bottom right,
+    #0cadc5,
+    #80d0c7
+  ) !important;
 
-  //background: linear-gradient(45deg, #e0f5f6, #46bdc6);
-  //background-image: linear-gradient(-90deg, #42d5a1, #0cadc5);
-  //background-image: linear-gradient(-90deg, var(--bg-gradient2), #0cadc5);
-
-  /*   background-image: linear-gradient(
-    90deg,
-    var(--bg-gradient1),
-    var(--bg-gradient2)
-  ) !important; */
-
-  // if the screen is going to be greater than 768px and less than 1366px
-
-  @include media('<=phone') {
-    background: linear-gradient(45deg, #e0f5f6, #46bdc6);
-  }
-  // if the breakpoint is greater than 360px and less than or eqaul to 425px
-  @include media('>phone', '<=425px') {
-    background: linear-gradient(45deg, #e0f5f6, #46bdc6);
-  }
-
-  // if the screen is going to be greater than 425px and less than or eqaul to 768px
-  @include media('>425px', '<=tablet') {
-    background: linear-gradient(45deg, #e0f5f6, #46bdc6);
-  }
-  @include media('>tablet', '<desktop') {
-    background-image: linear-gradient(
-      160deg,
-      #0cadc5 0%,
-      #80d0c7 100%
-    ) !important;
-    /*    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); */
-  }
-  // if the screen is going to be greater than or equal to 1366px
-  @include media('>=desktop') {
-    background-image: linear-gradient(
-      160deg,
-      #0cadc5 0%,
-      #80d0c7 100%
-    ) !important;
-    /*   -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); */
-  }
-
-  // if the screen is going to be greater than or equal to 1920px
-  @include media('>=LGdesktop', 'retina2x') {
-    background-image: linear-gradient(
-      160deg,
-      #0cadc5 0%,
-      #80d0c7 100%
-    ) !important;
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-  }
   .landing-text {
     text-align: center;
     margin: auto;

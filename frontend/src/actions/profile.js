@@ -25,6 +25,20 @@ export const getProfileById = (userId) => async (dispatch) => {
     });
   }
 };
+export const getAllProfiles = () => async (dispatch) => {
+  try {
+    const userResp = await axios.get('/user/getuserdetails');
+    dispatch({
+      type: GET_PROFILES,
+      payload: userResp.data,
+    });
+  } catch (err) {
+    catchHandler(err, PROFILE_ERROR);
+    dispatch({
+      type: PROFILE_ERROR,
+    });
+  }
+};
 
 // Create or update profile
 export const updateProfile = (formData, history, edit = false) => async (

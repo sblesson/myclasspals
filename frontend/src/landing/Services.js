@@ -6,15 +6,11 @@ const Services = () => {
       className='landing-inner services'
       style={{ fontSize: '1.2rem', textAlign: 'left' }}
     >
-      <div style={{ color: '#46bdc6', fontSize: '2.4rem' }}>
+      <div style={{ color: '#0cadc5', fontSize: '2.4rem' }}>
         5 reasons to join?
       </div>
       <div>
         <ol>
-          <li>
-            <strong>It&#39;s free</strong>
-            <p>There are no hidden fees.</p>
-          </li>
           <li>
             <strong>Benefit your child</strong>
             <p>
@@ -24,45 +20,55 @@ const Services = () => {
             </p>
           </li>
           <li>
-            {' '}
-            <strong>Start a Movement</strong>
+            <strong>Strong Relationships Create Strong Kids</strong>
             <p>
-              Learn & grow together. Make more of an impact in your community.
-              Start new movements like volunteering, bookclub, etc.
+              Research shows kids do well are the ones who have strong, stable
+              supportive relationships. Strong community builds strong, happy
+              kids.
             </p>
           </li>
           <li>
-            {' '}
+            <strong>Schedule quality time</strong>
+            <p>
+              Schedule activities as part of daily or weekly routine. Activities
+              such as virtual playdate, story time, virtual lunch or dinner,
+              book club, show and tell, lego club, sing songs, share photos, DIY
+              craft, bake cookies etc.
+            </p>
+          </li>
+          <li>
             <strong>Be a role model</strong>
             <p>
-              Have more involment in school community and take initiatives that
-              show you are leading by example.
+              Have more involvement in the school community and take initiatives
+              that show you are leading by example.
             </p>
           </li>
           <li>
-            <strong>Get Deeper Meaningful Connections</strong>
-            <p>Schedule playdate, book club, lego club, walk to park, etc.</p>
+            {' '}
+            <strong>Amazing communities, happy future</strong>
+            <p>
+              Happy parents, teachers and students with supportive communities
+              are likely to have happy optimistic futures.
+            </p>
           </li>
         </ol>
       </div>
-      <div style={{ color: '#46bdc6', fontSize: '2.2rem' }}>More benefits</div>
+      <div style={{ color: '#0cadc5', fontSize: '2.2rem' }}>More benefits</div>
       <div className='service-container'>
         <div className='services-card service-one'></div>
         <div className='service-description'>
-          <strong style={{ color: '#46bdc6' }}>
-            Discover School Community
-          </strong>
+          <strong style={{ color: '#0cadc5' }}>Make Friends</strong>
           <div>
-            Connect with other families in school. Create a profile, join school
-            community and share posts with other parents in your child&apos;s
-            class
+            When families in school unite, there are many things to discuss.
+            Share your interest. Offer help, spread kindness and make new
+            friends.
           </div>
         </div>
       </div>
       <div className='row'>
         <div className='service-container' style={{ width: '100%' }}>
           <div className='service-description'>
-            <strong style={{ color: '#46bdc6' }}>Together Is Better</strong>
+            <strong style={{ color: '#0cadc5' }}>Together Is Better</strong>
             <div>
               Challenging times can bring us closer. Join your school community.
             </div>
@@ -73,11 +79,12 @@ const Services = () => {
         <div className='service-container'>
           <div className='services-card service-three'></div>
           <div className='service-description'>
-            <strong style={{ color: '#46bdc6' }}>Make Friends</strong>
+            <strong style={{ color: '#0cadc5' }}>
+              Discover School Community
+            </strong>
             <div>
-              When families in school unite, there are many things to discuss.
-              Share your interest. Offer help, spread kindness and make new
-              friends.
+              Connect with other families in school. Create account, join school
+              community and share posts with other families.
             </div>
           </div>
         </div>

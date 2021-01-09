@@ -56,7 +56,7 @@ const AutoCompleteUserSearch = ({
       style={{
         width: '100%',
       }}
-      placeholder={'Type Name'}
+      placeholder={'Type email address'}
       onSelect={onUserSelect}
       onSearch={handleUserSearch}
     >

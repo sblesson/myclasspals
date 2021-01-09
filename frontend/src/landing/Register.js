@@ -49,7 +49,7 @@ const Register = ({ setAlert, register, auth, history }) => {
         password2: '',
       }}
       onSubmit={(values) => {
-        //setIsLoadingSignUpBtn(true);
+        setIsLoadingSignUpBtn(true);
         if (values.password !== values.password2) {
           setAlert('Passwords do not match', 'danger');
           setIsLoadingSignUpBtn(false);
@@ -126,8 +126,12 @@ const Register = ({ setAlert, register, auth, history }) => {
       <div className='landing-wrapper'>
         <div className='landing-text'>
           <h2>
-            Enhance the academic experience of your child by building a positive
-            &amp; authentic school communities
+            Is Your Child Missing Friends Due to COVID-19? Are You Missing
+            Social Connection?
+          </h2>
+          <h2>
+            MyClassPals connects families in school by building positive &amp;
+            authentic school communities.
           </h2>
           <p className='font-italic landing-text-info'>
             “So thankful to the platform for a deeper meaningful way to connect

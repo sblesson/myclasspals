@@ -268,7 +268,7 @@ public class UserService implements UserDetailsService{
 
 			GroupInvitations invitation = new GroupInvitations();
 			invitation.setGroupId(action.getGroupId());
-			invitation.setRequestorUserId(action.getRequestorUserId());
+			invitation.setRequestorUserId(requestorUser.get_id());
 			invitation.setRole(action.getRole());
 	
 			if (userGroup.getPendingInvitations() == null) {

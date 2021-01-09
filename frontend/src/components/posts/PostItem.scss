@@ -2,10 +2,9 @@
 
 .feed {
   margin-bottom: 0.2rem;
-  width: '100%' !important;
+  width: 100%;
   .single-feed-card {
-    margin-left: 3rem !important;
-    margin-top: 0rem !important;
+    margin: 3rem auto;
     @include respond(phone) {
       width: 80%;
     }
@@ -16,7 +15,7 @@
       width: 60%;
     }
     @include respond(big-desktop) {
-      width: 60%;
+      width: 40%;
     }
   }
   .comment-count-text {
@@ -71,6 +70,7 @@
         text-decoration: underline;
       }
     }
+
     &-time {
       margin-top: 0.3rem;
       font-size: 0.575rem;
@@ -132,5 +132,9 @@
   }
   .m-left-minus-5 {
     margin-left: -5px;
+  }
+  .feed-image {
+    //object-fit: scale-down;
+    border-radius: 8px;
   }
 }

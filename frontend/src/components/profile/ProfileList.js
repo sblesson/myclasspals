@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { List, Avatar } from 'antd';
-import { getAllUsers } from '../../actions/profile';
+import { getAllProfiles } from '../../actions/profile';
 
-const ProfileList = ({ getAllUsers, auth }) => {
+const ProfileList = ({ getAllProfiles, profile: { profiles } }) => {
   const isCurrent = useRef(true);
 
   useEffect(() => {
@@ -34,10 +35,10 @@ const ProfileList = ({ getAllUsers, auth }) => {
           pageSize: 50,
           hideOnSinglePage: true,
         }}
-        dataSource={profileList}
+        dataSource={profiles}
         style={{ marginTop: '.1rem', padding: '1rem', marginLeft: '1rem' }}
         renderItem={(item) => (
-          <Link to={`${groupUrl}${item.id}`}>
+          <Link /* to={`${groupUrl}${item.id}`} */>
             <List.Item key={item.id}>
               <List.Item.Meta
                 avatar={
@@ -45,14 +46,13 @@ const ProfileList = ({ getAllUsers, auth }) => {
                     src={item.avatar}
                     style={{
                       textTransform: 'uppercase',
-                      background: iconColor,
+                      background: 'blue',
                     }}
                     //className='avatar-icon'
                     shape='square'
                     icon={item.groupName.charAt(0)}
                   />
                 }
-                description={}
               />
             </List.Item>
           </Link>
@@ -63,7 +63,7 @@ const ProfileList = ({ getAllUsers, auth }) => {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  auth: state.auth,
+  profile: state.profile,
 });
 
-export default connect(mapStateToProps, { getAllUsers })(ProfileList);
+export default connect(mapStateToProps, { getAllProfiles })(ProfileList);
