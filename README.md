@@ -42,8 +42,8 @@ This project is licensed under the MIT License
 Create docker container
 Go to java server base dir
 mvn clean install
-docker build . --tag blessonpaul/clazzbuddy
-docker push blessonpaul/clazzbuddy
+docker build . --tag sb/clazzbuddy
+docker push sb/clazzbuddy
 
 Run docker container
 docker run -d -p 3000:3000 -p 5000:5000 -p 8080:8080 clazzvilla:1.0
@@ -61,8 +61,8 @@ Change axios file to prod setting
 
 Nom run build
 Locally
-docker build . --tag blessonpaul/clazzbuddy
-docker push blessonpaul/clazzbuddy
+docker build . --tag sb/clazzbuddy
+docker push sb/clazzbuddy
 ——————
 docker run -d -p 3000:3000 -p 5000:5000 -p 8080:8080 blessonpaul/clazzbuddy:latest
 
@@ -72,4 +72,4 @@ docker ps
 2 docker stop 40a9ea361cc5
 docker images
 9 docker image rm -f c837b534b136
-10 docker pull blessonpaul/clazzbuddy
+10 docker pull sb/clazzbuddy
