@@ -64,7 +64,7 @@ Locally
 docker build . --tag sb/clazzbuddy
 docker push sb/clazzbuddy
 ——————
-docker run -d -p 3000:3000 -p 5000:5000 -p 8080:8080 blessonpaul/clazzbuddy:latest
+docker run -d -p 3000:3000 -p 5000:5000 -p 8080:8080 sb/clazzbuddy:latest
 
 ————
 Prod
